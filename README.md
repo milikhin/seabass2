@@ -16,12 +16,10 @@ Features:
 
 Application for each platform consists of two major parts:
 
-1. Platform-specific "frontend" application 
-
+1. Platform-specific "frontend" application  
     Frontend application provides UI using native components and contains WebView to inject editor engine
 
-1. Common web-based "backend" editor engine 
-
+1. Common web-based "backend" editor engine  
     Backend is a HTML5 application based on the awesome [Ace editor](https://github.com/ajaxorg/ace) optimised for mobile WebView runtime 
 
 Frontend and backend components interacts using the simple message-based API.
