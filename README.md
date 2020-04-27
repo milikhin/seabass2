@@ -2,8 +2,6 @@
 
 ## About
 
-### Overview
-
 Seabass is a code editor for mobile devices.
 
 Currently supported platforms:
@@ -16,7 +14,7 @@ Features:
 * Syntax highlighting for over 120 programming/markup languages
 * Native look and feel for each platform
 
-### Architecture
+## Architecture
 
 Application for each platform consists of two major parts:
 
@@ -28,7 +26,7 @@ Application for each platform consists of two major parts:
 Frontend and backend components interacts using the simple message-based API.
 In Sailfish OS messages are delivered using `navigator.qt` API
 
-### Directory structure
+## Directory structure
 
 * `harbour-seabass` - QML application for Sailfish OS developed with Sailfish SDK
 * `editor` - JS editor engine
