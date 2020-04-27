@@ -1,14 +1,14 @@
 # Seabass
 
-Code editor for mobile devices.
+## About
+
+### Overview
+
+Seabass is a code editor for mobile devices.
 
 Currently supported platforms:
 
 * Sailfish OS
-
-## About
-
-### Overview
 
 Seabass is based on the awesome [Ace editor](https://github.com/ajaxorg/ace).
 
