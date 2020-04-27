@@ -22,7 +22,7 @@ Application for each platform consists of two major parts:
 1. Common web-based "backend" editor engine  
     Backend is a HTML5 application optimised for mobile WebView runtime based on the awesome [Ace editor](https://github.com/ajaxorg/ace)
 
-Frontend and backend components interacts using the simple message-based API.
+Frontend and backend components interacts using a simple message-based API.
 In Sailfish OS messages are delivered using `navigator.qt` API
 
 ## Directory structure
