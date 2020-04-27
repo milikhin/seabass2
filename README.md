@@ -1,6 +1,7 @@
 # Seabass
 
-Seabass is a cross platform code editor for mobile devices.
+Code editor for mobile devices.
+
 Currently supported platforms:
 
 * Sailfish OS
