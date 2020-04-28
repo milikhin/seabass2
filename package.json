@@ -4,9 +4,13 @@
   "description": "web-editor component for Seabass app",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config=./editor/jest.config.js",
+    "test-watch": "jest --config=./editor/jest.config.js --watch",
     "webpack": "./node_modules/.bin/webpack",
     "webpack-watch": "./node_modules/.bin/webpack --watch"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   },
   "keywords": [
     "seabass",
@@ -19,13 +23,16 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.4.0",
     "babel-loader": "^8.1.0",
-    "babel-polyfill": "^6.26.0",
     "core-js": "^3.6.5",
     "css-loader": "^3.5.2",
     "file-loader": "^6.0.0",
+    "jest": "^25.4.0",
     "standard": "^14.3.3",
     "style-loader": "^1.1.4",
+    "uuid": "^7.0.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },

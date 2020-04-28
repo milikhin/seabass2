@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 
@@ -6,18 +6,21 @@ import '../utils.js' as QmlJs
 
 Page {
     id: page
-    property string fileName: ''
-    property bool isReadOnly: true
-
     allowedOrientations: Orientation.All
-    onOrientationChanged: function() {
+    onOrientationChanged: {
         webView.experimental.deviceWidth = getDeviceWidth()
         fixResize()
     }
 
+    // #region LAYOUT
+
     SilicaWebView {
         id: webView
         url: '../html/index.html'
+
+        property string seabassFileName: ''
+        property string seabassFilePath: ''
+        property bool seabassIsReadOnly: true
 
         anchors.top: page.top
         anchors.bottom: panel.open ? panel.top : page.bottom
@@ -25,29 +28,29 @@ Page {
 
         experimental.onMessageReceived: {
             var msg = JSON.parse(message.data)
-            QmlJs.handleApiMessage(msg)
+            editorApiHandler(msg)
         }
         experimental.transparentBackground: true
         experimental.deviceWidth: getDeviceWidth()
         experimental.preferences.navigatorQtObjectEnabled: true
 
+        VerticalScrollDecorator {}
         PullDownMenu {
+            MenuItem {
+                text: qsTr("Open...")
+                onClicked: pageStack.push(filePickerPage)
+            }
+            MenuItem {
+                visible: webView.seabassFileName !== ''
+                text: qsTr("Save")
+                onClicked: saveFile()
+            }
+        }
+
+        PushUpMenu {
             MenuItem {
                 text: qsTr(panel.open ? "Hide toolbar" : "Show toolbar")
                 onClicked: panel.open = !panel.open
-            }
-            MenuItem {
-                text: qsTr("Open file...")
-                onClicked: pageStack.push(filePickerPage)
-            }
-
-            MenuLabel {
-                text: page.fileName
-                visible: page.fileName !== ''
-            }
-            MenuItem {
-                visible: page.fileName !== ''
-                text: qsTr("Save")
             }
         }
     }
@@ -69,31 +72,33 @@ Page {
                 icon.source: "image://theme/icon-m-folder"
                 onClicked: pageStack.push(filePickerPage)
             }
-            IconButton {
-                icon.source: "image://theme/icon-m-accept"
-                onClicked: editorApi('save')
-            }
         }
     }
 
     Component {
         id: filePickerPage
-            FilePickerPage {
-                onSelectedContentPropertiesChanged: {
-                    if (selectedContentProperties.filePath) {
-                        loadFile(selectedContentProperties.fileName, selectedContentProperties.filePath)
-                    }
+        FilePickerPage {
+            onSelectedContentPropertiesChanged: {
+                if (!selectedContentProperties.filePath) {
+                    return
                 }
+
+                openFile(selectedContentProperties.fileName, selectedContentProperties.filePath)
+            }
         }
     }
 
-    function loadFile(fileName, filePath) {
+    // #endregion LAYOUT
+    // #region JS_FUNCTIONS
+
+    function openFile(fileName, filePath) {
         QmlJs.readFile(filePath, function(err, text) {
             if (err) {
                 return console.error(err)
             }
 
-            page.fileName = fileName
+            webView.seabassFileName = fileName
+            webView.seabassFilePath = filePath
             editorApi('loadFile', {
                 filePath: filePath,
                 content: text
@@ -101,12 +106,32 @@ Page {
         })
     }
 
+    function saveFile() {
+        editorApi('requestSaveFile', {
+            filePath: webView.seabassFilePath
+        })
+    }
+
+    function editorApiHandler(message) {
+        switch (message.action) {
+            case 'error':
+                console.error(JSON.stringify(message))
+                return
+
+            case 'saveFile':
+                return QmlJs.writeFile(message.data.filePath, message.data.content, function(err) {
+                    if (err) {
+                        console.error(err)
+                    }
+                })
+        }
+    }
+
     function editorApi(action, data) {
         webView.experimental.postMessage(JSON.stringify({ 'action': action, 'data': data }));
     }
 
     function getDeviceWidth() {
-        console.log(Theme.pixelRatio)
         const deviceWidth = page.orientation === Orientation.Portrait
             ? Screen.width
             : Screen.height
@@ -119,4 +144,6 @@ Page {
         webView.x = 1
         webView.x = 0
     }
+
+    // #endregion JS_FUNCTIONS
 }

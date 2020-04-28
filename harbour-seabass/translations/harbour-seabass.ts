@@ -11,11 +11,11 @@
 <context>
     <name>Editor</name>
     <message>
-        <source>Open file...</source>
+        <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save</source>
+        <source>Open...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

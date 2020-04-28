@@ -5,8 +5,15 @@ function readFile(filePath, callback) {
     request.open('GET', filePath)
     request.onreadystatechange = function(event) {
         if (request.readyState === XMLHttpRequest.DONE) {
-            callback(null, request.responseText)
+            if (request.status >= 200 && request.status <= 400) {
+                return callback(null, request.responseText)
+            }
+
+            callback(request.responseText)
         }
+    }
+    request.onerror = function(err) {
+        callback(err.message)
     }
     request.send();
 }
@@ -16,15 +23,16 @@ function writeFile(filePath, content, callback) {
     request.open("PUT", filePath);
     request.onreadystatechange = function(event) {
         if (request.readyState === XMLHttpRequest.DONE) {
-            callback(null)
+            if (request.status >= 200 && request.status <= 400) {
+                return callback(null)
+            }
+
+            callback(request.responseText)
         }
     }
-    request.send(content);
-}
-
-function handleApiMessage(message) {
-    switch (message.action) {
-        case 'saveFile':
-            return writeFile(message.data.filePath, message.data.content, Function.prototype)
+    request.onerror = function(err) {
+        callback(err.message)
     }
+
+    request.send(content);
 }

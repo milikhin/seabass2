@@ -1,7 +1,7 @@
 const path = require('path')
 
 const sailfishConfig = {
-  entry: './editor/index.js',
+  entry: './editor/src/index.js',
   output: {
     path: path.resolve(__dirname, 'harbour-seabass/qml/html/dist'),
     filename: 'bundle.js'
