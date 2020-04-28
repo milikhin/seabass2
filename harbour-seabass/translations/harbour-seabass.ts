@@ -15,7 +15,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Open...</source>
+        <source>Open file...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

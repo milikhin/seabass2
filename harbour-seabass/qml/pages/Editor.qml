@@ -37,7 +37,7 @@ Page {
         VerticalScrollDecorator {}
         PullDownMenu {
             MenuItem {
-                text: qsTr("Open...")
+                text: qsTr("Open file...")
                 onClicked: pageStack.push(filePickerPage)
             }
             MenuItem {
