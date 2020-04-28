@@ -13,7 +13,7 @@ License: LICENSE
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my Sailfish OS Application
+  Code editor for mobile devices
 Configure: none
 Builder: qmake5
 

@@ -26,7 +26,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my Sailfish OS Application
+Code editor for mobile devices
 
 
 %prep
