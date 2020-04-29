@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest --config=./editor/jest.config.js",
     "test-watch": "jest --config=./editor/jest.config.js --watch",
-    "webpack": "./node_modules/.bin/webpack",
-    "webpack-watch": "./node_modules/.bin/webpack --watch"
+    "build": "./node_modules/.bin/webpack",
+    "build-watch": "./node_modules/.bin/webpack --watch"
   },
   "standard": {
     "parser": "babel-eslint"
