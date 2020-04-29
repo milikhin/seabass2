@@ -21,6 +21,7 @@ Page {
         property string seabassFileName: ''
         property string seabassFilePath: ''
         property bool seabassIsReadOnly: true
+        property bool seabassIsSaveInProgress: false
 
         anchors.top: page.top
         anchors.bottom: panel.open ? panel.top : page.bottom
@@ -36,14 +37,16 @@ Page {
 
         VerticalScrollDecorator {}
         PullDownMenu {
+            busy: webView.seabassIsSaveInProgress
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: pageStack.push(filePickerPage)
             }
             MenuItem {
+                enabled: !webView.seabassIsSaveInProgress
                 visible: webView.seabassFileName !== ''
-                text: qsTr("Save")
-                onClicked: saveFile()
+                text: webView.seabassIsSaveInProgress ? qsTr("Saving...") : qsTr("Save")
+                onClicked: requestSaveFile()
             }
         }
 
@@ -69,8 +72,13 @@ Page {
             anchors.verticalCenter: isPortrait ? parent.verticalCenter: undefined
 
             IconButton {
-                icon.source: "image://theme/icon-m-folder"
-                onClicked: pageStack.push(filePickerPage)
+                icon.source: "image://theme/icon-m-back"
+                onClicked: editorApi('undo')
+            }
+
+            IconButton {
+                icon.source: "image://theme/icon-m-forward"
+                onClicked: editorApi('redo')
             }
         }
     }
@@ -89,12 +97,13 @@ Page {
     }
 
     // #endregion LAYOUT
-    // #region JS_FUNCTIONS
+    // #region UI_ACTIONS
 
     function openFile(fileName, filePath) {
         QmlJs.readFile(filePath, function(err, text) {
             if (err) {
-                return console.error(err)
+                return displayError(err,
+                    qsTr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
             }
 
             webView.seabassFileName = fileName
@@ -106,24 +115,45 @@ Page {
         })
     }
 
-    function saveFile() {
+    function requestSaveFile() {
+        setSaveInProgress(true)
         editorApi('requestSaveFile', {
             filePath: webView.seabassFilePath
         })
     }
 
+    // #endregion UI_ACTIONS
+    // #endregion JS_FUNCTIONS
+
+    function displayError(error, errorMessage) {
+        console.error(error)
+        pageStack.completeAnimation()
+        pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"), {
+            "text": errorMessage || error.message
+        })
+    }
+
+    function saveFile(filePath, content) {
+        setSaveInProgress(true)
+        return QmlJs.writeFile(filePath, content, function(err) {
+            setSaveInProgress(false)
+            if (err) {
+                return displayError(err,
+                    qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
+            }
+        })
+    }
+
     function editorApiHandler(message) {
+        if (message.data && message.data.responseTo === 'requestSaveFile') {
+            setSaveInProgress(false)
+        }
+
         switch (message.action) {
             case 'error':
-                console.error(JSON.stringify(message))
-                return
-
+                return displayError(null, message.data.errorMessage || 'unknown error')
             case 'saveFile':
-                return QmlJs.writeFile(message.data.filePath, message.data.content, function(err) {
-                    if (err) {
-                        console.error(err)
-                    }
-                })
+                return saveFile(message.data.filePath, message.data.content)
         }
     }
 
@@ -136,6 +166,10 @@ Page {
             ? Screen.width
             : Screen.height
         return deviceWidth / Theme.pixelRatio / (540 / 320)
+    }
+
+    function setSaveInProgress(saveInProgress) {
+        webView.seabassIsSaveInProgress = saveInProgress
     }
 
     // WebView is not resize properly automatically when changing device orientation.

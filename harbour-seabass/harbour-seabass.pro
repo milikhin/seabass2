@@ -19,6 +19,7 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/html/bundle.js \
     qml/cover/CoverPage.qml \
     qml/pages/Editor.qml \
+    qml/pages/ErrorDialog.qml \
     qml/utils.js \
     rpm/harbour-seabass.changes.in \
     rpm/harbour-seabass.changes.run.in \

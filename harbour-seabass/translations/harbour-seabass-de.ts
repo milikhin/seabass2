@@ -18,5 +18,24 @@
         <source>Open file...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Saving...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to read file. Please ensure that you have read access to the</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to write the file. Please ensure that you have write access to</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ErrorDialog</name>
+    <message>
+        <source>Error occured</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

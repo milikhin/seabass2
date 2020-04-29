@@ -23,7 +23,8 @@ class Api {
     const value = this._editor.getContent(filePath)
     this._sendApiMessage('saveFile', {
       content: value,
-      filePath
+      filePath,
+      responseTo: 'requestSaveFile'
     })
   }
 
