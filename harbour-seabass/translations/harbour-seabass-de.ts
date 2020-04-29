@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name>CoverPage</name>
-    <message>
-        <source>Seabass</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Editor</name>
     <message>
         <source>Save</source>

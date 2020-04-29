@@ -1,0 +1,18 @@
+
+# harbour-seabass v0.1.0
+
+Welcome to the Seabass code editor for Sailfish OS!
+Open existing file using the top menu to start.
+
+-------------------
+# Release notes
+
+The current release provides ability to edit existing files.
+This is an early preview version, so things might be broken and some core functionality such as creating new files is yet to be implemented.
+
+Features:
+  * Syntax highlighting for over 120 programming/markup languages
+  * Undo/Redo
+
+Your feedback, bug reports and feature requests are very appreciated!
+If you have any suggestions or something doesn't work as expected, feel free to open an issue on github or contact me via email.

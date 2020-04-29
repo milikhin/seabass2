@@ -1,22 +1,33 @@
 import { InvalidArgError } from './errors'
 
 class Api {
-  constructor ({ editor } = {}) {
+  constructor ({ editor, notifyOnLoaded } = {}) {
     this._editor = editor
+
+    this._registerEditorEventsHandler()
     this._registerApiHandler()
+
+    if (notifyOnLoaded) {
+      this._sendApiMessage('appLoaded')
+    }
   }
 
-  // #region API
+  // #region AP
 
   _apiOnBeautify () {
     this._editor.beautify()
   }
 
-  _apiOnLoadFile ({ filePath, content = '' }) {
+  _apiOnLoadFile ({ filePath, content = '', readOnly = false }) {
     if (!filePath) {
       throw new InvalidArgError(`${filePath} is required to load file into editor`)
     }
-    this._editor.loadFile(filePath, content)
+
+    this._editor.loadFile(filePath, content, readOnly)
+  }
+
+  _apiOnRedo () {
+    this._editor.redo()
   }
 
   _apiOnRequestSaveFile ({ filePath }) {
@@ -28,17 +39,33 @@ class Api {
     })
   }
 
+  _apiOnUndo () {
+    this._editor.undo()
+  }
+
   // #endregion
+
+  _handleStateChanged = ({ hasUndo, hasRedo, filePath }) => {
+    this._sendApiMessage('stateChanged', {
+      hasUndo,
+      hasRedo,
+      filePath
+    })
+  }
 
   _onMessage = (msg) => {
     const { action, data } = JSON.parse(msg.data)
 
-    const apiMethod = `_apiOn${action.charAt(0).toUpperCase()}${action.slice(1)}`
-    if (!this[apiMethod]) {
-      return console.warn(`${action} is not implemented`)
-    }
-
     try {
+      const apiMethod = `_apiOn${action.charAt(0).toUpperCase()}${action.slice(1)}`
+      if (!this[apiMethod]) {
+        console.warn(`${action} is not implemented`)
+        return
+      }
+
+      if (action !== 'loadFile' && data.filePath !== this._editor.getFilePath()) {
+        throw new InvalidArgError(`file ${data.filePath} is not loaded`)
+      }
       return this[apiMethod](data)
     } catch (err) {
       this._sendApiError(err.message)
@@ -52,6 +79,14 @@ class Api {
     }
 
     throw new Error('No supported API found')
+  }
+
+  _registerEditorEventsHandler () {
+    if (!this._editor) {
+      return
+    }
+
+    this._editor.onChange(this._handleStateChanged)
   }
 
   _sendApiError (message) {

@@ -22,6 +22,9 @@ export default class Editor {
     this._ace.renderer.setOption('maxLines', Infinity)
     this._ace.renderer.setOption('minLines', 5)
     this._filePath = undefined
+
+    this._onChangeTimer = undefined
+    this._changeListeners = []
   }
 
   beautify () {
@@ -34,11 +37,11 @@ export default class Editor {
    * @returns {string|undefined} - file content
    */
   getContent (filePath) {
-    if (this._filePath !== filePath) {
-      throw new InvalidArgError(`file ${filePath} is not loaded`)
-    }
-
     return this._ace.getValue()
+  }
+
+  getFilePath () {
+    return this._filePath
   }
 
   /**
@@ -47,11 +50,47 @@ export default class Editor {
    * @param {string} content - editor content
    * @returns {undefined}
    */
-  loadFile (filePath, content) {
+  loadFile (filePath, content, readOnly = false) {
     this._filePath = filePath
     const { mode } = modelist.getModeForPath(filePath)
-    this._ace.session.setMode(mode)
+    const editorSession = this._ace.getSession()
+
+    this._ace.setOption('readOnly', readOnly)
+    editorSession.setMode(mode)
+    editorSession.off('change', this._onChange)
     this._ace.setValue(content)
     this._ace.clearSelection()
+    editorSession.getUndoManager().reset()
+    editorSession.on('change', this._onChange)
+  }
+
+  redo () {
+    this._ace.redo()
+  }
+
+  undo () {
+    this._ace.undo()
+  }
+
+  onChange (callback) {
+    if (this._changeListeners.indexOf(callback) !== -1) {
+      return
+    }
+    this._changeListeners.push(callback)
+  }
+
+  _onChange = () => {
+    clearTimeout(this._onChangeTimer)
+    this._onChangeTimer = setTimeout(() => {
+      const undoManager = this._ace.getSession().getUndoManager()
+      const data = {
+        value: this._ace.getSession().getValue(),
+        hasUndo: undoManager.hasUndo(),
+        hasRedo: undoManager.hasRedo(),
+        filePath: this._filePath
+      }
+
+      this._changeListeners.forEach(listener => listener(data))
+    }, this._autosaveTimeout)
   }
 }
