@@ -21,6 +21,7 @@ CoverBackground {
             visible: !!title
             id: label
             text: title
+            wrapMode: "WrapAtWordBoundaryOrAnywhere"
         }
     }
 

@@ -13,7 +13,9 @@ export default class Editor {
     this._ace = ace.edit(elem, {
       wrap: true,
       tabSize: 2,
-      showFoldWidgets: false
+      showFoldWidgets: false,
+      indentedSoftWrap: false,
+      animatedScroll: false
     })
     this._filePath = undefined
     this._onChangeTimer = undefined
@@ -21,8 +23,6 @@ export default class Editor {
     this._lastScrollTop = 0
 
     this._ace.setTheme('ace/theme/twilight')
-    this._ace.setAnimatedScroll(false)
-
     this._applyPlatformHaks()
   }
 

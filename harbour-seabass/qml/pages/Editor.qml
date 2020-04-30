@@ -17,7 +17,6 @@ Page {
 
     allowedOrientations: Orientation.All
     onOrientationChanged: {
-        webView.experimental.deviceWidth = getDeviceWidth()
         fixResize()
     }
 
@@ -41,6 +40,11 @@ Page {
 
         PullDownMenu {
             busy: page.seabassIsSaveInProgress
+            MenuItem {
+                text: qsTr('About')
+                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+            }
+
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: pageStack.push(filePickerPage)
@@ -89,6 +93,7 @@ Page {
             }
 
             TextSwitch {
+                id: readOnlySwitch
                 text: "Read only"
                 enabled: !page.seabassForceReadOnly
                 checked: page.seabassIsReadOnly
@@ -159,18 +164,19 @@ Page {
             case 'error':
                 return displayError(null, message.data.errorMessage || 'unknown error')
             case 'appLoaded':
-                fixResize()
                 const welcomeNoteUrl = Qt.resolvedUrl("../changelog.txt")
                 return openFile('changelog.txt', welcomeNoteUrl, true)
             case 'stateChanged':
                 if (message.data.filePath === page.seabassFilePath) {
                     page.seabassHasUndo = !message.data.isReadOnly && message.data.hasUndo
                     page.seabassHasRedo = !message.data.isReadOnly && message.data.hasRedo
-                    page.seabassIsReadOnly = message.data.isReadOnly
 
-                    if (message.data.isReadOnly) {
+                    if (message.data.isReadOnly && !page.seabassIsReadOnly) {
                         Qt.inputMethod.hide()
                     }
+
+                    page.seabassIsReadOnly = message.data.isReadOnly
+                    readOnlySwitch.checked = message.data.isReadOnly
                 }
 
                 return
@@ -213,8 +219,9 @@ Page {
     // WebView is not resize properly automatically when changing device orientation.
     // Simple hak to fix it
     function fixResize() {
-        webView.x = 1
-        webView.x = 0
+        webView.experimental.deviceWidth = getDeviceWidth()
+        page.x = 1
+        page.x = 0
     }
 
     // #endregion JS_FUNCTIONS

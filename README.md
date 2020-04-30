@@ -19,8 +19,8 @@ Application for each platform consists of two major parts:
 1. Platform-specific application  
     The application provides UI using native components, interacts with file system and contains WebView to inject editor engine
 
-1. Common web-based editor engine  
-    HTML5 application optimised for mobile WebView runtime based on the awesome [Ace editor](https://github.com/ajaxorg/ace)
+1. Platform-agnostic web-based editor engine  
+    HTML5 application optimised for mobile WebView runtime
 
 The two components interacts using a simple message-based API.
 In Sailfish OS messages are delivered using `navigator.qt` API

@@ -18,6 +18,7 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/html/index.html \
     qml/html/bundle.js \
     qml/cover/CoverPage.qml \
+    qml/pages/About.qml \
     qml/pages/Editor.qml \
     qml/pages/ErrorDialog.qml \
     qml/utils.js \
