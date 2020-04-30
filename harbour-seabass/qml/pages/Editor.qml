@@ -9,7 +9,8 @@ Page {
 
     property string seabassFileName: ''
     property string seabassFilePath: ''
-    property bool seabassIsReadOnly: true
+    property bool seabassForceReadOnly: false
+    property bool seabassIsReadOnly: false
     property bool seabassHasUndo: false
     property bool seabassHasRedo: false
     property bool seabassIsSaveInProgress: false
@@ -38,7 +39,6 @@ Page {
         experimental.deviceWidth: getDeviceWidth()
         experimental.preferences.navigatorQtObjectEnabled: true
 
-        VerticalScrollDecorator {}
         PullDownMenu {
             busy: page.seabassIsSaveInProgress
             MenuItem {
@@ -69,10 +69,12 @@ Page {
         dock: Dock.Bottom
         focus: false
 
-        Flow {
+        Row {
             anchors.leftMargin: Theme.paddingMedium
-            anchors.left: isPortrait ? parent.left: undefined
-            anchors.verticalCenter: isPortrait ? parent.verticalCenter: undefined
+            anchors.left: parent.left
+            anchors.rightMargin: Theme.paddingMedium
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
 
             IconButton {
                 enabled: page.seabassHasUndo
@@ -84,6 +86,13 @@ Page {
                 enabled: page.seabassHasRedo
                 icon.source: "image://theme/icon-m-forward"
                 onClicked: editorApi('redo')
+            }
+
+            TextSwitch {
+                text: "Read only"
+                enabled: !page.seabassForceReadOnly
+                checked: page.seabassIsReadOnly
+                onClicked: editorApi('toggleReadOnly')
             }
         }
     }
@@ -115,12 +124,12 @@ Page {
             page.seabassFilePath = filePath
             page.seabassHasUndo = false
             page.seabassHasRedo = false
-            page.seabassIsReadOnly = readOnly || false
+            page.seabassForceReadOnly = readOnly ||false
 
             editorApi('loadFile', {
                 filePath: filePath,
                 content: text,
-                readOnly: page.seabassIsReadOnly
+                readOnly: page.seabassForceReadOnly
             })
         })
     }
@@ -150,12 +159,18 @@ Page {
             case 'error':
                 return displayError(null, message.data.errorMessage || 'unknown error')
             case 'appLoaded':
+                fixResize()
                 const welcomeNoteUrl = Qt.resolvedUrl("../changelog.txt")
                 return openFile('changelog.txt', welcomeNoteUrl, true)
             case 'stateChanged':
                 if (message.data.filePath === page.seabassFilePath) {
-                    page.seabassHasUndo = message.data.hasUndo
-                    page.seabassHasRedo = message.data.hasRedo
+                    page.seabassHasUndo = !message.data.isReadOnly && message.data.hasUndo
+                    page.seabassHasRedo = !message.data.isReadOnly && message.data.hasRedo
+                    page.seabassIsReadOnly = message.data.isReadOnly
+
+                    if (message.data.isReadOnly) {
+                        Qt.inputMethod.hide()
+                    }
                 }
 
                 return

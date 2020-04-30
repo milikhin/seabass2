@@ -24,6 +24,7 @@ Page {
                 anchors.rightMargin: Theme.horizontalPageMargin
 
                 text: root.text
+                font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
