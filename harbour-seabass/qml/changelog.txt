@@ -2,7 +2,11 @@
 # harbour-seabass v0.1.0
 
 Welcome to the Seabass code editor for Sailfish OS!
-Open existing file using the top menu to start.
+
+-------------------
+# Getting started
+
+Use top menu to open existing file.
 
 -------------------
 # Release notes
