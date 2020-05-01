@@ -1,3 +1,5 @@
+![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
+
 # Seabass
 
 ## About
