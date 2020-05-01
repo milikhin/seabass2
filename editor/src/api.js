@@ -39,17 +39,22 @@ class Api {
     })
   }
 
+  _apiOnToggleReadOnly () {
+    this._editor.toggleReadOnly()
+  }
+
   _apiOnUndo () {
     this._editor.undo()
   }
 
   // #endregion
 
-  _handleStateChanged = ({ hasUndo, hasRedo, filePath }) => {
+  _handleStateChanged = ({ hasUndo, hasRedo, filePath, isReadOnly }) => {
     this._sendApiMessage('stateChanged', {
       hasUndo,
       hasRedo,
-      filePath
+      filePath,
+      isReadOnly
     })
   }
 

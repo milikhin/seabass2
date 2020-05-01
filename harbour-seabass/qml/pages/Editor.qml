@@ -9,14 +9,14 @@ Page {
 
     property string seabassFileName: ''
     property string seabassFilePath: ''
-    property bool seabassIsReadOnly: true
+    property bool seabassForceReadOnly: false
+    property bool seabassIsReadOnly: false
     property bool seabassHasUndo: false
     property bool seabassHasRedo: false
     property bool seabassIsSaveInProgress: false
 
     allowedOrientations: Orientation.All
     onOrientationChanged: {
-        webView.experimental.deviceWidth = getDeviceWidth()
         fixResize()
     }
 
@@ -38,9 +38,13 @@ Page {
         experimental.deviceWidth: getDeviceWidth()
         experimental.preferences.navigatorQtObjectEnabled: true
 
-        VerticalScrollDecorator {}
         PullDownMenu {
             busy: page.seabassIsSaveInProgress
+            MenuItem {
+                text: qsTr('About')
+                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+            }
+
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: pageStack.push(filePickerPage)
@@ -69,10 +73,12 @@ Page {
         dock: Dock.Bottom
         focus: false
 
-        Flow {
+        Row {
             anchors.leftMargin: Theme.paddingMedium
-            anchors.left: isPortrait ? parent.left: undefined
-            anchors.verticalCenter: isPortrait ? parent.verticalCenter: undefined
+            anchors.left: parent.left
+            anchors.rightMargin: Theme.paddingMedium
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
 
             IconButton {
                 enabled: page.seabassHasUndo
@@ -84,6 +90,14 @@ Page {
                 enabled: page.seabassHasRedo
                 icon.source: "image://theme/icon-m-forward"
                 onClicked: editorApi('redo')
+            }
+
+            TextSwitch {
+                id: readOnlySwitch
+                text: "Read only"
+                enabled: !page.seabassForceReadOnly
+                checked: page.seabassIsReadOnly
+                onClicked: editorApi('toggleReadOnly')
             }
         }
     }
@@ -115,12 +129,12 @@ Page {
             page.seabassFilePath = filePath
             page.seabassHasUndo = false
             page.seabassHasRedo = false
-            page.seabassIsReadOnly = readOnly || false
+            page.seabassForceReadOnly = readOnly ||false
 
             editorApi('loadFile', {
                 filePath: filePath,
                 content: text,
-                readOnly: page.seabassIsReadOnly
+                readOnly: page.seabassForceReadOnly
             })
         })
     }
@@ -154,8 +168,15 @@ Page {
                 return openFile('changelog.txt', welcomeNoteUrl, true)
             case 'stateChanged':
                 if (message.data.filePath === page.seabassFilePath) {
-                    page.seabassHasUndo = message.data.hasUndo
-                    page.seabassHasRedo = message.data.hasRedo
+                    page.seabassHasUndo = !message.data.isReadOnly && message.data.hasUndo
+                    page.seabassHasRedo = !message.data.isReadOnly && message.data.hasRedo
+
+                    if (message.data.isReadOnly && !page.seabassIsReadOnly) {
+                        Qt.inputMethod.hide()
+                    }
+
+                    page.seabassIsReadOnly = message.data.isReadOnly
+                    readOnlySwitch.checked = message.data.isReadOnly
                 }
 
                 return
@@ -198,8 +219,9 @@ Page {
     // WebView is not resize properly automatically when changing device orientation.
     // Simple hak to fix it
     function fixResize() {
-        webView.x = 1
-        webView.x = 0
+        webView.experimental.deviceWidth = getDeviceWidth()
+        page.x = 1
+        page.x = 0
     }
 
     // #endregion JS_FUNCTIONS

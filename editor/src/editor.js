@@ -5,8 +5,6 @@ import 'ace-builds/webpack-resolver'
 import 'ace-builds/src-noconflict/theme-twilight'
 import beautify from 'ace-builds/src-noconflict/ext-beautify'
 
-import { InvalidArgError } from './errors'
-
 /**
  * Editor window
  */
@@ -15,16 +13,17 @@ export default class Editor {
     this._ace = ace.edit(elem, {
       wrap: true,
       tabSize: 2,
-      showFoldWidgets: false
+      showFoldWidgets: false,
+      indentedSoftWrap: false,
+      animatedScroll: false
     })
-
-    this._ace.setTheme('ace/theme/twilight')
-    this._ace.renderer.setOption('maxLines', Infinity)
-    this._ace.renderer.setOption('minLines', 5)
     this._filePath = undefined
-
     this._onChangeTimer = undefined
     this._changeListeners = []
+    this._lastScrollTop = 0
+
+    this._ace.setTheme('ace/theme/twilight')
+    this._applyPlatformHaks()
   }
 
   beautify () {
@@ -62,6 +61,7 @@ export default class Editor {
     this._ace.clearSelection()
     editorSession.getUndoManager().reset()
     editorSession.on('change', this._onChange)
+    this._onChange()
   }
 
   redo () {
@@ -79,6 +79,24 @@ export default class Editor {
     this._changeListeners.push(callback)
   }
 
+  toggleReadOnly () {
+    const readOnly = this._ace.getOption('readOnly')
+    this._ace.setOption('readOnly', !readOnly)
+    this._onChange()
+  }
+
+  _applyPlatformHaks () {
+    this._ace.getSession().on('changeScrollTop', scrollTop => {
+      if (this._lastScrollTop > scrollTop) {
+        window.scrollTo(0, 1)
+      } else {
+        window.scrollTo(0, 0)
+      }
+
+      this._lastScrollTop = scrollTop
+    })
+  }
+
   _onChange = () => {
     clearTimeout(this._onChangeTimer)
     this._onChangeTimer = setTimeout(() => {
@@ -87,6 +105,7 @@ export default class Editor {
         value: this._ace.getSession().getValue(),
         hasUndo: undoManager.hasUndo(),
         hasRedo: undoManager.hasRedo(),
+        isReadOnly: this._ace.getOption('readOnly'),
         filePath: this._filePath
       }
 

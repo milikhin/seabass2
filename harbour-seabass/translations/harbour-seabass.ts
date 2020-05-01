@@ -2,6 +2,29 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>About</name>
+    <message>
+        <source>Seabass v0.1.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seabass is developed by Mikhael Milikhin. Sources are available under MIT license: github.com/milikhin/seabass2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ace editor, copyright (c) 2010, Ajax.org B.V., BSD license:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Editor</name>
     <message>
         <source>Save</source>
@@ -21,6 +44,10 @@
     </message>
     <message>
         <source>Unable to write the file. Please ensure that you have write access to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
