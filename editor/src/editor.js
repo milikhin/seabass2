@@ -53,13 +53,15 @@ export default class Editor {
     this._filePath = filePath
     const { mode } = modelist.getModeForPath(filePath)
     const editorSession = this._ace.getSession()
-
-    this._ace.setOption('readOnly', readOnly)
-    editorSession.setMode(mode)
     editorSession.off('change', this._onChange)
+    this._ace.setOption('readOnly', readOnly)
+
+    // load new content and activate required mode
     this._ace.setValue(content)
+    editorSession.setMode(mode)
     this._ace.clearSelection()
     editorSession.getUndoManager().reset()
+
     editorSession.on('change', this._onChange)
     this._onChange()
   }

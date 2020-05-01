@@ -15,8 +15,7 @@ TARGET = harbour-seabass
 CONFIG += sailfishapp_qml
 
 DISTFILES += qml/harbour-seabass.qml \
-    qml/html/index.html \
-    qml/html/bundle.js \
+    qml/html/dist \
     qml/cover/CoverPage.qml \
     qml/pages/About.qml \
     qml/pages/Editor.qml \

@@ -1,9 +1,10 @@
 const path = require('path')
+const CopyPlugin = require('copy-webpack-plugin')
 
 const sailfishConfig = {
   entry: './editor/src/index.js',
   output: {
-    path: path.resolve(__dirname, 'harbour-seabass/qml/html/dist'),
+    path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
     filename: 'bundle.js'
   },
   module: {
@@ -19,7 +20,14 @@ const sailfishConfig = {
       }
     ]
   },
-  mode: 'development'
+  mode: 'production',
+  plugins: [
+    new CopyPlugin([
+      {
+        from: './harbour-seabass/html'
+      }
+    ])
+  ]
 }
 
 module.exports = [sailfishConfig]
