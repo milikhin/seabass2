@@ -31,3 +31,17 @@ In Sailfish OS messages are delivered using `navigator.qt` API
 
 * `harbour-seabass` - QML application for Sailfish OS developed with Sailfish SDK
 * `editor` - JS editor engine
+
+## Build instructions
+
+Requiremests:
+
+* Node.JS, tested using v12
+* Sailfish SDK
+
+Build steps:
+
+1. Building editor engine  
+   1. Install editor dependenncies and build tools: `npm install`
+   1. Build editor engine and copy required files to Sailfish app directory: `npm build`
+1. Build `harbour-seabass` using Sailfish SDK
