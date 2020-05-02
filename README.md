@@ -12,7 +12,11 @@ Currently supported platforms:
 
 Features:
 * Syntax highlighting for over 120 programming/markup languages
-* Native look and feel for each platform
+* Undo/Redo
+* Navigation buttons
+
+![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-01.png)
+![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
 
 ## Architecture
 
@@ -36,7 +40,7 @@ In Sailfish OS messages are delivered using `navigator.qt` API
 
 Requiremests:
 
-* Node.JS, tested using v12
+* Node.js, tested using v12
 * Sailfish SDK
 
 Build steps:
