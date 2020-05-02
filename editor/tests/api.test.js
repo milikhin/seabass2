@@ -10,7 +10,12 @@ describe('api.js', () => {
     loadFile: jest.fn(),
     onChange: jest.fn(),
     redo: jest.fn(),
-    undo: jest.fn()
+    undo: jest.fn(),
+
+    navigateDown: jest.fn(),
+    navigateLeft: jest.fn(),
+    navigateRight: jest.fn(),
+    navigateUp: jest.fn()
   }
 
   const filePath = uuid()
@@ -172,6 +177,62 @@ describe('api.js', () => {
         })
 
         expect(editor.redo).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateLeft', () => {
+      it('should execute `navigateLeft` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateLeft',
+          data: { filePath }
+        })
+
+        expect(editor.navigateLeft).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateRight', () => {
+      it('should execute `navigateRight` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateRight',
+          data: { filePath }
+        })
+
+        expect(editor.navigateRight).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateUp', () => {
+      it('should execute `navigateUp` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateUp',
+          data: { filePath }
+        })
+
+        expect(editor.navigateUp).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateDown', () => {
+      it('should execute `navigateDown` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateDown',
+          data: { filePath }
+        })
+
+        expect(editor.navigateDown).toHaveBeenCalledTimes(1)
       })
     })
 

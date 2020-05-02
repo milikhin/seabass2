@@ -66,6 +66,22 @@ export default class Editor {
     this._onChange()
   }
 
+  navigateDown () {
+    this._ace.navigateDown()
+  }
+
+  navigateLeft () {
+    this._ace.navigateLeft()
+  }
+
+  navigateRight () {
+    this._ace.navigateRight()
+  }
+
+  navigateUp () {
+    this._ace.navigateUp()
+  }
+
   redo () {
     this._ace.redo()
   }

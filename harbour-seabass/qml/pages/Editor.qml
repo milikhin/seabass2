@@ -41,11 +41,6 @@ Page {
         PullDownMenu {
             busy: page.seabassIsSaveInProgress
             MenuItem {
-                text: qsTr('About')
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
-            }
-
-            MenuItem {
                 text: qsTr("Open file...")
                 onClicked: pageStack.push(filePickerPage)
             }
@@ -62,6 +57,10 @@ Page {
                 text: qsTr(panel.open ? "Hide toolbar" : "Show toolbar")
                 onClicked: panel.open = !panel.open
             }
+            MenuItem {
+                text: qsTr('About')
+                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+            }
         }
     }
 
@@ -73,31 +72,65 @@ Page {
         dock: Dock.Bottom
         focus: false
 
-        Row {
-            anchors.leftMargin: Theme.paddingMedium
-            anchors.left: parent.left
-            anchors.rightMargin: Theme.paddingMedium
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+        SilicaFlickable {
+            contentWidth: panelRow.childrenRect.width;
+            height: parent.height
+            width: parent.width
 
-            IconButton {
-                enabled: page.seabassHasUndo
-                icon.source: "image://theme/icon-m-back"
-                onClicked: editorApi('undo')
-            }
+            HorizontalScrollDecorator {}
+            flickableDirection: Flickable.HorizontalFlick
 
-            IconButton {
-                enabled: page.seabassHasRedo
-                icon.source: "image://theme/icon-m-forward"
-                onClicked: editorApi('redo')
-            }
+            Row {
+                id: panelRow
+                anchors.verticalCenter: parent.verticalCenter
 
-            TextSwitch {
-                id: readOnlySwitch
-                text: "Read only"
-                enabled: !page.seabassForceReadOnly
-                checked: page.seabassIsReadOnly
-                onClicked: editorApi('toggleReadOnly')
+                IconButton {
+                    enabled: page.seabassHasUndo
+                    icon.source: "image://theme/icon-m-back"
+                    onClicked: editorApi('undo')
+                }
+
+                IconButton {
+                    enabled: page.seabassHasRedo
+                    icon.source: "image://theme/icon-m-forward"
+                    onClicked: editorApi('redo')
+                }
+
+                IconButton {
+                    icon.source: "image://theme/icon-m-left"
+                    onClicked: editorApi('navigateLeft')
+                }
+
+                IconButton {
+                    icon.source: "image://theme/icon-m-right"
+                    onClicked: editorApi('navigateRight')
+                }
+
+                IconButton {
+                    icon.source: "image://theme/icon-m-up"
+                    onClicked: editorApi('navigateUp')
+                }
+
+                IconButton {
+                    icon.source: "image://theme/icon-m-down"
+                    onClicked: editorApi('navigateDown')
+                }
+
+                TextSwitch {
+                    id: readOnlySwitch
+                    text: "Read only"
+                    width: childrenRect.width + Theme.paddingLarge
+                    enabled: !page.seabassForceReadOnly
+                    checked: page.seabassIsReadOnly
+                    onClicked: editorApi('toggleReadOnly')
+                    Component.onCompleted: {
+                        var label = children[1]
+                        var description = children[2]
+                        label.width = undefined
+                        description.width = 0
+                        description.visible = 0
+                    }
+                }
             }
         }
     }

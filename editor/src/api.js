@@ -18,6 +18,22 @@ class Api {
     this._editor.beautify()
   }
 
+  _apiOnNavigateLeft () {
+    this._editor.navigateLeft()
+  }
+
+  _apiOnNavigateRight () {
+    this._editor.navigateRight()
+  }
+
+  _apiOnNavigateUp () {
+    this._editor.navigateUp()
+  }
+
+  _apiOnNavigateDown () {
+    this._editor.navigateDown()
+  }
+
   _apiOnLoadFile ({ filePath, content = '', readOnly = false }) {
     if (!filePath) {
       throw new InvalidArgError(`${filePath} is required to load file into editor`)
