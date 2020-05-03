@@ -25,7 +25,7 @@ Application for each platform consists of two major parts:
 1. Platform-specific application  
     The application provides UI using native components, interacts with file system and contains WebView to inject editor engine
 
-1. Platform-agnostic web-based editor engine  
+1. Web-based editor engine  
     HTML5 application optimised for mobile WebView runtime
 
 The two components interacts using a simple message-based API.
