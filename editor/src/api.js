@@ -75,9 +75,8 @@ class Api {
   }
 
   _onMessage = (msg) => {
-    const { action, data } = JSON.parse(msg.data)
-
     try {
+      const { action, data } = JSON.parse(msg.data)
       const apiMethod = `_apiOn${action.charAt(0).toUpperCase()}${action.slice(1)}`
       if (!this[apiMethod]) {
         console.warn(`${action} is not implemented`)

@@ -151,6 +151,13 @@ Page {
     // #endregion LAYOUT
     // #region UI_ACTIONS
 
+    /**
+     * Opens given file in the editor
+     * @param {string} fileName  - file name
+     * @param {string} filePath - /path/to/file
+     * @param {boolean} [readOnly=false] - open file in readonly mode if true, in readwrite mode otherwise
+     * @returns {undefined}
+     */
     function openFile(fileName, filePath, readOnly) {
         QmlJs.readFile(filePath, function(err, text) {
             if (err) {
@@ -172,6 +179,10 @@ Page {
         })
     }
 
+    /**
+     * Request editor to save file at the given path (editor will reply with a message containing file content)
+     * @returns {undefined}
+     */
     function requestSaveFile() {
         setSaveInProgress(true)
         editorApi('requestSaveFile')
@@ -180,6 +191,12 @@ Page {
     // #endregion UI_ACTIONS
     // #endregion JS_FUNCTIONS
 
+    /**
+     * Displays error message
+     * @param {Error} error - error object
+     * @param {string} [errorMessage] - error message to display
+     * @returns {undefined}
+     */
     function displayError(error, errorMessage) {
         console.error(error)
         pageStack.completeAnimation()
@@ -188,6 +205,11 @@ Page {
         })
     }
 
+    /**
+     * Handles incoming API message
+     * @param {Object} message - API message
+     * @returns {undefined}
+     */
     function editorApiHandler(message) {
         if (message.data && message.data.responseTo === 'requestSaveFile') {
             setSaveInProgress(false)
@@ -218,6 +240,12 @@ Page {
         }
     }
 
+    /**
+     * Sends API message
+     * @param {string} action - API action name
+     * @param {Object} data - action params
+     * @returns {undefined}
+     */
     function editorApi(action, data) {
         data = data || {}
         if (!data.filePath) {
@@ -227,6 +255,12 @@ Page {
         webView.experimental.postMessage(JSON.stringify({ 'action': action, 'data': data }));
     }
 
+    /**
+     * Saves file with the given content at the given path
+     * @param {string} filePath - /path/to/file
+     * @param {string} content  - file content
+     * @returns {undefined}
+     */
     function saveFile(filePath, content) {
         setSaveInProgress(true)
         return QmlJs.writeFile(filePath, content, function(err) {
@@ -238,6 +272,10 @@ Page {
         })
     }
 
+    /**
+     * Returns HTML device-width scaled correctly for the current device
+     * @returns {int} - device width in CSS pixels
+     */
     function getDeviceWidth() {
         const deviceWidth = page.orientation === Orientation.Portrait
             ? Screen.width
@@ -245,12 +283,19 @@ Page {
         return deviceWidth / Theme.pixelRatio / (540 / 320)
     }
 
+    /**
+     * Sets saveInProgress flag
+     * @param {boolean} saveInProgress - flag value
+     * @returns {undefined}
+     */
     function setSaveInProgress(saveInProgress) {
         page.seabassIsSaveInProgress = saveInProgress
     }
 
-    // WebView is not resize properly automatically when changing device orientation.
-    // Simple hak to fix it
+    /**
+     * Simple hak to fix issue with WebView not resized properly automatically when changing device orientation.
+     * @returns {undefined}
+     */
     function fixResize() {
         webView.experimental.deviceWidth = getDeviceWidth()
         page.x = 1
