@@ -4,7 +4,7 @@
   "description": "web-editor component for Seabass app",
   "main": "index.js",
   "scripts": {
-    "lint": "(cd editor/; standard --parse=babel-eslint)",
+    "lint": "(cd editor/; standard --parser=babel-eslint)",
     "test": "jest --config=./editor/jest.config.js",
     "test-watch": "jest --config=./editor/jest.config.js --watch",
     "build": "./node_modules/.bin/webpack",
