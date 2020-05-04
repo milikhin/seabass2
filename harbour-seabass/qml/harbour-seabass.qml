@@ -9,6 +9,8 @@ ApplicationWindow
     property string coverTitle: ''
     initialPage: Component {
         Editor {
+            seabassFilePath: Qt.application.arguments[2] || Qt.resolvedUrl("./changelog.txt")
+            seabassFileName: seabassFilePath.split('/').slice(-1)[0]
             onSeabassFileNameChanged: {
                 root.coverTitle = seabassFileName
             }

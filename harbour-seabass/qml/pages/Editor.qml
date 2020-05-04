@@ -219,8 +219,11 @@ Page {
             case 'error':
                 return displayError(null, message.data.errorMessage || 'unknown error')
             case 'appLoaded':
-                const welcomeNoteUrl = Qt.resolvedUrl("../changelog.txt")
-                return openFile('changelog.txt', welcomeNoteUrl, true)
+                if (!seabassFilePath) {
+                    return
+                }
+                var isWelcomeText = Qt.resolvedUrl("../changelog.txt") === seabassFilePath
+                return openFile(seabassFileName, seabassFilePath, isWelcomeText)
             case 'stateChanged':
                 if (message.data.filePath === page.seabassFilePath) {
                     page.seabassHasUndo = !message.data.isReadOnly && message.data.hasUndo

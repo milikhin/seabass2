@@ -4,6 +4,7 @@ X-Nemo-Application-Type=silica-qt5
 Icon=harbour-seabass
 Exec=sailfish-qml harbour-seabass
 Name=harbour-seabass
+MimeType=text/plain;
 # translation example:
 # your app name in German locale (de)
 #

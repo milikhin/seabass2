@@ -10,15 +10,21 @@
   */
 function readFile(filePath, callback) {
     var request = new XMLHttpRequest()
+    var sentSuccessfully = false;
+
     request.open('GET', filePath)
     request.onreadystatechange = function(event) {
+        // The only way i've found to distinguish successful and failed fs write operations using XHR in QML
+        //   is to check that request.readyState has got HEADERS_RECEIVED ("send has been called") value before the DONE value
+        if (request.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+            sentSuccessfully = true
+        }
         if (request.readyState === XMLHttpRequest.DONE) {
-            // request.status is 0 for not found files and 200 for successful reads
-            if (request.status >= 200 && request.status <= 400) {
-                return callback(null, request.responseText)
+            if (!sentSuccessfully) {
+                return callback(new Error('Error writing file'))
             }
 
-            callback(new Error('Error reading file'))
+            return callback(null, request.responseText)
         }
     }
     request.onerror = function(err) {
@@ -50,7 +56,7 @@ function writeFile(filePath, content, callback) {
 
         if (request.readyState === XMLHttpRequest.DONE) {
             if (!sentSuccessfully) {
-                callback(new Error('Error writing file'))
+                return callback(new Error('Error writing file'))
             }
 
             callback(null)
