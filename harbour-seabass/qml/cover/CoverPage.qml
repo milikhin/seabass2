@@ -6,8 +6,7 @@ CoverBackground {
     anchors.centerIn: parent
 
     Column {
-        anchors.verticalCenter: parent.verticalCenter
-        width: parent.width
+        anchors.centerIn: parent
 
         Image {
             id: logo
@@ -15,9 +14,14 @@ CoverBackground {
             source: "../logo.png"
         }
 
+        Rectangle {
+            height: Theme.paddingMedium
+            width: parent.width
+            color: "transparent"
+        }
+
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: Theme.paddingMedium
             visible: !!title
             id: label
             text: title
