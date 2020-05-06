@@ -122,6 +122,8 @@ Page {
                     width: childrenRect.width + Theme.paddingLarge
                     enabled: !page.seabassForceReadOnly
                     checked: page.seabassIsReadOnly
+                    // disable automaticCheck, so that binding works
+                    automaticCheck: false
                     onClicked: editorApi('toggleReadOnly')
                     Component.onCompleted: {
                         var label = children[1]
@@ -155,10 +157,10 @@ Page {
      * Opens given file in the editor
      * @param {string} fileName  - file name
      * @param {string} filePath - /path/to/file
-     * @param {boolean} [readOnly=false] - open file in readonly mode if true, in readwrite mode otherwise
+     * @param {boolean} [forceReadOnly=false] - open file in readonly mode if true, in readwrite mode otherwise
      * @returns {undefined}
      */
-    function openFile(fileName, filePath, readOnly) {
+    function openFile(fileName, filePath, forceReadOnly) {
         QmlJs.readFile(filePath, function(err, text) {
             if (err) {
                 return displayError(err,
@@ -169,7 +171,7 @@ Page {
             page.seabassFilePath = filePath
             page.seabassHasUndo = false
             page.seabassHasRedo = false
-            page.seabassForceReadOnly = readOnly ||false
+            page.seabassForceReadOnly = forceReadOnly || false
 
             editorApi('loadFile', {
                 filePath: filePath,
@@ -219,11 +221,10 @@ Page {
             case 'error':
                 return displayError(null, message.data.errorMessage || 'unknown error')
             case 'appLoaded':
-                if (!seabassFilePath) {
+                if (!page.seabassFilePath) {
                     return
                 }
-                var isWelcomeText = Qt.resolvedUrl("../changelog.txt") === seabassFilePath
-                return openFile(seabassFileName, seabassFilePath, isWelcomeText)
+                return openFile(page.seabassFileName, page.seabassFilePath, page.seabassForceReadOnly)
             case 'stateChanged':
                 if (message.data.filePath === page.seabassFilePath) {
                     page.seabassHasUndo = !message.data.isReadOnly && message.data.hasUndo
@@ -232,9 +233,7 @@ Page {
                     if (message.data.isReadOnly && !page.seabassIsReadOnly) {
                         Qt.inputMethod.hide()
                     }
-
                     page.seabassIsReadOnly = message.data.isReadOnly
-                    readOnlySwitch.checked = message.data.isReadOnly
                 }
 
                 return

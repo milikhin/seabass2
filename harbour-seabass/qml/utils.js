@@ -1,5 +1,16 @@
 .pragma library
 
+var DEFAULT_FILE_PATH = Qt.resolvedUrl('./changelog.txt')
+
+function getDefaultFile() {
+    var filePath = Qt.application.arguments[2] || DEFAULT_FILE_PATH
+    return {
+        fileName: filePath.split('/').slice(-1)[0],
+        filePath: filePath,
+        isReadOnly: !Qt.application.arguments[2]
+    }
+}
+
 /**
   * Reads content of a file at the given path.
   * Async operation in Node.js callback notation
