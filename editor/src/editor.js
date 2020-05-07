@@ -82,6 +82,22 @@ export default class Editor {
     this._ace.navigateUp()
   }
 
+  navigateFileEnd () {
+    this._ace.navigateFileEnd()
+  }
+
+  navigateFileStart () {
+    this._ace.navigateFileStart()
+  }
+
+  navigateLineEnd () {
+    this._ace.navigateLineEnd()
+  }
+
+  navigateLineStart () {
+    this._ace.navigateLineStart()
+  }
+
   redo () {
     this._ace.redo()
   }

@@ -99,21 +99,25 @@ Page {
                 IconButton {
                     icon.source: "image://theme/icon-m-left"
                     onClicked: editorApi('navigateLeft')
+                    onPressAndHold: editorApi('navigateLineStart')
                 }
 
                 IconButton {
                     icon.source: "image://theme/icon-m-right"
                     onClicked: editorApi('navigateRight')
+                    onPressAndHold: editorApi('navigateLineEnd')
                 }
 
                 IconButton {
                     icon.source: "image://theme/icon-m-up"
                     onClicked: editorApi('navigateUp')
+                    onPressAndHold: editorApi('navigateFileStart')
                 }
 
                 IconButton {
                     icon.source: "image://theme/icon-m-down"
                     onClicked: editorApi('navigateDown')
+                    onPressAndHold: editorApi('navigateFileEnd')
                 }
 
                 TextSwitch {
