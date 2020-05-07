@@ -47,5 +47,5 @@ Build steps:
 
 1. Building editor engine  
    1. Install editor dependenncies and build tools: `npm install`
-   1. Build editor engine and copy required files to Sailfish app directory: `npm build`
+   1. Build editor engine and copy required files to Sailfish app directory: `npm run build`
 1. Build `harbour-seabass` using Sailfish SDK
