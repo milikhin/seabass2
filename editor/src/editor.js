@@ -75,10 +75,12 @@ export default class Editor {
 
   navigateLeft () {
     this._ace.navigateLeft()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateRight () {
     this._ace.navigateRight()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateUp () {
@@ -98,10 +100,12 @@ export default class Editor {
 
   navigateLineEnd () {
     this._ace.navigateLineEnd()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateLineStart () {
     this._ace.navigateLineStart()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   redo () {
