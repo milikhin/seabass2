@@ -67,7 +67,10 @@ export default class Editor {
   }
 
   navigateDown () {
+    // 1. Position cursor
     this._ace.navigateDown()
+    // 2. Scroll editor into the current cursor position
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateLeft () {
@@ -80,14 +83,17 @@ export default class Editor {
 
   navigateUp () {
     this._ace.navigateUp()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateFileEnd () {
     this._ace.navigateFileEnd()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateFileStart () {
     this._ace.navigateFileStart()
+    this._ace.renderer.scrollCursorIntoView()
   }
 
   navigateLineEnd () {
