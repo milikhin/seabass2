@@ -15,7 +15,11 @@ describe('api.js', () => {
     navigateDown: jest.fn(),
     navigateLeft: jest.fn(),
     navigateRight: jest.fn(),
-    navigateUp: jest.fn()
+    navigateUp: jest.fn(),
+    navigateLineStart: jest.fn(),
+    navigateLineEnd: jest.fn(),
+    navigateFileStart: jest.fn(),
+    navigateFileEnd: jest.fn()
   }
 
   const filePath = uuid()
@@ -233,6 +237,62 @@ describe('api.js', () => {
         })
 
         expect(editor.navigateDown).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateLineStart', () => {
+      it('should execute `navigateLineStart` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateLineStart',
+          data: { filePath }
+        })
+
+        expect(editor.navigateLineStart).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateLineEnd', () => {
+      it('should execute `navigateLineEnd` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateLineEnd',
+          data: { filePath }
+        })
+
+        expect(editor.navigateLineEnd).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateFileStart', () => {
+      it('should execute `navigateFileStart` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateFileStart',
+          data: { filePath }
+        })
+
+        expect(editor.navigateFileStart).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#navigateFileEnd', () => {
+      it('should execute `navigateFileEnd` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'navigateFileEnd',
+          data: { filePath }
+        })
+
+        expect(editor.navigateFileEnd).toHaveBeenCalledTimes(1)
       })
     })
 

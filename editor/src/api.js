@@ -16,7 +16,7 @@ class Api {
 
   /**
    * 'beautify' command handler: intended to auto format file content
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnBeautify () {
     this._editor.beautify()
@@ -24,7 +24,7 @@ class Api {
 
   /**
    * 'navigateLeft' command handler: intended to move cursor left
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnNavigateLeft () {
     this._editor.navigateLeft()
@@ -32,7 +32,7 @@ class Api {
 
   /**
    * 'navigateRight' command handler: intended to move cursor right
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnNavigateRight () {
     this._editor.navigateRight()
@@ -40,7 +40,7 @@ class Api {
 
   /**
    * 'navigateDown' command handler: intended to move cursor down
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnNavigateDown () {
     this._editor.navigateDown()
@@ -48,10 +48,42 @@ class Api {
 
   /**
    * 'navigateUp' command handler: intended to move cursor up
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnNavigateUp () {
     this._editor.navigateUp()
+  }
+
+  /**
+   * 'navigateLineStart' command handler: intended to move cursor to the start of the line
+   * @returns {undefined}
+   */
+  _apiOnNavigateLineStart () {
+    this._editor.navigateLineStart()
+  }
+
+  /**
+   * 'navigateLineEnd' command handler: intended to move cursor to the end of the line
+   * @returns {undefined}
+   */
+  _apiOnNavigateLineEnd () {
+    this._editor.navigateLineEnd()
+  }
+
+  /**
+   * 'navigateFileStart' command handler: intended to move cursor to the 1:1
+   * @returns {undefined}
+   */
+  _apiOnNavigateFileStart () {
+    this._editor.navigateFileStart()
+  }
+
+  /**
+   * 'navigateFileEnd' command handler: intended to move cursor to the last symbol of the file
+   * @returns {undefined}
+   */
+  _apiOnNavigateFileEnd () {
+    this._editor.navigateFileEnd()
   }
 
   /**
@@ -59,7 +91,7 @@ class Api {
    * @param {string} filePath - /path/to/file - used as file ID
    * @param {string} content - file content
    * @param {boolean} [readOnly=false] - read only flag
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnLoadFile ({ filePath, content = '', readOnly = false }) {
     if (!filePath) {
@@ -71,7 +103,7 @@ class Api {
 
   /**
    * 'redo' command handler: intended to redo latest changes
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnRedo () {
     this._editor.redo()
@@ -80,7 +112,7 @@ class Api {
   /**
    * 'requestFileSave' command handler: intended to request and save file content
    * @param {string} filePath - /path/to/file - used as file ID
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnRequestSaveFile ({ filePath }) {
     const value = this._editor.getContent(filePath)
@@ -93,7 +125,7 @@ class Api {
 
   /**
    * 'toggleReadOnly' command handler: intended to toggle readOnly mode
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnToggleReadOnly () {
     this._editor.toggleReadOnly()
@@ -101,7 +133,7 @@ class Api {
 
   /**
    * 'undo' command handler: intended to undo latest changes
-   * @returns undefined
+   * @returns {undefined}
    */
   _apiOnUndo () {
     this._editor.undo()

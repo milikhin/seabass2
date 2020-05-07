@@ -4,10 +4,6 @@
 <context>
     <name>About</name>
     <message>
-        <source>Seabass v0.1.0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21,6 +17,10 @@
     </message>
     <message>
         <source>Ace editor, copyright (c) 2010, Ajax.org B.V., BSD license:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seabass v0.2.0</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
