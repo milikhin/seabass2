@@ -28,7 +28,7 @@ Application for each platform consists of two major parts:
 1. Web-based editor engine  
     HTML5 application optimised for mobile WebView runtime
 
-The two components interacts using a simple message-based API.
+The two components interact using a simple message-based API.
 In Sailfish OS messages are delivered using `navigator.qt` API
 
 ## Directory structure
@@ -38,7 +38,7 @@ In Sailfish OS messages are delivered using `navigator.qt` API
 
 ## Build instructions
 
-Requiremests:
+Requirements:
 
 * Node.js, tested using v12
 * Sailfish SDK
@@ -46,6 +46,6 @@ Requiremests:
 Build steps:
 
 1. Building editor engine  
-   1. Install editor dependenncies and build tools: `npm install`
+   1. Install editor dependencies and build tools: `npm install`
    1. Build editor engine and copy required files to Sailfish app directory: `npm run build`
 1. Build `harbour-seabass` using Sailfish SDK
