@@ -14,6 +14,18 @@ Page {
     property bool seabassHasUndo: false
     property bool seabassHasRedo: false
     property bool seabassIsSaveInProgress: false
+    property bool seabassIsDarkTheme: Theme.colorScheme === Theme.LightOnDark
+    property bool seabassIsLoaded: false
+
+    onSeabassIsDarkThemeChanged: {
+        if (!seabassIsLoaded) {
+            return
+        }
+
+        editorApi('setPreferences', {
+            isDarkTheme: seabassIsDarkTheme
+        })
+    }
 
     allowedOrientations: Orientation.All
     onOrientationChanged: {
@@ -204,7 +216,7 @@ Page {
      * @returns {undefined}
      */
     function displayError(error, errorMessage) {
-        console.error(error)
+        console.error(error, errorMessage)
         pageStack.completeAnimation()
         pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"), {
             "text": errorMessage || error.message
@@ -223,8 +235,13 @@ Page {
 
         switch (message.action) {
             case 'error':
-                return displayError(null, message.data.errorMessage || 'unknown error')
+                return displayError(null, message.data.message || 'unknown error')
             case 'appLoaded':
+                page.seabassIsLoaded = true
+                editorApi('setPreferences', {
+                    isDarkTheme: page.seabassIsDarkTheme
+                })
+
                 if (!page.seabassFilePath) {
                     return
                 }

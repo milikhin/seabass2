@@ -10,6 +10,8 @@ describe('api.js', () => {
     loadFile: jest.fn(),
     onChange: jest.fn(),
     redo: jest.fn(),
+    setPreferences: jest.fn(),
+    toggleReadOnly: jest.fn(),
     undo: jest.fn(),
 
     navigateDown: jest.fn(),
@@ -293,6 +295,33 @@ describe('api.js', () => {
         })
 
         expect(editor.navigateFileEnd).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#setPreferences', () => {
+      it('should execute `setPreferences` action', () => {
+        registerApi({ editor })
+
+        postMessage({
+          action: 'setPreferences',
+          data: { filePath }
+        })
+
+        expect(editor.setPreferences).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    describe('#toggleReadOnly', () => {
+      it('should execute `toggleReadOnly` action', () => {
+        registerApi({ editor })
+        editor.getFilePath.mockReturnValue(filePath)
+
+        postMessage({
+          action: 'toggleReadOnly',
+          data: { filePath }
+        })
+
+        expect(editor.toggleReadOnly).toHaveBeenCalledTimes(1)
       })
     })
 

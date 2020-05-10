@@ -20,7 +20,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seabass v0.2.0</source>
+        <source>Seabass v0.3.0</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
