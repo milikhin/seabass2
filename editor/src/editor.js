@@ -3,6 +3,7 @@ import modelist from 'ace-builds/src-noconflict/ext-modelist'
 
 import 'ace-builds/webpack-resolver'
 import 'ace-builds/src-noconflict/theme-twilight'
+import 'ace-builds/src-noconflict/theme-chrome'
 import beautify from 'ace-builds/src-noconflict/ext-beautify'
 
 /**
@@ -22,7 +23,6 @@ export default class Editor {
     this._changeListeners = []
     this._lastScrollTop = 0
 
-    this._ace.setTheme('ace/theme/twilight')
     this._applyPlatformHaks()
   }
 
@@ -121,6 +121,12 @@ export default class Editor {
       return
     }
     this._changeListeners.push(callback)
+  }
+
+  setPreferences ({ isDarkTheme }) {
+    if (isDarkTheme !== undefined) {
+      this._ace.setTheme(`ace/theme/${isDarkTheme ? 'twilight' : 'chrome'}`)
+    }
   }
 
   toggleReadOnly () {

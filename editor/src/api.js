@@ -12,6 +12,13 @@ class Api {
     }
   }
 
+  get NON_FILE_ACTIONS () {
+    return [
+      'loadFile',
+      'setPreferences'
+    ]
+  }
+
   // #region API
 
   /**
@@ -124,6 +131,17 @@ class Api {
   }
 
   /**
+   * Set editor preferences
+   *
+   * @param {Object} options - options to set
+   * @param {boolean}  [options.isDarkTheme] - `true` to set dark theme, `false` to set light theme
+   * @returns {undefined}
+   */
+  _apiOnSetPreferences (options) {
+    this._editor.setPreferences(options)
+  }
+
+  /**
    * 'toggleReadOnly' command handler: intended to toggle readOnly mode
    * @returns {undefined}
    */
@@ -159,7 +177,7 @@ class Api {
         return
       }
 
-      if (action !== 'loadFile' && data.filePath !== this._editor.getFilePath()) {
+      if (this.NON_FILE_ACTIONS.indexOf(action) === -1 && data.filePath !== this._editor.getFilePath()) {
         throw new InvalidArgError(`file ${data.filePath} is not loaded`)
       }
       return this[apiMethod](data)

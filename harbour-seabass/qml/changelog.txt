@@ -1,5 +1,5 @@
 
-# harbour-seabass v0.2.0
+# harbour-seabass v0.3.0
 
 Welcome to the Seabass code editor for Sailfish OS!
 
@@ -19,6 +19,7 @@ This is an early preview version, so things might be broken and some core functi
 Features:
   * Syntax highlighting for over 120 programming/markup languages
   * Undo/Redo
+  * Light and Dark themes to match current Ambience
 
 Your feedback, bug reports and feature requests are very appreciated!
 If you have any suggestions or something doesn't work as expected, feel free to open an issue on github or contact me via email.
