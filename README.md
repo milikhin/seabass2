@@ -15,7 +15,7 @@ Features:
 * Undo/Redo
 * Navigation buttons
 
-![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-01.png)
+![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-04.png)
 ![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
 
 ## Architecture
