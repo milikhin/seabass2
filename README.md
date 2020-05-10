@@ -14,6 +14,7 @@ Features:
 * Syntax highlighting for over 120 programming/markup languages
 * Undo/Redo
 * Navigation buttons
+* Light and dark themes
 
 ![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-04.png)
 ![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
