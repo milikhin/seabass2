@@ -2,35 +2,43 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 
-import '../utils.js' as QmlJs
+import '../generic/utils.js' as QmlJs
+import '../components' as PlatformComponents
+import '../generic' as GenericComponents
 
 Page {
     id: page
+    property bool isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+    property string seabassFilePath
 
-    property string seabassFileName: ''
-    property string seabassFilePath: ''
-    property bool seabassForceReadOnly: false
-    property bool seabassIsReadOnly: false
-    property bool seabassHasUndo: false
-    property bool seabassHasRedo: false
-    property bool seabassIsSaveInProgress: false
-    property bool seabassIsDarkTheme: Theme.colorScheme === Theme.LightOnDark
-    property bool seabassIsLoaded: false
+    allowedOrientations: Orientation.All
 
-    onSeabassIsDarkThemeChanged: {
-        if (!seabassIsLoaded) {
+    GenericComponents.EditorApi {
+        id: api
+        filePath: seabassFilePath
+        isReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
+        forceReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
+
+        onMessageSent: function(jsonMessage) {
+            webView.experimental.postMessage(jsonMessage)
+        }
+
+        onIsReadOnlyChanged: {
+            if (isReadOnly) {
+                Qt.inputMethod.hide()
+            }
+        }
+    }
+
+    onIsDarkThemeChanged: {
+        if (!api.isAppLoaded) {
             return
         }
 
-        editorApi('setPreferences', {
-            isDarkTheme: seabassIsDarkTheme
-        })
+        api.isDarkTheme = isDarkTheme
     }
 
-    allowedOrientations: Orientation.All
-    onOrientationChanged: {
-        fixResize()
-    }
+    onOrientationChanged: fixResize()
 
     // #region LAYOUT
 
@@ -39,35 +47,35 @@ Page {
         url: '../html/index.html'
 
         anchors.top: page.top
-        anchors.bottom: panel.open ? panel.top : page.bottom
+        anchors.bottom: toolbar.open ? toolbar.top : page.bottom
         width: page.width
 
-        experimental.onMessageReceived: {
-            var msg = JSON.parse(message.data)
-            editorApiHandler(msg)
-        }
         experimental.transparentBackground: true
         experimental.deviceWidth: getDeviceWidth()
         experimental.preferences.navigatorQtObjectEnabled: true
+        experimental.onMessageReceived: {
+            var msg = JSON.parse(message.data)
+            api.handleMessage(msg.action, msg.data)
+        }
 
         PullDownMenu {
-            busy: page.seabassIsSaveInProgress
+            busy: api.isSaveInProgress
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: pageStack.push(filePickerPage)
             }
             MenuItem {
-                enabled: !page.seabassIsSaveInProgress
-                visible: !page.seabassIsReadOnly
-                text: page.seabassIsSaveInProgress ? qsTr("Saving...") : qsTr("Save")
-                onClicked: requestSaveFile()
+                enabled: !api.isSaveInProgress
+                visible: !api.isReadOnly
+                text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
+                onClicked: api.requestSaveFile()
             }
         }
 
         PushUpMenu {
             MenuItem {
-                text: qsTr(panel.open ? "Hide toolbar" : "Show toolbar")
-                onClicked: panel.open = !panel.open
+                text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
+                onClicked: toolbar.open = !toolbar.open
             }
             MenuItem {
                 text: qsTr('About')
@@ -77,79 +85,29 @@ Page {
     }
 
     DockedPanel {
-        id: panel
-
+        id: toolbar
+        dock: Dock.Bottom
         width: parent.width
         height: Theme.itemSizeMedium
-        dock: Dock.Bottom
         focus: false
 
-        SilicaFlickable {
-            contentWidth: panelRow.childrenRect.width;
-            height: parent.height
-            width: parent.width
+        PlatformComponents.Toolbar {
+            hasUndo: api.hasUndo
+            hasRedo: api.hasRedo
+            readOnly: api.isReadOnly
+            readOnlyEnabled: !api.forceReadOnly
 
-            HorizontalScrollDecorator {}
-            flickableDirection: Flickable.HorizontalFlick
-
-            Row {
-                id: panelRow
-                anchors.verticalCenter: parent.verticalCenter
-
-                IconButton {
-                    enabled: page.seabassHasUndo
-                    icon.source: "image://theme/icon-m-back"
-                    onClicked: editorApi('undo')
-                }
-
-                IconButton {
-                    enabled: page.seabassHasRedo
-                    icon.source: "image://theme/icon-m-forward"
-                    onClicked: editorApi('redo')
-                }
-
-                IconButton {
-                    icon.source: "image://theme/icon-m-left"
-                    onClicked: editorApi('navigateLeft')
-                    onPressAndHold: editorApi('navigateLineStart')
-                }
-
-                IconButton {
-                    icon.source: "image://theme/icon-m-right"
-                    onClicked: editorApi('navigateRight')
-                    onPressAndHold: editorApi('navigateLineEnd')
-                }
-
-                IconButton {
-                    icon.source: "image://theme/icon-m-up"
-                    onClicked: editorApi('navigateUp')
-                    onPressAndHold: editorApi('navigateFileStart')
-                }
-
-                IconButton {
-                    icon.source: "image://theme/icon-m-down"
-                    onClicked: editorApi('navigateDown')
-                    onPressAndHold: editorApi('navigateFileEnd')
-                }
-
-                TextSwitch {
-                    id: readOnlySwitch
-                    text: "Read only"
-                    width: childrenRect.width + Theme.paddingLarge
-                    enabled: !page.seabassForceReadOnly
-                    checked: page.seabassIsReadOnly
-                    // disable automaticCheck, so that binding works
-                    automaticCheck: false
-                    onClicked: editorApi('toggleReadOnly')
-                    Component.onCompleted: {
-                        var label = children[1]
-                        var description = children[2]
-                        label.width = undefined
-                        description.width = 0
-                        description.visible = 0
-                    }
-                }
-            }
+            onUndo: api.postMessage('undo')
+            onRedo: api.postMessage('redo')
+            onToggleReadOnly: api.postMessage('toggleReadOnly')
+            onNavigateDown: api.postMessage('navigateDown')
+            onNavigateUp: api.postMessage('navigateUp')
+            onNavigateLeft: api.postMessage('navigateLeft')
+            onNavigateRight: api.postMessage('navigateRight')
+            onNavigateLineStart: api.postMessage('navigateLineStart')
+            onNavigateLineEnd: api.postMessage('navigateLineEnd')
+            onNavigateFileStart: api.postMessage('navigateFileStart')
+            onNavigateFileEnd: api.postMessage('navigateFileEnd')
         }
     }
 
@@ -161,53 +119,10 @@ Page {
                     return
                 }
 
-                openFile(selectedContentProperties.fileName, selectedContentProperties.filePath)
+                api.filePath = selectedContentProperties.filePath
             }
         }
     }
-
-    // #endregion LAYOUT
-    // #region UI_ACTIONS
-
-    /**
-     * Opens given file in the editor
-     * @param {string} fileName  - file name
-     * @param {string} filePath - /path/to/file
-     * @param {boolean} [forceReadOnly=false] - open file in readonly mode if true, in readwrite mode otherwise
-     * @returns {undefined}
-     */
-    function openFile(fileName, filePath, forceReadOnly) {
-        QmlJs.readFile(filePath, function(err, text) {
-            if (err) {
-                return displayError(err,
-                    qsTr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
-            }
-
-            page.seabassFileName = fileName
-            page.seabassFilePath = filePath
-            page.seabassHasUndo = false
-            page.seabassHasRedo = false
-            page.seabassForceReadOnly = forceReadOnly || false
-
-            editorApi('loadFile', {
-                filePath: filePath,
-                content: text,
-                readOnly: page.seabassForceReadOnly
-            })
-        })
-    }
-
-    /**
-     * Request editor to save file at the given path (editor will reply with a message containing file content)
-     * @returns {undefined}
-     */
-    function requestSaveFile() {
-        setSaveInProgress(true)
-        editorApi('requestSaveFile')
-    }
-
-    // #endregion UI_ACTIONS
-    // #endregion JS_FUNCTIONS
 
     /**
      * Displays error message
@@ -224,78 +139,6 @@ Page {
     }
 
     /**
-     * Handles incoming API message
-     * @param {Object} message - API message
-     * @returns {undefined}
-     */
-    function editorApiHandler(message) {
-        if (message.data && message.data.responseTo === 'requestSaveFile') {
-            setSaveInProgress(false)
-        }
-
-        switch (message.action) {
-            case 'error':
-                return displayError(null, message.data.message || 'unknown error')
-            case 'appLoaded':
-                page.seabassIsLoaded = true
-                editorApi('setPreferences', {
-                    isDarkTheme: page.seabassIsDarkTheme
-                })
-
-                if (!page.seabassFilePath) {
-                    return
-                }
-                return openFile(page.seabassFileName, page.seabassFilePath, page.seabassForceReadOnly)
-            case 'stateChanged':
-                if (message.data.filePath === page.seabassFilePath) {
-                    page.seabassHasUndo = !message.data.isReadOnly && message.data.hasUndo
-                    page.seabassHasRedo = !message.data.isReadOnly && message.data.hasRedo
-
-                    if (message.data.isReadOnly && !page.seabassIsReadOnly) {
-                        Qt.inputMethod.hide()
-                    }
-                    page.seabassIsReadOnly = message.data.isReadOnly
-                }
-
-                return
-            case 'saveFile':
-                return saveFile(message.data.filePath, message.data.content)
-        }
-    }
-
-    /**
-     * Sends API message
-     * @param {string} action - API action name
-     * @param {Object} data - action params
-     * @returns {undefined}
-     */
-    function editorApi(action, data) {
-        data = data || {}
-        if (!data.filePath) {
-            data.filePath = page.seabassFilePath
-        }
-
-        webView.experimental.postMessage(JSON.stringify({ 'action': action, 'data': data }));
-    }
-
-    /**
-     * Saves file with the given content at the given path
-     * @param {string} filePath - /path/to/file
-     * @param {string} content  - file content
-     * @returns {undefined}
-     */
-    function saveFile(filePath, content) {
-        setSaveInProgress(true)
-        return QmlJs.writeFile(filePath, content, function(err) {
-            setSaveInProgress(false)
-            if (err) {
-                return displayError(err,
-                    qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
-            }
-        })
-    }
-
-    /**
      * Returns HTML device-width scaled correctly for the current device
      * @returns {int} - device width in CSS pixels
      */
@@ -304,15 +147,6 @@ Page {
             ? Screen.width
             : Screen.height
         return deviceWidth / Theme.pixelRatio / (540 / 320)
-    }
-
-    /**
-     * Sets saveInProgress flag
-     * @param {boolean} saveInProgress - flag value
-     * @returns {undefined}
-     */
-    function setSaveInProgress(saveInProgress) {
-        page.seabassIsSaveInProgress = saveInProgress
     }
 
     /**

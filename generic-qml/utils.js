@@ -1,14 +1,17 @@
 .pragma library
 
-var DEFAULT_FILE_PATH = Qt.resolvedUrl('./changelog.txt')
+var DEFAULT_FILE_PATH = Qt.resolvedUrl('../changelog.txt')
 
-function getDefaultFile() {
-    var filePath = Qt.application.arguments[2] || DEFAULT_FILE_PATH
-    return {
-        fileName: filePath.split('/').slice(-1)[0],
-        filePath: filePath,
-        isReadOnly: !Qt.application.arguments[2]
-    }
+function getDefaultFilePath() {
+    return Qt.application.arguments[2] || DEFAULT_FILE_PATH
+}
+
+/**
+  * Extracts file name from a given path
+  * @returns {string} - file name
+  */
+function getFileNameByPath(filePath) {
+    return filePath.split('/').slice(-1)[0]
 }
 
 /**
