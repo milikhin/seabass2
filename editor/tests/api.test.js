@@ -1,4 +1,4 @@
-/* globals describe,expect,jest,it,beforeEach,beforeAll,afterAll */
+/* globals describe,expect,jest,it,beforeEach,beforeAll,afterAll,localStorage */
 
 import registerApi from '../src/api'
 import uuid from 'uuid/v4'
@@ -59,12 +59,28 @@ describe('api.js', () => {
       it('should notify when app is loaded (notifyOnLoaded: true)', () => {
         registerApi({ notifyOnLoaded: true })
 
-        // Expect error message to be posted
         expect(navigator.qt.postMessage).toHaveBeenCalledTimes(1)
 
         // Check for 'appLoaded' action
         const [message] = navigator.qt.postMessage.mock.calls[0]
         expect(JSON.parse(message).action).toEqual('appLoaded')
+        expect(JSON.parse(message).data).toEqual({
+          isSailfishToolbarOpened: undefined
+        })
+      })
+
+      it('should notify when app is loaded (notifyOnLoaded: true, toolbar opened)', () => {
+        localStorage.setItem('sailfish__isToolbarOpened', true)
+        registerApi({ notifyOnLoaded: true })
+
+        expect(navigator.qt.postMessage).toHaveBeenCalledTimes(1)
+
+        // Check for 'appLoaded' action
+        const [message] = navigator.qt.postMessage.mock.calls[0]
+        expect(JSON.parse(message).action).toEqual('appLoaded')
+        expect(JSON.parse(message).data).toEqual({
+          isSailfishToolbarOpened: true
+        })
       })
     })
 
@@ -308,6 +324,17 @@ describe('api.js', () => {
         })
 
         expect(editor.setPreferences).toHaveBeenCalledTimes(1)
+      })
+
+      it('should save toolbar preferences to localStorage', () => {
+        registerApi({ editor })
+
+        postMessage({
+          action: 'setPreferences',
+          data: { filePath, isSailfishToolbarOpened: true }
+        })
+
+        expect(localStorage.getItem('sailfish__isToolbarOpened')).toEqual('true')
       })
     })
 

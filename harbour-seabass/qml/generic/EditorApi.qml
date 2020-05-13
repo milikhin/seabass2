@@ -10,19 +10,19 @@ QtObject {
     property bool forceReadOnly: false
     property bool hasUndo: false
     property bool hasRedo: false
-    // true if web editor is initialized
-    property bool isAppLoaded: false
     property bool isDarkTheme: true
     property bool isReadOnly: false
     // true when the file is being saved
     property bool isSaveInProgress: false
 
+    signal appLoaded(var preferences)
     signal messageSent(string jsonPayload)
     signal errorOccured(string message)
 
     Component.onCompleted: {
         isAppLoadedChanged.connect(startup)
         filePathChanged.connect(openFile)
+        isDarkThemeChanged.connect(switchTheme)
     }
 
     /**
@@ -30,7 +30,6 @@ QtObject {
      * @returns {undefined}
      */
     function openFile() {
-        console.log(filePath)
         QmlJs.readFile(filePath, function(err, text) {
             if (err) {
                 console.error(err)
@@ -71,11 +70,14 @@ QtObject {
         })
     }
 
-    function startup() {
+    function switchTheme() {
         postMessage('setPreferences', {
             isDarkTheme: isDarkTheme
         })
+    }
 
+    function startup() {
+        switchTheme()
         if (filePath) {
             openFile()
         }
@@ -95,7 +97,7 @@ QtObject {
             case 'error':
                 return errorOccured(data.message || 'unknown error')
             case 'appLoaded':
-                return isAppLoaded = true
+                return appLoaded(data)
             case 'stateChanged':
                 if (data.filePath !== filePath) {
                     return

@@ -1,3 +1,4 @@
+/* globals localStorage */
 import { InvalidArgError } from './errors'
 
 class Api {
@@ -8,7 +9,7 @@ class Api {
     this._registerApiHandler()
 
     if (notifyOnLoaded) {
-      this._sendApiMessage('appLoaded')
+      this._sendApiMessage('appLoaded', this._getSavedPreferences())
     }
   }
 
@@ -138,6 +139,9 @@ class Api {
    * @returns {undefined}
    */
   _apiOnSetPreferences (options) {
+    if (options.isSailfishToolbarOpened !== undefined) {
+      window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened)
+    }
     this._editor.setPreferences(options)
   }
 
@@ -158,6 +162,13 @@ class Api {
   }
 
   // #endregion API
+
+  _getSavedPreferences () {
+    const isSailfishToolbarOpened = localStorage.getItem('sailfish__isToolbarOpened')
+    return {
+      isSailfishToolbarOpened: isSailfishToolbarOpened ? JSON.parse(isSailfishToolbarOpened) : undefined
+    }
+  }
 
   _handleStateChanged = ({ hasUndo, hasRedo, filePath, isReadOnly }) => {
     this._sendApiMessage('stateChanged', {

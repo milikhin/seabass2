@@ -9,6 +9,7 @@ import '../generic' as GenericComponents
 Page {
     id: page
     property bool isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+    property bool isAppLoaded: false
     property string seabassFilePath
 
     allowedOrientations: Orientation.All
@@ -28,10 +29,16 @@ Page {
                 Qt.inputMethod.hide()
             }
         }
+
+        onAppLoaded: function (data) {
+            isAppLoaded = true
+            console.log(JSON.stringify(data))
+            toolbar.open = data.isSailfishToolbarOpened
+        }
     }
 
     onIsDarkThemeChanged: {
-        if (!api.isAppLoaded) {
+        if (!isAppLoaded) {
             return
         }
 
@@ -75,7 +82,12 @@ Page {
         PushUpMenu {
             MenuItem {
                 text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
-                onClicked: toolbar.open = !toolbar.open
+                onClicked: {
+                    toolbar.open = !toolbar.open
+                    api.postMessage('setPreferences', {
+                        isSailfishToolbarOpened: toolbar.open
+                    })
+                }
             }
             MenuItem {
                 text: qsTr('About')
