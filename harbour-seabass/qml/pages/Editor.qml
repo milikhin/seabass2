@@ -8,8 +8,6 @@ import '../generic' as GenericComponents
 
 Page {
     id: page
-    property bool isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-    property bool isAppLoaded: false
     property string seabassFilePath
 
     allowedOrientations: Orientation.All
@@ -17,37 +15,27 @@ Page {
     GenericComponents.EditorApi {
         id: api
         filePath: seabassFilePath
-        isReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
         forceReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
+        isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+        isReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
 
-        onMessageSent: function(jsonMessage) {
-            webView.experimental.postMessage(jsonMessage)
+        onAppLoaded: function (data) {
+            toolbar.open = data.isSailfishToolbarOpened || false
         }
-
+        onErrorOccured: function (message) {
+            displayError(message)
+        }
         onIsReadOnlyChanged: {
             if (isReadOnly) {
                 Qt.inputMethod.hide()
             }
         }
-
-        onAppLoaded: function (data) {
-            isAppLoaded = true
-            console.log(JSON.stringify(data))
-            toolbar.open = data.isSailfishToolbarOpened
+        onMessageSent: function(jsonMessage) {
+            webView.experimental.postMessage(jsonMessage)
         }
-    }
-
-    onIsDarkThemeChanged: {
-        if (!isAppLoaded) {
-            return
-        }
-
-        api.isDarkTheme = isDarkTheme
     }
 
     onOrientationChanged: fixResize()
-
-    // #region LAYOUT
 
     SilicaWebView {
         id: webView
@@ -82,12 +70,7 @@ Page {
         PushUpMenu {
             MenuItem {
                 text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
-                onClicked: {
-                    toolbar.open = !toolbar.open
-                    api.postMessage('setPreferences', {
-                        isSailfishToolbarOpened: toolbar.open
-                    })
-                }
+                onClicked: toolbar.open = !toolbar.open
             }
             MenuItem {
                 text: qsTr('About')
@@ -102,6 +85,12 @@ Page {
         width: parent.width
         height: Theme.itemSizeMedium
         focus: false
+        open: false
+        onOpenChanged: {
+            api.postMessage('setPreferences', {
+                isSailfishToolbarOpened: open
+            })
+        }
 
         PlatformComponents.Toolbar {
             hasUndo: api.hasUndo
@@ -138,12 +127,10 @@ Page {
 
     /**
      * Displays error message
-     * @param {Error} error - error object
      * @param {string} [errorMessage] - error message to display
      * @returns {undefined}
      */
-    function displayError(error, errorMessage) {
-        console.error(error, errorMessage)
+    function displayError(errorMessage) {
         pageStack.completeAnimation()
         pageStack.push(Qt.resolvedUrl("ErrorDialog.qml"), {
             "text": errorMessage || error.message
@@ -170,6 +157,4 @@ Page {
         page.x = 1
         page.x = 0
     }
-
-    // #endregion JS_FUNCTIONS
 }

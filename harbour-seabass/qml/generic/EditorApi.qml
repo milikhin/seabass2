@@ -20,16 +20,16 @@ QtObject {
     signal errorOccured(string message)
 
     Component.onCompleted: {
-        isAppLoadedChanged.connect(startup)
-        filePathChanged.connect(openFile)
-        isDarkThemeChanged.connect(switchTheme)
+        appLoaded.connect(startup)
+        filePathChanged.connect(loadFile)
+        isDarkThemeChanged.connect(loadTheme)
     }
 
     /**
      * Opens file at `filePath` in the editor
      * @returns {undefined}
      */
-    function openFile() {
+    function loadFile() {
         QmlJs.readFile(filePath, function(err, text) {
             if (err) {
                 console.error(err)
@@ -64,22 +64,22 @@ QtObject {
         return QmlJs.writeFile(filePath, content, function(err) {
             isSaveInProgress = false
             if (err) {
-                return displayError(err,
-                    qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
+                console.error(err)
+                return errorOccured(qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
             }
         })
     }
 
-    function switchTheme() {
+    function loadTheme() {
         postMessage('setPreferences', {
             isDarkTheme: isDarkTheme
         })
     }
 
     function startup() {
-        switchTheme()
+        loadTheme()
         if (filePath) {
-            openFile()
+            loadFile()
         }
     }
 

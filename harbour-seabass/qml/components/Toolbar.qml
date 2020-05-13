@@ -57,7 +57,7 @@ Item {
             IconButton {
                 icon.source: "image://theme/icon-m-right"
                 onClicked: root.navigateRight()
-                onPressAndHold: root.navigateFileEnd()
+                onPressAndHold: root.navigateLineEnd()
             }
 
             IconButton {
