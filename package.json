@@ -1,6 +1,6 @@
 {
   "name": "seabass-editor",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "web-editor component for Seabass app",
   "main": "index.js",
   "scripts": {

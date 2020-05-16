@@ -15,12 +15,14 @@ TARGET = harbour-seabass
 CONFIG += sailfishapp_qml
 
 DISTFILES += qml/harbour-seabass.qml \
+    qml/components/Toolbar.qml \
+    qml/generic/EditorApi.qml \
+    qml/generic/utils.js \
     qml/html/dist \
     qml/cover/CoverPage.qml \
     qml/pages/About.qml \
     qml/pages/Editor.qml \
     qml/pages/ErrorDialog.qml \
-    qml/utils.js \
     rpm/harbour-seabass.changes.in \
     rpm/harbour-seabass.changes.run.in \
     rpm/harbour-seabass.spec \

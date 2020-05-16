@@ -20,7 +20,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seabass v0.3.0</source>
+        <source>Seabass v0.3.1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -39,15 +39,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EditorApi</name>
+    <message>
         <source>Unable to read file. Please ensure that you have read access to the</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Unable to write the file. Please ensure that you have write access to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

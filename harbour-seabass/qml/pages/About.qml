@@ -13,7 +13,7 @@ Page {
             width: parent.width
 
             PageHeader {
-                title: qsTr('Seabass v0.3.0')
+                title: qsTr('Seabass v0.3.1')
             }
 
             SectionHeader { text: qsTr("About") }

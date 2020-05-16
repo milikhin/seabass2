@@ -1,5 +1,5 @@
 
-# harbour-seabass v0.3.0
+# harbour-seabass v0.3.1
 
 Welcome to the Seabass code editor for Sailfish OS!
 

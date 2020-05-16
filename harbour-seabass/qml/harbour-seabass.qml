@@ -3,21 +3,18 @@ import Sailfish.Silica 1.0
 import "pages"
 import "cover"
 
-import './utils.js' as QmlJs
+import './generic/utils.js' as QmlJs
 
 ApplicationWindow
 {
     id: root
-    property var defaultFile: QmlJs.getDefaultFile()
-    property string coverTitle: defaultFile.fileName
+    property string defaultFilePath: QmlJs.getDefaultFilePath()
+    property string coverTitle: QmlJs.getFileNameByPath(defaultFilePath)
     initialPage: Component {
         Editor {
-            seabassFilePath: defaultFile.filePath
-            seabassFileName: defaultFile.fileName
-            seabassForceReadOnly: defaultFile.isReadOnly
-            seabassIsReadOnly: defaultFile.isReadOnly
-            onSeabassFileNameChanged: {
-                root.coverTitle = seabassFileName
+            seabassFilePath: defaultFilePath
+            onSeabassFilePathChanged: {
+                root.coverTitle = QmlJs.getFileNameByPath(seabassFilePath)
             }
         }
     }
