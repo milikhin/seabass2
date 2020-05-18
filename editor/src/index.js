@@ -1,7 +1,7 @@
 import registerApi from './api'
-import Editor from './editor'
 
 registerApi({
-  editor: new Editor(),
-  notifyOnLoaded: true
+  // editor: new Editor(),
+  notifyOnLoaded: true,
+  apiBackend: 'url'
 })

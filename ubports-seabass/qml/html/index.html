@@ -1,0 +1,98 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <meta charset="utf-8" />
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    #root,
+    .editor {
+      width: 100%;
+      height: 100%;
+    }
+
+    #welcome {
+      font-family: sans-serif;
+      padding: 1rem;
+    }
+
+    #welcome h1 {
+      font-size: large;
+    }
+
+    #welcome h2 {
+      font-size: medium
+    }
+
+    #root {
+      display: none
+    }
+
+    .ace_mobile-menu {
+      display: none !important;
+    }
+
+    /* Fix for incorrect format string's rendering in Erlang */
+    .ace_line > .ace_placeholder {
+      font-family: inherit;
+      transform: none;
+      opacity: 1;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="welcome">
+    <h1>
+      Seabass for UBports v0.1.0
+    </h1>
+    <h2>
+      Release notes
+    </h2>
+    <p>
+      The current release provides ability to edit existing files.
+      This is an early preview version, so things might be broken and some core functionality such as creating new files is yet to be implemented.
+    </p>
+    <h2>
+      Features
+    </h2>
+    <ul>
+      <li>
+        Syntax highlighting for over 120 programming/markup languages
+      </li>
+      <li>
+        Multiple tabs
+      </li>
+      <li>
+        Undo/Redo
+      </li>
+      <li>
+        Light and Dark themes
+      </li>
+    </ul>
+    <p>
+      Your feedback, bug reports and feature requests are very appreciated!
+      If you have any suggestions or something doesn't work as expected, feel free to open an issue on <a href="https://github.com/milikhin/seabass2">github</a> or contact me via email.
+    </p>
+    <h2>
+      Acknowledgements
+    </h2>
+    <ul>
+      <li>
+        Ace editor, copyright &copy; 2010, Ajax.org B.V., <a href="https://github.com/ajaxorg/ace/blob/master/LICENSE">BSD license</a>
+      </li>
+      <li>
+        blueimp-md5, copyright &copy; 2011 Sebastian Tschan, https://blueimp.net, <a href="https://github.com/blueimp/JavaScript-MD5/blob/master/LICENSE.txt">MIT license</a>
+      </li>
+    </ul>
+  </div>
+  <div id="root"></div>
+  <script src="./bundle.js"></script>
+</body>
+
+</html>

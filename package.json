@@ -39,8 +39,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@codemirror/next": "^0.5.5",
     "ace-builds": "^1.4.11",
-    "codemirror": "^5.53.2"
+    "blueimp-md5": "^2.16.0"
   }
 }

@@ -1,13 +1,17 @@
 /* globals localStorage */
+import Editor from './editor'
 import { InvalidArgError } from './errors'
 
 class Api {
-  constructor ({ editor, notifyOnLoaded } = {}) {
-    this._editor = editor
+  constructor ({ notifyOnLoaded, apiBackend = 'navigatorQt' } = {}) {
+    this._tabs = []
+    this._apiBackend = apiBackend
+    this._editor = undefined
+    this._preferences = {}
+    this._rootElem = document.getElementById('root')
+    this._welcomeElem = document.getElementById('welcome')
 
-    this._registerEditorEventsHandler()
     this._registerApiHandler()
-
     if (notifyOnLoaded) {
       this._sendApiMessage('appLoaded', this._getSavedPreferences())
     }
@@ -15,12 +19,66 @@ class Api {
 
   get NON_FILE_ACTIONS () {
     return [
+      'closeFile',
       'loadFile',
+      'openFile',
       'setPreferences'
     ]
   }
 
+  _createTab (filePath) {
+    const editorElem = document.createElement('div')
+    this._rootElem.appendChild(editorElem)
+    editorElem.classList.add('editor')
+
+    const tab = {
+      filePath,
+      editor: new Editor({ elem: editorElem }),
+      elem: editorElem
+    }
+    tab.editor.setPreferences(this._preferences)
+    this._tabs.push(tab)
+    this._registerEditorEventsHandler(tab.editor)
+
+    this._showTab(tab)
+    return tab
+  }
+
+  _showTab (tab) {
+    this._editor = tab.editor
+    this._tabs.forEach(({ elem }) => { elem.style.display = 'none' })
+
+    this._welcomeElem.style.display = 'none'
+    this._rootElem.style.display = 'block'
+    tab.elem.style.display = ''
+    this._editor.activate()
+  }
+
+  _showWelcomeNote () {
+    this._welcomeElem.style.display = 'block'
+    this._rootElem.style.display = 'none'
+  }
+
   // #region API
+
+  _apiOnCloseFile ({ filePath }) {
+    if (!filePath) {
+      throw new InvalidArgError(`${filePath} is required to load file into editor`)
+    }
+
+    const tabIndex = this._tabs.findIndex(({ filePath: tabFile }) => tabFile === filePath)
+    if (tabIndex === -1) {
+      return
+    }
+
+    const tab = this._tabs[tabIndex]
+    tab.editor.destroy()
+    this._tabs.splice(tabIndex, 1)
+
+    if (!this._tabs.length) {
+      this._showWelcomeNote()
+    }
+  }
 
   /**
    * 'beautify' command handler: intended to auto format file content
@@ -94,6 +152,13 @@ class Api {
     this._editor.navigateFileEnd()
   }
 
+  _apiOnFileSaved ({ filePath, content }) {
+    const tab = this._tabs.find(({ filePath: tabFile }) => tabFile === filePath)
+    if (tab) {
+      tab.editor.setSavedContent(content)
+    }
+  }
+
   /**
    * 'loadFile' command handler: intended to load given content to the editor
    * @param {string} filePath - /path/to/file - used as file ID
@@ -106,7 +171,20 @@ class Api {
       throw new InvalidArgError(`${filePath} is required to load file into editor`)
     }
 
-    this._editor.loadFile(filePath, content, readOnly)
+    const { editor } = this._createTab(filePath)
+    editor.loadFile(filePath, content, readOnly)
+  }
+
+  _apiOnOpenFile ({ filePath }) {
+    if (!filePath) {
+      throw new InvalidArgError(`${filePath} is required to load file into editor`)
+    }
+
+    const tab = this._tabs.find(({ filePath: tabFile }) => tabFile === filePath)
+    if (!tab) {
+      return
+    }
+    this._showTab(tab)
   }
 
   /**
@@ -142,7 +220,11 @@ class Api {
     if (options.isSailfishToolbarOpened !== undefined) {
       window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened)
     }
-    this._editor.setPreferences(options)
+
+    this._preferences = options
+    this._tabs.forEach(({ editor }) => {
+      editor.setPreferences(options)
+    })
   }
 
   /**
@@ -170,8 +252,9 @@ class Api {
     }
   }
 
-  _handleStateChanged = ({ hasUndo, hasRedo, filePath, isReadOnly }) => {
+  _handleStateChanged = ({ hasChanges, hasUndo, hasRedo, filePath, isReadOnly }) => {
     this._sendApiMessage('stateChanged', {
+      hasChanges,
       hasUndo,
       hasRedo,
       filePath,
@@ -179,9 +262,8 @@ class Api {
     })
   }
 
-  _onMessage = (msg) => {
+  _onMessage = ({ action, data }) => {
     try {
-      const { action, data } = JSON.parse(msg.data)
       const apiMethod = `_apiOn${action.charAt(0).toUpperCase()}${action.slice(1)}`
       if (!this[apiMethod]) {
         console.warn(`${action} is not implemented`)
@@ -198,20 +280,25 @@ class Api {
   }
 
   _registerApiHandler () {
-    if (navigator && navigator.qt) {
-      navigator.qt.onmessage = this._onMessage
-      return
+    switch (this._apiBackend) {
+      case 'navigatorQt': {
+        navigator.qt.onmessage = (msg) => {
+          const payload = JSON.parse(msg.data)
+          this._onMessage(payload)
+        }
+        return
+      }
+      case 'url':
+      default: {
+        window.postSeabassApiMessage = (payload) => {
+          this._onMessage(payload)
+        }
+      }
     }
-
-    throw new Error('No supported API found')
   }
 
-  _registerEditorEventsHandler () {
-    if (!this._editor) {
-      return
-    }
-
-    this._editor.onChange(this._handleStateChanged)
+  _registerEditorEventsHandler (editor = this._editor) {
+    editor.onChange(this._handleStateChanged)
   }
 
   _sendApiError (message) {
@@ -219,11 +306,19 @@ class Api {
   }
 
   _sendApiMessage (action, data) {
-    if (navigator && navigator.qt) {
-      return navigator.qt.postMessage(JSON.stringify({ action, data }))
+    const payload = JSON.stringify({ action, data })
+    switch (this._apiBackend) {
+      case 'navigatorQt': {
+        return navigator.qt.postMessage(payload)
+      }
+      case 'url': {
+        document.location = `http://seabass/${encodeURIComponent(payload)}`
+        return
+      }
+      default: {
+        console.error('No supported API found')
+      }
     }
-
-    console.error('No supported API found')
   }
 }
 

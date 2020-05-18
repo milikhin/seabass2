@@ -1,0 +1,98 @@
+import QtQuick 2.9
+import Ubuntu.Components 1.3
+import QtQuick.Layouts 1.3
+import Ubuntu.Components.Themes 1.3
+
+import Qt.labs.folderlistmodel 2.1
+
+ListView {
+  id: root
+  property bool isPage: false
+  property bool showHidden: false
+  property string homeDir
+
+  readonly property string backgroundColor: theme.palette.normal.background
+  readonly property string textColor: theme.palette.normal.backgroundText
+
+  signal closed()
+  signal fileSelected(string filePath)
+
+  header: PageHeader {
+    title: qsTr("Files")
+    subtitle: folderModel.folder.toString().replace('file://', '')
+    navigationActions:[
+      Action {
+        visible: isPage
+        iconName: "back"
+        text: qsTr("Close")
+        onTriggered: closed()
+      }
+    ]
+    trailingActionBar {
+      actions: [
+        Action {
+          visible: !isPage
+          iconName: "close"
+          text: qsTr("Close")
+          onTriggered: closed()
+        }
+      ]
+    }
+  }
+  model: folderModel
+  delegate: ListItem {
+    visible: isVisible()
+    height: isVisible() ? undefined : 0
+    color: backgroundColor
+
+    MouseArea {
+      anchors.fill: parent
+      cursorShape: Qt.PointingHandCursor
+      hoverEnabled: false
+      onClicked: {
+        if (fileIsDir) {
+          return folderModel.folder = filePath
+        }
+
+        fileSelected(filePath)
+      }
+
+      RowLayout {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: units.gu(2)
+        anchors.rightMargin: units.gu(2)
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: units.gu(1)
+
+        Icon {
+          height: parent.height
+          name: fileIsDir ? 'folder-symbolic' : 'stock_document'
+          color: textColor
+        }
+        Label {
+          Layout.fillWidth: true
+          Layout.fillHeight: true
+          elide: Text.ElideRight
+          text: fileName
+          color: textColor
+        }
+      }
+    }
+
+    function isVisible() {
+      return fileName !== '.'
+    }
+  }
+
+  FolderListModel {
+    id: folderModel
+    rootFolder: homeDir
+    folder: homeDir
+
+    showDirsFirst: true
+    showDotAndDotDot: true
+    showHidden: true
+    showOnlyReadable: true
+  }
+}

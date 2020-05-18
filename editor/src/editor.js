@@ -6,12 +6,18 @@ import 'ace-builds/src-noconflict/theme-twilight'
 import 'ace-builds/src-noconflict/theme-chrome'
 import beautify from 'ace-builds/src-noconflict/ext-beautify'
 
+import md5 from 'blueimp-md5'
+
 /**
  * Editor window
  */
 export default class Editor {
-  constructor ({ elem = 'root' } = {}) {
-    this._ace = ace.edit(elem, {
+  constructor ({
+    elem = document.getElementById('root'),
+    isSailfish = false
+  } = {}) {
+    this._editorElem = elem
+    this._ace = ace.edit(this._editorElem, {
       wrap: true,
       tabSize: 2,
       showFoldWidgets: false,
@@ -19,15 +25,23 @@ export default class Editor {
       animatedScroll: false
     })
     this._filePath = undefined
+    this._initialContentHash = undefined
     this._onChangeTimer = undefined
     this._changeListeners = []
     this._lastScrollTop = 0
 
-    this._applyPlatformHaks()
+    if (isSailfish) {
+      this._applyPlatformHaks()
+    }
   }
 
   beautify () {
     beautify.beautify(this._ace.session)
+  }
+
+  destroy () {
+    this._ace.destroy()
+    this._editorElem.parentElement.removeChild(this._editorElem)
   }
 
   /**
@@ -51,6 +65,7 @@ export default class Editor {
    */
   loadFile (filePath, content, readOnly = false) {
     this._filePath = filePath
+    this._initialContentHash = md5(content)
     const { mode } = modelist.getModeForPath(filePath)
     const editorSession = this._ace.getSession()
     editorSession.off('change', this._onChange)
@@ -63,6 +78,15 @@ export default class Editor {
     editorSession.getUndoManager().reset()
 
     editorSession.on('change', this._onChange)
+  }
+
+  setSavedContent (content) {
+    console.log(content, md5(content))
+    this._initialContentHash = md5(content)
+    this._onChange()
+  }
+
+  activate () {
     this._onChange()
   }
 
@@ -151,8 +175,10 @@ export default class Editor {
     clearTimeout(this._onChangeTimer)
     this._onChangeTimer = setTimeout(() => {
       const undoManager = this._ace.getSession().getUndoManager()
+      const value = this._ace.getSession().getValue()
       const data = {
-        value: this._ace.getSession().getValue(),
+        value,
+        hasChanges: this._initialContentHash !== md5(value),
         hasUndo: undoManager.hasUndo(),
         hasRedo: undoManager.hasRedo(),
         isReadOnly: this._ace.getOption('readOnly'),

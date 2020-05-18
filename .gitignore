@@ -1,3 +1,7 @@
 node_modules
+
 harbour-seabass/qml/html/
 harbour-seabass/harbour-seabass.pro.user
+
+ubports-seabass/build
+ubports-seabass/.clickable
