@@ -9,11 +9,13 @@ Seabass is a code editor for mobile devices.
 Currently supported platforms:
 
 * Sailfish OS
+* UBports
 
 Features:
 * Syntax highlighting for over 120 programming/markup languages
+* Multiple tabs (UBports only)
+* Navigation buttons (Sailfish OS only)
 * Undo/Redo
-* Navigation buttons
 * Light and dark themes
 
 ![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-04.png)
