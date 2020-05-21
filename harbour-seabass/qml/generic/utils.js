@@ -6,12 +6,36 @@ function getDefaultFilePath() {
     return Qt.application.arguments[2] || DEFAULT_FILE_PATH
 }
 
+function getShortDirName(filePath, homeUrl) {
+  var dirName = filePath
+    .split('/')
+    .slice(0, -1)
+    .join('/') + '/'
+  var homeDir = homeUrl.toString().replace('file://', '')
+
+  if (dirName.indexOf(homeDir) === 0) {
+    return dirName.replace(homeDir, '~')
+  }
+
+  return dirName
+}
+
 /**
   * Extracts file name from a given path
   * @returns {string} - file name
   */
 function getFileNameByPath(filePath) {
     return filePath.split('/').slice(-1)[0]
+}
+
+function isDarker(color1, color2) {
+  return __getColorDarkness(color1.toString()) < __getColorDarkness(color2.toString())
+
+  function __getColorDarkness(color) {
+    return parseInt(color.slice(1, 3), 16) +
+      parseInt(color.slice(3, 5), 16) +
+      parseInt(color.slice(5), 16)
+  }
 }
 
 /**

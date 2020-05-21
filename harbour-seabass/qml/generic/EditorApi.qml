@@ -8,12 +8,15 @@ QtObject {
     property string filePath
     // operate in readonly mode if true, in readwrite mode otherwise
     property bool forceReadOnly: false
+    property bool hasChanges: false
     property bool hasUndo: false
     property bool hasRedo: false
-    property bool isDarkTheme: true
+    property bool isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
+      theme.palette.normal.backgroundText)
     property bool isReadOnly: false
     // true when the file is being saved
     property bool isSaveInProgress: false
+    property string homeDir
 
     signal appLoaded(var preferences)
     signal messageSent(string jsonPayload)
@@ -21,27 +24,43 @@ QtObject {
 
     Component.onCompleted: {
         appLoaded.connect(startup)
-        filePathChanged.connect(loadFile)
+        // filePathChanged.connect(loadFile)
         isDarkThemeChanged.connect(loadTheme)
+    }
+
+    function openFile(filePath) {
+      api.filePath  = filePath
+      postMessage('openFile', {
+        filePath: filePath
+      })
+    }
+
+    function closeFile(filePath) {
+      api.filePath  = filePath
+      postMessage('closeFile', {
+        filePath: filePath
+      })
     }
 
     /**
      * Opens file at `filePath` in the editor
      * @returns {undefined}
      */
-    function loadFile() {
-        QmlJs.readFile(filePath, function(err, text) {
-            if (err) {
-                console.error(err)
-                return errorOccured(qsTr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
-            }
+    function loadFile(filePath, forceReadOnly) {
+      api.filePath  = filePath
+      api.forceReadOnly = forceReadOnly || false
+      QmlJs.readFile(filePath, function(err, text) {
+        if (err) {
+          console.error(err)
+          return errorOccured(qsTr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
+        }
 
-            postMessage('loadFile', {
-                filePath: filePath,
-                content: text,
-                readOnly: forceReadOnly
-            })
+        postMessage('loadFile', {
+          filePath: filePath,
+          content: text,
+          readOnly: forceReadOnly
         })
+      })
     }
 
     /**
@@ -67,6 +86,8 @@ QtObject {
                 console.error(err)
                 return errorOccured(qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
             }
+
+            postMessage('fileSaved', { filePath: filePath, content: content })
         })
     }
 
@@ -79,7 +100,7 @@ QtObject {
     function startup() {
         loadTheme()
         if (filePath) {
-            loadFile()
+          loadFile(filePath)
         }
     }
 
@@ -103,6 +124,10 @@ QtObject {
                     return
                 }
 
+                // disable word suggestions
+                Qt.inputMethod.commit()
+
+                hasChanges = !data.isReadOnly && data.hasChanges
                 hasUndo = !data.isReadOnly && data.hasUndo
                 hasRedo = !data.isReadOnly && data.hasRedo
                 isReadOnly = data.isReadOnly

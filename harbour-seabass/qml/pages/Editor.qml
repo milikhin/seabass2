@@ -120,7 +120,8 @@ Page {
                     return
                 }
 
-                api.filePath = selectedContentProperties.filePath
+                api.closeFile(api.filePath)
+                api.loadFile(selectedContentProperties.filePath)
             }
         }
     }

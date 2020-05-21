@@ -100,7 +100,7 @@ QtObject {
     function startup() {
         loadTheme()
         if (filePath) {
-          loadFile()
+          loadFile(filePath)
         }
     }
 

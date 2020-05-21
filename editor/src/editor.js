@@ -1,6 +1,6 @@
 import ace from 'ace-builds/src-noconflict/ace'
 
-// import 'ace-builds/webpack-resolver'
+import 'ace-builds/webpack-resolver'
 import 'ace-builds/src-noconflict/theme-twilight'
 import 'ace-builds/src-noconflict/theme-chrome'
 
