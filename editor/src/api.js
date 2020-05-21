@@ -21,7 +21,6 @@ class Api {
     })
     this._apiBackend = apiBackend
     this._editor = undefined
-    this._preferences = {}
     this._tabsRootElem = rootElem
     this._welcomeElem = welcomeElem
 
@@ -192,7 +191,6 @@ class Api {
       window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened)
     }
 
-    this._preferences = options
     this._tabsController.setPreferences(options)
   }
 

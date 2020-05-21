@@ -67,6 +67,7 @@ export default class TabsController {
   }
 
   setPreferences (preferences) {
+    this._preferences = preferences
     this._tabs.forEach(({ editor }) => {
       editor.setPreferences(preferences)
     })
