@@ -18,7 +18,7 @@ Features:
 * Undo/Redo
 * Light and dark themes
 
-![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-04.png)
+![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-u01.png)
 ![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
 
 ## Architecture
@@ -32,11 +32,12 @@ Application for each platform consists of two major parts:
     HTML5 application optimised for mobile WebView runtime
 
 The two components interact using a simple message-based API.
-In Sailfish OS messages are delivered using `navigator.qt` API
+In Sailfish OS messages are delivered using `navigator.qt` API, UBports uses webpage URL and JS calls
 
 ## Directory structure
 
-* `harbour-seabass` - QML application for Sailfish OS developed with Sailfish SDK
+* `harbour-seabass` - QML application for Sailfish OS
+* `ubports-seabass` - QML application for UBports
 * `editor` - JS editor engine
 
 ## Build instructions
