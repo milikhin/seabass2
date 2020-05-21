@@ -44,14 +44,17 @@ In Sailfish OS messages are delivered using `navigator.qt` API
 Requirements:
 
 * Node.js, tested using v12
-* Sailfish SDK
+* Sailfish SDK (for Sailfish OS)
+* clickable (for UBports)
 
 Build steps:
 
 1. Building editor engine  
    1. Install editor dependencies and build tools: `npm install`
    1. Build editor engine and copy required files to Sailfish app directory: `npm run build`
-1. Build `harbour-seabass` using Sailfish SDK
+1. Build App  
+   * Sailfish OS: build `harbour-seabass` using Sailfish SDK
+   * UBports: build `ubports-seabass` using clickable
 
 ## Documentation
 
