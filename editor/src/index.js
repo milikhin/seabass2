@@ -1,7 +1,11 @@
 import registerApi from './api'
+import editorFactory from './editor-factory'
 
 registerApi({
-  // editor: new Editor(),
+  editorFactory,
   notifyOnLoaded: true,
-  apiBackend: 'url'
+  apiBackend: 'url',
+
+  rootElem: document.getElementById('root'),
+  welcomeElem: document.getElementById('welcome')
 })

@@ -1,15 +1,29 @@
 /* globals localStorage */
-import Editor from './editor'
 import { InvalidArgError } from './errors'
+import TabsController from './tabs-controller'
 
 class Api {
-  constructor ({ notifyOnLoaded, apiBackend = 'navigatorQt' } = {}) {
-    this._tabs = []
+  constructor ({
+    editorFactory,
+    notifyOnLoaded,
+    apiBackend = 'navigatorQt',
+
+    welcomeElem,
+    rootElem
+  } = {}) {
+    if (!editorFactory) {
+      throw new InvalidArgError('editorFactory is required')
+    }
+    this._tabsController = new TabsController({
+      rootElem,
+      editorFactory,
+      onStateChange: this._handleStateChanged
+    })
     this._apiBackend = apiBackend
     this._editor = undefined
     this._preferences = {}
-    this._rootElem = document.getElementById('root')
-    this._welcomeElem = document.getElementById('welcome')
+    this._tabsRootElem = rootElem
+    this._welcomeElem = welcomeElem
 
     this._registerApiHandler()
     if (notifyOnLoaded) {
@@ -17,146 +31,102 @@ class Api {
     }
   }
 
-  get NON_FILE_ACTIONS () {
-    return [
-      'closeFile',
-      'loadFile',
-      'openFile',
-      'setPreferences'
-    ]
-  }
-
-  _createTab (filePath) {
-    const editorElem = document.createElement('div')
-    this._rootElem.appendChild(editorElem)
-    editorElem.classList.add('editor')
-
-    const tab = {
-      filePath,
-      editor: new Editor({ elem: editorElem }),
-      elem: editorElem
-    }
-    tab.editor.setPreferences(this._preferences)
-    this._tabs.push(tab)
-    this._registerEditorEventsHandler(tab.editor)
-
-    this._showTab(tab)
-    return tab
-  }
-
-  _showTab (tab) {
-    this._editor = tab.editor
-    this._tabs.forEach(({ elem }) => { elem.style.display = 'none' })
-
-    this._welcomeElem.style.display = 'none'
-    this._rootElem.style.display = 'block'
-    tab.elem.style.display = ''
-    this._editor.activate()
-  }
-
-  _showWelcomeNote () {
-    this._welcomeElem.style.display = 'block'
-    this._rootElem.style.display = 'none'
-  }
-
   // #region API
 
   _apiOnCloseFile ({ filePath }) {
     if (!filePath) {
-      throw new InvalidArgError(`${filePath} is required to load file into editor`)
+      throw new InvalidArgError(`${filePath} is required to close tab`)
     }
 
-    const tabIndex = this._tabs.findIndex(({ filePath: tabFile }) => tabFile === filePath)
-    if (tabIndex === -1) {
-      return
-    }
-
-    const tab = this._tabs[tabIndex]
-    tab.editor.destroy()
-    this._tabs.splice(tabIndex, 1)
-
-    if (!this._tabs.length) {
+    this._tabsController.close(filePath)
+    if (this._tabsController.list().length === 0) {
       this._showWelcomeNote()
     }
   }
 
   /**
    * 'beautify' command handler: intended to auto format file content
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnBeautify () {
-    this._editor.beautify()
-  }
+  // _apiOnBeautify ({ filePath }) {
+  //   this._tabsController.exec(filePath, 'beautify')
+  // }
 
   /**
    * 'navigateLeft' command handler: intended to move cursor left
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateLeft () {
-    this._editor.navigateLeft()
+  _apiOnNavigateLeft ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateLeft')
   }
 
   /**
    * 'navigateRight' command handler: intended to move cursor right
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateRight () {
-    this._editor.navigateRight()
+  _apiOnNavigateRight ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateRight')
   }
 
   /**
    * 'navigateDown' command handler: intended to move cursor down
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateDown () {
-    this._editor.navigateDown()
+  _apiOnNavigateDown ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateDown')
   }
 
   /**
    * 'navigateUp' command handler: intended to move cursor up
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateUp () {
-    this._editor.navigateUp()
+  _apiOnNavigateUp ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateUp')
   }
 
   /**
    * 'navigateLineStart' command handler: intended to move cursor to the start of the line
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateLineStart () {
-    this._editor.navigateLineStart()
+  _apiOnNavigateLineStart ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateLineStart')
   }
 
   /**
    * 'navigateLineEnd' command handler: intended to move cursor to the end of the line
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateLineEnd () {
-    this._editor.navigateLineEnd()
+  _apiOnNavigateLineEnd ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateLineEnd')
   }
 
   /**
    * 'navigateFileStart' command handler: intended to move cursor to the 1:1
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateFileStart () {
-    this._editor.navigateFileStart()
+  _apiOnNavigateFileStart ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateFileStart')
   }
 
   /**
    * 'navigateFileEnd' command handler: intended to move cursor to the last symbol of the file
+   * @param {string} filePath - /path/to/file
    * @returns {undefined}
    */
-  _apiOnNavigateFileEnd () {
-    this._editor.navigateFileEnd()
+  _apiOnNavigateFileEnd ({ filePath }) {
+    this._tabsController.exec(filePath, 'navigateFileEnd')
   }
 
   _apiOnFileSaved ({ filePath, content }) {
-    const tab = this._tabs.find(({ filePath: tabFile }) => tabFile === filePath)
-    if (tab) {
-      tab.editor.setSavedContent(content)
-    }
+    this._tabsController.exec(filePath, 'setSavedContent', content)
   }
 
   /**
@@ -171,28 +141,29 @@ class Api {
       throw new InvalidArgError(`${filePath} is required to load file into editor`)
     }
 
-    const { editor } = this._createTab(filePath)
-    editor.loadFile(filePath, content, readOnly)
+    this._tabsController.create(filePath, content, readOnly)
   }
 
+  /**
+   * `openFile` command handler: intended to open previously loaded file
+   * @param {string} filePath - /path/to/file
+   */
   _apiOnOpenFile ({ filePath }) {
     if (!filePath) {
       throw new InvalidArgError(`${filePath} is required to load file into editor`)
     }
 
-    const tab = this._tabs.find(({ filePath: tabFile }) => tabFile === filePath)
-    if (!tab) {
-      return
-    }
-    this._showTab(tab)
+    this._welcomeElem.style.display = 'none'
+    this._tabsRootElem.style.display = 'block'
+    this._tabsController.show(filePath)
   }
 
   /**
    * 'redo' command handler: intended to redo latest changes
    * @returns {undefined}
    */
-  _apiOnRedo () {
-    this._editor.redo()
+  _apiOnRedo ({ filePath }) {
+    this._tabsController.exec(filePath, 'redo')
   }
 
   /**
@@ -201,7 +172,7 @@ class Api {
    * @returns {undefined}
    */
   _apiOnRequestSaveFile ({ filePath }) {
-    const value = this._editor.getContent(filePath)
+    const value = this._tabsController.exec(filePath, 'getContent')
     this._sendApiMessage('saveFile', {
       content: value,
       filePath,
@@ -222,28 +193,27 @@ class Api {
     }
 
     this._preferences = options
-    this._tabs.forEach(({ editor }) => {
-      editor.setPreferences(options)
-    })
+    this._tabsController.setPreferences(options)
   }
 
   /**
    * 'toggleReadOnly' command handler: intended to toggle readOnly mode
    * @returns {undefined}
    */
-  _apiOnToggleReadOnly () {
-    this._editor.toggleReadOnly()
+  _apiOnToggleReadOnly ({ filePath }) {
+    this._tabsController.exec(filePath, 'toggleReadOnly')
   }
 
   /**
    * 'undo' command handler: intended to undo latest changes
    * @returns {undefined}
    */
-  _apiOnUndo () {
-    this._editor.undo()
+  _apiOnUndo ({ filePath }) {
+    this._tabsController.exec(filePath, 'undo')
   }
 
   // #endregion API
+  // #region PRIVATE
 
   _getSavedPreferences () {
     const isSailfishToolbarOpened = localStorage.getItem('sailfish__isToolbarOpened')
@@ -269,10 +239,6 @@ class Api {
         console.warn(`${action} is not implemented`)
         return
       }
-
-      if (this.NON_FILE_ACTIONS.indexOf(action) === -1 && data.filePath !== this._editor.getFilePath()) {
-        throw new InvalidArgError(`file ${data.filePath} is not loaded`)
-      }
       return this[apiMethod](data)
     } catch (err) {
       this._sendApiError(err.message)
@@ -282,23 +248,22 @@ class Api {
   _registerApiHandler () {
     switch (this._apiBackend) {
       case 'navigatorQt': {
-        navigator.qt.onmessage = (msg) => {
-          const payload = JSON.parse(msg.data)
-          this._onMessage(payload)
-        }
+        navigator.qt.onmessage = this._handleQtMessage
         return
       }
-      case 'url':
+      case 'url': {
+        window.postSeabassApiMessage = this._onMessage
+        return
+      }
       default: {
-        window.postSeabassApiMessage = (payload) => {
-          this._onMessage(payload)
-        }
+        throw new InvalidArgError(`${this._apiBackend} is incorrect API backend. Must be one of (navigatorQt, url)`)
       }
     }
   }
 
-  _registerEditorEventsHandler (editor = this._editor) {
-    editor.onChange(this._handleStateChanged)
+  _handleQtMessage = (msg) => {
+    const payload = JSON.parse(msg.data)
+    this._onMessage(payload)
   }
 
   _sendApiError (message) {
@@ -320,8 +285,14 @@ class Api {
       }
     }
   }
+
+  _showWelcomeNote () {
+    this._welcomeElem.style.display = 'block'
+    this._tabsRootElem.style.display = 'none'
+  }
+  // #endregion PRIVATE
 }
 
-export default function registerApi (options) {
+export default function registerApi (options = {}) {
   return new Api(options)
 }

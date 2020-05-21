@@ -1,9 +1,10 @@
 import ace from 'ace-builds/src-noconflict/ace'
-import modelist from 'ace-builds/src-noconflict/ext-modelist'
 
-import 'ace-builds/webpack-resolver'
+// import 'ace-builds/webpack-resolver'
 import 'ace-builds/src-noconflict/theme-twilight'
 import 'ace-builds/src-noconflict/theme-chrome'
+
+import modelist from 'ace-builds/src-noconflict/ext-modelist'
 import beautify from 'ace-builds/src-noconflict/ext-beautify'
 
 import md5 from 'blueimp-md5'
@@ -24,7 +25,6 @@ export default class Editor {
       indentedSoftWrap: false,
       animatedScroll: false
     })
-    this._filePath = undefined
     this._initialContentHash = undefined
     this._onChangeTimer = undefined
     this._changeListeners = []
@@ -53,10 +53,6 @@ export default class Editor {
     return this._ace.getValue()
   }
 
-  getFilePath () {
-    return this._filePath
-  }
-
   /**
    * Load given content using given mode
    * @param {string} fileUrl - /path/to/file
@@ -64,7 +60,6 @@ export default class Editor {
    * @returns {undefined}
    */
   loadFile (filePath, content, readOnly = false) {
-    this._filePath = filePath
     this._initialContentHash = md5(content)
     const { mode } = modelist.getModeForPath(filePath)
     const editorSession = this._ace.getSession()
@@ -81,7 +76,6 @@ export default class Editor {
   }
 
   setSavedContent (content) {
-    console.log(content, md5(content))
     this._initialContentHash = md5(content)
     this._onChange()
   }
@@ -181,8 +175,7 @@ export default class Editor {
         hasChanges: this._initialContentHash !== md5(value),
         hasUndo: undoManager.hasUndo(),
         hasRedo: undoManager.hasRedo(),
-        isReadOnly: this._ace.getOption('readOnly'),
-        filePath: this._filePath
+        isReadOnly: this._ace.getOption('readOnly')
       }
 
       this._changeListeners.forEach(listener => listener(data))

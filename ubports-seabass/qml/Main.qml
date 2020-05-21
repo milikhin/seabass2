@@ -5,6 +5,7 @@ import Morph.Web 0.1
 import QtWebEngine 1.1
 import QtQuick.Controls 2.2
 import Ubuntu.Components.Themes 1.3
+import Ubuntu.Components.Popups 1.3
 import Qt.labs.platform 1.0
 
 import "./components" as CustomComponents
@@ -44,6 +45,10 @@ MainView {
       file.hasChanges = hasChanges
       filesModel.set(fileIndex, file)
     }
+  }
+
+  CustomComponents.SaveDialog {
+    id: saveDialog
   }
 
   Page {
@@ -142,16 +147,31 @@ MainView {
           }
           onTabClosed: function(index) {
             const file = model.get(index)
-            api.closeFile(file.filePath)
-            model.remove(index, 1)
-
-            if (!model.count) {
-              api.filePath = ''
-              return
+            if (!file.hasChanges) {
+              return __close()
             }
 
-            if (currentIndex === -1) {
-              currentIndex = 0
+            saveDialog.show(file.filePath, {
+              onSaved: function() {
+                api.requestSaveFile()
+                // TODO: wait until the file actually saved
+                __close()
+              },
+              onDismissed: __close
+            })
+
+            function __close() {
+              api.closeFile(file.filePath)
+              model.remove(index, 1)
+
+              if (!model.count) {
+                api.filePath = ''
+                return
+              }
+
+              if (currentIndex === -1) {
+                currentIndex = 0
+              }
             }
           }
         }
