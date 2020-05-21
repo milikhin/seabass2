@@ -1,6 +1,13 @@
 {
   "presets": [
-    "@babel/preset-env"
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": "30"
+        }
+      }
+    ]
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",

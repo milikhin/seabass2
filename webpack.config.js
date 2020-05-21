@@ -1,12 +1,8 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 
-const sailfishConfig = {
+const commonConfig = {
   entry: './editor/src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
-    filename: 'bundle.js'
-  },
   module: {
     rules: [
       {
@@ -30,4 +26,34 @@ const sailfishConfig = {
   ]
 }
 
-module.exports = [sailfishConfig]
+const sailfishConfig = {
+  ...commonConfig,
+  output: {
+    path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
+    filename: 'bundle.js'
+  },
+  plugins: [
+    new CopyPlugin([
+      {
+        from: './harbour-seabass/html'
+      }
+    ])
+  ]
+}
+
+const ubportsConfig = {
+  ...commonConfig,
+  output: {
+    path: path.resolve(__dirname, 'ubports-seabass/qml/html'),
+    filename: 'bundle.js'
+  },
+  plugins: [
+    new CopyPlugin([
+      {
+        from: './ubports-seabass/html'
+      }
+    ])
+  ]
+}
+
+module.exports = [sailfishConfig, ubportsConfig]

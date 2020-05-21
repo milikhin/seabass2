@@ -1,7 +1,12 @@
+import 'babel-polyfill'
 import registerApi from './api'
-import Editor from './editor'
+import editorFactory from './editor-factory'
 
 registerApi({
-  editor: new Editor(),
-  notifyOnLoaded: true
+  editorFactory,
+  notifyOnLoaded: true,
+  apiBackend: window.seabassOptions.apiBackend,
+
+  rootElem: document.getElementById('root'),
+  welcomeElem: document.getElementById('welcome')
 })

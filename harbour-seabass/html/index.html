@@ -10,8 +10,14 @@
     }
 
     #root {
+      width: 100%;
       height: 100%;
       margin-bottom: 1px;
+    }
+
+    .editor {
+      width: 100%;
+      height: 100%;
     }
 
     .ace_mobile-menu {
@@ -30,7 +36,13 @@
 </head>
 
 <body>
+  <div id="welcome"></div>
   <div id="root"></div>
+  <script>
+    window.seabassOptions = {
+      apiBackend: 'navigatorQt'
+    }
+  </script>
   <script src="./bundle.js"></script>
 </body>
 

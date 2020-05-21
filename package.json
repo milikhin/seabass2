@@ -27,6 +27,7 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^25.4.0",
     "babel-loader": "^8.1.0",
+    "babel-polyfill": "^6.26.0",
     "copy-webpack-plugin": "^5.1.1",
     "core-js": "^3.6.5",
     "css-loader": "^3.5.2",
@@ -39,8 +40,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@codemirror/next": "^0.5.5",
     "ace-builds": "^1.4.11",
-    "codemirror": "^5.53.2"
+    "blueimp-md5": "^2.16.0"
   }
 }
