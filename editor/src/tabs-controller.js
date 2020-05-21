@@ -60,6 +60,9 @@ export default class TabsController {
 
   exec (filePath, action, ...args) {
     const tab = this._getTab(filePath)
+    if (!tab) {
+      throw new InvalidArgError(`file ${filePath} is not loaded`)
+    }
     return tab.editor[action](...args)
   }
 
@@ -72,7 +75,7 @@ export default class TabsController {
   _getTab (filePath) {
     const tabIndex = this._tabs.findIndex(({ filePath: tabFile }) => tabFile === filePath)
     if (tabIndex === -1) {
-      throw new InvalidArgError(`file ${filePath} is not loaded`)
+      return
     }
     return this._tabs[tabIndex]
   }

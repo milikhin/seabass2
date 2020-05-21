@@ -116,6 +116,7 @@ QtObject {
 
         switch (action) {
             case 'error':
+                console.error(data.message)
                 return errorOccured(data.message || 'unknown error')
             case 'appLoaded':
                 return appLoaded(data)
