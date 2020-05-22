@@ -1,9 +1,9 @@
+![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
+
 # Seabass
 ## About
 
 Seabass is a code editor for mobile devices.
-
-![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
 
 Currently supported platforms:
 
