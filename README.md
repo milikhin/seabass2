@@ -32,7 +32,7 @@ Application for each platform consists of two major parts:
     HTML5 application optimised for mobile WebView runtime
 
 The two components interact using a simple message-based API.
-In Sailfish OS messages are delivered using `navigator.qt` API, UBports uses webpage URL and JS calls
+In Sailfish OS messages are delivered using `navigator.qt` API, UBports uses webpage URL and direct JS calls
 
 ## Directory structure
 
@@ -50,9 +50,9 @@ Requirements:
 
 Build steps:
 
-1. Building editor engine  
+1. Build editor engine  
    1. Install editor dependencies and build tools: `npm install`
-   1. Build editor engine and copy required files to Sailfish app directory: `npm run build`
+   1. Build editor engine and copy required files to Sailfish/UBports app directory: `npm run build`
 1. Build App  
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK
    * UBports: build `ubports-seabass` using clickable
