@@ -1,15 +1,16 @@
-![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
-
 # Seabass
-
 ## About
 
 Seabass is a code editor for mobile devices.
+
+![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
 
 Currently supported platforms:
 
 * Sailfish OS
 * UBports
+
+[![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
 Features:
 * Syntax highlighting for over 120 programming/markup languages
