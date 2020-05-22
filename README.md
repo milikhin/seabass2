@@ -32,7 +32,7 @@ Application for each platform consists of two major parts:
     HTML5 application optimised for mobile WebView runtime
 
 The two components interact using a simple message-based API.
-In Sailfish OS messages are delivered using `navigator.qt` API, UBports uses webpage URL and direct JS calls
+In Sailfish OS messages are delivered using `navigator.qt.postMessage` API, UBports uses webpage URL and direct JS calls
 
 ## Directory structure
 
