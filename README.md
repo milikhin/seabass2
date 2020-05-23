@@ -60,4 +60,4 @@ Build steps:
 
 ## Documentation
 
-Major design decisions and applied workarounds are listed in [workarounds.md](docs/workarounds.md).
+Some architecture aspects and key ideas are described in wiki.
