@@ -371,6 +371,20 @@ describe('editor API', () => {
     })
   })
 
+  describe('#getFileContent', () => {
+    it('should execute `getContent` action', () => {
+      const { editor } = createEditor()
+      editor.getFilePath.mockReturnValue(filePath)
+
+      postMessage({
+        action: 'getFileContent',
+        data: { filePath }
+      })
+
+      expect(editor.getContent).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe('#unknownMethod', () => {
     const originalConsoleWarn = console.warn
     beforeAll(() => {

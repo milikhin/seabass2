@@ -45,6 +45,22 @@ MainView {
       file.hasChanges = hasChanges
       filesModel.set(fileIndex, file)
     }
+
+    /**
+     * Returns current content of the given file from the EditorApi
+     *  (the API backend must support returning a result from a JS call for this method to work)
+     * @param {function} - callback
+     * @returns {string} - file content
+     */
+    function getFileContent(callback) {
+      const jsonPayload = JSON.stringify({
+        action: 'getFileContent',
+        data: {
+          filePath: filePath
+        }
+      })
+      return editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")", callback);
+    }
   }
 
   CustomComponents.SaveDialog {
@@ -124,7 +140,11 @@ MainView {
                 iconName: "save"
                 text: qsTr("Save")
                 enabled: api.filePath && api.hasChanges
-                onTriggered: api.requestSaveFile()
+                onTriggered: {
+                  api.getFileContent(function(fileContent) {
+                    api.saveFile(api.filePath, fileContent)
+                  })
+                }
               }
             ]
           }

@@ -53,6 +53,16 @@ class Api {
   // }
 
   /**
+   * Returns file content.
+   *  API backend must support returning results from JS calls to use the method
+   * @param {string} filePath - path/to/file
+   * @returns {string} - file content
+   */
+  _apiOnGetFileContent ({ filePath }) {
+    return this._tabsController.exec(filePath, 'getContent')
+  }
+
+  /**
    * 'navigateLeft' command handler: intended to move cursor left
    * @param {string} filePath - /path/to/file
    * @returns {undefined}
