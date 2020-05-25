@@ -1,4 +1,4 @@
-/* globals describe,expect,jest,it,beforeEach,beforeAll,afterAll,localStorage */
+/* globals describe,expect,jest,it,beforeEach,beforeAll,afterAll,afterEach,localStorage */
 
 import registerApi from '../src/api'
 import { NotFoundError } from '../src/errors'
@@ -349,7 +349,7 @@ describe('editor API', () => {
     beforeEach(() => {
       console.warn = jest.fn()
     })
-    
+
     afterEach(() => {
       console.warn.mockRestore()
     })
@@ -364,7 +364,7 @@ describe('editor API', () => {
 
       expect(editor.toggleReadOnly).toHaveBeenCalledTimes(1)
     })
-    
+
     it('should not throw if filePath is incorrect', () => {
       const { editor } = createEditor()
       const invalidFilePath = uuid()
@@ -378,7 +378,7 @@ describe('editor API', () => {
       expect(editor.toggleReadOnly).toHaveBeenCalledTimes(0)
     })
   })
-  
+
   describe('#getFileContent', () => {
     it('should execute `getContent` action', () => {
       const { editor } = createEditor('url')
@@ -395,17 +395,16 @@ describe('editor API', () => {
   })
 
   describe('#unknownMethod', () => {
-    const originalConsoleWarn = console.warn
     beforeAll(() => {
       console.warn = jest.fn()
     })
 
     afterAll(() => {
-      console.warn = originalConsoleWarn
+      console.warn.mockRestore()
     })
 
     it('should not throw', () => {
-      const { editor } = createEditor()
+      createEditor()
 
       postMessage({ action: uuid() })
     })
