@@ -4,7 +4,6 @@ export default () => ({
   activate: jest.fn(),
   destroy: jest.fn(),
   getContent: jest.fn(),
-  getFilePath: jest.fn(),
   loadFile: jest.fn(),
   onChange: jest.fn(),
   redo: jest.fn(),

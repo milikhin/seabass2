@@ -181,12 +181,21 @@ class Api {
    * @returns {undefined}
    */
   _apiOnRequestSaveFile ({ filePath }) {
-    const value = this._tabsController.exec(filePath, 'getContent')
-    this._sendApiMessage('saveFile', {
-      content: value,
-      filePath,
-      responseTo: 'requestSaveFile'
-    })
+    try {
+      const value = this._tabsController.exec(filePath, 'getContent')
+      this._sendApiMessage('saveFile', {
+        content: value,
+        filePath,
+        responseTo: 'requestSaveFile'
+      })
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        // requestSaveFile operation must throw error to the platform application if required file is not loaded
+        throw new InvalidArgError(`File ${filePath} is not opened`)
+      }
+
+      throw err
+    }
   }
 
   /**
