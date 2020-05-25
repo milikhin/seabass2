@@ -20,10 +20,10 @@ Item {
 
     Dialog {
       id: dialogue
-      title: qsTr("Save changes in %1?").arg(fileName)
-      text: qsTr("Changes will be lost if you close the file without saving.")
+      title: i18n.tr("Save changes in %1?").arg(fileName)
+      text: i18n.tr("Changes will be lost if you close the file without saving.")
       Button {
-        text: qsTr("Save")
+        text: i18n.tr("Save")
         color: theme.palette.normal.positive
         onClicked: {
           PopupUtils.close(dialogue)
@@ -31,7 +31,7 @@ Item {
         }
       }
       Button {
-        text: qsTr("Close")
+        text: i18n.tr("Close")
         color: theme.palette.normal.negative
         onClicked: {
           PopupUtils.close(dialogue)
@@ -39,7 +39,7 @@ Item {
         }
       }
       Button {
-        text: qsTr("Cancel")
+        text: i18n.tr("Cancel")
         onClicked: {
           PopupUtils.close(dialogue)
         }

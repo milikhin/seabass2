@@ -52,7 +52,7 @@ QtObject {
       QmlJs.readFile(filePath, function(err, text) {
         if (err) {
           console.error(err)
-          return errorOccured(qsTr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
+          return errorOccured(i18n.tr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
         }
 
         postMessage('loadFile', {
@@ -86,7 +86,7 @@ QtObject {
             isSaveInProgress = false
             if (err) {
                 console.error(err)
-                errorOccured(qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
+                errorOccured(i18n.tr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
                 return callback(err)
             }
 

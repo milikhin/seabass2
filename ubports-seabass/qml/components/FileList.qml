@@ -19,13 +19,13 @@ ListView {
   signal fileSelected(string filePath)
 
   header: PageHeader {
-    title: qsTr("Files")
+    title: i18n.tr("Files")
     subtitle: folderModel.folder.toString().replace('file://', '')
     navigationActions:[
       Action {
         visible: isPage
         iconName: "back"
-        text: qsTr("Close")
+        text: i18n.tr("Close")
         onTriggered: closed()
       }
     ]
@@ -34,7 +34,7 @@ ListView {
         Action {
           visible: !isPage
           iconName: "close"
-          text: qsTr("Close")
+          text: i18n.tr("Close")
           onTriggered: closed()
         }
       ]
