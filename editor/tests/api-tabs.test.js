@@ -1,7 +1,8 @@
-/* globals describe,expect,jest,it,beforeEach,beforeAll,afterAll,localStorage */
+/* globals describe,expect,jest,it,beforeEach,beforeAll,afterAll,afterEach,localStorage */
 
-import registerApi from '../src/api' //eslint-disable-line
-import uuid from 'uuid/v4'//eslint-disable-line
+import registerApi from '../src/api'
+import { NotFoundError } from '../src/errors'
+import { v4 as uuid } from 'uuid'
 import editorFactory from './mocks/editor-factory'
 
 describe('editor API', () => {
@@ -14,12 +15,11 @@ describe('editor API', () => {
     navigator.qt.onmessage({ data: JSON.stringify(payload) })
   }
 
-  const createEditor = () => {
-    const api = registerApi({ editorFactory, rootElem, welcomeElem })
+  const createEditor = (apiBackend = 'navigatorQt') => {
+    const api = registerApi({ editorFactory, apiBackend, rootElem, welcomeElem })
     api._tabsController.create(filePath)
     const editor = api._tabsController._tabs[0].editor
     editor.getContent.mockReturnValue(content)
-    editor.getFilePath.mockReturnValue(uuid())
     return { api, editor }
   }
 
@@ -60,7 +60,6 @@ describe('editor API', () => {
   describe('#fileSaved', () => {
     it('should execute `setSavedContent` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'fileSaved',
@@ -156,7 +155,6 @@ describe('editor API', () => {
     it('should send API message with file content', () => {
       const { editor } = createEditor()
       editor.getContent.mockReturnValue(content)
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'requestSaveFile',
@@ -195,7 +193,6 @@ describe('editor API', () => {
   describe('#undo', () => {
     it('should execute `undo` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'undo',
@@ -209,7 +206,6 @@ describe('editor API', () => {
   describe('#redo', () => {
     it('should execute `redo` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'redo',
@@ -223,7 +219,6 @@ describe('editor API', () => {
   describe('#navigateLeft', () => {
     it('should execute `navigateLeft` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateLeft',
@@ -237,7 +232,6 @@ describe('editor API', () => {
   describe('#navigateRight', () => {
     it('should execute `navigateRight` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateRight',
@@ -251,7 +245,6 @@ describe('editor API', () => {
   describe('#navigateUp', () => {
     it('should execute `navigateUp` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateUp',
@@ -265,7 +258,6 @@ describe('editor API', () => {
   describe('#navigateDown', () => {
     it('should execute `navigateDown` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateDown',
@@ -279,7 +271,6 @@ describe('editor API', () => {
   describe('#navigateLineStart', () => {
     it('should execute `navigateLineStart` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateLineStart',
@@ -293,7 +284,6 @@ describe('editor API', () => {
   describe('#navigateLineEnd', () => {
     it('should execute `navigateLineEnd` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateLineEnd',
@@ -307,7 +297,6 @@ describe('editor API', () => {
   describe('#navigateFileStart', () => {
     it('should execute `navigateFileStart` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateFileStart',
@@ -321,7 +310,6 @@ describe('editor API', () => {
   describe('#navigateFileEnd', () => {
     it('should execute `navigateFileEnd` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'navigateFileEnd',
@@ -358,9 +346,16 @@ describe('editor API', () => {
   })
 
   describe('#toggleReadOnly', () => {
+    beforeEach(() => {
+      console.warn = jest.fn()
+    })
+
+    afterEach(() => {
+      console.warn.mockRestore()
+    })
+
     it('should execute `toggleReadOnly` action', () => {
       const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
 
       postMessage({
         action: 'toggleReadOnly',
@@ -369,21 +364,47 @@ describe('editor API', () => {
 
       expect(editor.toggleReadOnly).toHaveBeenCalledTimes(1)
     })
+
+    it('should not throw if filePath is incorrect', () => {
+      const { editor } = createEditor()
+      const invalidFilePath = uuid()
+
+      postMessage({
+        action: 'toggleReadOnly',
+        data: { filePath: invalidFilePath }
+      })
+
+      expect(console.warn).toBeCalledWith(expect.any(NotFoundError))
+      expect(editor.toggleReadOnly).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  describe('#getFileContent', () => {
+    it('should execute `getContent` action', () => {
+      const { editor } = createEditor('url')
+      const expectedValue = uuid()
+      editor.getContent.mockReturnValue(expectedValue)
+
+      const value = window.postSeabassApiMessage({
+        action: 'getFileContent',
+        data: { filePath }
+      })
+
+      expect(value).toEqual(expectedValue)
+    })
   })
 
   describe('#unknownMethod', () => {
-    const originalConsoleWarn = console.warn
     beforeAll(() => {
       console.warn = jest.fn()
     })
 
     afterAll(() => {
-      console.warn = originalConsoleWarn
+      console.warn.mockRestore()
     })
 
     it('should not throw', () => {
-      const { editor } = createEditor()
-      editor.getFilePath.mockReturnValue(filePath)
+      createEditor()
 
       postMessage({ action: uuid() })
     })

@@ -33,6 +33,9 @@ MainView {
   GenericComponents.EditorApi {
     id: api
     homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+    onErrorOccured: function(message) {
+      errorDialog.show(message)
+    }
     onMessageSent: function(jsonPayload) {
       editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
     }
@@ -45,6 +48,26 @@ MainView {
       file.hasChanges = hasChanges
       filesModel.set(fileIndex, file)
     }
+
+    /**
+     * Returns current content of the given file from the EditorApi
+     *  (the API backend must support returning a result from a JS call for this method to work)
+     * @param {function} - callback
+     * @returns {string} - file content
+     */
+    function getFileContent(callback) {
+      const jsonPayload = JSON.stringify({
+        action: 'getFileContent',
+        data: {
+          filePath: filePath
+        }
+      })
+      return editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")", callback);
+    }
+  }
+
+  CustomComponents.ErrorDialog {
+    id: errorDialog
   }
 
   CustomComponents.SaveDialog {
@@ -54,6 +77,7 @@ MainView {
   Page {
     id: page
     anchors.fill: parent
+    background: theme.palette.normal.background
 
     RowLayout {
       anchors.fill: parent
@@ -124,7 +148,12 @@ MainView {
                 iconName: "save"
                 text: qsTr("Save")
                 enabled: api.filePath && api.hasChanges
-                onTriggered: api.requestSaveFile()
+                shortcut: StandardKey.Save
+                onTriggered: {
+                  api.getFileContent(function(fileContent) {
+                    api.saveFile(api.filePath, fileContent)
+                  })
+                }
               }
             ]
           }
@@ -153,9 +182,14 @@ MainView {
 
             saveDialog.show(file.filePath, {
               onSaved: function() {
-                api.requestSaveFile()
-                // TODO: wait until the file actually saved
-                __close()
+                const filePath = api.filePath
+                api.getFileContent(function(fileContent) {
+                  api.saveFile(filePath, fileContent, function(err) {
+                    if (!err) {
+                      __close()
+                    }
+                  })
+                })
               },
               onDismissed: __close
             })

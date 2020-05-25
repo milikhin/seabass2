@@ -10,6 +10,7 @@ ListView {
   property bool isPage: false
   property bool showHidden: false
   property string homeDir
+  property real rowHeight: units.gu(4.5)
 
   readonly property string backgroundColor: theme.palette.normal.background
   readonly property string textColor: theme.palette.normal.backgroundText
@@ -42,7 +43,7 @@ ListView {
   model: folderModel
   delegate: ListItem {
     visible: isVisible()
-    height: isVisible() ? undefined : 0
+    height: isVisible() ? rowHeight : 0
     color: backgroundColor
 
     MouseArea {

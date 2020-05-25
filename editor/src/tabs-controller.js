@@ -1,4 +1,4 @@
-import { InvalidArgError } from './errors'
+import { NotFoundError } from './errors'
 
 export default class TabsController {
   constructor ({ rootElem, editorFactory, onStateChange }) {
@@ -61,7 +61,7 @@ export default class TabsController {
   exec (filePath, action, ...args) {
     const tab = this._getTab(filePath)
     if (!tab) {
-      throw new InvalidArgError(`file ${filePath} is not loaded`)
+      throw new NotFoundError(`file ${filePath} is not loaded`)
     }
     return tab.editor[action](...args)
   }

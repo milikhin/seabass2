@@ -1,5 +1,5 @@
 /* globals localStorage */
-import { InvalidArgError } from './errors'
+import { InvalidArgError, NotFoundError } from './errors'
 import TabsController from './tabs-controller'
 
 class Api {
@@ -51,6 +51,16 @@ class Api {
   // _apiOnBeautify ({ filePath }) {
   //   this._tabsController.exec(filePath, 'beautify')
   // }
+
+  /**
+   * Returns file content.
+   *  API backend must support returning results from JS calls to use the method
+   * @param {string} filePath - path/to/file
+   * @returns {string} - file content
+   */
+  _apiOnGetFileContent ({ filePath }) {
+    return this._tabsController.exec(filePath, 'getContent')
+  }
 
   /**
    * 'navigateLeft' command handler: intended to move cursor left
@@ -171,12 +181,21 @@ class Api {
    * @returns {undefined}
    */
   _apiOnRequestSaveFile ({ filePath }) {
-    const value = this._tabsController.exec(filePath, 'getContent')
-    this._sendApiMessage('saveFile', {
-      content: value,
-      filePath,
-      responseTo: 'requestSaveFile'
-    })
+    try {
+      const value = this._tabsController.exec(filePath, 'getContent')
+      this._sendApiMessage('saveFile', {
+        content: value,
+        filePath,
+        responseTo: 'requestSaveFile'
+      })
+    } catch (err) {
+      if (err instanceof NotFoundError) {
+        // requestSaveFile operation must throw error to the platform application if required file is not loaded
+        throw new InvalidArgError(`File ${filePath} is not opened`)
+      }
+
+      throw err
+    }
   }
 
   /**
@@ -239,6 +258,9 @@ class Api {
       }
       return this[apiMethod](data)
     } catch (err) {
+      if (err instanceof NotFoundError) {
+        return console.warn(err)
+      }
       this._sendApiError(err.message)
     }
   }

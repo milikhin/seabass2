@@ -12,3 +12,9 @@ export class InvalidArgError extends BaseError {
     super('InvalidArgError', message)
   }
 }
+
+export class NotFoundError extends BaseError {
+  constructor (message) {
+    super('NotFoundError', message)
+  }
+}
