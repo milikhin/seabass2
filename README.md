@@ -21,11 +21,11 @@ Core features:
 * Undo/Redo
 * Light and dark themes
 
-UBports specific features:
+UBports:
 * Multiple tabs
 * Adaptive layout
 
-Sailfish OS specific feature:
+Sailfish OS:
 * Navigation buttons
 * Read only mode
 
