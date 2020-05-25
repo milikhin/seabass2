@@ -33,6 +33,9 @@ MainView {
   GenericComponents.EditorApi {
     id: api
     homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+    onErrorOccured: function(message) {
+      errorDialog.show(message)
+    }
     onMessageSent: function(jsonPayload) {
       editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
     }
@@ -63,6 +66,10 @@ MainView {
     }
   }
 
+  CustomComponents.ErrorDialog {
+    id: errorDialog
+  }
+
   CustomComponents.SaveDialog {
     id: saveDialog
   }
@@ -70,6 +77,7 @@ MainView {
   Page {
     id: page
     anchors.fill: parent
+    background: theme.palette.normal.background
 
     RowLayout {
       anchors.fill: parent
@@ -140,6 +148,7 @@ MainView {
                 iconName: "save"
                 text: qsTr("Save")
                 enabled: api.filePath && api.hasChanges
+                shortcut: StandardKey.Save
                 onTriggered: {
                   api.getFileContent(function(fileContent) {
                     api.saveFile(api.filePath, fileContent)
@@ -173,9 +182,14 @@ MainView {
 
             saveDialog.show(file.filePath, {
               onSaved: function() {
-                api.requestSaveFile()
-                // TODO: wait until the file actually saved
-                __close()
+                const filePath = api.filePath
+                api.getFileContent(function(fileContent) {
+                  api.saveFile(filePath, fileContent, function(err) {
+                    if (!err) {
+                      __close()
+                    }
+                  })
+                })
               },
               onDismissed: __close
             })

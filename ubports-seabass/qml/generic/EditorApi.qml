@@ -76,18 +76,22 @@ QtObject {
      * Saves file with the given content at the given path
      * @param {string} filePath - /path/to/file
      * @param {string} content  - file content
+     * @param {function} [callback]  - callback
      * @returns {undefined}
      */
-    function saveFile(filePath, content) {
+    function saveFile(filePath, content, callback) {
+        callback = callback || function emptyCallback() {}
         isSaveInProgress = true
         return QmlJs.writeFile(filePath, content, function(err) {
             isSaveInProgress = false
             if (err) {
                 console.error(err)
-                return errorOccured(qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
+                errorOccured(qsTr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
+                return callback(err)
             }
 
             postMessage('fileSaved', { filePath: filePath, content: content })
+            return callback(null)
         })
     }
 

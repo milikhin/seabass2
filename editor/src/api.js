@@ -1,5 +1,5 @@
 /* globals localStorage */
-import { InvalidArgError } from './errors'
+import { InvalidArgError, NotFoundError } from './errors'
 import TabsController from './tabs-controller'
 
 class Api {
@@ -249,6 +249,9 @@ class Api {
       }
       return this[apiMethod](data)
     } catch (err) {
+      if (err instanceof NotFoundError) {
+        return console.warn(err)
+      }
       this._sendApiError(err.message)
     }
   }
