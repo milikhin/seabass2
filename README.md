@@ -12,15 +12,22 @@ Currently supported platforms:
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
-Features:
+![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-u01.png)
+![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
+
+## Features
+Core features:
 * Syntax highlighting for over 120 programming/markup languages
-* Multiple tabs (UBports only)
-* Navigation buttons (Sailfish OS only)
 * Undo/Redo
 * Light and dark themes
 
-![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-u01.png)
-![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
+UBports specific features:
+* Multiple tabs
+* Adaptive layout
+
+Sailfish OS specific feature:
+* Navigation buttons
+* Read only mode
 
 ## Architecture
 
