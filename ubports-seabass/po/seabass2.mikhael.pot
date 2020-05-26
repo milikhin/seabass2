@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-25 20:21+0000\n"
+"POT-Creation-Date: 2020-05-26 08:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,20 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:141 ../qml/components/FileList.qml:22
+#: ../qml/Main.qml:36
+msgid "Unable to read file. Please ensure that you have read access to the %1"
+msgstr ""
+
+#: ../qml/Main.qml:37
+msgid ""
+"Unable to write the file. Please ensure that you have write access to %1"
+msgstr ""
+
+#: ../qml/Main.qml:143 ../qml/components/FileList.qml:22
 msgid "Files"
 msgstr ""
 
-#: ../qml/Main.qml:149 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:151 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr ""
 
@@ -52,14 +61,6 @@ msgstr ""
 
 #: ../qml/components/SaveDialog.qml:42
 msgid "Cancel"
-msgstr ""
-
-#: ../qml/generic/EditorApi.qml:55
-msgid "Unable to read file. Please ensure that you have read access to the"
-msgstr ""
-
-#: ../qml/generic/EditorApi.qml:89
-msgid "Unable to write the file. Please ensure that you have write access to"
 msgstr ""
 
 #: seabass2.desktop.in.h:1

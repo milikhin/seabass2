@@ -33,6 +33,8 @@ MainView {
   GenericComponents.EditorApi {
     id: api
     homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+    readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
+    writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
     onErrorOccured: function(message) {
       errorDialog.show(message)
     }

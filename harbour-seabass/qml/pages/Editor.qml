@@ -18,6 +18,8 @@ Page {
         forceReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
         isReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
+        readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
+        writeErrorMsg: qsTr('Unable to write the file. Please ensure that you have write access to %1')
 
         onAppLoaded: function (data) {
             toolbar.open = data.isSailfishToolbarOpened || false
