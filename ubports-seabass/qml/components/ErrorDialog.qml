@@ -4,7 +4,7 @@ import Ubuntu.Components.Popups 1.3
 import "../generic/utils.js" as QmlJs
 
 Item {
-  property string message: qsTr('unknown error')
+  property string message: i18n.tr('unknown error')
 
   function show(errorMsg) {
     message = errorMsg
@@ -16,10 +16,10 @@ Item {
 
     Dialog {
       id: dialogue
-      title: qsTr('Error occured')
+      title: i18n.tr('Error occured')
       text: message
       Button {
-        text: qsTr("Close")
+        text: i18n.tr("Close")
         onClicked: {
           PopupUtils.close(dialogue)
         }

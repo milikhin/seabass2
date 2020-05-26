@@ -23,7 +23,7 @@ MainView {
   height: units.gu(60)
 
   readonly property bool isWide: width >= units.gu(100)
-  readonly property string defaultTitle: qsTr("Welcome")
+  readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
 
   GenericComponents.FilesModel {
@@ -138,7 +138,7 @@ MainView {
             Action {
               visible: !isWide || !navBar.visible
               iconName: "navigation-menu"
-              text: qsTr("Files")
+              text: i18n.tr("Files")
               onTriggered: navBar.visible = !navBar.visible
             }
           ]
@@ -146,7 +146,7 @@ MainView {
             actions: [
               Action {
                 iconName: "save"
-                text: qsTr("Save")
+                text: i18n.tr("Save")
                 enabled: api.filePath && api.hasChanges
                 shortcut: StandardKey.Save
                 onTriggered: {
