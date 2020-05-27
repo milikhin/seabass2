@@ -16,14 +16,7 @@ const commonConfig = {
       }
     ]
   },
-  mode: 'production',
-  plugins: [
-    new CopyPlugin([
-      {
-        from: './harbour-seabass/html'
-      }
-    ])
-  ]
+  mode: 'production'
 }
 
 const sailfishConfig = {
@@ -44,16 +37,10 @@ const sailfishConfig = {
 const ubportsConfig = {
   ...commonConfig,
   output: {
-    path: path.resolve(__dirname, 'ubports-seabass/qml/html'),
+    path: path.resolve(__dirname, 'ubports-seabass/html/dist'),
+    publicPath: 'dist/',
     filename: 'bundle.js'
-  },
-  plugins: [
-    new CopyPlugin([
-      {
-        from: './ubports-seabass/html'
-      }
-    ])
-  ]
+  }
 }
 
 module.exports = [sailfishConfig, ubportsConfig]
