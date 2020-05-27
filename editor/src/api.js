@@ -150,8 +150,7 @@ class Api {
       throw new InvalidArgError('filePath is required to load file into editor')
     }
 
-    this._welcomeElem.style.display = 'none'
-    this._tabsRootElem.style.display = 'block'
+    this._showTabs()
     this._tabsController.create(filePath, content, readOnly)
   }
 
@@ -309,6 +308,11 @@ class Api {
   _showWelcomeNote () {
     this._welcomeElem.style.display = 'block'
     this._tabsRootElem.style.display = 'none'
+  }
+
+  _showTabs () {
+    this._welcomeElem.style.display = 'none'
+    this._tabsRootElem.style.display = 'block'
   }
   // #endregion PRIVATE
 }
