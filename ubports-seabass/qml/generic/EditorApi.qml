@@ -16,6 +16,8 @@ QtObject {
     property bool isReadOnly: false
     // true when the file is being saved
     property bool isSaveInProgress: false
+    property string readErrorMsg: 'Unable to read file %1'
+    property string writeErrorMsg: 'Unable to write file %1'
     property string homeDir
 
     signal appLoaded(var preferences)
@@ -52,7 +54,7 @@ QtObject {
       QmlJs.readFile(filePath, function(err, text) {
         if (err) {
           console.error(err)
-          return errorOccured(i18n.tr('Unable to read file. Please ensure that you have read access to the') + ' ' + filePath)
+          return errorOccured(readErrorMsg.arg(filePath))
         }
 
         postMessage('loadFile', {
@@ -86,7 +88,7 @@ QtObject {
             isSaveInProgress = false
             if (err) {
                 console.error(err)
-                errorOccured(i18n.tr('Unable to write the file. Please ensure that you have write access to') + ' ' + filePath)
+                errorOccured(writeErrorMsg.arg(filePath))
                 return callback(err)
             }
 

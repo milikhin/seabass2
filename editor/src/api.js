@@ -34,7 +34,7 @@ class Api {
 
   _apiOnCloseFile ({ filePath }) {
     if (!filePath) {
-      throw new InvalidArgError(`${filePath} is required to close tab`)
+      throw new InvalidArgError('filePath is required to close tab')
     }
 
     this._tabsController.close(filePath)
@@ -147,9 +147,10 @@ class Api {
    */
   _apiOnLoadFile ({ filePath, content = '', readOnly = false }) {
     if (!filePath) {
-      throw new InvalidArgError(`${filePath} is required to load file into editor`)
+      throw new InvalidArgError('filePath is required to load file into editor')
     }
 
+    this._showTabs()
     this._tabsController.create(filePath, content, readOnly)
   }
 
@@ -159,11 +160,9 @@ class Api {
    */
   _apiOnOpenFile ({ filePath }) {
     if (!filePath) {
-      throw new InvalidArgError(`${filePath} is required to load file into editor`)
+      throw new InvalidArgError('filePath is required to load file into editor')
     }
 
-    this._welcomeElem.style.display = 'none'
-    this._tabsRootElem.style.display = 'block'
     this._tabsController.show(filePath)
   }
 
@@ -309,6 +308,11 @@ class Api {
   _showWelcomeNote () {
     this._welcomeElem.style.display = 'block'
     this._tabsRootElem.style.display = 'none'
+  }
+
+  _showTabs () {
+    this._welcomeElem.style.display = 'none'
+    this._tabsRootElem.style.display = 'block'
   }
   // #endregion PRIVATE
 }

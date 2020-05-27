@@ -1,4 +1,6 @@
 import QtQuick 2.2
+
+import QtWebKit 3.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 
@@ -14,10 +16,9 @@ Page {
 
     GenericComponents.EditorApi {
         id: api
-        filePath: seabassFilePath
-        forceReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        isReadOnly: filePath === QmlJs.DEFAULT_FILE_PATH
+        readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
+        writeErrorMsg: qsTr('Unable to write the file. Please ensure that you have write access to %1')
 
         onAppLoaded: function (data) {
             toolbar.open = data.isSailfishToolbarOpened || false
@@ -51,6 +52,17 @@ Page {
         experimental.onMessageReceived: {
             var msg = JSON.parse(message.data)
             api.handleMessage(msg.action, msg.data)
+        }
+
+        onNavigationRequested: function(request) {
+            const urlStr = request.url.toString()
+            const isHttpRequest = urlStr.indexOf('http') === 0
+            if (!isHttpRequest) {
+                return
+            }
+
+            request.action = WebView.IgnoreRequest;
+            Qt.openUrlExternally(request.url)
         }
 
         PullDownMenu {
@@ -120,7 +132,9 @@ Page {
                     return
                 }
 
-                api.closeFile(api.filePath)
+                if (api.filePath) {
+                    api.closeFile(api.filePath)
+                }
                 api.loadFile(selectedContentProperties.filePath)
             }
         }
