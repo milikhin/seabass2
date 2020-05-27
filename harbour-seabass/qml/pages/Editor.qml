@@ -17,6 +17,11 @@ Page {
     GenericComponents.EditorApi {
         id: api
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+        backgroundColor: isDarkTheme
+            ? 'rgba(0, 0, 0, 0.75)'
+            : 'rgba(255, 255, 255, 0.75)'
+        textColor: Theme.highlightColor
+        linkColor: Theme.primaryColor
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
         writeErrorMsg: qsTr('Unable to write the file. Please ensure that you have write access to %1')
 

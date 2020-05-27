@@ -5,10 +5,8 @@
   <meta charset="utf-8" />
   <style>
     body {
-      background:rgba(0, 0, 0, 0.5);
       padding: 0;
       margin: 0;
-      color: #eee
     }
 
     #root {
@@ -32,6 +30,7 @@
       font-family: sans-serif;
       font-size: small;
       padding: 1rem;
+      box-sizing: border-box;
     }
 
     #welcome h1 {
@@ -42,14 +41,9 @@
       font-size: small;
     }
 
-    #welcome a {
-      color: lightskyblue
-    }
-
     .ace_mobile-menu {
       display: none !important;
     }
-
 
     /* Fix for incorrect format string's rendering in Erlang */
     .ace_line > .ace_placeholder {
@@ -57,6 +51,17 @@
       transform: none;
       opacity: 1;
       margin: 0;
+    }
+  </style>
+  <style id="theme-css">
+    /* CSS Custom Properties are not supported in Sailfish */
+    /* these values are replaceable via JS */
+    #welcome {
+      color: #111;
+      background-color: #eee;
+    }
+    #welcome a {
+      color: dodgerblue;
     }
   </style>
 </head>
