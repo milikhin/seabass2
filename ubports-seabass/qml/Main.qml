@@ -218,7 +218,7 @@ MainView {
           Layout.fillWidth: true
           Layout.fillHeight: true
 
-          url: "./html/index.html"
+          url: "../html/index.html"
           onNavigationRequested: function(request) {
             const urlStr = request.url.toString()
             const isHttpRequest = urlStr.indexOf('http') === 0
