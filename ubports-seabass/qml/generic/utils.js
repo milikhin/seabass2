@@ -59,7 +59,7 @@ function readFile(filePath, callback) {
         }
         if (request.readyState === XMLHttpRequest.DONE) {
             if (!sentSuccessfully) {
-                return callback(new Error('Error writing file'))
+                return callback(new Error('Error reading file'))
             }
 
             return callback(null, request.responseText)

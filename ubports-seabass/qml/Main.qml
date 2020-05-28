@@ -32,9 +32,20 @@ MainView {
 
   GenericComponents.EditorApi {
     id: api
+
+    // UI theme
+    isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
+      theme.palette.normal.backgroundText)
+    backgroundColor: theme.palette.normal.background
+    textColor: theme.palette.normal.backgroundSecondaryText
+    linkColor: theme.palette.normal.backgroundText
     homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+
+    // platform-specific i18n implementation for Generic API
     readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
     writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
+
+    // API methods
     onErrorOccured: function(message) {
       errorDialog.show(message)
     }

@@ -11,13 +11,15 @@ QtObject {
     property bool hasChanges: false
     property bool hasUndo: false
     property bool hasRedo: false
-    property bool isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
-      theme.palette.normal.backgroundText)
+    property bool isDarkTheme: false
     property bool isReadOnly: false
     // true when the file is being saved
     property bool isSaveInProgress: false
     property string readErrorMsg: 'Unable to read file %1'
     property string writeErrorMsg: 'Unable to write file %1'
+    property string backgroundColor
+    property string textColor
+    property string linkColor
     property string homeDir
 
     signal appLoaded(var preferences)
@@ -28,6 +30,8 @@ QtObject {
         appLoaded.connect(startup)
         // filePathChanged.connect(loadFile)
         isDarkThemeChanged.connect(loadTheme)
+        linkColorChanged.connect(loadTheme)
+        textColorChanged.connect(loadTheme)
     }
 
     function openFile(filePath) {
@@ -99,7 +103,10 @@ QtObject {
 
     function loadTheme() {
         postMessage('setPreferences', {
-            isDarkTheme: isDarkTheme
+            isDarkTheme: isDarkTheme,
+            textColor: textColor,
+            linkColor: linkColor,
+            backgroundColor: backgroundColor
         })
     }
 

@@ -209,6 +209,12 @@ class Api {
       window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened)
     }
 
+    if (options.textColor && options.linkColor && options.backgroundColor) {
+      const styleElem = document.getElementById('theme-css')
+      styleElem.sheet.cssRules[0].style.backgroundColor = options.backgroundColor
+      styleElem.sheet.cssRules[1].style.color = options.textColor
+      styleElem.sheet.cssRules[2].style.color = options.linkColor
+    }
     this._tabsController.setPreferences(options)
   }
 
