@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-27 17:17+0000\n"
+"POT-Creation-Date: 2020-05-28 18:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,20 +21,20 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:41
+#: ../qml/Main.qml:45
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:42
+#: ../qml/Main.qml:46
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:148 ../qml/components/FileList.qml:22
+#: ../qml/Main.qml:154 ../qml/components/FileList.qml:22
 msgid "Files"
 msgstr ""
 
-#: ../qml/Main.qml:156 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:162 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr ""
 

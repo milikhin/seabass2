@@ -16,15 +16,20 @@ Page {
 
     GenericComponents.EditorApi {
         id: api
+
+        // UI theme
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
         backgroundColor: isDarkTheme
             ? 'rgba(0, 0, 0, 0.75)'
             : 'rgba(255, 255, 255, 0.75)'
         textColor: Theme.highlightColor
         linkColor: Theme.primaryColor
+
+        // platform-specific i18n implementation for Generic API
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
         writeErrorMsg: qsTr('Unable to write the file. Please ensure that you have write access to %1')
 
+        // API methods
         onAppLoaded: function (data) {
             toolbar.open = data.isSailfishToolbarOpened || false
         }
