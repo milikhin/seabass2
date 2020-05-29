@@ -10,8 +10,8 @@ TabButton {
   property real maxLabelWidth: Infinity
   property bool isActive: false
   property bool hasChanges: false
+  property real underlineWidth: units.gu(1) / 4
 
-  readonly property real underlineWidth: units.gu(1) / 4
   readonly property real tabPadding: units.gu(1)
   readonly property real tabSpacing: units.gu(2)
 
