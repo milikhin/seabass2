@@ -2,6 +2,7 @@ import QtQuick 2.9
 import Ubuntu.Components 1.3
 import QtQuick.Layouts 1.3
 import Ubuntu.Components.Themes 1.3
+import QtQuick.Controls 2.2
 
 import Qt.labs.folderlistmodel 2.1
 
@@ -17,6 +18,8 @@ ListView {
 
   signal closed()
   signal fileSelected(string filePath)
+
+  ScrollBar.vertical: ScrollBar {}
 
   header: PageHeader {
     title: i18n.tr("Files")

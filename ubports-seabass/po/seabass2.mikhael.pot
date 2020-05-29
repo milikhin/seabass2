@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 18:17+0000\n"
+"POT-Creation-Date: 2020-05-29 08:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:154 ../qml/components/FileList.qml:22
+#: ../qml/Main.qml:154 ../qml/components/FileList.qml:25
 msgid "Files"
 msgstr ""
 
@@ -46,8 +46,8 @@ msgstr ""
 msgid "Error occured"
 msgstr ""
 
-#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:28
-#: ../qml/components/FileList.qml:37 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:31
+#: ../qml/components/FileList.qml:40 ../qml/components/SaveDialog.qml:34
 msgid "Close"
 msgstr ""
 
