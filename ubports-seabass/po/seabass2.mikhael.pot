@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-29 08:12+0000\n"
+"POT-Creation-Date: 2020-05-30 11:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ../qml/About.qml:12 ../qml/Main.qml:171
+msgid "About"
+msgstr ""
+
+#: ../qml/About.qml:30
+msgid ""
+"Click here to open project page and find docs, support and list of "
+"contributors!"
+msgstr ""
+
 #: ../qml/Main.qml:26
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:45
+#: ../qml/Main.qml:53
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:46
+#: ../qml/Main.qml:54
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:154 ../qml/components/FileList.qml:25
+#: ../qml/Main.qml:163 ../qml/components/FileList.qml:25
 msgid "Files"
 msgstr ""
 
-#: ../qml/Main.qml:162 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:179 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr ""
 

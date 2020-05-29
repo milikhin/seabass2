@@ -25,229 +25,247 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
+  readonly property string version: "0.1.2"
 
-  GenericComponents.FilesModel {
-    id: filesModel
-  }
+  PageStack {
+    id: pageStack
 
-  GenericComponents.EditorApi {
-    id: api
-
-    // UI theme
-    isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
-      theme.palette.normal.backgroundText)
-    backgroundColor: theme.palette.normal.background
-    textColor: theme.palette.normal.backgroundSecondaryText
-    linkColor: theme.palette.normal.backgroundText
-    homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
-
-    // platform-specific i18n implementation for Generic API
-    readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
-    writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
-
-    // API methods
-    onErrorOccured: function(message) {
-      errorDialog.show(message)
+    Component.onCompleted: {
+      pageStack.push(page)
     }
-    onMessageSent: function(jsonPayload) {
-      editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
+
+    GenericComponents.FilesModel {
+      id: filesModel
     }
-    onHasChangesChanged: {
-      if (!filePath) {
-        return
+
+    GenericComponents.EditorApi {
+      id: api
+
+      // UI theme
+      isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
+        theme.palette.normal.backgroundText)
+      backgroundColor: theme.palette.normal.background
+      textColor: theme.palette.normal.backgroundSecondaryText
+      linkColor: theme.palette.normal.backgroundText
+      homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+
+      // platform-specific i18n implementation for Generic API
+      readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
+      writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
+
+      // API methods
+      onErrorOccured: function(message) {
+        errorDialog.show(message)
       }
-      const fileIndex = filesModel.getIndex(filePath)
-      const file = filesModel.get(fileIndex)
-      file.hasChanges = hasChanges
-      filesModel.set(fileIndex, file)
-    }
-
-    /**
-     * Returns current content of the given file from the EditorApi
-     *  (the API backend must support returning a result from a JS call for this method to work)
-     * @param {function} - callback
-     * @returns {string} - file content
-     */
-    function getFileContent(callback) {
-      const jsonPayload = JSON.stringify({
-        action: 'getFileContent',
-        data: {
-          filePath: filePath
+      onMessageSent: function(jsonPayload) {
+        editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
+      }
+      onHasChangesChanged: {
+        if (!filePath) {
+          return
         }
-      })
-      return editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")", callback);
+        const fileIndex = filesModel.getIndex(filePath)
+        const file = filesModel.get(fileIndex)
+        file.hasChanges = hasChanges
+        filesModel.set(fileIndex, file)
+      }
+
+      /**
+      * Returns current content of the given file from the EditorApi
+      *  (the API backend must support returning a result from a JS call for this method to work)
+      * @param {function} - callback
+      * @returns {string} - file content
+      */
+      function getFileContent(callback) {
+        const jsonPayload = JSON.stringify({
+          action: 'getFileContent',
+          data: {
+            filePath: filePath
+          }
+        })
+        return editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")", callback);
+      }
     }
-  }
 
-  CustomComponents.ErrorDialog {
-    id: errorDialog
-  }
+    CustomComponents.ErrorDialog {
+      id: errorDialog
+    }
 
-  CustomComponents.SaveDialog {
-    id: saveDialog
-  }
+    CustomComponents.SaveDialog {
+      id: saveDialog
+    }
 
-  Page {
-    id: page
-    anchors.fill: parent
-    background: theme.palette.normal.background
-
-    RowLayout {
+    Page {
+      id: page
+      visible: false
       anchors.fill: parent
-      spacing: 0
+      background: theme.palette.normal.background
 
       RowLayout {
-        id: navBar
-        z: 1
-        visible: isWide
+        anchors.fill: parent
         spacing: 0
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.minimumWidth: isWide ? units.gu(30) : parent.width
-        Layout.maximumWidth: isWide ? units.gu(40) : parent.width
 
-        CustomComponents.FileList {
-          homeDir: api.homeDir
-          onClosed: navBar.visible = false
-          isPage: !isWide
+        RowLayout {
+          id: navBar
+          z: 1
+          visible: isWide
+          spacing: 0
           Layout.fillWidth: true
           Layout.fillHeight: true
+          Layout.minimumWidth: isWide ? units.gu(30) : parent.width
+          Layout.maximumWidth: isWide ? units.gu(40) : parent.width
 
-          onFileSelected: function(filePath) {
-            const existingTabIndex = filesModel.open(filePath)
-            if (existingTabIndex !== undefined) {
-              tabBar.currentIndex = existingTabIndex
-            } else {
-              api.loadFile(filePath)
-            }
+          CustomComponents.FileList {
+            homeDir: api.homeDir
+            onClosed: navBar.visible = false
+            isPage: !isWide
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            if (!isWide) {
-              navBar.visible = false
+            onFileSelected: function(filePath) {
+              const existingTabIndex = filesModel.open(filePath)
+              if (existingTabIndex !== undefined) {
+                tabBar.currentIndex = existingTabIndex
+              } else {
+                api.loadFile(filePath)
+              }
+
+              if (!isWide) {
+                navBar.visible = false
+              }
             }
           }
+          Rectangle {
+            Layout.minimumWidth: 1
+            Layout.fillHeight: true
+            color: theme.palette.normal.overlaySecondaryText
+            visible: isWide
+          }
         }
-        Rectangle {
-          Layout.minimumWidth: 1
-          Layout.fillHeight: true
-          color: theme.palette.normal.overlaySecondaryText
-          visible: isWide
-        }
-      }
 
-      ColumnLayout {
-        id: main
-        visible: isWide || !navBar.visible
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        spacing: 0
-
-        PageHeader {
-          id: header
-          title: api.filePath ? QmlJs.getFileNameByPath(api.filePath) : defaultTitle
-          subtitle: api.filePath ? QmlJs.getShortDirName(api.filePath, api.homeDir): defaultSubTitle
+        ColumnLayout {
+          id: main
+          visible: isWide || !navBar.visible
           Layout.fillWidth: true
+          Layout.fillHeight: true
+          spacing: 0
 
-          navigationActions: [
-            Action {
-              visible: !isWide || !navBar.visible
-              iconName: "navigation-menu"
-              text: i18n.tr("Files")
-              onTriggered: navBar.visible = !navBar.visible
-            }
-          ]
-          trailingActionBar {
-            actions: [
+          PageHeader {
+            id: header
+            title: api.filePath ? QmlJs.getFileNameByPath(api.filePath) : defaultTitle
+            subtitle: api.filePath ? QmlJs.getShortDirName(api.filePath, api.homeDir): defaultSubTitle
+            Layout.fillWidth: true
+
+            navigationActions: [
               Action {
-                iconName: "save"
-                text: i18n.tr("Save")
-                enabled: api.filePath && api.hasChanges
-                shortcut: StandardKey.Save
-                onTriggered: {
-                  api.getFileContent(function(fileContent) {
-                    api.saveFile(api.filePath, fileContent)
-                  })
-                }
+                visible: !isWide || !navBar.visible
+                iconName: "navigation-menu"
+                text: i18n.tr("Files")
+                onTriggered: navBar.visible = !navBar.visible
               }
             ]
-          }
-        }
+            trailingActionBar {
+              actions: [
+                Action {
+                  iconName: "info"
+                  text: i18n.tr("About")
 
-        CustomComponents.TabBar {
-          id: tabBar
-          model: filesModel
-          visible: model.count
-          Layout.minimumHeight: model.count ? units.gu(4.5) : 0
-          Layout.fillWidth: true
-
-          onCurrentIndexChanged: {
-            if (currentIndex === -1) {
-              return
+                  onTriggered: {
+                    pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
+                  }
+                },
+                Action {
+                  iconName: "save"
+                  text: i18n.tr("Save")
+                  enabled: api.filePath && api.hasChanges
+                  shortcut: StandardKey.Save
+                  onTriggered: {
+                    api.getFileContent(function(fileContent) {
+                      api.saveFile(api.filePath, fileContent)
+                    })
+                  }
+                }
+              ]
             }
-
-            const file = model.get(currentIndex)
-            api.openFile(file.filePath)
           }
-          onTabClosed: function(index) {
-            const file = model.get(index)
-            if (!file.hasChanges) {
-              return __close()
-            }
 
-            saveDialog.show(file.filePath, {
-              onSaved: function() {
-                const filePath = api.filePath
-                api.getFileContent(function(fileContent) {
-                  api.saveFile(filePath, fileContent, function(err) {
-                    if (!err) {
-                      __close()
-                    }
-                  })
-                })
-              },
-              onDismissed: __close
-            })
+          CustomComponents.TabBar {
+            id: tabBar
+            model: filesModel
+            visible: model.count
+            Layout.minimumHeight: model.count ? units.gu(4.5) : 0
+            Layout.fillWidth: true
 
-            function __close() {
-              api.closeFile(file.filePath)
-              model.remove(index, 1)
-
-              if (!model.count) {
-                api.filePath = ''
+            onCurrentIndexChanged: {
+              if (currentIndex === -1) {
                 return
               }
 
-              if (currentIndex === -1) {
-                currentIndex = 0
+              const file = model.get(currentIndex)
+              api.openFile(file.filePath)
+            }
+            onTabClosed: function(index) {
+              const file = model.get(index)
+              if (!file.hasChanges) {
+                return __close()
+              }
+
+              saveDialog.show(file.filePath, {
+                onSaved: function() {
+                  const filePath = api.filePath
+                  api.getFileContent(function(fileContent) {
+                    api.saveFile(filePath, fileContent, function(err) {
+                      if (!err) {
+                        __close()
+                      }
+                    })
+                  })
+                },
+                onDismissed: __close
+              })
+
+              function __close() {
+                api.closeFile(file.filePath)
+                model.remove(index, 1)
+
+                if (!model.count) {
+                  api.filePath = ''
+                  return
+                }
+
+                if (currentIndex === -1) {
+                  currentIndex = 0
+                }
               }
             }
           }
-        }
 
-        WebView {
-          id: editor
-          width: parent.width
-          Layout.fillWidth: true
-          Layout.fillHeight: true
+          WebView {
+            id: editor
+            width: parent.width
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-          url: "../html/index.html"
-          onNavigationRequested: function(request) {
-            const urlStr = request.url.toString()
-            const isHttpRequest = urlStr.indexOf('http') === 0
-            if (!isHttpRequest) {
-              return
+            url: "../html/index.html"
+            onNavigationRequested: function(request) {
+              const urlStr = request.url.toString()
+              const isHttpRequest = urlStr.indexOf('http') === 0
+              if (!isHttpRequest) {
+                return
+              }
+
+              request.action = WebEngineNavigationRequest.IgnoreRequest
+              const apiPrefix = 'http://seabass/'
+              if (urlStr.indexOf(apiPrefix) === 0) {
+                const messageStr = decodeURIComponent(urlStr.slice(apiPrefix.length))
+                const payload = JSON.parse(messageStr)
+                return api.handleMessage(payload.action, payload.data)
+              }
+
+              Qt.openUrlExternally(request.url)
             }
-
-            request.action = WebEngineNavigationRequest.IgnoreRequest
-            const apiPrefix = 'http://seabass/'
-            if (urlStr.indexOf(apiPrefix) === 0) {
-              const messageStr = decodeURIComponent(urlStr.slice(apiPrefix.length))
-              const payload = JSON.parse(messageStr)
-              return api.handleMessage(payload.action, payload.data)
-            }
-
-            Qt.openUrlExternally(request.url)
+            zoomFactor: units.gu(1) / 8
           }
-          zoomFactor: units.gu(1) / 8
         }
       }
     }
