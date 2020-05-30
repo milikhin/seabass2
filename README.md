@@ -67,4 +67,8 @@ Build steps:
 
 ## Documentation
 
-Some architecture aspects and key ideas are described in wiki.
+Some architecture aspects and key ideas are described in [wiki](https://github.com/milikhin/seabass2/wiki).
+
+## Credits
+
+* Internationalization and German translation for ubports-seabass: [Danfro](https://github.com/Danfro) 
