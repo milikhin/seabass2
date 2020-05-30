@@ -69,6 +69,8 @@ Page {
           title.text: view.items[index].title
           subtitle.text: view.items[index].subtitle || ''
           summary.text: view.items[index].text
+          summary.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+          summary.maximumLineCount: -1
           ProgressionSlot {}
         }
         onClicked: Qt.openUrlExternally(view.items[index].url)
