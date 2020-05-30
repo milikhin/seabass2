@@ -67,7 +67,7 @@ Page {
         ListItemLayout {
           id: itemLayout
           title.text: view.items[index].title
-          subtitle.text: view.items[index].subtitle
+          subtitle.text: view.items[index].subtitle || ''
           summary.text: view.items[index].text
           ProgressionSlot {}
         }

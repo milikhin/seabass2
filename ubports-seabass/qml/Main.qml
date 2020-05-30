@@ -99,7 +99,9 @@ MainView {
       id: page
       visible: false
       anchors.fill: parent
-      background: theme.palette.normal.background
+      background: Rectangle {
+        color: theme.palette.normal.background
+      }
 
       RowLayout {
         anchors.fill: parent
