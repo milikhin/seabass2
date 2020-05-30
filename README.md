@@ -71,4 +71,4 @@ Some architecture aspects and key ideas are described in [wiki](https://github.c
 
 ## Credits
 
-* Internationalization and German translation for ubports-seabass: [Danfro](https://github.com/Danfro) 
+* Basic internationalization and German translation for ubports-seabass: [Danfro](https://github.com/Danfro) 
