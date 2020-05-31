@@ -1,9 +1,7 @@
 .pragma library
 
-var DEFAULT_FILE_PATH = Qt.resolvedUrl('../changelog.txt')
-
 function getDefaultFilePath() {
-    return Qt.application.arguments[2] || DEFAULT_FILE_PATH
+    return Qt.application.arguments[2] || ''
 }
 
 function getShortDirName(filePath, homeUrl) {
@@ -59,7 +57,7 @@ function readFile(filePath, callback) {
         }
         if (request.readyState === XMLHttpRequest.DONE) {
             if (!sentSuccessfully) {
-                return callback(new Error('Error reading file'))
+                return callback(new Error('Error writing file'))
             }
 
             return callback(null, request.responseText)

@@ -58,4 +58,11 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>harbour-seabass</name>
+    <message>
+        <source>Welcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
