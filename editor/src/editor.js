@@ -21,6 +21,8 @@ export default class Editor {
     this._ace = ace.edit(this._editorElem, {
       wrap: true,
       tabSize: 2,
+      useSoftTabs: true,
+      navigateWithinSoftTabs: true,
       showFoldWidgets: false,
       indentedSoftWrap: false,
       animatedScroll: false
