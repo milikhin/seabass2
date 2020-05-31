@@ -65,9 +65,24 @@ Build steps:
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK
    * UBports: build `ubports-seabass` using clickable
 
-## Documentation
+## Contribution
 
-Some architecture aspects and key ideas are described in [wiki](https://github.com/milikhin/seabass2/wiki).
+Like the Seabass? Would like to see new features implemented?
+Awesome! There are numerous ways you can support the development.
+
+First of all, your reviews, bug reports and feature requests are very appreciated!
+As so pull requests :-). If you'd like to contribute, the [wiki](https://github.com/milikhin/seabass2/wiki) might be useful. It contains notes on project's architecture and some non-trivial workarounds applied.
+
+There are a few labels used to indicate issue progress.
+* `help wanted`: in my opinion, the issue worth fixing, but I'm not going to fix it myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
+* `wontfix`: in my opinion, the issue requires to much work out of the project's scope or too many workarounds for SDK issues. Pull requests are still welcome though. It might be worth discussing implementation beforehand if there going to be lots of changes.
+
+## Becoming a sponsor
+
+Seabass is a free "as in free speech" software. You can support the development using [Patreon](https://www.patreon.com/mmmikhael). Your donations helps to find time for resolving non-critical issues and implementing new features.
+
+The more supporters the project gets, the more development time it gets :-).
+And if it doesn't... Well there be updates and new features on a regular basis anyway! Just less often.
 
 ## Credits
 
