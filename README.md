@@ -83,6 +83,7 @@ Seabass is a free (as in free speech) software. You can support the development 
 
 The more supporters the project gets, the more development time it gets.
 And if it doesn't... Well there be updates and new features on a regular basis anyway! Just less often.
+
 Issues that are scheduled to be fixed in the nearest releases has milestone label attached.
 
 ## Credits
