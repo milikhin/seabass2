@@ -23,6 +23,7 @@ const sailfishConfig = {
   ...commonConfig,
   output: {
     path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
+    publicPath: '/usr/share/harbour-seabass/qml/html/',
     filename: 'bundle.js'
   },
   plugins: [
