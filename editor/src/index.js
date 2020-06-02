@@ -6,6 +6,7 @@ registerApi({
   editorFactory,
   notifyOnLoaded: true,
   apiBackend: window.seabassOptions.apiBackend,
+  isSailfish: window.seabassOptions.isSailfish,
 
   rootElem: document.getElementById('root'),
   welcomeElem: document.getElementById('welcome')

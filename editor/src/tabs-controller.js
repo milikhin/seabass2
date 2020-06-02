@@ -23,14 +23,14 @@ export default class TabsController {
     this._tabs.splice(tabIndex, 1)
   }
 
-  create (filePath, content = '', readOnly = false) {
+  create (filePath, content = '', readOnly = false, isSailfish = false) {
     const editorElem = document.createElement('div')
     this._rootElem.appendChild(editorElem)
     editorElem.classList.add('editor')
 
     const tab = {
       filePath,
-      editor: this._editorFactory({ elem: editorElem }),
+      editor: this._editorFactory({ elem: editorElem, isSailfish }),
       elem: editorElem,
       onStateChange: (state) => {
         this._onStateChange({ ...state, filePath })

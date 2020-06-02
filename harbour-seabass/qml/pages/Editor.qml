@@ -51,7 +51,7 @@ Page {
 
     Component.onCompleted: {
         const tmpHtmlFile = StandardPaths.temporary + '/harbour-seabas__cached-index.html'
-        QmlJs.readFile('/usr/share/harbour-seabass/qml/html/index.html', function(err, html) {
+        QmlJs.readFile(Qt.resolvedUrl('../html/index.html'), function(err, html) {
             QmlJs.writeFile(tmpHtmlFile, html.replace(/\$\{DEVICE_SCALE\}/g, getDeviceScale()), function(err) {
                 if (err) {
                     return displayError(err.message)
@@ -93,7 +93,15 @@ Page {
             busy: api.isSaveInProgress
             MenuItem {
                 text: qsTr("Open file...")
-                onClicked: pageStack.push(filePickerPage)
+                onClicked: {
+                    api.hasChanges
+                        ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
+                              filePath: api.filePath,
+                              acceptDestination: filePickerPage,
+                              acceptDestinationAction: PageStackAction.Replace
+                          })
+                        : pageStack.push(filePickerPage)
+                }
             }
             MenuItem {
                 enabled: !api.isSaveInProgress
