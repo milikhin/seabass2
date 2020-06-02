@@ -23,6 +23,26 @@
         <source>Seabass v0.3.2</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Babel, Copyright (c) 2010, Ajax.org B.V., BSD license:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>JavaScript-MD5, Copyright (c) 2011 Sebastian Tschan, https://blueimp.net, MIT license:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jest, Copyright (c) Facebook, Inc. and its affiliates, MIT license:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>UUID JavaScript Module, Copyright (c) 2010-2020 Robert Kieffer and other contributors, MIT license:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>webpack and webpack-contrib packages, Copyright JS Foundation and other contributors, MIT license:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Editor</name>
