@@ -59,6 +59,17 @@
     </message>
 </context>
 <context>
+    <name>SaveDialog</name>
+    <message>
+        <source>Discard changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>harbour-seabass</name>
     <message>
         <source>Welcome</source>
