@@ -1,9 +1,7 @@
 .pragma library
 
-var DEFAULT_FILE_PATH = Qt.resolvedUrl('../changelog.txt')
-
 function getDefaultFilePath() {
-    return Qt.application.arguments[2] || DEFAULT_FILE_PATH
+    return Qt.application.arguments[2] || ''
 }
 
 function getShortDirName(filePath, homeUrl) {

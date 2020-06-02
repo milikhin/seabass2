@@ -9,7 +9,10 @@ ApplicationWindow
 {
     id: root
     property string defaultFilePath: QmlJs.getDefaultFilePath()
-    property string coverTitle: QmlJs.getFileNameByPath(defaultFilePath)
+    property string coverTitle: defaultFilePath
+        ? QmlJs.getFileNameByPath(defaultFilePath)
+        : qsTr('Welcome')
+
     initialPage: Component {
         Editor {
             seabassFilePath: defaultFilePath

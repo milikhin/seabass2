@@ -44,6 +44,9 @@ Page {
         onMessageSent: function(jsonMessage) {
             webView.experimental.postMessage(jsonMessage)
         }
+        onFilePathChanged: {
+            seabassFilePath = filePath
+        }
     }
 
     onOrientationChanged: fixResize()
