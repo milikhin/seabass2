@@ -20,7 +20,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seabass v0.3.2</source>
+        <source>Seabass v%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -55,6 +55,17 @@
     <name>ErrorDialog</name>
     <message>
         <source>Error occured</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SaveDialog</name>
+    <message>
+        <source>Discard changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

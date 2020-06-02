@@ -1,5 +1,35 @@
-import QtQuick 2.0
+import QtQuick 2.2
+import Sailfish.Silica 1.0
 
-Item {
+Dialog {
+    id: root
+    property string filePath: ''
 
+    canAccept: true
+
+    SilicaFlickable {
+        anchors.fill: parent
+        contentHeight: column.height
+
+        Column {
+            id: column
+            width: parent.width
+
+            PageHeader {
+                title: qsTr('Discard changes?')
+            }
+
+            Text {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: Theme.horizontalPageMargin
+                anchors.rightMargin: Theme.horizontalPageMargin
+
+                text: qsTr('Unsaved changes at %1 will be lost if you open another file. Continue?').arg(filePath)
+                font.pixelSize: Theme.fontSizeMedium
+                color: Theme.highlightColor
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            }
+        }
+    }
 }

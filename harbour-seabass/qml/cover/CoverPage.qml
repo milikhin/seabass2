@@ -24,6 +24,7 @@ CoverBackground {
         Label {
             width: root.width - Theme.horizontalPageMargin * 2
             anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
             visible: !!title
             id: label
             text: title

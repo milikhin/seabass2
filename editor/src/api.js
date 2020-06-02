@@ -7,6 +7,7 @@ class Api {
     editorFactory,
     notifyOnLoaded,
     apiBackend = 'navigatorQt',
+    isSailfish = false,
 
     welcomeElem,
     rootElem
@@ -23,6 +24,7 @@ class Api {
     this._editor = undefined
     this._tabsRootElem = rootElem
     this._welcomeElem = welcomeElem
+    this._isSailfish = isSailfish
 
     this._registerApiHandler()
     if (notifyOnLoaded) {
@@ -151,7 +153,7 @@ class Api {
     }
 
     this._showTabs()
-    this._tabsController.create(filePath, content, readOnly)
+    this._tabsController.create(filePath, content, readOnly, this._isSailfish)
   }
 
   /**
