@@ -2,6 +2,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
+    id: root
     property string title: ''
     anchors.centerIn: parent
 
@@ -21,11 +22,12 @@ CoverBackground {
         }
 
         Label {
+            width: root.width - Theme.horizontalPageMargin * 2
             anchors.horizontalCenter: parent.horizontalCenter
             visible: !!title
             id: label
             text: title
-            wrapMode: "WrapAtWordBoundaryOrAnywhere"
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
     }
 
