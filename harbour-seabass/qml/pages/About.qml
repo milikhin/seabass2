@@ -53,7 +53,7 @@ Page {
             }
 
             Label {
-                text: qsTr("Babel, Copyright (c) 2010, Ajax.org B.V., BSD license:")
+                text: qsTr("Babel, Copyright (c) 2014-present Sebastian McKenzie and other contributors, MIT license:")
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
                 anchors.left: parent.left
