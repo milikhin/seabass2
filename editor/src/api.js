@@ -54,6 +54,10 @@ class Api {
   //   this._tabsController.exec(filePath, 'beautify')
   // }
 
+  _apiOnKeyDown ({ filePath, keyCode }) {
+    return this._tabsController.exec(filePath, 'keyDown', keyCode)
+  }
+
   /**
    * Returns file content.
    *  API backend must support returning results from JS calls to use the method

@@ -25,7 +25,7 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.1.2"
+  readonly property string version: "0.2.0"
 
   PageStack {
     id: pageStack
@@ -267,6 +267,24 @@ MainView {
               Qt.openUrlExternally(request.url)
             }
             zoomFactor: units.gu(1) / 8
+          }
+
+          Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: theme.palette.normal.overlaySecondaryText
+            visible: keyboardExtension.visible
+          }
+
+          CustomComponents.KeyboardExtension {
+            id: keyboardExtension
+            Layout.fillWidth: true
+            visible: Qt.inputMethod.visible && main.visible && filesModel.count
+            onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 })
+            onLeftArrowClicked: api.postMessage('keyDown', { keyCode: 37 })
+            onRightArrowClicked: api.postMessage('keyDown', { keyCode: 39 })
+            onUpArrowClicked: api.postMessage('keyDown', { keyCode: 38 })
+            onDownArrowClicked: api.postMessage('keyDown', { keyCode: 40 })
           }
         }
       }

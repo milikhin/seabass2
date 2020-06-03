@@ -28,6 +28,7 @@ export default class TabsController {
     this._rootElem.appendChild(editorElem)
     editorElem.classList.add('editor')
 
+    this._tabs.forEach(tab => tab.editor.deactivate())
     const tab = {
       filePath,
       editor: this._editorFactory({ elem: editorElem, isSailfish }),

@@ -6,6 +6,7 @@ import 'ace-builds/src-noconflict/theme-chrome'
 
 import modelist from 'ace-builds/src-noconflict/ext-modelist'
 import beautify from 'ace-builds/src-noconflict/ext-beautify'
+import 'ace-builds/src-noconflict/ext-language_tools'
 
 import md5 from 'blueimp-md5'
 
@@ -25,7 +26,10 @@ export default class Editor {
       navigateWithinSoftTabs: true,
       showFoldWidgets: false,
       indentedSoftWrap: false,
-      animatedScroll: false
+      animatedScroll: false,
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
     })
     this._initialContentHash = undefined
     this._onChangeTimer = undefined
@@ -53,6 +57,10 @@ export default class Editor {
    */
   getContent (filePath) {
     return this._ace.getValue()
+  }
+
+  keyDown (keyCode) {
+    this._ace.onCommandKey({}, 0, keyCode)
   }
 
   /**
@@ -84,6 +92,13 @@ export default class Editor {
 
   activate () {
     this._onChange()
+  }
+
+  deactivate () {
+    if (!this._ace.completer) {
+      return
+    }
+    this._ace.completer.detach()
   }
 
   navigateDown () {

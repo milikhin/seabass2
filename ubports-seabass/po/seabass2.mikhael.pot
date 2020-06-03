@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-31 08:02+0000\n"
+"POT-Creation-Date: 2020-06-03 09:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,26 @@ msgstr ""
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:31
 #: ../qml/components/FileList.qml:40 ../qml/components/SaveDialog.qml:34
 msgid "Close"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:18
+msgid "Down arrow"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:23
+msgid "Up arrow"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:28
+msgid "Right arrow"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:33
+msgid "Left arrow"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:38
+msgid "Tab"
 msgstr ""
 
 #: ../qml/components/SaveDialog.qml:23
