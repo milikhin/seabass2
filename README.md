@@ -79,7 +79,7 @@ There are a few labels used to indicate issue progress.
 
 ## Becoming a sponsor
 
-Seabass is a free (as in free speech) software. You can support the development using [Patreon](https://www.patreon.com/mmmikhael). Your donations helps to find time for resolving non-critical issues and implementing new features.
+Seabass is a free software. You can support the development using [Patreon](https://www.patreon.com/mmmikhael). Your donations helps to find time for resolving non-critical issues and implementing new features.
 
 The more supporters the project gets, the more development time it gets.
 And if it doesn't... Well there be updates and new features on a regular basis anyway! Just less often.
