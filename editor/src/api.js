@@ -54,8 +54,14 @@ class Api {
   //   this._tabsController.exec(filePath, 'beautify')
   // }
 
+  /**
+   * Simmulates keyDown event within the editor
+   * @param {string} filePath - /path/to/file
+   * @param {int} keyCode - JS keyCode
+   * @returns {undefined}
+   */
   _apiOnKeyDown ({ filePath, keyCode }) {
-    return this._tabsController.exec(filePath, 'keyDown', keyCode)
+    this._tabsController.exec(filePath, 'keyDown', keyCode)
   }
 
   /**
@@ -217,9 +223,14 @@ class Api {
 
     if (options.textColor && options.linkColor && options.backgroundColor) {
       const styleElem = document.getElementById('theme-css')
+      if (!styleElem) {
+        return console.warn('Theme colors are ignored as corresponding <style> tag is not found')
+      }
       styleElem.sheet.cssRules[0].style.backgroundColor = options.backgroundColor
       styleElem.sheet.cssRules[1].style.color = options.textColor
       styleElem.sheet.cssRules[2].style.color = options.linkColor
+      styleElem.sheet.cssRules[3].style.backgroundColor = options.backgroundColor || options.foregroundColor
+      styleElem.sheet.cssRules[4].style.color = options.textColor || options.foregroundTextColor
     }
     this._tabsController.setPreferences(options)
   }
@@ -308,11 +319,7 @@ class Api {
         return navigator.qt.postMessage(payload)
       }
       case 'url': {
-        document.location = `http://seabass/${encodeURIComponent(payload)}`
-        return
-      }
-      default: {
-        console.error('No supported API found')
+        return window.location.assign(`http://seabass/${encodeURIComponent(payload)}`)
       }
     }
   }

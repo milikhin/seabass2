@@ -36,6 +36,7 @@ export default class Editor {
     this._changeListeners = []
     this._lastScrollTop = 0
 
+    window.addEventListener('resize', this._onResize)
     if (isSailfish) {
       this._applyPlatformHaks()
     }
@@ -48,6 +49,7 @@ export default class Editor {
   destroy () {
     this._ace.destroy()
     this._editorElem.parentElement.removeChild(this._editorElem)
+    window.removeEventListener('resize', this._onResize)
   }
 
   /**
@@ -197,5 +199,9 @@ export default class Editor {
 
       this._changeListeners.forEach(listener => listener(data))
     }, this._autosaveTimeout)
+  }
+
+  _onResize = () => {
+    this._ace.renderer.scrollCursorIntoView()
   }
 }

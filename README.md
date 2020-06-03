@@ -60,6 +60,7 @@ Build steps:
 
 1. Build editor engine  
    1. Install editor dependencies and build tools: `npm install`
+   1. UBports only: remove `ubports-seabass/qml/html` directory if exists (required only once when updating sources from ubports-seabass@v0.1.x)
    1. Build editor engine and copy required files to Sailfish/UBports app directory: `npm run build`
 1. Build App  
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK

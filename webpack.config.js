@@ -1,5 +1,6 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const commonConfig = {
   entry: './editor/src/index.js',
@@ -16,6 +17,9 @@ const commonConfig = {
       }
     ]
   },
+  plugins: [
+    new CleanWebpackPlugin()
+  ],
   mode: 'production'
 }
 
@@ -27,6 +31,7 @@ const sailfishConfig = {
     filename: 'bundle.js'
   },
   plugins: [
+    ...commonConfig.plugins,
     new CopyPlugin([
       {
         from: './harbour-seabass/html'

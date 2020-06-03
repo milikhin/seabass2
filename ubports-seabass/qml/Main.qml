@@ -47,6 +47,8 @@ MainView {
       backgroundColor: theme.palette.normal.background
       textColor: theme.palette.normal.backgroundSecondaryText
       linkColor: theme.palette.normal.backgroundText
+      foregroundColor: theme.palette.normal.foreground
+      foregroundTextColor: theme.palette.normal.foregroundText
       homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
 
       // platform-specific i18n implementation for Generic API
@@ -280,11 +282,11 @@ MainView {
             id: keyboardExtension
             Layout.fillWidth: true
             visible: Qt.inputMethod.visible && main.visible && filesModel.count
-            onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 })
-            onLeftArrowClicked: api.postMessage('keyDown', { keyCode: 37 })
-            onRightArrowClicked: api.postMessage('keyDown', { keyCode: 39 })
-            onUpArrowClicked: api.postMessage('keyDown', { keyCode: 38 })
-            onDownArrowClicked: api.postMessage('keyDown', { keyCode: 40 })
+            onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 /* ESC */ })
+            onLeftArrowClicked: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
+            onRightArrowClicked: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
+            onUpArrowClicked: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
+            onDownArrowClicked: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
           }
         }
       }

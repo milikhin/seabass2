@@ -14,19 +14,9 @@ Rectangle {
   property real minTabLabelWidth: units.gu(10)
   property real maxTabLabelWidth: units.gu(30)
   property real underlineWidth: units.gu(1) / 4
-  property int currentIndex
+  property alias currentIndex: tabBar.currentIndex
 
   signal tabClosed(int index)
-
-  // Two-way binding for currentIndex between the Component and TabBar
-  Component.onCompleted: {
-    currentIndexChanged.connect(function() {
-      tabBar.currentIndex = currentIndex
-    })
-    tabBar.currentIndexChanged.connect(function() {
-      currentIndex = tabBar.currentIndex
-    })
-  }
 
   TabBar {
     id: tabBar
