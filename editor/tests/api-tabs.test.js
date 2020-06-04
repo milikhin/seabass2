@@ -320,7 +320,29 @@ describe('editor API', () => {
     })
   })
 
+  describe('#keyDown', () => {
+    it('should execute `keyDown` action', () => {
+      const { editor } = createEditor()
+      const keyCode = uuid()
+
+      postMessage({
+        action: 'keyDown',
+        data: { filePath, keyCode }
+      })
+
+      expect(editor.keyDown).toHaveBeenCalledTimes(1)
+      expect(editor.keyDown).toHaveBeenCalledWith(keyCode)
+    })
+  })
+
   describe('#setPreferences', () => {
+    beforeEach(() => {
+      console.warn = jest.fn()
+    })
+    afterEach(() => {
+      document.body.innerHTML = ''
+    })
+
     it('should execute `setPreferences` action', () => {
       const { editor } = createEditor()
 
@@ -343,15 +365,73 @@ describe('editor API', () => {
 
       expect(localStorage.getItem('sailfish__isToolbarOpened')).toEqual('true')
     })
+
+    it('should set theme colors', () => {
+      registerApi({ editorFactory })
+      document.body.innerHTML = `
+        <style id="theme-css">
+          /* CSS Custom Properties are not supported in Sailfish */
+          /* these values are replaceable via JS */
+          body {
+            background-color: #eee; /* backgroungColor */
+          }
+          #welcome {
+            color: #111; /* textColor */
+          }
+          #welcome a {
+            color: dodgerblue; /* linkColor */
+          }
+          .ace_tooltip.ace_doc-tooltip {
+            background-color: #eee; /* foregroundColor */
+          }
+          .ace_tooltip.ace_doc-tooltip {
+            color: #111; /* foregroundText */
+          }
+        </style>
+      `
+
+      const colors = [
+        uuid(),
+        uuid(),
+        uuid()
+      ]
+      postMessage({
+        action: 'setPreferences',
+        data: {
+          filePath,
+          textColor: colors[1],
+          backgroundColor: colors[0],
+          linkColor: colors[2]
+        }
+      })
+
+      const cssRules = document.getElementById('theme-css').sheet.cssRules
+      expect(cssRules[0].style.backgroundColor).toEqual(colors[0])
+      expect(cssRules[1].style.color).toEqual(colors[1])
+      expect(cssRules[2].style.color).toEqual(colors[2])
+      expect(cssRules[3].style.backgroundColor).toEqual(colors[0])
+      expect(cssRules[4].style.color).toEqual(colors[1])
+    })
+
+    it('should ignore theme colors if <style> elem is not found', () => {
+      registerApi({ editorFactory })
+      postMessage({
+        action: 'setPreferences',
+        data: {
+          filePath,
+          textColor: uuid(),
+          backgroundColor: uuid(),
+          linkColor: uuid()
+        }
+      })
+
+      expect(console.warn).toHaveBeenCalledWith('Theme colors are ignored as corresponding <style> tag is not found')
+    })
   })
 
   describe('#toggleReadOnly', () => {
     beforeEach(() => {
       console.warn = jest.fn()
-    })
-
-    afterEach(() => {
-      console.warn.mockRestore()
     })
 
     it('should execute `toggleReadOnly` action', () => {

@@ -2,6 +2,7 @@
 
 export default () => ({
   activate: jest.fn(),
+  deactivate: jest.fn(),
   destroy: jest.fn(),
   getContent: jest.fn(),
   loadFile: jest.fn(),
@@ -12,6 +13,7 @@ export default () => ({
   toggleReadOnly: jest.fn(),
   undo: jest.fn(),
 
+  keyDown: jest.fn(),
   navigateDown: jest.fn(),
   navigateLeft: jest.fn(),
   navigateRight: jest.fn(),

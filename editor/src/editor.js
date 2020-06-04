@@ -6,6 +6,7 @@ import 'ace-builds/src-noconflict/theme-chrome'
 
 import modelist from 'ace-builds/src-noconflict/ext-modelist'
 import beautify from 'ace-builds/src-noconflict/ext-beautify'
+import 'ace-builds/src-noconflict/ext-language_tools'
 
 import md5 from 'blueimp-md5'
 
@@ -25,13 +26,17 @@ export default class Editor {
       navigateWithinSoftTabs: true,
       showFoldWidgets: false,
       indentedSoftWrap: false,
-      animatedScroll: false
+      animatedScroll: false,
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
     })
     this._initialContentHash = undefined
     this._onChangeTimer = undefined
     this._changeListeners = []
     this._lastScrollTop = 0
 
+    window.addEventListener('resize', this._onResize)
     if (isSailfish) {
       this._applyPlatformHaks()
     }
@@ -44,6 +49,7 @@ export default class Editor {
   destroy () {
     this._ace.destroy()
     this._editorElem.parentElement.removeChild(this._editorElem)
+    window.removeEventListener('resize', this._onResize)
   }
 
   /**
@@ -53,6 +59,10 @@ export default class Editor {
    */
   getContent (filePath) {
     return this._ace.getValue()
+  }
+
+  keyDown (keyCode) {
+    this._ace.onCommandKey({}, 0, keyCode)
   }
 
   /**
@@ -84,6 +94,13 @@ export default class Editor {
 
   activate () {
     this._onChange()
+  }
+
+  deactivate () {
+    if (!this._ace.completer) {
+      return
+    }
+    this._ace.completer.detach()
   }
 
   navigateDown () {
@@ -182,5 +199,9 @@ export default class Editor {
 
       this._changeListeners.forEach(listener => listener(data))
     }, this._autosaveTimeout)
+  }
+
+  _onResize = () => {
+    this._ace.renderer.scrollCursorIntoView()
   }
 }

@@ -20,6 +20,8 @@ QtObject {
     property string backgroundColor
     property string textColor
     property string linkColor
+    property string foregroundColor: backgroundColor
+    property string foregroundTextColor: textColor
     property string homeDir
 
     signal appLoaded(var preferences)
@@ -106,7 +108,9 @@ QtObject {
             isDarkTheme: isDarkTheme,
             textColor: textColor,
             linkColor: linkColor,
-            backgroundColor: backgroundColor
+            backgroundColor: backgroundColor,
+            foregroundColor: foregroundColor,
+            foregroundTextColor: foregroundTextColor
         })
     }
 

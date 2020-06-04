@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-31 08:02+0000\n"
+"POT-Creation-Date: 2020-06-04 04:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:173
+#: ../qml/About.qml:12 ../qml/Main.qml:181
 msgid "About"
 msgstr ""
 
@@ -27,25 +27,29 @@ msgid ""
 "contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:26
+#: ../qml/Main.qml:27
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:53
+#: ../qml/Main.qml:61
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:54
+#: ../qml/Main.qml:62
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:165 ../qml/components/FileList.qml:25
+#: ../qml/Main.qml:173 ../qml/components/FileList.qml:25
 msgid "Files"
 msgstr ""
 
-#: ../qml/Main.qml:181 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:189 ../qml/components/SaveDialog.qml:26
 msgid "Save"
+msgstr ""
+
+#: ../qml/Main.qml:200
+msgid "Toggle keyboard extension"
 msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:7
@@ -59,6 +63,14 @@ msgstr ""
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:31
 #: ../qml/components/FileList.qml:40 ../qml/components/SaveDialog.qml:34
 msgid "Close"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:33
+msgid "Tab"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:37
+msgid "Esc"
 msgstr ""
 
 #: ../qml/components/SaveDialog.qml:23

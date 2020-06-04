@@ -51,7 +51,8 @@ export default class TabsController {
       return
     }
 
-    this._tabs.forEach(({ elem }) => {
+    this._tabs.forEach(({ elem, editor }) => {
+      editor.deactivate()
       elem.style.display = 'none'
     })
     tab.elem.style.display = ''

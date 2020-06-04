@@ -32,8 +32,22 @@
       display: none
     }
 
+    /* Ace overrides for better styling and minor UI fixes*/
     .ace_mobile-menu {
       display: none !important;
+    }
+
+    .ace_tooltip.ace_doc-tooltip {
+      font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
+      font-size: 12px;
+      background-image: none;
+      border: solid 1px;
+      color: inherit;
+    }
+
+    .ace_tooltip.ace_doc-tooltip hr {
+      border-top: solid 1px;
+      border-bottom: none;
     }
 
     /* Fix for incorrect format string's rendering in Erlang */
@@ -43,18 +57,37 @@
       opacity: 1;
       margin: 0;
     }
+
+    .ace_editor.ace_autocomplete,
+    .ace_dark.ace_editor.ace_autocomplete {
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+
+    .very-important-links {
+      margin: 0;
+    }
+    .very-important-links li {
+      margin-bottom: 0.5em;
+    }
   </style>
   <style id="theme-css">
     /* CSS Custom Properties are not supported in Sailfish */
     /* these values are replaceable via JS */
     body {
-      background-color: #eee;
+      background-color: #eee; /* backgroungColor */
     }
     #welcome {
-      color: #111;
+      color: #111; /* textColor */
     }
     #welcome a {
-      color: dodgerblue;
+      color: dodgerblue; /* linkColor */
+    }
+    .ace_tooltip.ace_doc-tooltip {
+      background-color: #eee; /* foregroundColor */
+    }
+    .ace_tooltip.ace_doc-tooltip {
+      color: #111; /* foregroundText */
     }
   </style>
 </head>
@@ -62,43 +95,32 @@
 <body>
   <div id="welcome">
     <h1>
-      Seabass for UBports v0.1.2
+      Seabass for UBports v0.2.0
     </h1>
     <h2>
       Release notes
     </h2>
     <p>
-      The current release provides ability to edit existing files.
-      This is an early preview version, so things might be broken and some core functionality such as creating new files is yet to be implemented.
-    </p>
-    <h2>
-      Features
-    </h2>
-    <ul>
-      <li>
-        Syntax highlighting for over 120 programming/markup languages
-      </li>
-      <li>
-        Multiple tabs
-      </li>
-      <li>
-        Undo/Redo
-      </li>
-      <li>
-        Light and Dark themes
-      </li>
-    </ul>
-    <h2>
-      Support development 🐟
-    </h2>
-    <p>
-      Seabass is a free (as in free speech) software.
-      You can support the development using <a href="https://www.patreon.com/mmmikhael">Patreon</a>.
-      Your donations helps to find time for resolving non-critical issues and implementing new features.
+      This release features autocompletion, code snippets and a new navigation toolbar to make it easier
+      to use the new features with on-screen keyboard!
     </p>
     <p>
-      Your feedback, bug reports and feature requests are very appreciated!
-      If you have any suggestions or something doesn't work as expected, feel free to open an issue on <a href="https://github.com/milikhin/seabass2">github</a> or contact me via email.
+      Please let me know if you have any issues on <a href="https://github.com/milikhin/seabass2">github</a>
+      or in the dedicated <a href="https://forums.ubports.com/topic/4359/feedback-for-the-seabass/6">topic</a> on the UBports forum.
+    </p>
+    <h2>
+      Like the Seabass?
+    </h2>
+    <p>
+      Don't hesitate to support the development:
+      <ul class="very-important-links">
+        <li>
+          <a href="https://www.patreon.com/mmmikhael">Patreon</a>
+        </li>
+        <li>
+          <a href="https://paypal.me/mmmikhael/5">PayPal</a>
+        </li>
+      </ul>
     </p>
   </div>
   <div id="root"></div>

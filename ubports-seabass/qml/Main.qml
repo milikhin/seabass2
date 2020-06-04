@@ -7,6 +7,7 @@ import QtQuick.Controls 2.2
 import Ubuntu.Components.Themes 1.3
 import Ubuntu.Components.Popups 1.3
 import Qt.labs.platform 1.0
+import Qt.labs.settings 1.0
 
 import "./components" as CustomComponents
 import "./generic" as GenericComponents
@@ -25,7 +26,12 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.1.2"
+  readonly property string version: "0.2.0"
+
+  Settings {
+    id: settings
+    property bool isKeyboardExtensionVisible: true
+  }
 
   PageStack {
     id: pageStack
@@ -47,6 +53,8 @@ MainView {
       backgroundColor: theme.palette.normal.background
       textColor: theme.palette.normal.backgroundSecondaryText
       linkColor: theme.palette.normal.backgroundText
+      foregroundColor: theme.palette.normal.foreground
+      foregroundTextColor: theme.palette.normal.foregroundText
       homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
 
       // platform-specific i18n implementation for Generic API
@@ -186,6 +194,14 @@ MainView {
                       api.saveFile(api.filePath, fileContent)
                     })
                   }
+                },
+                Action {
+                  iconName: "preferences-desktop-keyboard-shortcuts-symbolic"
+                  text: i18n.tr("Toggle keyboard extension")
+                  visible: Qt.inputMethod.visible && main.visible && filesModel.count
+                  onTriggered: {
+                    settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
+                  }
                 }
               ]
             }
@@ -267,6 +283,25 @@ MainView {
               Qt.openUrlExternally(request.url)
             }
             zoomFactor: units.gu(1) / 8
+          }
+
+          Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: theme.palette.normal.overlaySecondaryText
+            visible: keyboardExtension.visible
+          }
+
+          CustomComponents.KeyboardExtension {
+            id: keyboardExtension
+            Layout.fillWidth: true
+            visible: settings.isKeyboardExtensionVisible && Qt.inputMethod.visible && main.visible && filesModel.count
+            onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 /* TAB */ })
+            onEscBtnClicked: api.postMessage('keyDown', { keyCode: 27 /* ESC */ })
+            onLeftArrowClicked: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
+            onRightArrowClicked: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
+            onUpArrowClicked: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
+            onDownArrowClicked: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
           }
         }
       }

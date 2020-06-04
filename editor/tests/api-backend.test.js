@@ -10,6 +10,9 @@ describe('#registerApi', () => {
     navigator.qt = {
       postMessage: jest.fn()
     }
+
+    delete window.location
+    window.location = { assign: jest.fn() }
   })
 
   it('should throw when `editorFactory` is undefined', () => {
@@ -51,6 +54,15 @@ describe('#registerApi', () => {
     expect(JSON.parse(message).data).toEqual({
       isSailfishToolbarOpened: undefined
     })
+  })
+
+  it('should notify when app is loaded (`url` backend)', () => {
+    registerApi({ editorFactory, notifyOnLoaded: true, apiBackend: 'url' })
+
+    // Check for 'appLoaded' action
+    const payload = { action: 'appLoaded', data: {} }
+    expect(window.location.assign).toHaveBeenCalledTimes(1)
+    expect(window.location.assign).toHaveBeenCalledWith(`http://seabass/${encodeURIComponent(JSON.stringify(payload))}`)
   })
 
   it('should notify when app is loaded (notifyOnLoaded: true, toolbar opened)', () => {
