@@ -229,8 +229,8 @@ class Api {
       styleElem.sheet.cssRules[0].style.backgroundColor = options.backgroundColor
       styleElem.sheet.cssRules[1].style.color = options.textColor
       styleElem.sheet.cssRules[2].style.color = options.linkColor
-      styleElem.sheet.cssRules[3].style.backgroundColor = options.backgroundColor || options.foregroundColor
-      styleElem.sheet.cssRules[4].style.color = options.textColor || options.foregroundTextColor
+      styleElem.sheet.cssRules[3].style.backgroundColor = options.foregroundColor || options.backgroundColor
+      styleElem.sheet.cssRules[4].style.color = options.foregroundTextColor || options.textColor
     }
     this._tabsController.setPreferences(options)
   }

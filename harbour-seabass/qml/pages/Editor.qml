@@ -22,6 +22,9 @@ Page {
         backgroundColor: isDarkTheme
             ? 'rgba(0, 0, 0, 0.75)'
             : 'rgba(255, 255, 255, 0.75)'
+        foregroundColor: isDarkTheme
+            ? 'rgba(0, 0, 0, 1)'
+            : 'rgba(255, 255, 255, 1)'
         textColor: Theme.highlightColor
         linkColor: Theme.primaryColor
 
@@ -105,7 +108,7 @@ Page {
             }
             MenuItem {
                 enabled: !api.isSaveInProgress
-                visible: !api.isReadOnly
+                visible: api.filePath && !api.isReadOnly
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
                 onClicked: api.requestSaveFile()
             }
@@ -145,10 +148,10 @@ Page {
             onUndo: api.postMessage('undo')
             onRedo: api.postMessage('redo')
             onToggleReadOnly: api.postMessage('toggleReadOnly')
-            onNavigateDown: api.postMessage('navigateDown')
-            onNavigateUp: api.postMessage('navigateUp')
-            onNavigateLeft: api.postMessage('navigateLeft')
-            onNavigateRight: api.postMessage('navigateRight')
+            onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
+            onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
+            onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
+            onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
             onNavigateLineStart: api.postMessage('navigateLineStart')
             onNavigateLineEnd: api.postMessage('navigateLineEnd')
             onNavigateFileStart: api.postMessage('navigateFileStart')

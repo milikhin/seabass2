@@ -173,7 +173,17 @@ export default class Editor {
   }
 
   _applyPlatformHaks () {
+    // debounce scrollTop workaround too prevent tearing when scroll is animated
+    this._scrollDebounced = false
     this._ace.getSession().on('changeScrollTop', scrollTop => {
+      if (this._scrollDebounced) {
+        return
+      }
+
+      setTimeout(() => {
+        this._scrollDebounced = false
+      }, 100)
+      this._scrollDebounced = true
       if (this._lastScrollTop > scrollTop) {
         window.scrollTo(0, 1)
       } else {

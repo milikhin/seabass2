@@ -5,6 +5,11 @@
   <meta charset="utf-8" />
   <style>
     body {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: -1px;
+      right: 0;
       padding: 0;
       margin: 0;
     }
@@ -12,7 +17,6 @@
     #root {
       width: 100%;
       height: 100%;
-      margin-bottom: 1px;
       display: none;
     }
 
@@ -24,7 +28,6 @@
     #welcome {
       width: 100%;
       height: 100%;
-      margin-bottom: 1px;
 
       font-family: sans-serif;
       padding: 1rem;
@@ -51,6 +54,40 @@
       opacity: 1;
       margin: 0;
     }
+
+    .ace_tooltip.ace_doc-tooltip {
+      font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
+      font-size: 12px;
+      background-image: none;
+      border: solid 1px;
+      color: inherit;
+    }
+
+    .ace_tooltip.ace_doc-tooltip hr {
+      border-top: solid 1px;
+      border-bottom: none;
+    }
+
+    /* Fix for incorrect format string's rendering in Erlang */
+    .ace_line > .ace_placeholder {
+      font-family: inherit;
+      transform: none;
+      opacity: 1;
+      margin: 0;
+    }
+
+    .ace_editor.ace_autocomplete,
+    .ace_dark.ace_editor.ace_autocomplete {
+      box-shadow: none;
+      transform: translateY(-1px);
+    }
+
+    .very-important-links {
+      margin: 0;
+    }
+    .very-important-links li {
+      margin-bottom: 0.5em;
+    }
   </style>
   <style id="theme-css">
     /* CSS Custom Properties are not supported in Sailfish */
@@ -76,37 +113,30 @@
 <body>
   <div id="welcome">
     <h1>
-      Seabass for SailfishOS v0.4.0
+      Seabass for SailfishOS v0.5.0
     </h1>
     <h2>
       Release notes
     </h2>
     <p>
-      The current release provides ability to edit existing files.
-      This is an early preview version, so things might be broken and some core functionality such as creating new files is yet to be implemented.
-      Your feedback, bug reports and feature requests are very appreciated!
+      This release features code autocompletion and snippets (for some languages)!
+    </p>
+    <p>
+      Please let me know if you have any issues on <a href="https://github.com/milikhin/seabass2">github</a>.
     </p>
     <h2>
-      Getting started
-    </h2>
-    <ul>
-      <li>
-        Use top menu to open existing file
-      </li>
-      <li>
-        Use gutter to access pull down / push up menu when working with large files
-      </li>
-      <li>
-        Press and hold navigation buttons (in the bottom toolbar) to move the cursor to the first/last symbol in the line or first/last symbol of the file
-      </li>
-    </ul>
-    <h2>
-      Support development 🐟
+      Like the Seabass?
     </h2>
     <p>
-      Seabass is a free software.
-      You can support the development using <a href="https://www.patreon.com/mmmikhael">Patreon</a>.
-      Your donations helps to find time for resolving non-critical issues and implementing new features.
+      Don't hesitate to support the development:
+      <ul class="very-important-links">
+        <li>
+          <a href="https://www.patreon.com/mmmikhael">Patreon</a>
+        </li>
+        <li>
+          <a href="https://paypal.me/mmmikhael/5">PayPal</a>
+        </li>
+      </ul>
     </p>
   </div>
   <div id="root"></div>
