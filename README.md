@@ -21,11 +21,11 @@ Core features:
 * Undo/Redo
 * Light and dark themes
 * Navigation buttons
+* Code autocompletion and snippets
 
 UBports:
 * Multiple tabs
 * Adaptive layout
-* Code autocompletion and snippets
 
 Sailfish OS:
 * Read only mode
