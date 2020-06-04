@@ -7,6 +7,7 @@ import QtQuick.Controls 2.2
 import Ubuntu.Components.Themes 1.3
 import Ubuntu.Components.Popups 1.3
 import Qt.labs.platform 1.0
+import Qt.labs.settings 1.0
 
 import "./components" as CustomComponents
 import "./generic" as GenericComponents
@@ -26,6 +27,11 @@ MainView {
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
   readonly property string version: "0.2.0"
+
+  Settings {
+    id: settings
+    property bool isKeyboardExtensionVisible: true
+  }
 
   PageStack {
     id: pageStack
@@ -188,6 +194,14 @@ MainView {
                       api.saveFile(api.filePath, fileContent)
                     })
                   }
+                },
+                Action {
+                  iconName: "preferences-desktop-keyboard-shortcuts-symbolic"
+                  text: i18n.tr("Toggle keyboard extension")
+                  visible: Qt.inputMethod.visible && main.visible && filesModel.count
+                  onTriggered: {
+                    settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
+                  }
                 }
               ]
             }
@@ -281,8 +295,9 @@ MainView {
           CustomComponents.KeyboardExtension {
             id: keyboardExtension
             Layout.fillWidth: true
-            visible: Qt.inputMethod.visible && main.visible && filesModel.count
-            onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 /* ESC */ })
+            visible: settings.isKeyboardExtensionVisible && Qt.inputMethod.visible && main.visible && filesModel.count
+            onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 /* TAB */ })
+            onEscBtnClicked: api.postMessage('keyDown', { keyCode: 27 /* ESC */ })
             onLeftArrowClicked: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
             onRightArrowClicked: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
             onUpArrowClicked: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
