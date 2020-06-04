@@ -20,13 +20,14 @@ Core features:
 * Syntax highlighting for over 120 programming/markup languages
 * Undo/Redo
 * Light and dark themes
+* Navigation buttons
 
 UBports:
 * Multiple tabs
 * Adaptive layout
+* Code autocompletion and snippets
 
 Sailfish OS:
-* Navigation buttons
 * Read only mode
 
 ## Architecture
@@ -80,7 +81,7 @@ There are a few labels used to indicate issue progress.
 
 ## Becoming a sponsor
 
-Seabass is a free software. You can support the development using [Patreon](https://www.patreon.com/mmmikhael). Your donations helps to find time for resolving non-critical issues and implementing new features.
+Seabass is a free software. You can support the development using [Patreon](https://www.patreon.com/mmmikhael) or [PayPal](https://paypal.me/mmmikhael/5). Donations helps to find time for resolving non-critical issues and implementing new features.
 
 The more supporters the project gets, the more development time it gets.
 And if it doesn't... Well there be updates and new features on a regular basis anyway! Just less often.
