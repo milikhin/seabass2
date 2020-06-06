@@ -27,9 +27,6 @@ UBports:
 * Multiple tabs
 * Adaptive layout
 
-Sailfish OS:
-* Read only mode
-
 ## Architecture
 
 Application for each platform consists of two major parts:
