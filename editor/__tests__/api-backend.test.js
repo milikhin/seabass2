@@ -1,9 +1,8 @@
 /* globals describe,expect,jest,it,beforeEach,localStorage */
 
-import registerApi from '../src/api' //eslint-disable-line
-import uuid from 'uuid/v4'//eslint-disable-line
+import registerApi from '../src/api'
 import { InvalidArgError } from '../src/errors'
-import editorFactory from './mocks/editor-factory'
+import editorFactory from './helpers/mocks/editor-factory'
 
 describe('#registerApi', () => {
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid'
-import registerApi from '../src/api'
-import editorFactory from '../src/editor-factory'
+import registerApi from '../../src/api'
+import editorFactory from '../../src/editor-factory'
 
 export const initDom = () => {
   const welcomeElem = document.createElement('div')
