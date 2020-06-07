@@ -3,7 +3,8 @@
 import registerApi from '../src/api'
 import { NotFoundError } from '../src/errors'
 import { v4 as uuid } from 'uuid'
-import editorFactory from './mocks/editor-factory'
+import editorFactory from '../src/editor-factory'
+import md5 from 'blueimp-md5'
 
 describe('editor API', () => {
   const filePath = uuid()
@@ -15,12 +16,24 @@ describe('editor API', () => {
     navigator.qt.onmessage({ data: JSON.stringify(payload) })
   }
 
-  const createEditor = (apiBackend = 'navigatorQt') => {
+  const createEditor = (options = {}) => {
+    const { apiBackend = 'navigatorQt', multiLine = false, moveToEnd = false } = options
     const api = registerApi({ editorFactory, apiBackend, rootElem, welcomeElem })
-    api._tabsController.create(filePath)
+    api._tabsController.create(
+      filePath,
+      multiLine ? `${content}\n${content}\n${content}` : content
+    )
     const editor = api._tabsController._tabs[0].editor
-    editor.getContent.mockReturnValue(content)
-    return { api, editor }
+    if (moveToEnd) {
+      editor.navigateFileEnd()
+    } else {
+      editor.navigateFileStart()
+    }
+    return {
+      api,
+      editor,
+      cursorPosition: editor._ace.getCursorPosition()
+    }
   }
 
   beforeEach(() => {
@@ -58,30 +71,31 @@ describe('editor API', () => {
   })
 
   describe('#fileSaved', () => {
-    it('should execute `setSavedContent` action', () => {
+    it('should set initial content hash', () => {
       const { editor } = createEditor()
+      const newContent = uuid()
 
       postMessage({
         action: 'fileSaved',
-        data: { filePath }
+        data: { filePath, content: newContent }
       })
 
-      expect(editor.setSavedContent).toHaveBeenCalledTimes(1)
+      const newContentHash = md5(newContent)
+      expect(editor._initialContentHash).toEqual(newContentHash)
     })
   })
 
   describe('#openFile', () => {
-    it('should execute `setSavedContent` action', () => {
+    it('should activate tab', () => {
       const { api, editor } = createEditor()
       api._tabsController.create(uuid())
-      editor.activate.mockReset()
 
       postMessage({
         action: 'openFile',
         data: { filePath }
       })
 
-      expect(editor.activate).toHaveBeenCalledTimes(1)
+      expect(editor._editorElem.style.display).toEqual('')
     })
 
     it('should throw if `filePath` is missing', () => {
@@ -101,25 +115,6 @@ describe('editor API', () => {
   })
 
   describe('#loadFile', () => {
-    it('should throw if `filePath` is missing', () => {
-      registerApi({ editorFactory })
-      const content = uuid()
-
-      postMessage({
-        action: 'loadFile',
-        data: {
-          content
-        }
-      })
-
-      // Expect error message to be posted
-      expect(navigator.qt.postMessage).toHaveBeenCalledTimes(1)
-
-      // Check for 'error' action
-      const [errorMessage] = navigator.qt.postMessage.mock.calls[0]
-      expect(JSON.parse(errorMessage).action).toEqual('error')
-    })
-
     it('should create editor with editable file', () => {
       const api = registerApi({ editorFactory, welcomeElem, rootElem })
 
@@ -131,7 +126,10 @@ describe('editor API', () => {
         }
       })
       expect(api._tabsController._tabs).toHaveLength(1)
-      expect(api._tabsController._tabs[0].editor.loadFile).toHaveBeenCalledWith(filePath, content, false)
+
+      const editor = api._tabsController._tabs[0].editor
+      expect(editor._ace.getValue()).toEqual(content)
+      expect(editor._ace.getOption('readOnly')).toEqual(false)
     })
 
     it('should create editor with readonly file', () => {
@@ -147,15 +145,33 @@ describe('editor API', () => {
       })
 
       expect(api._tabsController._tabs).toHaveLength(1)
-      expect(api._tabsController._tabs[0].editor.loadFile).toHaveBeenCalledWith(filePath, content, true)
+
+      const editor = api._tabsController._tabs[0].editor
+      expect(editor._ace.getValue()).toEqual(content)
+      expect(editor._ace.getOption('readOnly')).toEqual(true)
+    })
+
+    it('should throw if `filePath` is missing', () => {
+      registerApi({ editorFactory })
+      const content = uuid()
+
+      postMessage({
+        action: 'loadFile',
+        data: { content }
+      })
+
+      // Expect error message to be posted
+      expect(navigator.qt.postMessage).toHaveBeenCalledTimes(1)
+
+      // Check for 'error' action
+      const [errorMessage] = navigator.qt.postMessage.mock.calls[0]
+      expect(JSON.parse(errorMessage).action).toEqual('error')
     })
   })
 
   describe('#requestSaveFile', () => {
     it('should send API message with file content', () => {
-      const { editor } = createEditor()
-      editor.getContent.mockReturnValue(content)
-
+      createEditor()
       postMessage({
         action: 'requestSaveFile',
         data: { filePath }
@@ -172,13 +188,10 @@ describe('editor API', () => {
     })
 
     it('should throw API error if `filePath` is incorrect', () => {
-      const { api, editor } = createEditor()
-      editor.getContent.mockReturnValue(content)
-      api._tabsController._tabs[0].filePath = uuid()
-
+      createEditor()
       postMessage({
         action: 'requestSaveFile',
-        data: { filePath }
+        data: { filePath: uuid() }
       })
 
       // Expect 'saveFile' message to be sent
@@ -190,148 +203,179 @@ describe('editor API', () => {
     })
   })
 
-  describe('#undo', () => {
-    it('should execute `undo` action', () => {
+  describe('#undo/#redo', () => {
+    it('should `undo` changes', () => {
       const { editor } = createEditor()
+      editor._ace.setValue(uuid())
 
       postMessage({
         action: 'undo',
         data: { filePath }
       })
 
-      expect(editor.undo).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getValue()).toEqual(content)
     })
-  })
 
-  describe('#redo', () => {
-    it('should execute `redo` action', () => {
+    it('should `redo` changes', () => {
       const { editor } = createEditor()
+      const newContent = uuid()
+      editor._ace.setValue(newContent)
 
+      postMessage({
+        action: 'undo',
+        data: { filePath }
+      })
       postMessage({
         action: 'redo',
         data: { filePath }
       })
 
-      expect(editor.redo).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getValue()).toEqual(newContent)
     })
   })
 
   describe('#navigateLeft', () => {
     it('should execute `navigateLeft` action', () => {
-      const { editor } = createEditor()
+      const { editor, cursorPosition } = createEditor({ moveToEnd: true })
 
       postMessage({
         action: 'navigateLeft',
         data: { filePath }
       })
 
-      expect(editor.navigateLeft).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row,
+        column: cursorPosition.column - 1
+      })
     })
   })
 
   describe('#navigateRight', () => {
     it('should execute `navigateRight` action', () => {
-      const { editor } = createEditor()
+      const { editor, cursorPosition } = createEditor()
 
       postMessage({
         action: 'navigateRight',
         data: { filePath }
       })
 
-      expect(editor.navigateRight).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row,
+        column: cursorPosition.column + 1
+      })
     })
   })
 
   describe('#navigateUp', () => {
     it('should execute `navigateUp` action', () => {
-      const { editor } = createEditor()
+      const { editor, cursorPosition } = createEditor({ multiLine: true, moveToEnd: true })
 
       postMessage({
         action: 'navigateUp',
         data: { filePath }
       })
 
-      expect(editor.navigateUp).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row - 1,
+        column: cursorPosition.column
+      })
     })
   })
 
   describe('#navigateDown', () => {
     it('should execute `navigateDown` action', () => {
-      const { editor } = createEditor()
+      const { editor, cursorPosition } = createEditor({ multiLine: true })
 
       postMessage({
         action: 'navigateDown',
         data: { filePath }
       })
 
-      expect(editor.navigateDown).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row + 1,
+        column: cursorPosition.column
+      })
     })
   })
 
   describe('#navigateLineStart', () => {
     it('should execute `navigateLineStart` action', () => {
-      const { editor } = createEditor()
+      const { editor, cursorPosition } = createEditor({ moveToEnd: true })
 
       postMessage({
         action: 'navigateLineStart',
         data: { filePath }
       })
 
-      expect(editor.navigateLineStart).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row,
+        column: 0
+      })
     })
   })
 
   describe('#navigateLineEnd', () => {
     it('should execute `navigateLineEnd` action', () => {
-      const { editor } = createEditor()
+      const { editor, cursorPosition } = createEditor()
 
       postMessage({
         action: 'navigateLineEnd',
         data: { filePath }
       })
 
-      expect(editor.navigateLineEnd).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row,
+        column: content.length
+      })
     })
   })
 
   describe('#navigateFileStart', () => {
     it('should execute `navigateFileStart` action', () => {
-      const { editor } = createEditor()
+      const { editor } = createEditor({ multiLine: true, moveToEnd: true })
 
       postMessage({
         action: 'navigateFileStart',
         data: { filePath }
       })
 
-      expect(editor.navigateFileStart).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: 0,
+        column: 0
+      })
     })
   })
 
   describe('#navigateFileEnd', () => {
     it('should execute `navigateFileEnd` action', () => {
-      const { editor } = createEditor()
+      const { editor } = createEditor({ multiLine: true })
 
       postMessage({
         action: 'navigateFileEnd',
         data: { filePath }
       })
 
-      expect(editor.navigateFileEnd).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: content.split('\n').length - 1,
+        column: content.length
+      })
     })
   })
 
   describe('#keyDown', () => {
     it('should execute `keyDown` action', () => {
-      const { editor } = createEditor()
-      const keyCode = uuid()
+      const { editor, cursorPosition } = createEditor()
+      const keyCode = 39 // right arrow
 
       postMessage({
         action: 'keyDown',
         data: { filePath, keyCode }
       })
 
-      expect(editor.keyDown).toHaveBeenCalledTimes(1)
-      expect(editor.keyDown).toHaveBeenCalledWith(keyCode)
+      expect(editor._ace.getCursorPosition()).toEqual({
+        row: cursorPosition.row,
+        column: cursorPosition.column + 1
+      })
     })
   })
 
@@ -340,19 +384,18 @@ describe('editor API', () => {
       console.warn = jest.fn()
     })
     afterEach(() => {
-      document.body.innerHTML = ''
+      document.head.innerHTML = ''
     })
 
-    it('should execute `setPreferences` action', () => {
+    it('should set dark theme', () => {
       const { editor } = createEditor()
 
-      editor.setPreferences.mockReset()
       postMessage({
         action: 'setPreferences',
-        data: { filePath }
+        data: { filePath, isDarkTheme: true }
       })
 
-      expect(editor.setPreferences).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getTheme()).toEqual('ace/theme/twilight')
     })
 
     it('should save toolbar preferences to localStorage', () => {
@@ -368,7 +411,7 @@ describe('editor API', () => {
 
     it('should set theme colors', () => {
       registerApi({ editorFactory })
-      document.body.innerHTML = `
+      document.head.innerHTML += `
         <style id="theme-css">
           /* CSS Custom Properties are not supported in Sailfish */
           /* these values are replaceable via JS */
@@ -442,7 +485,7 @@ describe('editor API', () => {
         data: { filePath }
       })
 
-      expect(editor.toggleReadOnly).toHaveBeenCalledTimes(1)
+      expect(editor._ace.getReadOnly()).toEqual(true)
     })
 
     it('should not throw if filePath is incorrect', () => {
@@ -455,22 +498,19 @@ describe('editor API', () => {
       })
 
       expect(console.warn).toBeCalledWith(expect.any(NotFoundError))
-      expect(editor.toggleReadOnly).toHaveBeenCalledTimes(0)
+      expect(editor._ace.getReadOnly()).toEqual(false)
     })
   })
 
   describe('#getFileContent', () => {
-    it('should execute `getContent` action', () => {
-      const { editor } = createEditor('url')
-      const expectedValue = uuid()
-      editor.getContent.mockReturnValue(expectedValue)
-
+    it('should return file content', () => {
+      createEditor({ apiBackend: 'url' })
       const value = window.postSeabassApiMessage({
         action: 'getFileContent',
         data: { filePath }
       })
 
-      expect(value).toEqual(expectedValue)
+      expect(value).toEqual(content)
     })
   })
 
