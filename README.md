@@ -18,14 +18,13 @@ Currently supported platforms:
 ## Features
 Core features:
 * Syntax highlighting for over 120 programming/markup languages
-* Undo/Redo
-* Light and dark themes
 * Navigation buttons
+* Light and dark themes
 * Code autocompletion and snippets
 
 UBports:
-* Multiple tabs
-* Adaptive layout
+* Adaptive layout and multiple tabs
+* Ability to create new files
 
 ## Build instructions
 
