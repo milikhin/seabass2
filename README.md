@@ -57,15 +57,6 @@ There are a few labels used to indicate issue progress.
 * `help wanted`: in my opinion, the issue is worth fixing, but I'm not going to fix it myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
 * `wontfix`: in my opinion, the issue requires to much work out of the project's scope or too many workarounds for SDK issues. Pull requests are still welcome though. It might be worth discussing implementation beforehand if there going to be lots of changes.
 
-## Becoming a sponsor
-
-Seabass is a free software. You can support the development using [Liberapay](https://liberapay.com/mmmikhael/donate), [Patreon](https://www.patreon.com/mmmikhael) or [PayPal](https://paypal.me/mmmikhael/5). Donations helps to find time for resolving non-critical issues and implementing new features.
-
-The more supporters the project gets, the more development time it gets.
-And if it doesn't... Well there be updates and new features anyway! Just much less often.
-
-Issues that are scheduled to be fixed in the nearest releases has milestone label attached.
-
 ## Credits
 
 * Basic internationalization and German translation for ubports-seabass: [Danfro](https://github.com/Danfro) 
