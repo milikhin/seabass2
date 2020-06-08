@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-30 14:58+0000\n"
-"PO-Revision-Date: 2020-05-30 22:11+0700\n"
+"POT-Creation-Date: 2020-06-08 12:14+0000\n"
+"PO-Revision-Date: 2020-06-08 19:24+0700\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +19,7 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "Language: ru\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:173
+#: ../qml/About.qml:12 ../qml/Main.qml:204
 msgid "About"
 msgstr "О программе"
 
@@ -31,43 +31,75 @@ msgstr ""
 "Нажмите здесь, чтобы открыть сайт проекта. Там Вы найдете "
 "документацию, техническую поддержку и список участников проекта!"
 
-#: ../qml/Main.qml:26
+#: ../qml/Main.qml:27
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
-#: ../qml/Main.qml:53
+#: ../qml/Main.qml:61
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Ошибка чтения файла. Пожалуйста, убедитесь, что у Вас есть права на чтение "
 "из %1"
 
-#: ../qml/Main.qml:54
+#: ../qml/Main.qml:62
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Ошибка записи файла. Пожалуйста, убедитесь, что у Вас есть права на запись "
 "в %1"
 
-#: ../qml/Main.qml:165 ../qml/components/FileList.qml:25
+#: ../qml/Main.qml:196 ../qml/components/FileList.qml:26
 msgid "Files"
 msgstr "Файлы"
 
-#: ../qml/Main.qml:181 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:212 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr "Сохранить"
 
+#: ../qml/Main.qml:223
+msgid "Toggle keyboard extension"
+msgstr "Расширение виртуальной клавиатуры"
+
 #: ../qml/components/ErrorDialog.qml:7
 msgid "unknown error"
-msgstr "неизвестная ошибка"
+msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:19
 msgid "Error occured"
 msgstr "Ошибка"
 
-#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:31
-#: ../qml/components/FileList.qml:40 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:32
+#: ../qml/components/FileList.qml:41 ../qml/components/SaveDialog.qml:34
 msgid "Close"
 msgstr "Закрыть"
+
+#: ../qml/components/FileList.qml:46
+msgid "New file..."
+msgstr "Новый файл..."
+
+#: ../qml/components/KeyboardExtension.qml:33
+msgid "Tab"
+msgstr ""
+
+#: ../qml/components/KeyboardExtension.qml:37
+msgid "Esc"
+msgstr ""
+
+#: ../qml/components/NewFileDialog.qml:20
+msgid "Create new file"
+msgstr "Создать файл"
+
+#: ../qml/components/NewFileDialog.qml:25
+msgid "file.txt"
+msgstr ""
+
+#: ../qml/components/NewFileDialog.qml:35
+msgid "Create"
+msgstr "Создать"
+
+#: ../qml/components/NewFileDialog.qml:43 ../qml/components/SaveDialog.qml:42
+msgid "Cancel"
+msgstr "Отмена"
 
 #: ../qml/components/SaveDialog.qml:23
 msgid "Save changes in %1?"
@@ -77,10 +109,6 @@ msgstr "Сохранить изменения в %1?"
 msgid "Changes will be lost if you close the file without saving."
 msgstr "Изменения будут потеряны, если Вы закроете файл без сохранения."
 
-#: ../qml/components/SaveDialog.qml:42
-msgid "Cancel"
-msgstr "Отмена"
-
 #: seabass2.desktop.in.h:1
 msgid "Seabass2"
-msgstr "Seabass2"
+msgstr ""
