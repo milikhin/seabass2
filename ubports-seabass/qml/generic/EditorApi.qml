@@ -39,21 +39,24 @@ QtObject {
     function createFile(filePath, callback) {
       QmlJs.readFile(filePath, function(err, text) {
         if (!err) {
-          return postMessage('loadFile', {
+          postMessage('loadFile', {
             filePath: filePath,
             content: text
           })
+          return callback()
         }
 
         QmlJs.writeFile(filePath, '', function(err) {
           if (err) {
-            return errorOccured(writeErrorMsg.arg(filePath))
+            errorOccured(writeErrorMsg.arg(filePath))
+            return callback(err)
           }
 
-          return postMessage('loadFile', {
+          postMessage('loadFile', {
             filePath: filePath,
             content: ''
           })
+          return callback()
         })
       })
     }

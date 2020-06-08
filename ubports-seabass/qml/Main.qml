@@ -137,15 +137,23 @@ MainView {
             Layout.fillHeight: true
 
             onFileCreationInitialised: function(dirPath) {
+              const normalDirPath = QmlJs.getNormalPath(dirPath)
               function handler(fileName) {
                 newFileDialog.created.disconnect(handler)
 
-                const filePath = dirPath + '/' + fileName
+                const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
                 const existingTabIndex = filesModel.open(filePath)
                 if (existingTabIndex !== undefined) {
                   tabBar.currentIndex = existingTabIndex
                 } else {
-                  api.createFile(filePath)
+                  api.createFile(filePath, function(err) {
+                    if (err) {
+                      filesModel.remove(filesModel.count - 1, 1)
+                      if (!filesModel.count) {
+                        api.filePath = ''
+                      }
+                    }
+                  })
                 }
 
                 if (!isWide) {
@@ -153,7 +161,7 @@ MainView {
                 }
               }
               newFileDialog.created.connect(handler)
-              newFileDialog.show(dirPath)
+              newFileDialog.show(normalDirPath)
             }
             onFileSelected: function(filePath) {
               const existingTabIndex = filesModel.open(filePath)

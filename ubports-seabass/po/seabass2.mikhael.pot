@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 12:14+0000\n"
+"POT-Creation-Date: 2020-06-08 14:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:204
+#: ../qml/About.qml:12 ../qml/Main.qml:212
 msgid "About"
 msgstr ""
 
@@ -40,15 +40,15 @@ msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:196 ../qml/components/FileList.qml:26
+#: ../qml/Main.qml:204 ../qml/components/FileList.qml:26
 msgid "Files"
 msgstr ""
 
-#: ../qml/Main.qml:212 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:220 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr ""
 
-#: ../qml/Main.qml:223
+#: ../qml/Main.qml:231
 msgid "Toggle keyboard extension"
 msgstr ""
 
