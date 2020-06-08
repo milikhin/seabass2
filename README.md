@@ -56,3 +56,4 @@ There are a few labels used to indicate issue progress.
 ## Credits
 
 * Basic internationalization and German translation for ubports-seabass: [Danfro](https://github.com/Danfro) 
+* Testing harbour-seabass: [Pohli](https://github.com/Pohli)
