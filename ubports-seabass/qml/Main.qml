@@ -26,7 +26,7 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.2.0"
+  readonly property string version: "0.3.0"
 
   Settings {
     id: settings
@@ -99,6 +99,10 @@ MainView {
       id: errorDialog
     }
 
+    CustomComponents.NewFileDialog {
+      id: newFileDialog
+    }
+
     CustomComponents.SaveDialog {
       id: saveDialog
     }
@@ -132,12 +136,42 @@ MainView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            onFileCreationInitialised: function(dirPath) {
+              const normalDirPath = QmlJs.getNormalPath(dirPath)
+              newFileDialog.show(normalDirPath, function(fileName) {
+                const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
+                const existingTabIndex = filesModel.open(filePath)
+                if (existingTabIndex !== undefined) {
+                  tabBar.currentIndex = existingTabIndex
+                } else {
+                  api.createFile(filePath, function(err) {
+                    if (err) {
+                      filesModel.remove(filesModel.count - 1, 1)
+                      if (!filesModel.count) {
+                        api.filePath = ''
+                      }
+                    }
+                  })
+                }
+
+                if (!isWide) {
+                  navBar.visible = false
+                }
+              })
+            }
             onFileSelected: function(filePath) {
               const existingTabIndex = filesModel.open(filePath)
               if (existingTabIndex !== undefined) {
                 tabBar.currentIndex = existingTabIndex
               } else {
-                api.loadFile(filePath)
+                api.loadFile(filePath, false, function(err) {
+                  if (err) {
+                      filesModel.remove(filesModel.count - 1, 1)
+                      if (!filesModel.count) {
+                        api.filePath = ''
+                      }
+                    }
+                })
               }
 
               if (!isWide) {

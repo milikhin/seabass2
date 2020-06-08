@@ -4,12 +4,21 @@ function getDefaultFilePath() {
     return Qt.application.arguments[2] || ''
 }
 
+function getNormalPath(filePath) {
+  var normalizedPath = filePath[filePath.length - 1] === '/'
+    ? filePath.slice(0, -1)
+    : filePath
+
+  return normalizedPath.replace('file://', '')
+}
+
 function getShortDirName(filePath, homeUrl) {
-  var dirName = filePath
+  var dirPath = getNormalPath(filePath)
+  var dirName = dirPath
     .split('/')
     .slice(0, -1)
     .join('/') + '/'
-  var homeDir = homeUrl.toString().replace('file://', '')
+  var homeDir = getNormalPath(homeUrl.toString())
 
   if (dirName.indexOf(homeDir) === 0) {
     return dirName.replace(homeDir, '~')
