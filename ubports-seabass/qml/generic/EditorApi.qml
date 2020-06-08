@@ -36,6 +36,28 @@ QtObject {
         textColorChanged.connect(loadTheme)
     }
 
+    function createFile(filePath, callback) {
+      QmlJs.readFile(filePath, function(err, text) {
+        if (!err) {
+          return postMessage('loadFile', {
+            filePath: filePath,
+            content: text
+          })
+        }
+
+        QmlJs.writeFile(filePath, '', function(err) {
+          if (err) {
+            return errorOccured(writeErrorMsg.arg(filePath))
+          }
+
+          return postMessage('loadFile', {
+            filePath: filePath,
+            content: ''
+          })
+        })
+      })
+    }
+
     function openFile(filePath) {
       api.filePath  = filePath
       postMessage('openFile', {

@@ -17,6 +17,7 @@ ListView {
   readonly property string textColor: theme.palette.normal.backgroundText
 
   signal closed()
+  signal fileCreationInitialised(string dirPath)
   signal fileSelected(string filePath)
 
   ScrollBar.vertical: ScrollBar {}
@@ -39,6 +40,11 @@ ListView {
           iconName: "close"
           text: i18n.tr("Close")
           onTriggered: closed()
+        },
+        Action {
+          iconName: "add"
+          text: i18n.tr("New file...")
+          onTriggered: fileCreationInitialised(folderModel.folder.toString().replace('file://', ''))
         }
       ]
     }
