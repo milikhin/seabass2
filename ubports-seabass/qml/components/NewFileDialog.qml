@@ -5,10 +5,11 @@ import "../generic/utils.js" as QmlJs
 
 Item {
   property string dirPath
-  signal created(string fileName)
+  property var onSubmit: function() {}
 
-  function show(path) {
+  function show(path, handler) {
     dirPath = path
+    onSubmit = handler
     PopupUtils.open(dialog)
   }
 
@@ -27,7 +28,7 @@ Item {
         // Enter key
         Keys.onReturnPressed: {
           PopupUtils.close(dialogue)
-          created(fileName.text)
+          onSubmit(fileName.text)
         }
       }
       Button {
@@ -36,7 +37,7 @@ Item {
         color: theme.palette.normal.positive
         onClicked: {
           PopupUtils.close(dialogue)
-          created(fileName.text)
+          onSubmit(fileName.text)
         }
       }
       Button {

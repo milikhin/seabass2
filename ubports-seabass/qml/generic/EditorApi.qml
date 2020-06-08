@@ -79,13 +79,15 @@ QtObject {
      * Opens file at `filePath` in the editor
      * @returns {undefined}
      */
-    function loadFile(filePath, forceReadOnly) {
+    function loadFile(filePath, forceReadOnly, callback) {
       api.filePath  = filePath
       api.forceReadOnly = forceReadOnly || false
+      callback = callback || function() {}
       QmlJs.readFile(filePath, function(err, text) {
         if (err) {
           console.error(err)
-          return errorOccured(readErrorMsg.arg(filePath))
+          errorOccured(readErrorMsg.arg(filePath))
+          return callback(err)
         }
 
         postMessage('loadFile', {
@@ -93,6 +95,7 @@ QtObject {
           content: text,
           readOnly: forceReadOnly
         })
+        callback()
       })
     }
 
