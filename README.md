@@ -47,10 +47,7 @@ Build steps:
 
 ## Contribution
 
-Like the Seabass? Would like to see new features implemented?
-Awesome! There are numerous ways you can support the development.
-
-First of all, your reviews, bug reports and feature requests are very appreciated!
+Your reviews, bug reports and feature requests are very appreciated!
 As so pull requests :-). Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. [Unit tests](https://github.com/milikhin/seabass2/tree/master/editor/__tests__) might also be useful.
 
 There are a few labels used to indicate issue progress.
