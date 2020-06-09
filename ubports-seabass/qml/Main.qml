@@ -198,7 +198,7 @@ MainView {
           PageHeader {
             id: header
             title: api.filePath ? QmlJs.getFileNameByPath(api.filePath) : defaultTitle
-            subtitle: api.filePath ? QmlJs.getShortDirName(api.filePath, api.homeDir): defaultSubTitle
+            subtitle: api.filePath ? QmlJs.getShortDirName(api.filePath, api.homeDir, true): defaultSubTitle
             Layout.fillWidth: true
 
             navigationActions: [
