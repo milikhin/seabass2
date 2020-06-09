@@ -12,7 +12,7 @@ Currently supported platforms:
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
-![Seabass on UBports](http://milikhin.name/img/seabass/seabass-desktop-03.png)
+![Seabass on UBports](http://milikhin.name/img/seabass/seabass-desktop-02.png)
 
 ## Features
 Core features:
