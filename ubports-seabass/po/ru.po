@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-08 12:14+0000\n"
-"PO-Revision-Date: 2020-06-08 19:24+0700\n"
+"POT-Creation-Date: 2020-06-09 08:35+0000\n"
+"PO-Revision-Date: 2020-06-09 15:39+0700\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,17 +19,22 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "Language: ru\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:204
+#: ../qml/About.qml:12 ../qml/Main.qml:216
 msgid "About"
 msgstr "О программе"
 
-#: ../qml/About.qml:30
+#: ../qml/About.qml:19
+msgid "Feed the Seabass!"
+msgstr "Покормить Сибаса!"
+
+#: ../qml/About.qml:40
 msgid ""
-"Click here to open project page and find docs, support and list of "
-"contributors!"
+"Click here to open project page and find docs, support, donation options and "
+"list of contributors!"
 msgstr ""
 "Нажмите здесь, чтобы открыть сайт проекта. Там Вы найдете "
-"документацию, техническую поддержку и список участников проекта!"
+"документацию, техническую поддержку, способы пожертвований и список "
+"участников проекта!"
 
 #: ../qml/Main.qml:27
 msgid "Welcome"
@@ -45,35 +50,35 @@ msgstr ""
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
-"Ошибка записи файла. Пожалуйста, убедитесь, что у Вас есть права на запись "
-"в %1"
+"Ошибка записи файла. Пожалуйста, убедитесь, что у Вас есть права на запись в "
+"%1"
 
-#: ../qml/Main.qml:196 ../qml/components/FileList.qml:26
+#: ../qml/Main.qml:208 ../qml/components/FileList.qml:27
 msgid "Files"
 msgstr "Файлы"
 
-#: ../qml/Main.qml:212 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:224 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../qml/Main.qml:223
+#: ../qml/Main.qml:235
 msgid "Toggle keyboard extension"
-msgstr "Расширение виртуальной клавиатуры"
+msgstr "Расширение для виртуальной клавиатуры"
 
 #: ../qml/components/ErrorDialog.qml:7
 msgid "unknown error"
-msgstr ""
+msgstr "неизвестная ошибка"
 
 #: ../qml/components/ErrorDialog.qml:19
 msgid "Error occured"
 msgstr "Ошибка"
 
-#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:32
-#: ../qml/components/FileList.qml:41 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:33
+#: ../qml/components/FileList.qml:42 ../qml/components/SaveDialog.qml:34
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../qml/components/FileList.qml:46
+#: ../qml/components/FileList.qml:47
 msgid "New file..."
 msgstr "Новый файл..."
 
@@ -85,19 +90,19 @@ msgstr ""
 msgid "Esc"
 msgstr ""
 
-#: ../qml/components/NewFileDialog.qml:20
+#: ../qml/components/NewFileDialog.qml:22
 msgid "Create new file"
 msgstr "Создать файл"
 
-#: ../qml/components/NewFileDialog.qml:25
+#: ../qml/components/NewFileDialog.qml:27
 msgid "file.txt"
 msgstr ""
 
-#: ../qml/components/NewFileDialog.qml:35
+#: ../qml/components/NewFileDialog.qml:37
 msgid "Create"
 msgstr "Создать"
 
-#: ../qml/components/NewFileDialog.qml:43 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
 msgid "Cancel"
 msgstr "Отмена"
 

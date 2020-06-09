@@ -73,7 +73,7 @@ ListView {
 
       Icon {
         height: parent.height
-        name: fileIsDir ? 'folder-symbolic' : 'stock_document'
+        name: fileIsDir ? 'folder-symbolic' : getIcon(fileName)
         color: textColor
       }
       Label {
@@ -107,6 +107,21 @@ ListView {
     }
     function getShortDirPath() {
       return QmlJs.getShortDirName(folder.toString(), homeDir)
+    }
+  }
+
+  function getIcon(fileName) {
+    var match = fileName.match(/\.([A-Za-z]+)$/)
+    var ext = match && match[1]
+    switch(ext) {
+      case 'html':
+        return 'text-html-symbolic'
+      case 'css':
+        return 'text-css-symbolic'
+      case 'xml':
+        return 'text-xml-symbolic'
+      default:
+        return 'text-x-generic-symbolic'
     }
   }
 }
