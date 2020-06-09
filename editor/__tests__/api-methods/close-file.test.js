@@ -29,7 +29,7 @@ describe('#closeFile', () => {
   })
 
   it('should detach completer', async () => {
-    const { api, editor } = createEditor()
+    const { editor } = createEditor()
     editor._ace.setValue('sentense with spaces ')
     editor._ace.execCommand('startAutocomplete')
     const autocompleteWindow = document.querySelector('.ace_autocomplete')

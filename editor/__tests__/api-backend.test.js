@@ -1,4 +1,4 @@
-/* globals describe,expect,jest,it,beforeEach,localStorage */
+/* globals describe, expect, it, localStorage */
 
 import registerApi from '../src/api'
 import { InvalidArgError } from '../src/errors'

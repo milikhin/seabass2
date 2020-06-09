@@ -1,4 +1,4 @@
-/* globals describe, expect, it, beforeEach */
+/* globals describe, expect, it */
 import { v4 as uuid } from 'uuid'
 import { postMessage, initDom } from '../helpers'
 import registerApi from '../../src/api'
