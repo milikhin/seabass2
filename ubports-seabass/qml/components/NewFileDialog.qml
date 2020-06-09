@@ -5,10 +5,11 @@ import "../generic/utils.js" as QmlJs
 
 Item {
   property string dirPath
+  property string homeDir: ''
   property var onSubmit: function() {}
 
   function show(path, handler) {
-    dirPath = path
+    dirPath = QmlJs.getShortDirName(path, homeDir)
     onSubmit = handler
     PopupUtils.open(dialog)
   }
@@ -19,7 +20,7 @@ Item {
     Dialog {
       id: dialogue
       title: i18n.tr("Create new file")
-      text: dirPath + '/'
+      text: dirPath
       TextField {
         id: fileName
         focus: true

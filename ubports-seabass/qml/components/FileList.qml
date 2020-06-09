@@ -1,10 +1,12 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
-import QtQuick.Layouts 1.3
-import Ubuntu.Components.Themes 1.3
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
+
+import Ubuntu.Components 1.3
+import Ubuntu.Components.Themes 1.3
 
 import Qt.labs.folderlistmodel 2.1
+import "../generic/utils.js" as QmlJs
 
 ListView {
   id: root
@@ -20,11 +22,10 @@ ListView {
   signal fileCreationInitialised(string dirPath)
   signal fileSelected(string filePath)
 
-  ScrollBar.vertical: ScrollBar {}
-
+  model: folderModel
   header: PageHeader {
     title: i18n.tr("Files")
-    subtitle: folderModel.folder.toString().replace('file://', '')
+    subtitle: folderModel.getShortDirPath()
     navigationActions:[
       Action {
         visible: isPage
@@ -44,49 +45,43 @@ ListView {
         Action {
           iconName: "add"
           text: i18n.tr("New file...")
-          onTriggered: fileCreationInitialised(folderModel.folder.toString().replace('file://', ''))
+          onTriggered: fileCreationInitialised(folderModel.getDirPath())
         }
       ]
     }
   }
-  model: folderModel
   delegate: ListItem {
     visible: isVisible()
     height: isVisible() ? rowHeight : 0
     color: backgroundColor
 
-    MouseArea {
-      anchors.fill: parent
-      cursorShape: Qt.PointingHandCursor
-      hoverEnabled: false
-      onClicked: {
-        if (fileIsDir) {
-          return folderModel.folder = filePath
-        }
-
-        fileSelected(filePath)
+    onClicked: {
+      if (fileIsDir) {
+        return folderModel.folder = filePath
       }
 
-      RowLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: units.gu(2)
-        anchors.rightMargin: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: units.gu(1)
+      fileSelected(filePath)
+    }
 
-        Icon {
-          height: parent.height
-          name: fileIsDir ? 'folder-symbolic' : 'stock_document'
-          color: textColor
-        }
-        Label {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-          elide: Text.ElideRight
-          text: fileName
-          color: textColor
-        }
+    RowLayout {
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.leftMargin: units.gu(2)
+      anchors.rightMargin: units.gu(2)
+      anchors.verticalCenter: parent.verticalCenter
+      spacing: units.gu(1)
+
+      Icon {
+        height: parent.height
+        name: fileIsDir ? 'folder-symbolic' : 'stock_document'
+        color: textColor
+      }
+      Label {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        elide: Text.ElideRight
+        text: fileName
+        color: textColor
       }
     }
 
@@ -94,6 +89,8 @@ ListView {
       return fileName !== '.'
     }
   }
+
+  ScrollBar.vertical: ScrollBar {}
 
   FolderListModel {
     id: folderModel
@@ -104,5 +101,12 @@ ListView {
     showDotAndDotDot: true
     showHidden: true
     showOnlyReadable: true
+
+    function getDirPath() {
+      return folder.toString().replace('file://', '')
+    }
+    function getShortDirPath() {
+      return QmlJs.getShortDirName(folder.toString(), homeDir)
+    }
   }
 }
