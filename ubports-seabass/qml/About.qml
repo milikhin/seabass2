@@ -11,6 +11,16 @@ Page {
   header: PageHeader {
     title: i18n.tr("About")
     subtitle: "Seabass v%1".arg(version)
+
+    trailingActionBar {
+      actions: [
+        Action {
+          iconName: "like"
+          text: i18n.tr("Feed the Seabass!")
+          onTriggered: Qt.openUrlExternally("https://github.com/milikhin/seabass2")
+        }
+      ]
+    }
   }
 
   ColumnLayout {
@@ -27,7 +37,7 @@ Page {
         {
           title: 'Seabass2',
           subtitle: 'Copyright (c) 2020, Mikhael Milikhin, MIT license',
-          text: i18n.tr('Click here to open project page and find docs, support and list of contributors!'),
+          text: i18n.tr('Click here to open project page and find docs, support, donation options and list of contributors!'),
           url: 'https://github.com/milikhin/seabass2'
         },
         {

@@ -3,8 +3,8 @@ import registerApi from '../../src/api'
 import editorFactory from '../../src/editor-factory'
 
 export const initDom = () => {
-  const welcomeElem = document.createElement('div')
-  const rootElem = document.createElement('div')
+  const welcomeElem = document.getElementById('welcome')
+  const rootElem = document.getElementById('root')
 
   return { welcomeElem, rootElem }
 }

@@ -1,19 +1,10 @@
-/* globals describe,expect,jest,it,beforeEach,localStorage */
+/* globals describe, expect, it, localStorage */
 
 import registerApi from '../src/api'
 import { InvalidArgError } from '../src/errors'
 import editorFactory from './helpers/mocks/editor-factory'
 
 describe('#registerApi', () => {
-  beforeEach(() => {
-    navigator.qt = {
-      postMessage: jest.fn()
-    }
-
-    delete window.location
-    window.location = { assign: jest.fn() }
-  })
-
   it('should throw when `editorFactory` is undefined', () => {
     // sut = system under test
     const sutCall = () => registerApi()

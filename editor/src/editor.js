@@ -5,7 +5,7 @@ import 'ace-builds/src-noconflict/theme-twilight'
 import 'ace-builds/src-noconflict/theme-chrome'
 
 import modelist from 'ace-builds/src-noconflict/ext-modelist'
-import beautify from 'ace-builds/src-noconflict/ext-beautify'
+// import beautify from 'ace-builds/src-noconflict/ext-beautify'
 import 'ace-builds/src-noconflict/ext-language_tools'
 
 import md5 from 'blueimp-md5'
@@ -33,8 +33,10 @@ export default class Editor {
     })
     this._initialContentHash = undefined
     this._onChangeTimer = undefined
+    this._onChangeTimeout = 250
     this._changeListeners = []
     this._lastScrollTop = 0
+    this._isSailfish = false
 
     window.addEventListener('resize', this._onResize)
     if (isSailfish) {
@@ -42,9 +44,9 @@ export default class Editor {
     }
   }
 
-  beautify () {
-    beautify.beautify(this._ace.session)
-  }
+  // beautify () {
+  //   beautify.beautify(this._ace.session)
+  // }
 
   destroy () {
     this._ace.destroy()
@@ -154,10 +156,7 @@ export default class Editor {
   }
 
   onChange (callback) {
-    if (this._changeListeners.indexOf(callback) !== -1) {
-      return
-    }
-    this._changeListeners.push(callback)
+    this._changeListeners = [callback]
   }
 
   setPreferences ({ isDarkTheme }) {
@@ -174,6 +173,7 @@ export default class Editor {
 
   _applyPlatformHaks () {
     // debounce scrollTop workaround too prevent tearing when scroll is animated
+    this._isSailfish = true
     this._scrollDebounced = false
     this._ace.getSession().on('changeScrollTop', scrollTop => {
       if (this._scrollDebounced) {
@@ -200,7 +200,6 @@ export default class Editor {
       const undoManager = this._ace.getSession().getUndoManager()
       const value = this._ace.getSession().getValue()
       const data = {
-        value,
         hasChanges: this._initialContentHash !== md5(value),
         hasUndo: undoManager.hasUndo(),
         hasRedo: undoManager.hasRedo(),
@@ -208,7 +207,7 @@ export default class Editor {
       }
 
       this._changeListeners.forEach(listener => listener(data))
-    }, this._autosaveTimeout)
+    }, this._onChangeTimeout)
   }
 
   _onResize = () => {

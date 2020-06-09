@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "(cd editor/; standard --parser=babel-eslint)",
     "test": "jest --config=./editor/jest.config.js",
-    "test-watch": "jest --config=./editor/jest.config.js --watch",
+    "test-watch": "jest --watch --config=./editor/jest.config.js",
     "build": "./node_modules/.bin/webpack",
     "build-watch": "./node_modules/.bin/webpack --watch"
   },

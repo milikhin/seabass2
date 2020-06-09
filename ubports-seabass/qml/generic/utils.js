@@ -12,19 +12,16 @@ function getNormalPath(filePath) {
   return normalizedPath.replace('file://', '')
 }
 
-function getShortDirName(filePath, homeUrl) {
-  var dirPath = getNormalPath(filePath)
-  var dirName = dirPath
-    .split('/')
-    .slice(0, -1)
-    .join('/') + '/'
+function getShortDirName(fileOrDirPath, homeUrl, isFile) {
+  var dirPath = isFile
+    ? getNormalPath(fileOrDirPath).split('/').slice(0, -1).join('/')
+    : getNormalPath(fileOrDirPath)
   var homeDir = getNormalPath(homeUrl.toString())
-
-  if (dirName.indexOf(homeDir) === 0) {
-    return dirName.replace(homeDir, '~')
+  if (dirPath.indexOf(homeDir) === 0) {
+    return dirPath.replace(homeDir, '~') + '/'
   }
 
-  return dirName
+  return dirPath + '/'
 }
 
 /**
