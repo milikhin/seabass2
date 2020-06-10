@@ -9,7 +9,7 @@ Item {
   property var onSubmit: function() {}
 
   function show(path, handler) {
-    dirPath = QmlJs.getShortDirName(path, homeDir)
+    dirPath = QmlJs.getPrintableDirPath(path, homeDir)
     onSubmit = handler
     PopupUtils.open(dialog)
   }

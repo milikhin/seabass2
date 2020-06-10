@@ -25,7 +25,7 @@ ListView {
   model: folderModel
   header: PageHeader {
     title: i18n.tr("Files")
-    subtitle: folderModel.getShortDirPath()
+    subtitle: folderModel.getPrintableDirPath()
     navigationActions:[
       Action {
         visible: isPage
@@ -105,8 +105,8 @@ ListView {
     function getDirPath() {
       return folder.toString().replace('file://', '')
     }
-    function getShortDirPath() {
-      return QmlJs.getShortDirName(folder.toString(), homeDir)
+    function getPrintableDirPath() {
+      return QmlJs.getPrintableDirPath(folder.toString(), homeDir)
     }
   }
 

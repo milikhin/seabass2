@@ -1,38 +1,61 @@
 .pragma library
 
 function getDefaultFilePath() {
-    return Qt.application.arguments[2] || ''
+  return Qt.application.arguments[2] || ''
 }
 
-function getNormalPath(filePath) {
-  return filePath[filePath.length - 1] === '/'
-    ? filePath.slice(0, -1)
-    : filePath
-}
-
-function getShortDirName(filePath, homeUrl) {
-  var dirPath = getNormalPath(filePath)
-  var dirName = dirPath
-    .split('/')
-    .slice(0, -1)
-    .join('/') + '/'
-  var homeDir = homeUrl.toString().replace('file://', '')
-
-  if (dirName.indexOf(homeDir) === 0) {
-    return dirName.replace(homeDir, '~')
-  }
-
-  return dirName
+/**
+ * Returns directory path for the given file path
+ * @param {string} filePath - /path/to/file OR file:///path/to/file
+ * @returns {string} - directory path
+ */
+function getDirPath(filePath) {
+  return getNormalPath(filePath).split('/').slice(0, -1).join('/')
 }
 
 /**
   * Extracts file name from a given path
   * @returns {string} - file name
   */
-function getFileNameByPath(filePath) {
-    return filePath.split('/').slice(-1)[0]
+ function getFileName(filePath) {
+  return filePath.split('/').slice(-1)[0]
 }
 
+/**
+ * Returns path without trailing '/' and leading 'file://'
+ * @param {string} path - /path/to/file
+ * @returns {string} - normalized path
+ */
+function getNormalPath(path) {
+  var normalizedPath = path[path.length - 1] === '/'
+    ? path.slice(0, -1)
+    : path
+
+  return normalizedPath.replace(/^file:\/\//, '')
+}
+
+/**
+ * Returns shortened version of dir path: with '~/' instead of home directory
+ * @param {string} dirPath - /path/to/file OR file:///path/to/file
+ * @param {string} homeDir - /home/<user>
+ * @returns {string} - short dir path with trailing '/'
+ */
+function getPrintableDirPath(dirPath, homeDir) {
+  var normalizedDir = getNormalPath(dirPath)
+  var normalizedHome = getNormalPath(homeDir)
+  if (normalizedDir.indexOf(normalizedHome) === 0) {
+    return normalizedDir.replace(normalizedHome, '~') + '/'
+  }
+
+  return normalizedDir + '/'
+}
+
+/**
+ * 
+ * @param {string} color1 - hex color
+ * @param {string} color2 - hex color
+ * @returns {boolean} - true if color1 is darker than color2, false otherwise 
+ */
 function isDarker(color1, color2) {
   return __getColorDarkness(color1.toString()) < __getColorDarkness(color2.toString())
 
@@ -64,7 +87,7 @@ function readFile(filePath, callback) {
         }
         if (request.readyState === XMLHttpRequest.DONE) {
             if (!sentSuccessfully) {
-                return callback(new Error('Error writing file'))
+                return callback(new Error('Error reading file'))
             }
 
             return callback(null, request.responseText)
