@@ -12,8 +12,7 @@ Currently supported platforms:
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
-![Seabass on Sailfish X #1](http://milikhin.name/img/seabass/seabass-xperia-u01.png)
-![Seabass on Sailfish X #2](http://milikhin.name/img/seabass/seabass-xperia-02.png)
+![Seabass on UBports](https://milikhin.name/img/seabass/seabass-desktop-03.png)
 
 ## Features
 Core features:
@@ -59,5 +58,5 @@ There are a few labels used to indicate issue progress.
 
 ## Credits
 
-* Basic internationalization and German translation for ubports-seabass: [Danfro](https://github.com/Danfro) 
-* Testing harbour-seabass: [Pohli](https://github.com/Pohli)
+* [Danfro](https://github.com/Danfro): basic internationalization and German translation for ubports-seabass
+* [Pohli](https://github.com/Pohli): testing harbour-seabass
