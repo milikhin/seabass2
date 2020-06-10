@@ -19,7 +19,7 @@ ListModel {
 
     append({
       id: filePath,
-      name: QmlJs.getFileNameByPath(filePath),
+      name: QmlJs.getFileName(filePath),
       hasChanges: false,
 
       filePath: filePath

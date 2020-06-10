@@ -10,14 +10,14 @@ ApplicationWindow
     id: root
     property string defaultFilePath: QmlJs.getDefaultFilePath()
     property string coverTitle: defaultFilePath
-        ? QmlJs.getFileNameByPath(defaultFilePath)
+        ? QmlJs.getFileName(defaultFilePath)
         : qsTr('Welcome')
 
     initialPage: Component {
         Editor {
             seabassFilePath: defaultFilePath
             onSeabassFilePathChanged: {
-                root.coverTitle = QmlJs.getFileNameByPath(seabassFilePath)
+                root.coverTitle = QmlJs.getFileName(seabassFilePath)
             }
         }
     }

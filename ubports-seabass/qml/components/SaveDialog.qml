@@ -9,7 +9,7 @@ Item {
   property var onDismissed: function() {}
 
   function show(filePath, callbacks) {
-    fileName = QmlJs.getFileNameByPath(filePath)
+    fileName = QmlJs.getFileName(filePath)
     onSaved = callbacks.onSaved
     onDismissed = callbacks.onDismissed
     PopupUtils.open(dialog)

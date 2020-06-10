@@ -42,6 +42,11 @@ Build steps:
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK
    * UBports: build `ubports-seabass` using clickable
 
+Running tests:
+
+1. Editor: `npm test`
+1. UBports: `clickable test` (inside `ubports-seabass` directory)
+
 ## Contribution
 
 Your reviews, bug reports and feature requests are very appreciated!
