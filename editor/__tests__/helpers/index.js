@@ -1,3 +1,5 @@
+/* globals expect */
+
 import { v4 as uuid } from 'uuid'
 import registerApi from '../../src/api'
 import editorFactory from '../../src/editor-factory'
@@ -40,4 +42,19 @@ export const createEditor = (options = {}) => {
     filePath,
     cursorPosition: editor._ace.getCursorPosition()
   }
+}
+
+export const testFilePathRequired = actionName => {
+  createEditor()
+  postMessage({
+    action: actionName,
+    data: {}
+  })
+
+  // Expect error message to be posted
+  expect(navigator.qt.postMessage).toHaveBeenCalledTimes(1)
+
+  // Check for 'error' action
+  const [errorMessage] = navigator.qt.postMessage.mock.calls[0]
+  expect(JSON.parse(errorMessage).action).toEqual('error')
 }
