@@ -7,6 +7,9 @@ import Ubuntu.Components.Themes 1.3
 
 import Qt.labs.folderlistmodel 2.1
 import "../generic/utils.js" as QmlJs
+import "./files" as FilesComponents
+
+import io.thp.pyotherside 1.4
 
 ListView {
   id: root
@@ -23,32 +26,11 @@ ListView {
   signal fileSelected(string filePath)
 
   model: folderModel
-  header: PageHeader {
+  header: FilesComponents.Header {
     title: i18n.tr("Files")
     subtitle: folderModel.getPrintableDirPath()
-    navigationActions:[
-      Action {
-        visible: isPage
-        iconName: "back"
-        text: i18n.tr("Close")
-        onTriggered: closed()
-      }
-    ]
-    trailingActionBar {
-      actions: [
-        Action {
-          visible: !isPage
-          iconName: "close"
-          text: i18n.tr("Close")
-          onTriggered: closed()
-        },
-        Action {
-          iconName: "add"
-          text: i18n.tr("New file...")
-          onTriggered: fileCreationInitialised(folderModel.getDirPath())
-        }
-      ]
-    }
+    onClosed: root.closed()
+    onFileCreationInitialised: root.fileCreationInitialised(folderModel.getDirPath())
   }
   delegate: ListItem {
     visible: isVisible()
@@ -107,6 +89,19 @@ ListView {
     }
     function getPrintableDirPath() {
       return QmlJs.getPrintableDirPath(folder.toString(), homeDir)
+    }
+  }
+  
+  Python {
+    id: py
+    Component.onCompleted: {
+      // Print version of plugin and Python interpreter
+      console.log('PyOtherSide version: ' + pluginVersion());
+      console.log('Python version: ' + pythonVersion());
+      
+      addImportPath(Qt.resolvedUrl('.'));
+      // importModule('applogic', function() {});
+      console.log('after importModule');
     }
   }
 
