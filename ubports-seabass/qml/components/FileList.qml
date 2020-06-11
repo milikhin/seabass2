@@ -133,7 +133,7 @@ ListView {
         ready = true
       });
     }
-    
+
     function listDir(path, callback) {
       py.call('fs_model.list_dir', [path], callback);
     }

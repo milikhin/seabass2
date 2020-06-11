@@ -12,3 +12,4 @@ ubports-seabass/.clickable
 *.qmlc
 ubports-seabass/tests/data/test_write.txt
 build_ubports/
+coverage/
