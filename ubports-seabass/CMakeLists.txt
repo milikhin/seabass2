@@ -40,10 +40,11 @@ endif()
 configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest.json DESTINATION ${CMAKE_INSTALL_PREFIX})
 install(FILES ${PROJECT_NAME}.apparmor DESTINATION ${DATA_DIR})
-install(DIRECTORY qml DESTINATION ${DATA_DIR})
+install(DIRECTORY qml DESTINATION ${DATA_DIR} PATTERN qml/generic EXCLUDE)
 install(DIRECTORY assets DESTINATION ${DATA_DIR})
 install(DIRECTORY html DESTINATION ${DATA_DIR})
 install(DIRECTORY ../generic/qml/ DESTINATION qml/generic)
+install(DIRECTORY ../generic/py-backend/ DESTINATION py-backend)
 
 # Translations
 file(GLOB_RECURSE I18N_SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/po qml/*.qml qml/*.js)
