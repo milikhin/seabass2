@@ -17,6 +17,7 @@ CONFIG += sailfishapp_qml
 DISTFILES += qml/harbour-seabass.qml \
     qml/components/Toolbar.qml \
     qml/generic/EditorApi.qml \
+    qml/generic/FilesModel.qml \
     qml/generic/utils.js \
     qml/html/dist \
     qml/cover/CoverPage.qml \
@@ -30,6 +31,10 @@ DISTFILES += qml/harbour-seabass.qml \
     rpm/harbour-seabass.yaml \
     translations/*.ts \
     harbour-seabass.desktop
+
+generic_qml.files = ../generic/qml
+generic_qml.path = qml/generic
+DISTFILES += generic_qml
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 

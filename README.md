@@ -40,12 +40,12 @@ Build steps:
    1. Build editor engine and copy required files to Sailfish/UBports app directory: `npm run build`
 1. Build App  
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK
-   * UBports: build `ubports-seabass` using clickable
+   * UBports: run `clickable`
 
 Running tests:
 
 1. Editor: `npm test`
-1. UBports: `clickable test` (inside `ubports-seabass` directory)
+1. UBports: `clickable test`
 
 ## Contribution
 

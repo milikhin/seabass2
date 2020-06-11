@@ -5,8 +5,10 @@ import QtQuick.Layouts 1.3
 import Ubuntu.Components 1.3
 import Ubuntu.Components.Themes 1.3
 
-import Qt.labs.folderlistmodel 2.1
 import "../generic/utils.js" as QmlJs
+import "./files" as FilesComponents
+
+import io.thp.pyotherside 1.4
 
 ListView {
   id: root
@@ -23,44 +25,22 @@ ListView {
   signal fileSelected(string filePath)
 
   model: folderModel
-  header: PageHeader {
+  header: FilesComponents.Header {
     title: i18n.tr("Files")
     subtitle: folderModel.getPrintableDirPath()
-    navigationActions:[
-      Action {
-        visible: isPage
-        iconName: "back"
-        text: i18n.tr("Close")
-        onTriggered: closed()
-      }
-    ]
-    trailingActionBar {
-      actions: [
-        Action {
-          visible: !isPage
-          iconName: "close"
-          text: i18n.tr("Close")
-          onTriggered: closed()
-        },
-        Action {
-          iconName: "add"
-          text: i18n.tr("New file...")
-          onTriggered: fileCreationInitialised(folderModel.getDirPath())
-        }
-      ]
-    }
+    onClosed: root.closed()
+    onFileCreationInitialised: root.fileCreationInitialised(folderModel.getDirPath())
   }
   delegate: ListItem {
-    visible: isVisible()
-    height: isVisible() ? rowHeight : 0
+    height: rowHeight
     color: backgroundColor
 
     onClicked: {
-      if (fileIsDir) {
-        return folderModel.folder = filePath
+      if (model.isFile) {
+        return fileSelected(model.path)
       }
 
-      fileSelected(filePath)
+      folderModel.folder = model.path
     }
 
     RowLayout {
@@ -73,40 +53,89 @@ ListView {
 
       Icon {
         height: parent.height
-        name: fileIsDir ? 'folder-symbolic' : getIcon(fileName)
+        name: model.isFile ? getIcon(model.name) : 'folder-symbolic'
         color: textColor
       }
       Label {
         Layout.fillWidth: true
         Layout.fillHeight: true
         elide: Text.ElideRight
-        text: fileName
+        text: model.name
         color: textColor
       }
-    }
-
-    function isVisible() {
-      return fileName !== '.'
     }
   }
 
   ScrollBar.vertical: ScrollBar {}
 
-  FolderListModel {
+  ListModel {
     id: folderModel
-    rootFolder: homeDir
-    folder: homeDir
+    property string rootFolder: QmlJs.getNormalPath(homeDir)
+    property string folder: rootFolder
 
-    showDirsFirst: true
-    showDotAndDotDot: true
-    showHidden: true
-    showOnlyReadable: true
+    onFolderChanged: load()
+    Component.onCompleted: {
+      py.readyChanged.connect(function() {
+        folderModel.load()
+      })
+    }
 
+    function _abSort(a, b) {
+      if (!a.isFile && b.isFile) { return -1 }
+      if (a.isFile && !b.isFile) { return 1 }
+
+      var aName = a.name.toLowerCase()
+      var bName = b.name.toLowerCase()
+      if (aName < bName) { return -1 }
+      if (aName > bName) { return 1 }
+      return 0
+    }
     function getDirPath() {
       return folder.toString().replace('file://', '')
     }
     function getPrintableDirPath() {
       return QmlJs.getPrintableDirPath(folder.toString(), homeDir)
+    }
+    function load() {
+      if (!py.ready) {
+        return
+      }
+
+      clear()
+      py.listDir(folder, function(entries) {
+        console.log(folder, rootFolder)
+        if (folder !== rootFolder) {
+          append({
+            name: '..',
+            path: folder.split('/').slice(0, -1).join('/'),
+            isFile: false
+          })
+        }
+        entries
+          .sort(_abSort)
+          .forEach(function (entry) {
+            append(entry)
+          })
+      })
+    }
+  }
+  
+  Python {
+    id: py
+    property bool ready: false
+
+    Component.onCompleted: {
+      // Print version of plugin and Python interpreter
+      console.log('PyOtherSide version: ' + pluginVersion());
+      console.log('Python version: ' + pythonVersion());
+      addImportPath(Qt.resolvedUrl('../../py-backend'));
+      importModule('fs_model', function() {
+        ready = true
+      });
+    }
+
+    function listDir(path, callback) {
+      py.call('fs_model.list_dir', [path], callback);
     }
   }
 

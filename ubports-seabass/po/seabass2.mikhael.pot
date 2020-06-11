@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-10 06:18+0000\n"
+"POT-Creation-Date: 2020-06-11 07:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:216
+#: ../qml/About.qml:12 ../qml/Main.qml:218
 msgid "About"
 msgstr ""
 
@@ -44,15 +44,15 @@ msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:208 ../qml/components/FileList.qml:27
+#: ../qml/Main.qml:210 ../qml/components/FileList.qml:29
 msgid "Files"
 msgstr ""
 
-#: ../qml/Main.qml:224 ../qml/components/SaveDialog.qml:26
+#: ../qml/Main.qml:226 ../qml/components/SaveDialog.qml:26
 msgid "Save"
 msgstr ""
 
-#: ../qml/Main.qml:235
+#: ../qml/Main.qml:237
 msgid "Toggle keyboard extension"
 msgstr ""
 
@@ -64,13 +64,9 @@ msgstr ""
 msgid "Error occured"
 msgstr ""
 
-#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:33
-#: ../qml/components/FileList.qml:42 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/files/Header.qml:12 ../qml/components/files/Header.qml:21
 msgid "Close"
-msgstr ""
-
-#: ../qml/components/FileList.qml:47
-msgid "New file..."
 msgstr ""
 
 #: ../qml/components/KeyboardExtension.qml:33
@@ -103,6 +99,10 @@ msgstr ""
 
 #: ../qml/components/SaveDialog.qml:24
 msgid "Changes will be lost if you close the file without saving."
+msgstr ""
+
+#: ../qml/components/files/Header.qml:26
+msgid "New file..."
 msgstr ""
 
 #: seabass2.desktop.in.h:1
