@@ -134,3 +134,29 @@ function writeFile(filePath, content, callback) {
 
     request.send(content);
 }
+
+function sortFiles(a, b) {
+  if (!a.isFile && b.isFile) { return -1 }
+  if (a.isFile && !b.isFile) { return 1 }
+
+  var aName = a.path.toLowerCase()
+  var bName = b.path.toLowerCase()
+  if (aName < bName) { return -1 }
+  if (aName > bName) { return 1 }
+  return 0
+}
+
+function getFileIcon(fileName) {
+  var extMatch = fileName.match(/\.([A-Za-z]+)$/)
+  var ext = extMatch && extMatch[1]
+  switch(ext) {
+    case 'html':
+      return 'text-html-symbolic'
+    case 'css':
+      return 'text-css-symbolic'
+    case 'xml':
+      return 'text-xml-symbolic'
+    default:
+      return 'text-x-generic-symbolic'
+  }
+}

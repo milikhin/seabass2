@@ -4,6 +4,7 @@ import Ubuntu.Components 1.3
 PageHeader {
   signal closed()
   signal fileCreationInitialised()
+  signal reloaded()
 
   navigationActions:[
     Action {
@@ -20,6 +21,11 @@ PageHeader {
         iconName: "close"
         text: i18n.tr("Close")
         onTriggered: closed()
+      },
+      Action {
+        iconName: "reload"
+        text: i18n.tr("Reload")
+        onTriggered: reloaded()
       },
       Action {
         iconName: "add"

@@ -146,6 +146,7 @@ MainView {
                   tabBar.currentIndex = existingTabIndex
                 } else {
                   api.createFile(filePath, function(err) {
+                    reload()
                     if (err) {
                       filesModel.remove(filesModel.count - 1, 1)
                       if (!filesModel.count) {

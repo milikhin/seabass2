@@ -1,4 +1,6 @@
 node_modules
+build_ubports
+coverage
 
 harbour-seabass/qml/html/
 harbour-seabass/harbour-seabass.pro.user
@@ -11,5 +13,3 @@ ubports-seabass/.clickable
 *.jsc
 *.qmlc
 ubports-seabass/tests/data/test_write.txt
-build_ubports/
-coverage/
