@@ -1,4 +1,5 @@
 ![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
+[![JS test coverage](https://api.codeclimate.com/v1/badges/83fe45078487708c6061/test_coverage)](https://codeclimate.com/github/milikhin/seabass2/test_coverage)
 
 # Seabass
 ## About
