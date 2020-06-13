@@ -14,6 +14,7 @@ ListView {
   property bool showHidden: false
   property string homeDir
   property real rowHeight: units.gu(4.5)
+  property bool treeMode: false
 
   readonly property string backgroundColor: theme.palette.normal.background
   readonly property string textColor: theme.palette.normal.backgroundText
@@ -28,6 +29,7 @@ ListView {
     onClosed: root.closed()
     onFileCreationInitialised: root.fileCreationInitialised(directoryModel.getDirPath())
     onReloaded: directoryModel.load()
+    onTreeModeChanged: root.treeMode = treeMode
   }
 
   model: directoryModel.model
@@ -36,24 +38,29 @@ ListView {
     color: backgroundColor
     onClicked: {
       if (model.isDir) {
+        if (treeMode) {
+          return directoryModel.toggleExpanded(model.path)
+        }
+
         return directoryModel.directory = model.path
       }
 
       fileSelected(model.path)
-      // directoryModel.toggleExpanded(model.path)
     }
 
     RowLayout {
       anchors.left: parent.left
       anchors.right: parent.right
-      anchors.leftMargin: units.gu(2)
+      anchors.leftMargin: units.gu(2) * (model.level + 1)
       anchors.rightMargin: units.gu(2)
       anchors.verticalCenter: parent.verticalCenter
       spacing: units.gu(1)
 
       Icon {
         height: parent.height
-        name: model.isFile ? QmlJs.getFileIcon(model.name) : 'folder-symbolic'
+        name: model.isFile
+          ? QmlJs.getFileIcon(model.name)
+          : directoryModel.getDirIcon(model.path, model.isExpanded)
         color: textColor
       }
       Label {
@@ -73,6 +80,7 @@ ListView {
     id: directoryModel
     rootDirectory: QmlJs.getNormalPath(homeDir)
     directory: rootDirectory
+    showDotDot: treeMode
   }
 
   function reload() {

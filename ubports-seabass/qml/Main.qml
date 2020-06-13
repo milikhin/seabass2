@@ -40,8 +40,8 @@ MainView {
       pageStack.push(page)
     }
 
-    GenericComponents.FilesModel {
-      id: filesModel
+    GenericComponents.TabsModel {
+      id: tabsModel
     }
 
     GenericComponents.EditorApi {
@@ -72,10 +72,10 @@ MainView {
         if (!filePath) {
           return
         }
-        const fileIndex = filesModel.getIndex(filePath)
-        const file = filesModel.get(fileIndex)
+        const fileIndex = tabsModel.getIndex(filePath)
+        const file = tabsModel.get(fileIndex)
         file.hasChanges = hasChanges
-        filesModel.set(fileIndex, file)
+        tabsModel.set(fileIndex, file)
       }
 
       /**
@@ -141,15 +141,15 @@ MainView {
               const normalDirPath = QmlJs.getNormalPath(dirPath)
               newFileDialog.show(normalDirPath, function(fileName) {
                 const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
-                const existingTabIndex = filesModel.open(filePath)
+                const existingTabIndex = tabsModel.open(filePath)
                 if (existingTabIndex !== undefined) {
                   tabBar.currentIndex = existingTabIndex
                 } else {
                   api.createFile(filePath, function(err) {
                     reload()
                     if (err) {
-                      filesModel.remove(filesModel.count - 1, 1)
-                      if (!filesModel.count) {
+                      tabsModel.remove(tabsModel.count - 1, 1)
+                      if (!tabsModel.count) {
                         api.filePath = ''
                       }
                     }
@@ -162,14 +162,14 @@ MainView {
               })
             }
             onFileSelected: function(filePath) {
-              const existingTabIndex = filesModel.open(filePath)
+              const existingTabIndex = tabsModel.open(filePath)
               if (existingTabIndex !== undefined) {
                 tabBar.currentIndex = existingTabIndex
               } else {
                 api.loadFile(filePath, false, function(err) {
                   if (err) {
-                      filesModel.remove(filesModel.count - 1, 1)
-                      if (!filesModel.count) {
+                      tabsModel.remove(tabsModel.count - 1, 1)
+                      if (!tabsModel.count) {
                         api.filePath = ''
                       }
                     }
@@ -236,7 +236,7 @@ MainView {
                 Action {
                   iconName: "preferences-desktop-keyboard-shortcuts-symbolic"
                   text: i18n.tr("Toggle keyboard extension")
-                  visible: Qt.inputMethod.visible && main.visible && filesModel.count
+                  visible: Qt.inputMethod.visible && main.visible && tabsModel.count
                   onTriggered: {
                     settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
                   }
@@ -247,7 +247,7 @@ MainView {
 
           CustomComponents.TabBar {
             id: tabBar
-            model: filesModel
+            model: tabsModel
             visible: model.count
             Layout.minimumHeight: model.count ? units.gu(4.5) : 0
             Layout.fillWidth: true
@@ -333,7 +333,7 @@ MainView {
           CustomComponents.KeyboardExtension {
             id: keyboardExtension
             Layout.fillWidth: true
-            visible: settings.isKeyboardExtensionVisible && Qt.inputMethod.visible && main.visible && filesModel.count
+            visible: settings.isKeyboardExtensionVisible && Qt.inputMethod.visible && main.visible && tabsModel.count
             onTabBtnClicked: api.postMessage('keyDown', { keyCode: 9 /* TAB */ })
             onEscBtnClicked: api.postMessage('keyDown', { keyCode: 27 /* ESC */ })
             onLeftArrowClicked: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })

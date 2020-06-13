@@ -6,11 +6,15 @@ import "../../generic/utils.js" as QmlJs
 Item {
   property string rootDirectory
   property string directory
-  readonly property var expanded: []
+  property bool showDotDot: false
+  property var expanded: []
 
   readonly property var model: ListModel {
     Component.onCompleted: {
-      directoryChanged.connect(load)
+      directoryChanged.connect(function() {
+        expanded.splice(0, expanded.length)
+        load()
+      })
       py.readyChanged.connect(load)
     }
   }
@@ -29,6 +33,17 @@ Item {
     }
   }
 
+  function getDirIcon(path, isExpanded) {
+    if (!treeMode) {
+      return 'folder-symbolic'
+    }
+
+    if (isExpanded) {
+      return 'view-collapse'
+    }
+
+    return 'view-expand'
+  }
   function getDirPath() {
     return directory.toString().replace('file://', '')
   }
@@ -40,7 +55,6 @@ Item {
       return
     }
 
-    model.clear()
     py.listDir(directory, expanded, function(entries) {
       if (directory !== rootDirectory) {
         model.append({
@@ -49,18 +63,30 @@ Item {
           isDir: true
         })
       }
-      entries
-        .sort(QmlJs.sortFiles)
-        .forEach(function (fileEntry) {
+      entries.forEach(function (fileEntry, index) {
+        fileEntry.isExpanded = expanded.indexOf(fileEntry.path) !== -1
+        if (index < model.count) {
+          model.set(index, fileEntry)
+        } else {
           model.append(fileEntry)
-        })
+        }
+      })
+      if (entries.length < model.count) {
+        model.remove(entries.length, model.count - entries.length)
+      }
     })
   }
   function toggleExpanded(path) {
     if (expanded.indexOf(path) === -1) {
       expanded.push(path)
     } else {
-      expanded.splice(expanded.indexOf(path), 1)
+      var newExpanded = []
+      expanded.forEach(function(expandedPath) {
+        if (expandedPath.indexOf(path) !== 0) {
+          newExpanded.push(expandedPath)
+        }
+      })
+      expanded = newExpanded
     }
 
     load()
