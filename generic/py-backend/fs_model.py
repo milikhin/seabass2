@@ -46,9 +46,9 @@ def _same_dir_file_comparator(a_file, b_file):
     Cmp function for files within the same dir.
     Sorts directories first.
     """
-    if a_file["id_dir"] and not b_file["id_dir"]:
+    if a_file["is_dir"] and not b_file["is_dir"]:
         return -1
-    if not a_file["id_dir"] and b_file["id_dir"]:
+    if not a_file["is_dir"] and b_file["is_dir"]:
         return 1
     return _filename_comparator(a_file["name"], b_file["name"])
 
@@ -70,10 +70,10 @@ def _file_comparator(a_file, b_file):
       (before any parent's siblings)
     """
     if a_file["dir_name"] == b_file["dir_name"]:
-        _same_dir_file_comparator(a_file, b_file)
+        return _same_dir_file_comparator(a_file, b_file)
 
-    a_dir_path = a_file["path"] if a_file["id_dir"] else a_file["dir_name"]
-    b_dir_path = b_file["path"] if b_file["id_dir"] else b_file["dir_name"]
+    a_dir_path = a_file["path"] if a_file["is_dir"] else a_file["dir_name"]
+    b_dir_path = b_file["path"] if b_file["is_dir"] else b_file["dir_name"]
     common_path = commonpath([a_dir_path, b_dir_path])
 
     a_rel_path = relpath(a_dir_path, common_path)
