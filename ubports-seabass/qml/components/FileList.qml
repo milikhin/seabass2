@@ -80,7 +80,7 @@ ListView {
     id: directoryModel
     rootDirectory: QmlJs.getNormalPath(homeDir)
     directory: rootDirectory
-    showDotDot: treeMode
+    showDotDot: !treeMode
   }
 
   function reload() {

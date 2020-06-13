@@ -52,6 +52,28 @@ def _same_dir_file_comparator(a_file, b_file):
         return 1
     return _filename_comparator(a_file["name"], b_file["name"])
 
+def _diff_dir_file_comparator(a_file, b_file):
+    """
+    Cmp function for files within different dirs.
+    Entry's children are sorted before the next sibling.
+    """
+    a_dir_path = a_file["path"] if a_file["is_dir"] else a_file["dir_name"]
+    b_dir_path = b_file["path"] if b_file["is_dir"] else b_file["dir_name"]
+    common_path = commonpath([a_dir_path, b_dir_path])
+    a_rel_path = relpath(a_dir_path, common_path)
+    b_rel_path = relpath(b_dir_path, common_path)
+
+    if a_rel_path == '.':
+        return (-1 if not a_file["is_file"]
+                and b_dir_path.startswith(a_file["path"])
+                else 1)
+    if b_rel_path == '.':
+        return (1 if not b_file["is_file"]
+                and a_dir_path.startswith(b_file["path"])
+                else -1)
+
+    return _filename_comparator(a_rel_path, b_rel_path)
+
 def _file_comparator(a_file, b_file):
     """
     Comparator for sorting files list.
@@ -72,21 +94,7 @@ def _file_comparator(a_file, b_file):
     if a_file["dir_name"] == b_file["dir_name"]:
         return _same_dir_file_comparator(a_file, b_file)
 
-    a_dir_path = a_file["path"] if a_file["is_dir"] else a_file["dir_name"]
-    b_dir_path = b_file["path"] if b_file["is_dir"] else b_file["dir_name"]
-    common_path = commonpath([a_dir_path, b_dir_path])
-
-    a_rel_path = relpath(a_dir_path, common_path)
-    b_rel_path = relpath(b_dir_path, common_path)
-    if a_rel_path == '.':
-        if a_file["isFile"]:
-            return 1
-        return -1 if b_dir_path.startswith(a_file["path"]) else 1
-    if b_rel_path == '.':
-        if b_file["isFile"]:
-            return -1
-        return 1 if a_dir_path.startswith(b_file["path"]) else -1
-    return _filename_comparator(a_rel_path, b_rel_path)
+    return _diff_dir_file_comparator(a_file, b_file)
 
 def list_dir(root_directory, expanded_children=None):
     """

@@ -56,23 +56,27 @@ Item {
     }
 
     py.listDir(directory, expanded, function(entries) {
-      if (directory !== rootDirectory) {
-        model.append({
+      const hasDotDot = showDotDot && directory !== rootDirectory
+      if (hasDotDot) {
+        model.set(0, {
           name: '..',
           path: directory.split('/').slice(0, -1).join('/'),
           isDir: true
         })
       }
-      entries.forEach(function (fileEntry, index) {
+      const startIndex = hasDotDot ? 1 : 0
+      const totalEntriesNumber = entries.length + startIndex
+      entries.forEach(function (fileEntry, i) {
+        var index = startIndex + i
         fileEntry.isExpanded = expanded.indexOf(fileEntry.path) !== -1
         if (index < model.count) {
-          model.set(index, fileEntry)
+          model.set(index + startIndex, fileEntry)
         } else {
           model.append(fileEntry)
         }
       })
-      if (entries.length < model.count) {
-        model.remove(entries.length, model.count - entries.length)
+      if (totalEntriesNumber < model.count) {
+        model.remove(totalEntriesNumber, model.count - totalEntriesNumber)
       }
     })
   }
