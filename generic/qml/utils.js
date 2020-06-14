@@ -134,3 +134,18 @@ function writeFile(filePath, content, callback) {
 
     request.send(content);
 }
+
+function getFileIcon(fileName) {
+  var extMatch = fileName.match(/\.([A-Za-z]+)$/)
+  var ext = extMatch && extMatch[1]
+  switch(ext) {
+    case 'html':
+      return 'text-html-symbolic'
+    case 'css':
+      return 'text-css-symbolic'
+    case 'xml':
+      return 'text-xml-symbolic'
+    default:
+      return 'text-x-generic-symbolic'
+  }
+}

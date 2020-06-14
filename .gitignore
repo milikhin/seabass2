@@ -1,4 +1,8 @@
 node_modules
+build_ubports
+editor/coverage
+generic/py-backend/.coverage
+generic/py-backend/coverage.xml
 
 harbour-seabass/qml/html/
 harbour-seabass/harbour-seabass.pro.user
@@ -10,6 +14,6 @@ ubports-seabass/.clickable
 # tmp files
 *.jsc
 *.qmlc
+*.pytest-cache
+*/__pycache__
 ubports-seabass/tests/data/test_write.txt
-build_ubports/
-coverage/

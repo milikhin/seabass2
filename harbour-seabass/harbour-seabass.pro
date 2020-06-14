@@ -17,7 +17,7 @@ CONFIG += sailfishapp_qml
 DISTFILES += qml/harbour-seabass.qml \
     qml/components/Toolbar.qml \
     qml/generic/EditorApi.qml \
-    qml/generic/FilesModel.qml \
+    qml/generic/TabsModel.qml \
     qml/generic/utils.js \
     qml/html/dist \
     qml/cover/CoverPage.qml \
