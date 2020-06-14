@@ -1,7 +1,7 @@
 """Unit tests for fs_model.py"""
 
 from os.path import join
-from fs_model import list_dir
+from fs_utils import list_dir
 
 def test_same_dir_files(fs): # pylint: disable=invalid-name
     """Should sort files in the same dir alphabetically"""
@@ -20,7 +20,7 @@ def test_same_dir_files(fs): # pylint: disable=invalid-name
         "isFile": True,
         "level": 0
     }
-    assert result[0] == {
+    assert result[1] == {
         "name": "foo",
         "path": file0,
         "isDir": False,

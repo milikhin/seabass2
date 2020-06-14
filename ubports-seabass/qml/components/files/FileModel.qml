@@ -11,10 +11,8 @@ Item {
 
   readonly property var model: ListModel {
     Component.onCompleted: {
-      directoryChanged.connect(function() {
-        expanded.splice(0, expanded.length)
-        load()
-      })
+      directoryChanged.connect(reload)
+      showDotDotChanged.connect(reload)
       py.readyChanged.connect(load)
     }
   }
@@ -23,13 +21,13 @@ Item {
 
     Component.onCompleted: {
       addImportPath(Qt.resolvedUrl('../../../py-backend'))
-      importModule('fs_model', function() {
+      importModule('fs_utils', function() {
         ready = true
       });
     }
 
     function listDir(path, expanded, callback) {
-      py.call('fs_model.list_dir', [path, expanded], callback);
+      py.call('fs_utils.list_dir', [path, expanded], callback);
     }
   }
 
@@ -70,7 +68,7 @@ Item {
         var index = startIndex + i
         fileEntry.isExpanded = expanded.indexOf(fileEntry.path) !== -1
         if (index < model.count) {
-          model.set(index + startIndex, fileEntry)
+          model.set(index, fileEntry)
         } else {
           model.append(fileEntry)
         }
@@ -79,6 +77,10 @@ Item {
         model.remove(totalEntriesNumber, model.count - totalEntriesNumber)
       }
     })
+  }
+  function reload() {
+    expanded = []
+    load()
   }
   function toggleExpanded(path) {
     if (expanded.indexOf(path) === -1) {
