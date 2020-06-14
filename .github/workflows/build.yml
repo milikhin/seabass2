@@ -42,7 +42,7 @@ jobs:
     - run: pip install -U pip
     - run: pip install pipenv
     - run: cd generic/py-backend; pipenv install -d
-    - run: cd generic/py-backend; pipenv run pylint
+    - run: cd generic/py-backend; pipenv run pylint **/*.py
     - run: cd generic/py-backend; pipenv run coverage run --source=fs_utils -m pytest
     - run: cd generic/py-backend; pipenv run coverage xml
 
