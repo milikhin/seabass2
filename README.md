@@ -33,9 +33,9 @@ UBports:
 Requirements:
 
 * Node.js, tested using v12
+* pipenv (optional, to run tests for python modules)
 * Sailfish SDK (for Sailfish OS)
 * clickable (for UBports)
-* pipenv to run tests for pyotherside code
 
 Build steps:
 
@@ -48,13 +48,13 @@ Build steps:
 
 Running tests:
 
-1. Editor:  
-   * Frontend: `npm test`  
-   * Pyotherside backend:  
+1. Editor: `npm test`
+1. UBports app:  
+   * QML: `clickable test`  
+   * Python modules:  
       1. `cd generic/py-backend`
       1. `pipenv install -d`
-      1. `pipenv run pytest`
-1. UBports app: `clickable test`
+      1. `pipenv run pytest **/*.py`
 
 ## Contribution
 
