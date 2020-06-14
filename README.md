@@ -60,7 +60,7 @@ Running tests:
 
 Your reviews, bug reports and feature requests are very appreciated!
 As so pull requests! Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
-[pyotherside backend](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
+[python modules](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
 [ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
 
 There are a few labels used to indicate issue progress.
