@@ -61,6 +61,11 @@ Page {
           url: 'https://github.com/facebook/jest/blob/master/LICENSE'
         },
         {
+          title: 'PyOtherSide',
+          text: 'Copyright (c) 2011, 2013-2020, Thomas Perl <m@thp.io>, ISC license',
+          url: 'https://github.com/thp/pyotherside/blob/master/LICENSE'
+        },
+        {
           title: 'UUID JavaScript Module',
           text: 'Copyright (c) 2010-2020 Robert Kieffer and other contributors, MIT license',
           url: 'https://github.com/uuidjs/uuid/blob/master/LICENSE.md'
