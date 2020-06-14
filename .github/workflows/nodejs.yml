@@ -17,6 +17,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
+        python-version: [3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,9 +25,23 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - run: pip install -U pip
+    - run: pip install pipenv
+
     - run: npm ci
     - run: npm run lint 
     - run: npm run build
+
+    - run: cd generic/py-backend
+    - run: pipenv install -d
+    - run: pipenv run coverage run --source=fs_utils -m pytest
+    - run: cd ../../
 
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v2.6.0
@@ -34,4 +49,6 @@ jobs:
         CC_TEST_REPORTER_ID: 714d0009fb6cb54edb188259944e27d03fd2a3b9c810d4d2c7755050062925d6
       with:
         coverageCommand: npm test
-        coverageLocations: coverage/lcov.info:lcov
+        coverageLocations: |
+          editor/coverage/lcov.info:lcov
+          py-backend/.coverage:coverage.py
