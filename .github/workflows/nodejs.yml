@@ -38,10 +38,8 @@ jobs:
     - run: npm run lint 
     - run: npm run build
 
-    - run: cd generic/py-backend
-    - run: pipenv install -d
-    - run: pipenv run coverage run --source=fs_utils -m pytest
-    - run: cd ../../
+    - run: cd generic/py-backend; pipenv install -d
+    - run: cd generic/py-backend; pipenv run coverage run --source=fs_utils -m pytest
 
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v2.6.0
