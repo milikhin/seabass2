@@ -96,18 +96,18 @@ def _file_comparator(a_file, b_file):
 
     return _diff_dir_file_comparator(a_file, b_file)
 
-def list_dir(root_directory, expanded_children=None):
+def list_dir(root_directory, children=None):
     """
     Returns listing of directory content
 
     Keyword arguments:
     root_directory -- root directory
-    expanded_children -- list of expanded nested directories
+    children -- list of expanded nested directories
     """
-    if expanded_children is None:
-        expanded_children = []
+    if children is None:
+        children = []
 
-    request_dirs = [root_directory, *expanded_children]
+    request_dirs = [root_directory, *children]
     root_path = commonpath(request_dirs)
     dir_content = [_extract_file_info(directory, root_path, file_name)
                    for directory in request_dirs

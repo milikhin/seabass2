@@ -27,6 +27,7 @@ Core features:
 UBports:
 * Adaptive layout and multiple tabs
 * Ability to create new files
+* Tree mode for the file list
 
 ## Build instructions
 
@@ -35,6 +36,7 @@ Requirements:
 * Node.js, tested using v12
 * Sailfish SDK (for Sailfish OS)
 * clickable (for UBports)
+* pipenv to run tests for pyotherside code
 
 Build steps:
 
@@ -47,13 +49,20 @@ Build steps:
 
 Running tests:
 
-1. Editor: `npm test`
-1. UBports: `clickable test`
+1. Editor:  
+   * Frontend: `npm test`  
+   * Pyotherside backend:  
+      1. `cd generic/py-backend`
+      1. `pipenv install -d`
+      1. `pipenv run pytest`
+1. UBports app: `clickable test`
 
 ## Contribution
 
 Your reviews, bug reports and feature requests are very appreciated!
-As so pull requests :-). Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__) and [ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
+As so pull requests! Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
+[pyotherside backend](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
+[ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
 
 There are a few labels used to indicate issue progress.
 * `help wanted`: in my opinion, the issue is worth fixing, but I'm not going to fix it myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
