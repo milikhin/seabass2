@@ -20,28 +20,33 @@ jobs:
         python-version: [3.8]
 
     steps:
+    # setup Node.js
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
 
+    # setup Python
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
-    - run: pip install -U pip
-    - run: pip install pipenv
-
+    # editor: run linter and build
     - run: npm ci
-    - run: npm run lint 
+    - run: npm run lint
     - run: npm run build
 
+    # py-backend: install test utils, run linter, collect coverage
+    - run: pip install -U pip
+    - run: pip install pipenv
     - run: cd generic/py-backend; pipenv install -d
+    - run: cd generic/py-backend; pipenv run pylint **/*.py
     - run: cd generic/py-backend; pipenv run coverage run --source=fs_utils -m pytest
     - run: cd generic/py-backend; pipenv run coverage xml
 
+    # collect editor test coverage, publish sum coverage to codeclimate
     - name: Test & publish code coverage
       uses: paambaati/codeclimate-action@v2.6.0
       env:
