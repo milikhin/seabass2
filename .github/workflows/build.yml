@@ -49,4 +49,4 @@ jobs:
         coverageCommand: npm test
         coverageLocations: |
           editor/coverage/lcov.info:lcov
-          py-backend/.coverage:coverage.py
+          generic/py-backend/.coverage:coverage.py
