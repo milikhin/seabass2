@@ -54,6 +54,10 @@ class Api {
   //   this._tabsController.exec(filePath, 'beautify')
   // }
 
+  _apiOnAppendContent ({ filePath, content }) {
+    this._tabsController.exec(filePath, 'append', content)
+  }
+
   /**
    * Simmulates keyDown event within the editor
    * @param {string} filePath - /path/to/file

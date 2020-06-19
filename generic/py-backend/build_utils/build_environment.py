@@ -1,0 +1,100 @@
+"""The module provides build environment inside a Libertine container"""
+
+import subprocess
+
+from libertine.Libertine import LibertineContainer, ContainersConfig
+
+from .config import CONTAINER_ID, PACKAGES
+from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
+    get_run_clickable_cmd
+
+class BuildEnv:
+    """
+    Build environment inside a chroot Libertine container
+    """
+    def __init__(self, container_id, print_renderer=print):
+        self._container_id = container_id
+        self._print_renderer = print_renderer
+        self._libertine_config = ContainersConfig()
+        self._container = None
+
+    def init_container(self):
+        """Returns a Libertine container for the Seabass"""
+        try:
+            if self.test_container_exists():
+                self._container = self._get_container()
+            else:
+                self._setup_container()
+        except Exception as error:
+            self._print(error)
+            raise error
+
+    def build(self, config_file):
+        """
+        Executes clickable --config=<config_file> from a <config_file> directory
+
+        Keyword arguments:
+        config_file -- path to clickable.json
+        """
+        cmd = get_run_clickable_cmd(config_file)
+        self._shell_exec(cmd)
+
+    def test_container_exists(self):
+        """Returns True if Seabass Libertine container exists, False otherwise"""
+        self._libertine_config.refresh_database()
+        return self._libertine_config.container_exists(self._container_id)
+
+    def _create_container(self):
+        cmd = get_create_cmd()
+        self._shell_exec(cmd)
+        return self._get_container()
+
+    def _destroy_container(self):
+        self._container.destroy_libertine_container()
+
+    def _shell_exec(self, cmd):
+        for stdout_line in shell_exec(cmd):
+            self._print(stdout_line, eol='')
+
+    def _get_container(self):
+        self._libertine_config.refresh_database()
+        return LibertineContainer(CONTAINER_ID, self._libertine_config)
+
+    def _install_packages(self):
+        for package in PACKAGES:
+            self._print("Installing {}...".format(package))
+            self._container.install_package(package, update_cache=False, no_dialog=True)
+
+    def _install_clickable(self):
+        cmd = get_install_clickable_cmd()
+        # This function is available in Python but doesn't provide progress:
+        #   `self._container.start_application(cmd, environ)`
+        self._shell_exec(cmd)
+
+    def _print(self, message, margin_top=False, eol='\n'):
+        delimeter_top = '\n\n' if margin_top else ''
+        self._print_renderer('{}{}{}'.format(delimeter_top, message, eol))
+
+    def _setup_container(self):
+        try:
+            self._print('Initializing a new Libertine container to run Clickable.')
+            self._print('Step 1/3. Creating a container.')
+            self._container = self._create_container()
+
+            self._print('Step 2/3. Installing required packages.', margin_top=True)
+            self._install_packages()
+
+            self._print('Step 3/3. Installing Clickable.', margin_top=True)
+            self._install_clickable()
+        except subprocess.CalledProcessError as err:
+            self._print('ERROR: Creating a container failed', margin_top=True)
+            self._print(err)
+            raise Exception('Creating a container failed')
+        except Exception as err:
+            self._print('ERROR: Setting up a container failed', margin_top=True)
+            self._print(err)
+            if self.test_container_exists():
+                self._print('Deleting created container. Please wait...', margin_top=True)
+                self._destroy_container()
+                self._print('Container has been deleted')
+            raise Exception('Setting up a container failed')

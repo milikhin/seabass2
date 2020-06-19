@@ -48,6 +48,17 @@ export default class Editor {
   //   beautify.beautify(this._ace.session)
   // }
 
+  append (content) {
+    const session = this._ace.getSession()
+    session.insert({
+      row: session.getLength(),
+      column: 0
+    }, content.toString())
+
+    this._ace.navigateFileEnd()
+    this._ace.renderer.scrollCursorIntoView()
+  }
+
   destroy () {
     this._ace.destroy()
     this._editorElem.parentElement.removeChild(this._editorElem)
@@ -56,10 +67,9 @@ export default class Editor {
 
   /**
    * Returns editor content for the given file
-   * @param {string} filePath - /path/to/file
    * @returns {string|undefined} - file content
    */
-  getContent (filePath) {
+  getContent () {
     return this._ace.getValue()
   }
 

@@ -36,14 +36,20 @@ QtObject {
         textColorChanged.connect(loadTheme)
     }
 
-    function createFile(filePath, callback) {
+    /**
+     * Loads file at `filePath` into the editor.
+     * Creates file if not exists.
+     * @returns {undefined}
+     */
+    function loadFile(filePath, readOnly, callback) {
       QmlJs.readFile(filePath, function(err, text) {
         if (!err) {
           postMessage('loadFile', {
             filePath: filePath,
+            readOnly: readOnly,
             content: text
           })
-          return callback()
+          return callback(null, false)
         }
 
         QmlJs.writeFile(filePath, '', function(err) {
@@ -56,7 +62,7 @@ QtObject {
             filePath: filePath,
             content: ''
           })
-          return callback()
+          return callback(null, true)
         })
       })
     }
@@ -69,33 +75,8 @@ QtObject {
     }
 
     function closeFile(filePath) {
-      api.filePath  = filePath
       postMessage('closeFile', {
         filePath: filePath
-      })
-    }
-
-    /**
-     * Opens file at `filePath` in the editor
-     * @returns {undefined}
-     */
-    function loadFile(filePath, forceReadOnly, callback) {
-      api.filePath  = filePath
-      api.forceReadOnly = forceReadOnly || false
-      callback = callback || function() {}
-      QmlJs.readFile(filePath, function(err, text) {
-        if (err) {
-          console.error(err)
-          errorOccured(readErrorMsg.arg(filePath))
-          return callback(err)
-        }
-
-        postMessage('loadFile', {
-          filePath: filePath,
-          content: text,
-          readOnly: forceReadOnly
-        })
-        callback()
       })
     }
 
