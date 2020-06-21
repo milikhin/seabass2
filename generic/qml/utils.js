@@ -50,11 +50,18 @@ function getPrintableDirPath(dirPath, homeDir) {
   return normalizedDir + '/'
 }
 
+function getPrintableFilePath(filePath, homeDir) {
+  var normalizedPath = getNormalPath(filePath)
+  var normalizedHome = getNormalPath(homeDir)
+
+  return normalizedPath.replace(normalizedHome, '~')
+}
+
 /**
- * 
+ *
  * @param {string} color1 - hex color
  * @param {string} color2 - hex color
- * @returns {boolean} - true if color1 is darker than color2, false otherwise 
+ * @returns {boolean} - true if color1 is darker than color2, false otherwise
  */
 function isDarker(color1, color2) {
   return __getColorDarkness(color1.toString()) < __getColorDarkness(color2.toString())

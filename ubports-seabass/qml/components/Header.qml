@@ -26,7 +26,7 @@ PageHeader {
   navigationActions: [
     Action {
       visible: navBarCanBeOpened
-      iconName: "navigation-menu"
+      iconName: "document-open"
       text: i18n.tr("Files")
       onTriggered: navBarToggled()
     }

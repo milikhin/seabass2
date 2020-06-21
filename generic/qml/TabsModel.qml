@@ -14,14 +14,16 @@ ListModel {
     }
   }
 
-  function openTerminal(tabId, title) {
+  function openTerminal(tabId, title, subTitle) {
     return open({
       id: tabId,
-      name: title,
+      title: title,
+      subTitle: subTitle,
       readOnly: true,
       isTerminal: true,
+      isBusy: true,
 
-      filePath: tabId 
+      filePath: tabId
     })
   }
 
@@ -34,8 +36,10 @@ ListModel {
     var tab = {
       id: options.id,
       hasChanges: false,
+      isBusy: options.isTerminal || false,
       isTerminal: options.isTerminal || false,
-      name: options.name || QmlJs.getFileName(options.filePath),
+      title: options.title,
+      subTitle: options.subTitle,
       readOnly: options.isTerminal || options.readOnly || false,
 
       filePath: options.filePath
@@ -48,5 +52,14 @@ ListModel {
     var index = getIndex(filePath)
     remove(index, 1)
     tabClosed(filePath)
+  }
+
+  function patch(filePath, attributes) {
+    var index = getIndex(filePath)
+    var tab = get(index)
+    for (var key in attributes) {
+      tab[key] = attributes[key]
+    }
+    set(index, tab)
   }
 }

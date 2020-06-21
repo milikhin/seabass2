@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-20 12:34+0000\n"
+"POT-Creation-Date: 2020-06-21 14:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,17 +35,38 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:82
+#: ../qml/Main.qml:87
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:83
+#: ../qml/Main.qml:88
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:229
+#: ../qml/Main.qml:232
+msgid ""
+"A Libertine container is going to be created in order to execute build "
+"commands. The process might take a while, but you can continue using the "
+"Seabass while the container is being created. Your network connection will "
+"be used to fetch required packages."
+msgstr ""
+
+#: ../qml/Main.qml:256
 msgid "Build (%1) failed. See build output for details"
+msgstr ""
+
+#: ../qml/components/ConfirmDialog.qml:25
+msgid "Creating build container"
+msgstr ""
+
+#: ../qml/components/ConfirmDialog.qml:27
+msgid "Ok"
+msgstr ""
+
+#: ../qml/components/ConfirmDialog.qml:35
+#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+msgid "Cancel"
 msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:7
@@ -95,10 +116,6 @@ msgstr ""
 
 #: ../qml/components/NewFileDialog.qml:37
 msgid "Create"
-msgstr ""
-
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
-msgid "Cancel"
 msgstr ""
 
 #: ../qml/components/SaveDialog.qml:23

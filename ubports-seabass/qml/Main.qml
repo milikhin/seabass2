@@ -44,7 +44,12 @@ MainView {
       id: tabsModel
       onTabAdded: function(tab) {
         if (tab.isTerminal) {
-          return
+          return api.postMessage('loadFile', {
+            filePath: tab.id,
+            content: '',
+            readOnly: true,
+            isTerminal: true
+          })
         }
         api.loadFile(tab.filePath, false, function(err, isNewFile) {
           if (err) {
@@ -129,6 +134,10 @@ MainView {
       id: saveDialog
     }
 
+    CustomComponents.ConfirmDialog {
+      id: confirmDialog
+    }
+
     CustomComponents.Builder {
       id: builder
       onUnhandledError: function(message) {
@@ -167,7 +176,12 @@ MainView {
             Layout.fillHeight: true
 
             onFileSelected: function(filePath) {
-              const existingTabIndex = tabsModel.open({ id: filePath, filePath: filePath })
+              const existingTabIndex = tabsModel.open({
+                id: filePath,
+                filePath: filePath,
+                subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+                title: QmlJs.getFileName(filePath)
+              })
               if (existingTabIndex !== undefined) {
                 tabBar.currentIndex = existingTabIndex
               }
@@ -193,12 +207,9 @@ MainView {
           spacing: 0
 
           CustomComponents.Header {
-            title: api.filePath
-              ? QmlJs.getFileName(api.filePath)
-              : defaultTitle
-            subtitle: api.filePath
-              ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(api.filePath), api.homeDir)
-              : defaultSubTitle
+            id: header
+            title: defaultTitle
+            subtitle: defaultSubTitle
             Layout.fillWidth: true
 
             onNavBarToggled: navBar.visible = !navBar.visible
@@ -209,27 +220,44 @@ MainView {
               })
             }
             onBuildRequested: {
-              const configFile = api.filePath
-              const tabId = 'Build output'
-              tabsModel.openTerminal(tabId)
-              api.postMessage('loadFile', {
-                filePath: tabId,
-                content: '',
-                readOnly: true
+              builder.testContainer(function(error, containerExists) {
+                if (error) {
+                  errorDialog.show(i18n.tr(error))
+                }
+                if (containerExists) {
+                  return __build()
+                }
+
+                confirmDialog.show({
+                  text: i18n.tr("A Libertine container is going to be created in order to execute build commands. " +
+                    "The process might take a while, but you can continue using the Seabass " +
+                    "while the container is being created. " +
+                    "Your network connection will be used to fetch required packages."),
+                  onOk: __build,
+                  onCancel: function() {}
+                })
               })
 
-              builder.build(configFile, function(line) {
-                api.postMessage('appendContent', {
-                  filePath: tabId,
-                  content: line
+              function __build() {
+                const configFile = api.filePath
+                const tabId = '__seabass2_build_output'
+                const title = 'Build output'
+                const subTitle = QmlJs.getPrintableFilePath(configFile, api.homeDir)
+                tabsModel.openTerminal(tabId, title, subTitle)
+                builder.build(configFile, function(line) {
+                  api.postMessage('appendContent', {
+                    filePath: tabId,
+                    content: line
+                  })
+                }, function(err, result) {
+                  tabsModel.patch(tabId, { isBusy: false })
+                  if(err) {
+                    errorDialog.show(
+                      i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
+                    )
+                  }
                 })
-              }, function(err, result) {
-                if(err) {
-                  errorDialog.show(
-                    i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
-                  )
-                }
-              })
+              }
             }
             navBarCanBeOpened: !isWide || !navBar.visible
             canBeSaved: api.filePath && api.hasChanges
@@ -247,15 +275,21 @@ MainView {
             Layout.fillWidth: true
 
             onCurrentIndexChanged: {
-              if (currentIndex === -1) {
-                if (model.count) {
-                  currentIndex = 0
-                }
+              if (!model.count) {
+                header.title = defaultTitle
+                header.subtitle = defaultSubTitle
                 return
               }
 
-              const file = model.get(currentIndex)
-              api.openFile(file.filePath)
+              if (currentIndex === -1) {
+                currentIndex = 0
+                return
+              }
+
+              const tab = model.get(currentIndex)
+              header.title = tab.title
+              header.subtitle = tab.subTitle
+              api.openFile(tab.id)
             }
             onTabClosed: function(index) {
               const file = model.get(index)

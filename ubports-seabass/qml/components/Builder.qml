@@ -8,6 +8,7 @@ QtObject {
   id: root
   property bool ready: false
   property var onStdout: function() {}
+  property var confirm: function(callback) { callback() }
 
   signal unhandledError(string message)
 

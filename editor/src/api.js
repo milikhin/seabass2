@@ -156,18 +156,22 @@ class Api {
 
   /**
    * 'loadFile' command handler: intended to load given content to the editor
-   * @param {string} filePath - /path/to/file - used as file ID
-   * @param {string} content - file content
-   * @param {boolean} [readOnly=false] - read only flag
+   * @param {string} options.filePath - /path/to/file - used as file ID
+   * @param {string} options.content - editor content
+   * @param {boolean} [options.readOnly=false] - read only flag
+   * @param {boolean} [options.isTerminal=false] - terminal mode flag
    * @returns {undefined}
    */
-  _apiOnLoadFile ({ filePath, content = '', readOnly = false }) {
-    if (!filePath) {
+  _apiOnLoadFile (options) {
+    if (!options.filePath) {
       throw new InvalidArgError('filePath is required to load file into editor')
     }
 
     this._showTabs()
-    this._tabsController.create(filePath, content, readOnly, this._isSailfish)
+    this._tabsController.create({
+      ...options,
+      isSailfish: this._isSailfish
+    })
   }
 
   /**

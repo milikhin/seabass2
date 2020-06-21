@@ -3,6 +3,7 @@
 import subprocess
 
 from libertine.Libertine import LibertineContainer, ContainersConfig
+from os.path import dirname
 
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
@@ -37,7 +38,8 @@ class BuildEnv:
         config_file -- path to clickable.json
         """
         cmd = get_run_clickable_cmd(config_file)
-        self._shell_exec(cmd)
+        cwd = dirname(config_file)
+        self._shell_exec(cmd, cwd)
 
     def test_container_exists(self):
         """Returns True if Seabass Libertine container exists, False otherwise"""
@@ -52,8 +54,8 @@ class BuildEnv:
     def _destroy_container(self):
         self._container.destroy_libertine_container()
 
-    def _shell_exec(self, cmd):
-        for stdout_line in shell_exec(cmd):
+    def _shell_exec(self, cmd, cwd=None):
+        for stdout_line in shell_exec(cmd, cwd):
             self._print(stdout_line, eol='')
 
     def _get_container(self):

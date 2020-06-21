@@ -4,6 +4,6 @@
   * build() - run build inside a Libertine container
 """
 
-__all__ = ["build"]
+__all__ = ["build", "test_container_exists"]
 
-from .scripts import build
+from .scripts import build, test_container_exists
