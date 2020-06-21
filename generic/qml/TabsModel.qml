@@ -21,7 +21,6 @@ ListModel {
       subTitle: subTitle,
       readOnly: true,
       isTerminal: true,
-      isBusy: true,
 
       filePath: tabId
     })
@@ -36,7 +35,7 @@ ListModel {
     var tab = {
       id: options.id,
       hasChanges: false,
-      isBusy: options.isTerminal || false,
+      isBusy: false,
       isTerminal: options.isTerminal || false,
       title: options.title,
       subTitle: options.subTitle,

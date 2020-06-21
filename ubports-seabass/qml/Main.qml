@@ -243,12 +243,15 @@ MainView {
                 const tabId = '__seabass2_build_output'
                 const title = 'Build output'
                 const subTitle = QmlJs.getPrintableFilePath(configFile, api.homeDir)
-                tabsModel.openTerminal(tabId, title, subTitle)
+                const existingTabIndex = tabsModel.openTerminal(tabId, title, subTitle)
+                if (existingTabIndex !== undefined) {
+                  tabBar.currentIndex = existingTabIndex
+                  api.postMessage('setContent', { filePath: tabId, content: '' })
+                }
+
+                tabsModel.patch(tabId, { isBusy: true })
                 builder.build(configFile, function(line) {
-                  api.postMessage('appendContent', {
-                    filePath: tabId,
-                    content: line
-                  })
+                  api.postMessage('setContent', { filePath: tabId, content: line, append: true })
                 }, function(err, result) {
                   tabsModel.patch(tabId, { isBusy: false })
                   if(err) {

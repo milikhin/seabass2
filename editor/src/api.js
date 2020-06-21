@@ -51,9 +51,9 @@ class Api {
   //   this._tabsController.exec(filePath, 'beautify')
   // }
 
-  _apiOnAppendContent ({ filePath, content }) {
+  _apiOnSetContent ({ filePath, content, append }) {
     this._assertExists(filePath, 'filePath is required to modify editor content')
-    this._tabsController.exec(filePath, 'append', content)
+    this._tabsController.exec(filePath, 'setContent', content, append)
   }
 
   /**

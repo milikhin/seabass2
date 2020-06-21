@@ -53,7 +53,10 @@ export default class Editor {
   //   beautify.beautify(this._ace.session)
   // }
 
-  append (content) {
+  setContent (content, append = false) {
+    if (!append) {
+      return this._ace.setValue(content)
+    }
     const session = this._ace.getSession()
     session.insert({
       row: session.getLength(),

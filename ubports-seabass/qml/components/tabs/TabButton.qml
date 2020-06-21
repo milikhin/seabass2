@@ -83,13 +83,13 @@ TabButton {
         height: tabLabel.height
         width: height
         anchors.verticalCenter: parent.verticalCenter
-        visible: isBusy
         color: underlineColor
+        opacity: isBusy ? 0.25 : 1
 
         NumberAnimation on opacity {
-          enabled: isBusy
+          id: busyAnimation
+          running: isBusy
           loops: Animation.Infinite
-          id: createAnimation
           from: 0.25
           to: 0.75
           duration: 3000
