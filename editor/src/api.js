@@ -35,10 +35,7 @@ class Api {
   // #region API
 
   _apiOnCloseFile ({ filePath }) {
-    if (!filePath) {
-      throw new InvalidArgError('filePath is required to close tab')
-    }
-
+    this._assertExists(filePath, 'filePath is required to close tab')
     this._tabsController.close(filePath)
     if (this._tabsController.list().length === 0) {
       this._showWelcomeNote()
@@ -55,6 +52,7 @@ class Api {
   // }
 
   _apiOnAppendContent ({ filePath, content }) {
+    this._assertExists(filePath, 'filePath is required to modify editor content')
     this._tabsController.exec(filePath, 'append', content)
   }
 
@@ -179,10 +177,7 @@ class Api {
    * @param {string} filePath - /path/to/file
    */
   _apiOnOpenFile ({ filePath }) {
-    if (!filePath) {
-      throw new InvalidArgError('filePath is required to load file into editor')
-    }
-
+    this._assertExists(filePath, 'filePath is required to activate editor')
     this._tabsController.show(filePath)
   }
 
@@ -261,6 +256,12 @@ class Api {
 
   // #endregion API
   // #region PRIVATE
+
+  _assertExists (variable, errorMessage) {
+    if (variable === undefined) {
+      throw new InvalidArgError(errorMessage)
+    }
+  }
 
   _getSavedPreferences () {
     const isSailfishToolbarOpened = localStorage.getItem('sailfish__isToolbarOpened')

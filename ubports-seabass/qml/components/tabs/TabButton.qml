@@ -78,29 +78,22 @@ TabButton {
       width: closeIcon.width
 
       Icon {
-        name: 'package-x-generic-symbolic'
+        id: closeIcon
+        name: isBusy ? 'package-x-generic-symbolic' : 'close'
         height: tabLabel.height
         width: height
         anchors.verticalCenter: parent.verticalCenter
         visible: isBusy
+        color: underlineColor
 
         NumberAnimation on opacity {
+          enabled: isBusy
           loops: Animation.Infinite
           id: createAnimation
           from: 0.25
           to: 0.75
           duration: 3000
         }
-      }
-      Icon {
-        name: 'close'
-        id: closeIcon
-        height: tabLabel.height
-        width: height
-        anchors.verticalCenter: parent.verticalCenter
-        visible: !isBusy
-
-        color: underlineColor
       }
       MouseArea {
         enabled: !isBusy
