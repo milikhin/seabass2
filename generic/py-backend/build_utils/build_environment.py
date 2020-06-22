@@ -65,7 +65,9 @@ class BuildEnv:
     def _install_packages(self):
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
-            self._container.install_package(package, update_cache=False, no_dialog=True)
+            install_exit_code = self._container.install_package(package, update_cache=False, no_dialog=True)
+            if install_exit_code != 0:
+                raise Exception("Installing {} failed".format(package))
 
     def _delete_desktop_files(self):
         cmd = get_delete_desktop_files_cmd()

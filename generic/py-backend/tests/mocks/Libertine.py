@@ -11,7 +11,7 @@ class LibertineContainer:
         pass
 
     def install_package(self, package, update_cache, no_dialog):
-        pass
+        return 0
 
 class ContainersConfig:
     def container_exists(self, container_id):

@@ -277,8 +277,8 @@ MainView {
                 return __close()
               }
 
-              saveDialog.show(file.idd, {
-                onSaved: api.getFileContent(_saveAndClose),
+              saveDialog.show(file.id, {
+                onSaved: api.getFileContent(__saveAndClose),
                 onDismissed: __close()
               })
 

@@ -83,7 +83,7 @@ TabButton {
         height: tabLabel.height
         width: height
         anchors.verticalCenter: parent.verticalCenter
-        color: underlineColor
+        color: isBusy ? accentColor : underlineColor
         opacity: isBusy ? 0.25 : 1
 
         NumberAnimation on opacity {

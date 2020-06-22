@@ -33,6 +33,7 @@ PageHeader {
   ]
 
   trailingActionBar {
+    numberOfSlots: 4
     actions: [
       Action {
         iconName: "info"

@@ -37,7 +37,7 @@ def test_install_error_cleanup(shell_exec): # pylint: disable=unused-argument
 
     cmd = 'foo/bar'
     with patch.object(Libertine.LibertineContainer, 'install_package') as install_mock:
-        install_mock.side_effect = Exception('Any install exception')
+        install_mock.return_value = 1 # any error
         with patch.object(Libertine.ContainersConfig, 'container_exists') as container_exists:
             container_exists.side_effect = [False, True]
             with patch.object(Libertine.LibertineContainer,
@@ -50,7 +50,7 @@ def test_install_error(shell_exec): # pylint: disable=unused-argument
     """Should raise and print errors"""
 
     with patch.object(Libertine.LibertineContainer, 'install_package') as install_mock:
-        install_mock.side_effect = Exception('Any install exception')
+        install_mock.return_value = 1 # any error
         res = scripts.build('foo/bar')
         assert 'error' in res
         assert not 'result' in res
