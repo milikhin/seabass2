@@ -1,9 +1,9 @@
 """The module provides build environment inside a Libertine container"""
 
 import subprocess
+from os.path import dirname
 
 from libertine.Libertine import LibertineContainer, ContainersConfig
-from os.path import dirname
 
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\

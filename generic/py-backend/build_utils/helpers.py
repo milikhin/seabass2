@@ -4,7 +4,6 @@ import subprocess
 import shlex
 import re
 from os import environ
-from os.path import dirname
 from .config import CONTAINER_ID, CONTAINER_NAME
 
 def shell_exec(command_string, cwd):
@@ -45,6 +44,7 @@ def get_run_clickable_cmd(config_file):
         .format(CONTAINER_ID, config_file)
 
 def get_delete_desktop_files_cmd():
+    """Returns cmd string to delete unneeded .desktop files from build container"""
     return 'libertine-launch -i {} rm /usr/share/applications/*.desktop'\
         .format(CONTAINER_ID)
 
