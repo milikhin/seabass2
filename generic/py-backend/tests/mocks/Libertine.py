@@ -7,11 +7,14 @@ class LibertineContainer:
         self._libertine_config = ContainersConfig()
         self._container = None
 
-    def destroy_libertine_container(self):
+    def destroy_libertine_container(self, force):
+        pass
+
+    def update_libertine_container(self):
         pass
 
     def install_package(self, package, update_cache, no_dialog):
-        return 0
+        return True
 
 class ContainersConfig:
     def container_exists(self, container_id):

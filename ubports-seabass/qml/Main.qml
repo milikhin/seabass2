@@ -271,15 +271,15 @@ MainView {
               header.subtitle = tab.subTitle
               api.openFile(tab.id)
             }
-            onTabClosed: function(index) {
+            onTabCloseRequested: function(index) {
               const file = model.get(index)
               if (!file.hasChanges) {
                 return __close()
               }
 
               saveDialog.show(file.id, {
-                onSaved: api.getFileContent(__saveAndClose),
-                onDismissed: __close()
+                onSaved: function() { api.getFileContent(__saveAndClose) },
+                onDismissed: __close
               })
 
               function __close() {

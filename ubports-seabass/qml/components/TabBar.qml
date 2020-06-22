@@ -16,7 +16,7 @@ Rectangle {
   property real underlineWidth: units.gu(1) / 4
   property alias currentIndex: tabBar.currentIndex
 
-  signal tabClosed(int index)
+  signal tabCloseRequested(int index)
 
   TabBar {
     id: tabBar
@@ -72,7 +72,7 @@ Rectangle {
         underlineWidth: root.underlineWidth
         isBusy: model.isBusy
 
-        onClosed: tabClosed(model.index)
+        onClosed: tabCloseRequested(model.index)
       }
     }
   }

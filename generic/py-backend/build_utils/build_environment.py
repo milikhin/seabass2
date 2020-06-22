@@ -52,7 +52,7 @@ class BuildEnv:
         return self._get_container()
 
     def _destroy_container(self):
-        self._container.destroy_libertine_container()
+        self._container.destroy_libertine_container(force=True)
 
     def _shell_exec(self, cmd, cwd=None):
         for stdout_line in shell_exec(cmd, cwd):
@@ -63,10 +63,11 @@ class BuildEnv:
         return LibertineContainer(CONTAINER_ID, self._libertine_config)
 
     def _install_packages(self):
+        self._container.update_libertine_container()
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
-            install_exit_code = self._container.install_package(package, update_cache=False, no_dialog=True)
-            if install_exit_code != 0:
+            install_succeeded = self._container.install_package(package, update_cache=False, no_dialog=True)
+            if not install_succeeded:
                 raise Exception("Installing {} failed".format(package))
 
     def _delete_desktop_files(self):
