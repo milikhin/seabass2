@@ -44,6 +44,10 @@ def get_run_clickable_cmd(config_file):
     return 'libertine-launch -i {} clickable --container-mode --config={}'\
         .format(CONTAINER_ID, config_file)
 
+def get_delete_desktop_files_cmd():
+    return 'libertine-launch -i {} rm /usr/share/applications/*.desktop'\
+        .format(CONTAINER_ID)
+
 def patch_env():
     """
     Sets TMPDIR var to existing /tmp directory.

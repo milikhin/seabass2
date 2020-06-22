@@ -4,6 +4,9 @@ CONTAINER_ID = 'seabass2-build'
 CONTAINER_NAME = 'Seabass2 build container'
 PACKAGES = ['python3-pip', # to install clickable
             'nano' # cause why not?
+            'git',
+            'npm',
+
             'build-essential', # the list is inspired by clickable Docker image
             'cmake',
             'git',

@@ -125,21 +125,31 @@ MainView {
       id: errorDialog
     }
 
-    CustomComponents.NewFileDialog {
-      id: newFileDialog
-      homeDir: api.homeDir
-    }
-
     CustomComponents.SaveDialog {
       id: saveDialog
     }
 
-    CustomComponents.ConfirmDialog {
-      id: confirmDialog
-    }
-
     CustomComponents.Builder {
       id: builder
+
+      onStarted: {
+        const existingTabIndex = tabsModel.openTerminal(builder.tabId, builder.title, builder.subTitle)
+        if (existingTabIndex !== undefined) {
+          tabBar.currentIndex = existingTabIndex
+          api.postMessage('setContent', { filePath: builder.tabId, content: '' })
+        }
+        tabsModel.patch(builder.tabId, { isBusy: true })
+      }
+      onCompleted: {
+        tabsModel.patch(builder.tabId, { isBusy: false })
+      }
+      onStdout: function(line) {
+        api.postMessage('setContent', {
+          filePath: builder.tabId,
+          content: line,
+          append: true
+        })
+      }
       onUnhandledError: function(message) {
         errorDialog.show('Unhandled python backend error:\n' + message)
       }
@@ -220,47 +230,14 @@ MainView {
               })
             }
             onBuildRequested: {
-              builder.testContainer(function(error, containerExists) {
-                if (error) {
-                  errorDialog.show(i18n.tr(error))
+              const configFile = api.filePath
+              builder.build(configFile, function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
+                  )
                 }
-                if (containerExists) {
-                  return __build()
-                }
-
-                confirmDialog.show({
-                  text: i18n.tr("A Libertine container is going to be created in order to execute build commands. " +
-                    "The process might take a while, but you can continue using the Seabass " +
-                    "while the container is being created. " +
-                    "Your network connection will be used to fetch required packages."),
-                  onOk: __build,
-                  onCancel: function() {}
-                })
               })
-
-              function __build() {
-                const configFile = api.filePath
-                const tabId = '__seabass2_build_output'
-                const title = 'Build output'
-                const subTitle = QmlJs.getPrintableFilePath(configFile, api.homeDir)
-                const existingTabIndex = tabsModel.openTerminal(tabId, title, subTitle)
-                if (existingTabIndex !== undefined) {
-                  tabBar.currentIndex = existingTabIndex
-                  api.postMessage('setContent', { filePath: tabId, content: '' })
-                }
-
-                tabsModel.patch(tabId, { isBusy: true })
-                builder.build(configFile, function(line) {
-                  api.postMessage('setContent', { filePath: tabId, content: line, append: true })
-                }, function(err, result) {
-                  tabsModel.patch(tabId, { isBusy: false })
-                  if(err) {
-                    errorDialog.show(
-                      i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
-                    )
-                  }
-                })
-              }
             }
             navBarCanBeOpened: !isWide || !navBar.visible
             canBeSaved: api.filePath && api.hasChanges

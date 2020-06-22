@@ -7,7 +7,7 @@ from os.path import dirname
 
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
-    get_run_clickable_cmd
+    get_run_clickable_cmd, get_delete_desktop_files_cmd
 
 class BuildEnv:
     """
@@ -66,6 +66,11 @@ class BuildEnv:
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
             self._container.install_package(package, update_cache=False, no_dialog=True)
+
+    def _delete_desktop_files(self):
+        cmd = get_delete_desktop_files_cmd()
+        self._print("Deleting container applications from App Grid...")
+        self._shell_exec(cmd)
 
     def _install_clickable(self):
         cmd = get_install_clickable_cmd()

@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.3
 import Ubuntu.Components 1.3
 import Ubuntu.Components.Themes 1.3
 
+import Qt.labs.platform 1.0
+
 import "../generic/utils.js" as QmlJs
 import "./files" as FilesComponents
 
