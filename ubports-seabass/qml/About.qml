@@ -43,37 +43,42 @@ Page {
         {
           title: 'Ace editor',
           text: 'Copyright (c) 2010, Ajax.org B.V., BSD license',
-          url: 'https://github.com/ajaxorg/ace/blob/master/LICENSE'
+          url: 'https://github.com/ajaxorg/ace'
         },
         {
           title: 'Babel',
           text: 'Copyright (c) 2014-present Sebastian McKenzie and other contributors, MIT license',
-          url: 'https://github.com/babel/babel/blob/master/LICENSE'
+          url: 'https://github.com/babel/babel'
+        },
+        {
+          title: 'Clickable',
+          text: 'Copyright (C) 2020 Brian Douglass, GNU GPLv3 license',
+          url: 'https://gitlab.com/clickable/clickable'
         },
         {
           title: 'JavaScript-MD5',
           text: 'Copyright (c) 2011 Sebastian Tschan, https://blueimp.net, MIT license',
-          url: 'https://github.com/blueimp/JavaScript-MD5/blob/master/LICENSE.txt'
+          url: 'https://github.com/blueimp/JavaScript-MD5'
         },
         {
           title: 'Jest',
           text: 'Copyright (c) Facebook, Inc. and its affiliates, MIT license',
-          url: 'https://github.com/facebook/jest/blob/master/LICENSE'
+          url: 'https://github.com/facebook/jest'
         },
         {
           title: 'PyOtherSide',
           text: 'Copyright (c) 2011, 2013-2020, Thomas Perl <m@thp.io>, ISC license',
-          url: 'https://github.com/thp/pyotherside/blob/master/LICENSE'
+          url: 'https://github.com/thp/pyotherside'
         },
         {
           title: 'UUID JavaScript Module',
           text: 'Copyright (c) 2010-2020 Robert Kieffer and other contributors, MIT license',
-          url: 'https://github.com/uuidjs/uuid/blob/master/LICENSE.md'
+          url: 'https://github.com/uuidjs/uuid'
         },
         {
           title: 'webpack and webpack-contrib packages',
           text: 'Copyright JS Foundation and other contributors, MIT license',
-          url: 'https://github.com/webpack/webpack/blob/master/LICENSE'
+          url: 'https://github.com/webpack/webpack'
         }
       ]
       model: items
