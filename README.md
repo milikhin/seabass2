@@ -27,6 +27,7 @@ UBports:
 * Adaptive layout and multiple tabs
 * Ability to create new files
 * Tree mode for the file list
+* Building QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
 
 ## Build instructions
 
