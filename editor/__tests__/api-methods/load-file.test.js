@@ -52,6 +52,27 @@ describe('#loadFile', () => {
     expect(editor._ace.getOption('readOnly')).toEqual(true)
   })
 
+  it('should create Terminal window', () => {
+    setup()
+    postMessage({
+      action: 'loadFile',
+      data: {
+        filePath,
+        content,
+        readOnly: true,
+        isTerminal: true
+      }
+    })
+
+    expect(api._tabsController._tabs).toHaveLength(1)
+
+    const editor = api._tabsController._tabs[0].editor
+    expect(editor._isTerminal).toEqual(true)
+    expect(editor._ace.getValue()).toEqual(content)
+    expect(editor._ace.getOption('showGutter')).toEqual(false)
+    expect(editor._ace.getOption('showLineNumbers')).toEqual(false)
+  })
+
   it('should apply SailfishOS workarounds if required', () => {
     setup({ isSailfish: true })
     postMessage({

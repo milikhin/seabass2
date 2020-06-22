@@ -9,6 +9,7 @@ TabButton {
   property real minLabelWidth: 0
   property real maxLabelWidth: Infinity
   property bool isActive: false
+  property bool isBusy: false
   property bool hasChanges: false
   property real underlineWidth: units.gu(1) / 4
 
@@ -69,8 +70,8 @@ TabButton {
       text: '*'
       color: accentColor
       visible: hasChanges
-      // width: hasChanges ? undefined : 0
     }
+
     Item {
       Layout.fillHeight: true
       Layout.rightMargin: tabPadding
@@ -78,13 +79,24 @@ TabButton {
 
       Icon {
         id: closeIcon
-        name: "close"
+        name: isBusy ? 'package-x-generic-symbolic' : 'close'
         height: tabLabel.height
         width: height
         anchors.verticalCenter: parent.verticalCenter
         color: underlineColor
+        opacity: isBusy ? 0.25 : 1
+
+        NumberAnimation on opacity {
+          id: busyAnimation
+          running: isBusy
+          loops: Animation.Infinite
+          from: 0.25
+          to: 0.75
+          duration: 3000
+        }
       }
       MouseArea {
+        enabled: !isBusy
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: closed()

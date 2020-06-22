@@ -67,9 +67,10 @@ Rectangle {
         isActive: model.index === root.currentIndex
         maxLabelWidth: Math.min(root.width / 2, maxTabLabelWidth)
         minLabelWidth: minTabLabelWidth
-        text: model.name
+        text: model.title
         hasChanges: model.hasChanges
         underlineWidth: root.underlineWidth
+        isBusy: model.isBusy
 
         onClosed: tabClosed(model.index)
       }

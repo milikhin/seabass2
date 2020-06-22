@@ -26,7 +26,7 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.4.0"
+  readonly property string version: "0.5.0"
 
   Settings {
     id: settings
@@ -42,6 +42,32 @@ MainView {
 
     GenericComponents.TabsModel {
       id: tabsModel
+      onTabAdded: function(tab) {
+        if (tab.isTerminal) {
+          return api.postMessage('loadFile', {
+            filePath: tab.id,
+            content: '',
+            readOnly: true,
+            isTerminal: true
+          })
+        }
+        api.loadFile(tab.filePath, false, function(err, isNewFile) {
+          if (err) {
+            tabsModel.close(filePath)
+          }
+          if (isNewFile) {
+            fileList.reload()
+          }
+        })
+      }
+      onTabClosed: function(tabId) {
+        api.closeFile(tabId)
+      }
+      onCountChanged: {
+        if (!count) {
+          api.filePath = ''
+        }
+      }
     }
 
     GenericComponents.EditorApi {
@@ -99,13 +125,34 @@ MainView {
       id: errorDialog
     }
 
-    CustomComponents.NewFileDialog {
-      id: newFileDialog
-      homeDir: api.homeDir
-    }
-
     CustomComponents.SaveDialog {
       id: saveDialog
+    }
+
+    CustomComponents.Builder {
+      id: builder
+
+      onStarted: {
+        const existingTabIndex = tabsModel.openTerminal(builder.tabId, builder.title, builder.subTitle)
+        if (existingTabIndex !== undefined) {
+          tabBar.currentIndex = existingTabIndex
+          api.postMessage('setContent', { filePath: builder.tabId, content: '' })
+        }
+        tabsModel.patch(builder.tabId, { isBusy: true })
+      }
+      onCompleted: {
+        tabsModel.patch(builder.tabId, { isBusy: false })
+      }
+      onStdout: function(line) {
+        api.postMessage('setContent', {
+          filePath: builder.tabId,
+          content: line,
+          append: true
+        })
+      }
+      onUnhandledError: function(message) {
+        errorDialog.show('Unhandled python backend error:\n' + message)
+      }
     }
 
     Page {
@@ -131,49 +178,22 @@ MainView {
           Layout.maximumWidth: isWide ? units.gu(40) : parent.width
 
           CustomComponents.FileList {
+            id: fileList
             homeDir: api.homeDir
             onClosed: navBar.visible = false
             isPage: !isWide
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            onFileCreationInitialised: function(dirPath) {
-              const normalDirPath = QmlJs.getNormalPath(dirPath)
-              newFileDialog.show(normalDirPath, function(fileName) {
-                const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
-                const existingTabIndex = tabsModel.open(filePath)
-                if (existingTabIndex !== undefined) {
-                  tabBar.currentIndex = existingTabIndex
-                } else {
-                  api.createFile(filePath, function(err) {
-                    reload()
-                    if (err) {
-                      tabsModel.remove(tabsModel.count - 1, 1)
-                      if (!tabsModel.count) {
-                        api.filePath = ''
-                      }
-                    }
-                  })
-                }
-
-                if (!isWide) {
-                  navBar.visible = false
-                }
-              })
-            }
             onFileSelected: function(filePath) {
-              const existingTabIndex = tabsModel.open(filePath)
+              const existingTabIndex = tabsModel.open({
+                id: filePath,
+                filePath: filePath,
+                subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+                title: QmlJs.getFileName(filePath)
+              })
               if (existingTabIndex !== undefined) {
                 tabBar.currentIndex = existingTabIndex
-              } else {
-                api.loadFile(filePath, false, function(err) {
-                  if (err) {
-                      tabsModel.remove(tabsModel.count - 1, 1)
-                      if (!tabsModel.count) {
-                        api.filePath = ''
-                      }
-                    }
-                })
               }
 
               if (!isWide) {
@@ -196,53 +216,35 @@ MainView {
           Layout.fillHeight: true
           spacing: 0
 
-          PageHeader {
+          CustomComponents.Header {
             id: header
-            title: api.filePath ? QmlJs.getFileName(api.filePath) : defaultTitle
-            subtitle: api.filePath
-              ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(api.filePath), api.homeDir)
-              : defaultSubTitle
+            title: defaultTitle
+            subtitle: defaultSubTitle
             Layout.fillWidth: true
 
-            navigationActions: [
-              Action {
-                visible: !isWide || !navBar.visible
-                iconName: "navigation-menu"
-                text: i18n.tr("Files")
-                onTriggered: navBar.visible = !navBar.visible
-              }
-            ]
-            trailingActionBar {
-              actions: [
-                Action {
-                  iconName: "info"
-                  text: i18n.tr("About")
-
-                  onTriggered: {
-                    pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
-                  }
-                },
-                Action {
-                  iconName: "save"
-                  text: i18n.tr("Save")
-                  enabled: api.filePath && api.hasChanges
-                  shortcut: StandardKey.Save
-                  onTriggered: {
-                    api.getFileContent(function(fileContent) {
-                      api.saveFile(api.filePath, fileContent)
-                    })
-                  }
-                },
-                Action {
-                  iconName: "preferences-desktop-keyboard-shortcuts-symbolic"
-                  text: i18n.tr("Toggle keyboard extension")
-                  visible: Qt.inputMethod.visible && main.visible && tabsModel.count
-                  onTriggered: {
-                    settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
-                  }
-                }
-              ]
+            onNavBarToggled: navBar.visible = !navBar.visible
+            onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
+            onSaveRequested: {
+              api.getFileContent(function(fileContent) {
+                api.saveFile(api.filePath, fileContent)
+              })
             }
+            onBuildRequested: {
+              const configFile = api.filePath
+              builder.build(configFile, function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
+                  )
+                }
+              })
+            }
+            navBarCanBeOpened: !isWide || !navBar.visible
+            canBeSaved: api.filePath && api.hasChanges
+            buildEnabled: api.filePath && builder.ready
+            buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
+            keyboardExtensionAvailable: Qt.inputMethod.visible && main.visible && tabsModel.count
+            onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           }
 
           CustomComponents.TabBar {
@@ -253,12 +255,21 @@ MainView {
             Layout.fillWidth: true
 
             onCurrentIndexChanged: {
-              if (currentIndex === -1) {
+              if (!model.count) {
+                header.title = defaultTitle
+                header.subtitle = defaultSubTitle
                 return
               }
 
-              const file = model.get(currentIndex)
-              api.openFile(file.filePath)
+              if (currentIndex === -1) {
+                currentIndex = 0
+                return
+              }
+
+              const tab = model.get(currentIndex)
+              header.title = tab.title
+              header.subtitle = tab.subTitle
+              api.openFile(tab.id)
             }
             onTabClosed: function(index) {
               const file = model.get(index)
@@ -266,61 +277,35 @@ MainView {
                 return __close()
               }
 
-              saveDialog.show(file.filePath, {
-                onSaved: function() {
-                  const filePath = api.filePath
-                  api.getFileContent(function(fileContent) {
-                    api.saveFile(filePath, fileContent, function(err) {
-                      if (!err) {
-                        __close()
-                      }
-                    })
-                  })
-                },
-                onDismissed: __close
+              saveDialog.show(file.idd, {
+                onSaved: api.getFileContent(_saveAndClose),
+                onDismissed: __close()
               })
 
               function __close() {
-                api.closeFile(file.filePath)
-                model.remove(index, 1)
+                model.close(file.id)
+              }
 
-                if (!model.count) {
-                  api.filePath = ''
-                  return
-                }
-
-                if (currentIndex === -1) {
-                  currentIndex = 0
-                }
+              function __saveAndClose(fileContent) {
+                api.saveFile(file.id, fileContent, function(err) {
+                  if (err) {
+                    return
+                  }
+                  __close()
+                })
               }
             }
           }
 
-          WebView {
+          CustomComponents.EditorView {
             id: editor
             width: parent.width
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            url: "../html/index.html"
-            onNavigationRequested: function(request) {
-              const urlStr = request.url.toString()
-              const isHttpRequest = urlStr.indexOf('http') === 0
-              if (!isHttpRequest) {
-                return
-              }
-
-              request.action = WebEngineNavigationRequest.IgnoreRequest
-              const apiPrefix = 'http://seabass/'
-              if (urlStr.indexOf(apiPrefix) === 0) {
-                const messageStr = decodeURIComponent(urlStr.slice(apiPrefix.length))
-                const payload = JSON.parse(messageStr)
-                return api.handleMessage(payload.action, payload.data)
-              }
-
-              Qt.openUrlExternally(request.url)
+            onMessageReceived: function(payload) {
+              return api.handleMessage(payload.action, payload.data)
             }
-            zoomFactor: units.gu(1) / 8
           }
 
           Rectangle {

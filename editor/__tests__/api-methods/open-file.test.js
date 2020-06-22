@@ -5,7 +5,7 @@ import { postMessage, createEditor, testFilePathRequired } from '../helpers'
 describe('#openFile', () => {
   it('should activate tab', () => {
     const { api, editor, filePath } = createEditor()
-    api._tabsController.create(uuid())
+    api._tabsController.create({ filePath: uuid() })
 
     postMessage({
       action: 'openFile',

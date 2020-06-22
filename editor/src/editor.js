@@ -16,9 +16,11 @@ import md5 from 'blueimp-md5'
 export default class Editor {
   constructor ({
     elem = document.getElementById('root'),
-    isSailfish = false
+    isSailfish = false,
+    isTerminal = false
   } = {}) {
     this._editorElem = elem
+    this._isTerminal = isTerminal
     this._ace = ace.edit(this._editorElem, {
       wrap: true,
       tabSize: 2,
@@ -29,7 +31,10 @@ export default class Editor {
       animatedScroll: false,
       enableBasicAutocompletion: true,
       enableSnippets: true,
-      enableLiveAutocompletion: true
+      enableLiveAutocompletion: true,
+
+      showGutter: !isTerminal,
+      showLineNumbers: !isTerminal
     })
     this._initialContentHash = undefined
     this._onChangeTimer = undefined
@@ -48,6 +53,20 @@ export default class Editor {
   //   beautify.beautify(this._ace.session)
   // }
 
+  setContent (content, append = false) {
+    if (!append) {
+      return this._ace.setValue(content)
+    }
+    const session = this._ace.getSession()
+    session.insert({
+      row: session.getLength(),
+      column: 0
+    }, content.toString())
+
+    this._ace.navigateFileEnd()
+    this._ace.renderer.scrollCursorIntoView()
+  }
+
   destroy () {
     this._ace.destroy()
     this._editorElem.parentElement.removeChild(this._editorElem)
@@ -56,10 +75,9 @@ export default class Editor {
 
   /**
    * Returns editor content for the given file
-   * @param {string} filePath - /path/to/file
    * @returns {string|undefined} - file content
    */
-  getContent (filePath) {
+  getContent () {
     return this._ace.getValue()
   }
 
@@ -73,16 +91,18 @@ export default class Editor {
    * @param {string} content - editor content
    * @returns {undefined}
    */
-  loadFile (filePath, content, readOnly = false) {
+  loadFile (filePath, content, readOnly) {
     this._initialContentHash = md5(content)
-    const { mode } = modelist.getModeForPath(filePath)
     const editorSession = this._ace.getSession()
     editorSession.off('change', this._onChange)
     this._ace.setOption('readOnly', readOnly)
 
     // load new content and activate required mode
     this._ace.setValue(content)
-    editorSession.setMode(mode)
+    if (!this._isTerminal) {
+      const { mode } = modelist.getModeForPath(filePath)
+      editorSession.setMode(mode)
+    }
     this._ace.clearSelection()
     editorSession.getUndoManager().reset()
 

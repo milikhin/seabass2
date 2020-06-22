@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-14 19:17+0000\n"
+"POT-Creation-Date: 2020-06-22 06:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:219
+#: ../qml/About.qml:12 ../qml/components/Header.qml:39
 msgid "About"
 msgstr ""
 
@@ -35,25 +35,38 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:61
+#: ../qml/Main.qml:87
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:62
+#: ../qml/Main.qml:88
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:211 ../qml/components/FileList.qml:27
-msgid "Files"
+#: ../qml/Main.qml:237
+msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:227 ../qml/components/SaveDialog.qml:26
-msgid "Save"
+#: ../qml/components/Builder.qml:75
+msgid ""
+"A Libertine container is going to be created in order to execute build "
+"commands. The process might take a while, but you can continue using the "
+"Seabass while the container is being created. Your network connection will "
+"be used to fetch required packages."
 msgstr ""
 
-#: ../qml/Main.qml:238
-msgid "Toggle keyboard extension"
+#: ../qml/components/ConfirmDialog.qml:25
+msgid "Creating build container"
+msgstr ""
+
+#: ../qml/components/ConfirmDialog.qml:27
+msgid "Ok"
+msgstr ""
+
+#: ../qml/components/ConfirmDialog.qml:35
+#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+msgid "Cancel"
 msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:7
@@ -67,6 +80,22 @@ msgstr ""
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
 #: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
 msgid "Close"
+msgstr ""
+
+#: ../qml/components/FileList.qml:47 ../qml/components/Header.qml:30
+msgid "Files"
+msgstr ""
+
+#: ../qml/components/Header.qml:44 ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr ""
+
+#: ../qml/components/Header.qml:51
+msgid "Build"
+msgstr ""
+
+#: ../qml/components/Header.qml:58
+msgid "Toggle keyboard extension"
 msgstr ""
 
 #: ../qml/components/KeyboardExtension.qml:33
@@ -87,10 +116,6 @@ msgstr ""
 
 #: ../qml/components/NewFileDialog.qml:37
 msgid "Create"
-msgstr ""
-
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
-msgid "Cancel"
 msgstr ""
 
 #: ../qml/components/SaveDialog.qml:23

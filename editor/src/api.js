@@ -35,10 +35,7 @@ class Api {
   // #region API
 
   _apiOnCloseFile ({ filePath }) {
-    if (!filePath) {
-      throw new InvalidArgError('filePath is required to close tab')
-    }
-
+    this._assertExists(filePath, 'filePath is required to close tab')
     this._tabsController.close(filePath)
     if (this._tabsController.list().length === 0) {
       this._showWelcomeNote()
@@ -53,6 +50,11 @@ class Api {
   // _apiOnBeautify ({ filePath }) {
   //   this._tabsController.exec(filePath, 'beautify')
   // }
+
+  _apiOnSetContent ({ filePath, content, append }) {
+    this._assertExists(filePath, 'filePath is required to modify editor content')
+    this._tabsController.exec(filePath, 'setContent', content, append)
+  }
 
   /**
    * Simmulates keyDown event within the editor
@@ -152,18 +154,22 @@ class Api {
 
   /**
    * 'loadFile' command handler: intended to load given content to the editor
-   * @param {string} filePath - /path/to/file - used as file ID
-   * @param {string} content - file content
-   * @param {boolean} [readOnly=false] - read only flag
+   * @param {string} options.filePath - /path/to/file - used as file ID
+   * @param {string} options.content - editor content
+   * @param {boolean} [options.readOnly=false] - read only flag
+   * @param {boolean} [options.isTerminal=false] - terminal mode flag
    * @returns {undefined}
    */
-  _apiOnLoadFile ({ filePath, content = '', readOnly = false }) {
-    if (!filePath) {
+  _apiOnLoadFile (options) {
+    if (!options.filePath) {
       throw new InvalidArgError('filePath is required to load file into editor')
     }
 
     this._showTabs()
-    this._tabsController.create(filePath, content, readOnly, this._isSailfish)
+    this._tabsController.create({
+      ...options,
+      isSailfish: this._isSailfish
+    })
   }
 
   /**
@@ -171,10 +177,7 @@ class Api {
    * @param {string} filePath - /path/to/file
    */
   _apiOnOpenFile ({ filePath }) {
-    if (!filePath) {
-      throw new InvalidArgError('filePath is required to load file into editor')
-    }
-
+    this._assertExists(filePath, 'filePath is required to activate editor')
     this._tabsController.show(filePath)
   }
 
@@ -253,6 +256,12 @@ class Api {
 
   // #endregion API
   // #region PRIVATE
+
+  _assertExists (variable, errorMessage) {
+    if (variable === undefined) {
+      throw new InvalidArgError(errorMessage)
+    }
+  }
 
   _getSavedPreferences () {
     const isSailfishToolbarOpened = localStorage.getItem('sailfish__isToolbarOpened')

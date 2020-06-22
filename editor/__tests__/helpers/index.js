@@ -26,10 +26,10 @@ export const createEditor = (options = {}) => {
   const filePath = uuid()
 
   const api = registerApi({ editorFactory, apiBackend, rootElem, welcomeElem })
-  api._tabsController.create(
+  api._tabsController.create({
     filePath,
-    multiLine ? `${content}\n${content}\n${content}` : content
-  )
+    content: multiLine ? `${content}\n${content}\n${content}` : content
+  })
   const editor = api._tabsController._tabs[0].editor
   if (moveToEnd) {
     editor.navigateFileEnd()
