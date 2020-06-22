@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-09 08:35+0000\n"
-"PO-Revision-Date: 2020-06-09 15:39+0700\n"
+"POT-Creation-Date: 2020-06-22 06:58+0000\n"
+"PO-Revision-Date: 2020-06-22 18:34+0700\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
-"Last-Translator: \n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"Language: ru\n"
 
-#: ../qml/About.qml:12 ../qml/Main.qml:216
+#: ../qml/About.qml:12 ../qml/components/Header.qml:39
 msgid "About"
 msgstr "О программе"
 
@@ -32,38 +32,56 @@ msgid ""
 "Click here to open project page and find docs, support, donation options and "
 "list of contributors!"
 msgstr ""
-"Нажмите здесь, чтобы открыть сайт проекта. Там Вы найдете "
-"документацию, техническую поддержку, способы пожертвований и список "
-"участников проекта!"
+"Нажмите здесь, чтобы открыть сайт проекта. Там Вы найдете документацию, "
+"техническую поддержку, способы пожертвований и список участников проекта!"
 
 #: ../qml/Main.qml:27
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
-#: ../qml/Main.qml:61
+#: ../qml/Main.qml:87
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Ошибка чтения файла. Пожалуйста, убедитесь, что у Вас есть права на чтение "
 "из %1"
 
-#: ../qml/Main.qml:62
+#: ../qml/Main.qml:88
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Ошибка записи файла. Пожалуйста, убедитесь, что у Вас есть права на запись в "
 "%1"
 
-#: ../qml/Main.qml:208 ../qml/components/FileList.qml:27
-msgid "Files"
-msgstr "Файлы"
+#: ../qml/Main.qml:237
+msgid "Build (%1) failed. See build output for details"
+msgstr ""
+"Сборка проекта (%1) завершилась с ошибкой. Сведения об ошибке можно найти во "
+"вкладке Build output"
 
-#: ../qml/Main.qml:224 ../qml/components/SaveDialog.qml:26
-msgid "Save"
-msgstr "Сохранить"
+#: ../qml/components/Builder.qml:75
+msgid ""
+"A Libertine container is going to be created in order to execute build "
+"commands. The process might take a while, but you can continue using the "
+"Seabass while the container is being created. Your network connection will "
+"be used to fetch required packages."
+msgstr ""
+"Для запуска системы сборки проекта будет создан контейнер Libertine. Процесс "
+"создания контейнера может занять некоторое время, но вы сможете продолжать "
+"использовать Seabass в это время. Активное сетевое соединение будет "
+"использовано для скачивания необходимых пакетов."
 
-#: ../qml/Main.qml:235
-msgid "Toggle keyboard extension"
-msgstr "Расширение для виртуальной клавиатуры"
+#: ../qml/components/ConfirmDialog.qml:25
+msgid "Creating build container"
+msgstr "Создание контейнера для сборки проектов"
+
+#: ../qml/components/ConfirmDialog.qml:27
+msgid "Ok"
+msgstr ""
+
+#: ../qml/components/ConfirmDialog.qml:35
+#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+msgid "Cancel"
+msgstr "Отмена"
 
 #: ../qml/components/ErrorDialog.qml:7
 msgid "unknown error"
@@ -73,14 +91,26 @@ msgstr "неизвестная ошибка"
 msgid "Error occured"
 msgstr "Ошибка"
 
-#: ../qml/components/ErrorDialog.qml:22 ../qml/components/FileList.qml:33
-#: ../qml/components/FileList.qml:42 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
+#: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../qml/components/FileList.qml:47
-msgid "New file..."
-msgstr "Новый файл..."
+#: ../qml/components/FileList.qml:47 ../qml/components/Header.qml:30
+msgid "Files"
+msgstr "Файлы"
+
+#: ../qml/components/Header.qml:44 ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr "Сохранить"
+
+#: ../qml/components/Header.qml:51
+msgid "Build"
+msgstr "Сборка"
+
+#: ../qml/components/Header.qml:58
+msgid "Toggle keyboard extension"
+msgstr "Расширение для виртуальной клавиатуры"
 
 #: ../qml/components/KeyboardExtension.qml:33
 msgid "Tab"
@@ -102,10 +132,6 @@ msgstr ""
 msgid "Create"
 msgstr "Создать"
 
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
-msgid "Cancel"
-msgstr "Отмена"
-
 #: ../qml/components/SaveDialog.qml:23
 msgid "Save changes in %1?"
 msgstr "Сохранить изменения в %1?"
@@ -113,6 +139,18 @@ msgstr "Сохранить изменения в %1?"
 #: ../qml/components/SaveDialog.qml:24
 msgid "Changes will be lost if you close the file without saving."
 msgstr "Изменения будут потеряны, если Вы закроете файл без сохранения."
+
+#: ../qml/components/files/Header.qml:23
+msgid "New file..."
+msgstr "Новый файл..."
+
+#: ../qml/components/files/Header.qml:28
+msgid "Tree mode"
+msgstr "Дерево файлов"
+
+#: ../qml/components/files/Header.qml:33
+msgid "Reload"
+msgstr "Обновить"
 
 #: seabass2.desktop.in.h:1
 msgid "Seabass2"
