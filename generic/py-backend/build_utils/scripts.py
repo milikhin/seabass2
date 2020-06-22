@@ -1,5 +1,7 @@
 """Python scripts executable from the QML app"""
-import pyotherside
+
+import pyotherside # pylint: disable=import-error
+
 from .build_environment import BuildEnv
 from .config import CONTAINER_ID
 from .helpers import patch_env
@@ -24,7 +26,7 @@ def test_container_exists():
 def _exec_command(func):
     try:
         return {'result': func()}
-    except Exception as error:
+    except Exception as error: # pylint: disable=broad-except
         return {'error': str(error)}
 
 def _build(config_file):

@@ -1,4 +1,4 @@
-"""Unit tests for fs_model.py"""
+"""Unit tests for fs_utils"""
 
 from os.path import join
 from fs_utils import list_dir

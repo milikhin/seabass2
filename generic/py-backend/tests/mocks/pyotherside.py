@@ -1,0 +1,2 @@
+def send(message):
+    pass

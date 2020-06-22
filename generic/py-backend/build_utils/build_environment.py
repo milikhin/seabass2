@@ -3,7 +3,7 @@
 import subprocess
 from os.path import dirname
 
-from libertine.Libertine import LibertineContainer, ContainersConfig
+from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: disable=import-error
 
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
@@ -39,7 +39,7 @@ class BuildEnv:
         """
         cmd = get_run_clickable_cmd(config_file)
         cwd = dirname(config_file)
-        self._shell_exec(cmd, cwd)
+        return self._shell_exec(cmd, cwd)
 
     def test_container_exists(self):
         """Returns True if Seabass Libertine container exists, False otherwise"""
@@ -69,7 +69,7 @@ class BuildEnv:
 
     def _delete_desktop_files(self):
         cmd = get_delete_desktop_files_cmd()
-        self._print("Deleting container applications from App Grid...")
+        self._print("Deleting container applications from the App Grid...")
         self._shell_exec(cmd)
 
     def _install_clickable(self):
@@ -93,6 +93,7 @@ class BuildEnv:
 
             self._print('Step 3/3. Installing Clickable.', margin_top=True)
             self._install_clickable()
+            self._delete_desktop_files()
         except subprocess.CalledProcessError as err:
             self._print('ERROR: Creating a container failed', margin_top=True)
             self._print(err)

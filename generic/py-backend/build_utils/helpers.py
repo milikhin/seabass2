@@ -55,7 +55,7 @@ def patch_env():
     """
     environ['TMPDIR'] = '/tmp'
 
-def strip_color(s):
+def strip_color(s): # pylint: disable=invalid-name
     """
     Remove ANSI color/style sequences from a string. The set of all possible
     ANSI sequences is large, so does not try to strip every possible one. But
