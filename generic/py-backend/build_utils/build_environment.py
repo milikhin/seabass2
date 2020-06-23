@@ -66,7 +66,8 @@ class BuildEnv:
         self._container.update_libertine_container()
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
-            install_succeeded = self._container.install_package(package, update_cache=False, no_dialog=True)
+            install_succeeded = self._container.install_package(package,
+                                                                update_cache=False, no_dialog=True)
             if not install_succeeded:
                 raise Exception("Installing {} failed".format(package))
 

@@ -82,7 +82,7 @@ Rectangle {
     hoverEnabled: true
     active: hovered || pressed
     orientation: Qt.Horizontal
-    size: parent.width / tabBar.contentItem.contentWidth
+    size: parent.width / tabBar.contentWidth
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -90,12 +90,12 @@ Rectangle {
     anchors.bottomMargin: root.underlineWidth
 
     onPositionChanged: {
-      tabBar.contentX = position * tabBar.contentItem.contentWidth
+      tabBar.contentX = position * tabBar.contentWidth
     }
 
     Component.onCompleted: {
       tabBar.contentXChanged.connect(function() {
-        position = tabBar.contentX / tabBar.contentItem.contentWidth
+        position = tabBar.contentX / tabBar.contentWidth
       })
     }
   }
