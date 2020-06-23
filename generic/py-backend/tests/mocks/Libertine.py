@@ -1,13 +1,7 @@
 from unittest.mock import Mock
 
 class LibertineContainer:
-    def __init__(self, container_id, print_renderer=print):
-        self._container_id = container_id
-        self._print_renderer = print_renderer
-        self._libertine_config = ContainersConfig()
-        self._container = None
-
-    def destroy_libertine_container(self, force):
+    def __init__(self, container_id, containers_config=None, service=None):
         pass
 
     def update_libertine_container(self):

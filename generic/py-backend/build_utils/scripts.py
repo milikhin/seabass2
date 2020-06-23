@@ -6,10 +6,6 @@ from .build_environment import BuildEnv
 from .config import CONTAINER_ID
 from .helpers import patch_env
 
-def printer(message):
-    """Print message to 'stdoud'"""
-    return pyotherside.send(message)
-
 def build(config_file):
     """
     Runs build for the given clickable.json file

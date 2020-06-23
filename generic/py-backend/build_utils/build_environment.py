@@ -7,7 +7,7 @@ from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: d
 
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
-    get_run_clickable_cmd, get_delete_desktop_files_cmd
+    get_run_clickable_cmd, get_delete_desktop_files_cmd, get_destroy_cmd
 
 class BuildEnv:
     """
@@ -52,7 +52,8 @@ class BuildEnv:
         return self._get_container()
 
     def _destroy_container(self):
-        self._container.destroy_libertine_container(force=True)
+        cmd = get_destroy_cmd()
+        self._shell_exec(cmd)
 
     def _shell_exec(self, cmd, cwd=None):
         for stdout_line in shell_exec(cmd, cwd):

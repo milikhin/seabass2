@@ -36,14 +36,13 @@ def test_install_error_cleanup(shell_exec): # pylint: disable=unused-argument
     """Should destroy container if installation failed"""
 
     cmd = 'foo/bar'
+    destroy_cmd = helpers.get_destroy_cmd()
     with patch.object(Libertine.LibertineContainer, 'install_package') as install_mock:
         install_mock.return_value = False # any error
         with patch.object(Libertine.ContainersConfig, 'container_exists') as container_exists:
             container_exists.side_effect = [False, True]
-            with patch.object(Libertine.LibertineContainer,
-                              'destroy_libertine_container') as destroy_mock:
-                scripts.build(cmd)
-                destroy_mock.assert_called()
+            scripts.build(cmd)
+            shell_exec.assert_called_with(destroy_cmd, None)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_install_error(shell_exec): # pylint: disable=unused-argument

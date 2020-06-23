@@ -32,6 +32,11 @@ def get_create_cmd():
     return 'libertine-container-manager create -i {} -n "{}" -t chroot'\
         .format(CONTAINER_ID, CONTAINER_NAME)
 
+def get_destroy_cmd():
+    """Returns cmd string to destroy Seabass Libertine container"""
+    return 'libertine-container-manager destroy -i {}'\
+        .format(CONTAINER_ID)
+
 def get_install_clickable_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
     return 'libertine-launch -i {} \
@@ -45,7 +50,8 @@ def get_run_clickable_cmd(config_file):
 
 def get_delete_desktop_files_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""
-    return 'libertine-container-manager exec -i {} -c bash -c "rm /usr/share/applications/*.desktop"'\
+    return 'libertine-container-manager exec -i {} -c \
+        "bash -c \'rm /usr/share/applications/*.desktop\'"'\
         .format(CONTAINER_ID)
 
 def patch_env():
