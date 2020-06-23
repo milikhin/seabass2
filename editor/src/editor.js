@@ -34,7 +34,8 @@ export default class Editor {
       enableLiveAutocompletion: true,
 
       showGutter: !isTerminal,
-      showLineNumbers: !isTerminal
+      showLineNumbers: !isTerminal,
+      scrollPastEnd: 0.5
     })
     this._initialContentHash = undefined
     this._onChangeTimer = undefined

@@ -82,7 +82,7 @@ Rectangle {
     hoverEnabled: true
     active: hovered || pressed
     orientation: Qt.Horizontal
-    size: parent.width / tabBar.contentWidth
+    size: width / tabBar.contentWidth
 
     anchors.left: parent.left
     anchors.right: parent.right

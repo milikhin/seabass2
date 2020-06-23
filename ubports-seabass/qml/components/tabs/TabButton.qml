@@ -91,7 +91,7 @@ TabButton {
           running: isBusy
           loops: Animation.Infinite
           from: 0.25
-          to: 0.75
+          to: 0.85
           duration: 3000
         }
       }
