@@ -5,6 +5,5 @@
         "webview",
         "content_exchange"
     ],
-    "policy_version": 16.04,
-    "write_path": ["@{HOME}/"]
+    "policy_version": 16.04
 }

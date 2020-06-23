@@ -45,7 +45,7 @@ def get_run_clickable_cmd(config_file):
 
 def get_delete_desktop_files_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""
-    return 'libertine-launch -i {} rm /usr/share/applications/*.desktop'\
+    return 'libertine-container-manager exec -i {} -c bash -c "rm /usr/share/applications/*.desktop"'\
         .format(CONTAINER_ID)
 
 def patch_env():
