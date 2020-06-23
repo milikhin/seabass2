@@ -6,5 +6,5 @@
         "content_exchange"
     ],
     "policy_version": 16.04,
-    "write_path": ["/"]
+    "write_path": ["@{HOME}/"]
 }
