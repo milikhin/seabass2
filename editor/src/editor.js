@@ -105,6 +105,7 @@ export default class Editor {
       editorSession.setMode(mode)
     }
     this._ace.clearSelection()
+    this._ace.navigateFileStart()
     editorSession.getUndoManager().reset()
 
     editorSession.on('change', this._onChange)
@@ -233,5 +234,6 @@ export default class Editor {
 
   _onResize = () => {
     this._ace.renderer.scrollCursorIntoView()
+    this._ace.focus()
   }
 }
