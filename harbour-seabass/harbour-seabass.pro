@@ -32,10 +32,6 @@ DISTFILES += qml/harbour-seabass.qml \
     translations/*.ts \
     harbour-seabass.desktop
 
-generic_qml.files = ../generic/qml
-generic_qml.path = qml/generic
-DISTFILES += generic_qml
-
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
 # to disable building translations every time, comment out the

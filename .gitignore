@@ -5,6 +5,7 @@ generic/py-backend/.coverage
 generic/py-backend/coverage.xml
 
 harbour-seabass/qml/html/
+harbour-seabass/qml/generic/
 harbour-seabass/harbour-seabass.pro.user
 
 ubports-seabass/build
