@@ -35,6 +35,10 @@ const sailfishConfig = {
     new CopyPlugin([
       {
         from: './harbour-seabass/html'
+      },
+      {
+        from: './generic/qml',
+        to: path.resolve(__dirname, 'harbour-seabass/qml/generic')
       }
     ])
   ]

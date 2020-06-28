@@ -78,6 +78,11 @@ Page {
         experimental.preferences.navigatorQtObjectEnabled: true
         experimental.onMessageReceived: {
             var msg = JSON.parse(message.data)
+            // automatically copy selected text to the Clipboard
+            if (msg.data && msg.data.selectedText) {
+                Clipboard.text = msg.data.selectedText
+            }
+
             api.handleMessage(msg.action, msg.data)
         }
 
@@ -170,7 +175,8 @@ Page {
                 if (api.filePath) {
                     api.closeFile(api.filePath)
                 }
-                api.loadFile(selectedContentProperties.filePath)
+                api.loadFile(selectedContentProperties.filePath, false, Function.prototype)
+                api.openFile(selectedContentProperties.filePath)
             }
         }
     }
