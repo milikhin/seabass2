@@ -78,7 +78,8 @@ Page {
         experimental.preferences.navigatorQtObjectEnabled: true
         experimental.onMessageReceived: {
             var msg = JSON.parse(message.data)
-            if (msg.data && msg.data.selectedText) {
+            // automatically copy selected text to Clipboard if Virtual Keyboard is used (=visible)
+            if (Qt.inputMethod.visible && msg.data && msg.data.selectedText) {
                 Clipboard.text = msg.data.selectedText
             }
 
