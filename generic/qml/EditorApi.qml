@@ -68,7 +68,7 @@ QtObject {
     }
 
     function openFile(filePath) {
-      api.filePath  = filePath
+      api.filePath = filePath
       postMessage('openFile', {
         filePath: filePath
       })

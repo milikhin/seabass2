@@ -5,7 +5,8 @@ import { createEditor } from '../helpers'
 describe('#onStateChanged', () => {
   it('should emit \'onStateChanged\' event when editor\'s content changed', async () => {
     const { editor, filePath } = createEditor()
-    editor._ace.setValue(uuid())
+    const content = uuid()
+    editor._ace.setValue(content)
 
     navigator.qt.postMessage.mockReset()
     await new Promise(resolve => setTimeout(resolve, 250 /* onchange timeout */))
@@ -23,7 +24,8 @@ describe('#onStateChanged', () => {
         hasUndo: true,
         hasRedo: false,
         filePath,
-        isReadOnly: false
+        isReadOnly: false,
+        selectedText: content
       }
     })
   })

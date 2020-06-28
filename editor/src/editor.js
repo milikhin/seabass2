@@ -96,6 +96,7 @@ export default class Editor {
     this._initialContentHash = md5(content)
     const editorSession = this._ace.getSession()
     editorSession.off('change', this._onChange)
+    this._ace.getSelection().off('changeSelection', this._onChange)
     this._ace.setOption('readOnly', readOnly)
 
     // load new content and activate required mode
@@ -109,6 +110,7 @@ export default class Editor {
     editorSession.getUndoManager().reset()
 
     editorSession.on('change', this._onChange)
+    this._ace.getSelection().on('changeSelection', this._onChange)
   }
 
   setSavedContent (content) {
@@ -225,7 +227,8 @@ export default class Editor {
         hasChanges: this._initialContentHash !== md5(value),
         hasUndo: undoManager.hasUndo(),
         hasRedo: undoManager.hasRedo(),
-        isReadOnly: this._ace.getOption('readOnly')
+        isReadOnly: this._ace.getOption('readOnly'),
+        selectedText: this._ace.getSelectedText()
       }
 
       this._changeListeners.forEach(listener => listener(data))
@@ -233,7 +236,7 @@ export default class Editor {
   }
 
   _onResize = () => {
-    this._ace.renderer.scrollCursorIntoView()
     this._ace.focus()
+    this._ace.renderer.scrollCursorIntoView()
   }
 }

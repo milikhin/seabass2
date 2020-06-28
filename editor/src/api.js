@@ -270,13 +270,14 @@ class Api {
     }
   }
 
-  _handleStateChanged = ({ hasChanges, hasUndo, hasRedo, filePath, isReadOnly }) => {
+  _handleStateChanged = ({ hasChanges, hasUndo, hasRedo, filePath, isReadOnly, selectedText }) => {
     this._sendApiMessage('stateChanged', {
       hasChanges,
       hasUndo,
       hasRedo,
       filePath,
-      isReadOnly
+      isReadOnly,
+      selectedText
     })
   }
 
