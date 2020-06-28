@@ -5,6 +5,8 @@ Page {
     id: root
     property string text: 'unknown error'
 
+    allowedOrientations: Orientation.All
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: column.height

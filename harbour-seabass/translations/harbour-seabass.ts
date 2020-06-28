@@ -4,43 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Acknowledgements</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Seabass is developed by Mikhael Milikhin. Sources are available under MIT license: github.com/milikhin/seabass2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ace editor, copyright (c) 2010, Ajax.org B.V., BSD license:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Seabass v%1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>JavaScript-MD5, Copyright (c) 2011 Sebastian Tschan, https://blueimp.net, MIT license:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Jest, Copyright (c) Facebook, Inc. and its affiliates, MIT license:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UUID JavaScript Module, Copyright (c) 2010-2020 Robert Kieffer and other contributors, MIT license:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>webpack and webpack-contrib packages, Copyright JS Foundation and other contributors, MIT license:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Babel, Copyright (c) 2014-present Sebastian McKenzie and other contributors, MIT license:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
