@@ -44,7 +44,7 @@ install(DIRECTORY qml DESTINATION ${DATA_DIR} PATTERN qml/generic EXCLUDE)
 install(DIRECTORY assets DESTINATION ${DATA_DIR})
 install(DIRECTORY html DESTINATION ${DATA_DIR})
 install(DIRECTORY ../generic/qml/ DESTINATION qml/generic)
-install(DIRECTORY ../generic/py-backend/ DESTINATION py-backend)
+install(DIRECTORY ../generic/py-backend/ DESTINATION py-backend PATTERN py-backend/editorconfig EXCLUDE)
 install(DIRECTORY ../generic/py-libs/editorconfig-core-py/editorconfig/ DESTINATION py-backend/editorconfig)
 
 # Translations
