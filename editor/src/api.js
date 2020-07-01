@@ -77,75 +77,22 @@ class Api {
   }
 
   /**
-   * 'navigateLeft' command handler: intended to move cursor left
+   * Moves cursor to the given direction/position
+   *
    * @param {string} filePath - /path/to/file
+   * @param {string} where - navigation direction:
+   *   'left': move cursor left
+   *   'right' move cursor right
+   *   'down': move cursor down
+   *   'up': move cursor up
+   *   'lineStart': move cursor to the start of the line
+   *   'lineEnd': move cursor to the end of the line
+   *   'fileStart': move cursor to the 1:1
+   *   'fileEnd': move cursor to the last symbol of the file
    * @returns {undefined}
    */
-  _apiOnNavigateLeft ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateLeft')
-  }
-
-  /**
-   * 'navigateRight' command handler: intended to move cursor right
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateRight ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateRight')
-  }
-
-  /**
-   * 'navigateDown' command handler: intended to move cursor down
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateDown ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateDown')
-  }
-
-  /**
-   * 'navigateUp' command handler: intended to move cursor up
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateUp ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateUp')
-  }
-
-  /**
-   * 'navigateLineStart' command handler: intended to move cursor to the start of the line
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateLineStart ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateLineStart')
-  }
-
-  /**
-   * 'navigateLineEnd' command handler: intended to move cursor to the end of the line
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateLineEnd ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateLineEnd')
-  }
-
-  /**
-   * 'navigateFileStart' command handler: intended to move cursor to the 1:1
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateFileStart ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateFileStart')
-  }
-
-  /**
-   * 'navigateFileEnd' command handler: intended to move cursor to the last symbol of the file
-   * @param {string} filePath - /path/to/file
-   * @returns {undefined}
-   */
-  _apiOnNavigateFileEnd ({ filePath }) {
-    this._tabsController.exec(filePath, 'navigateFileEnd')
+  _apiOnNavigate ({ filePath, where }) {
+    this._tabsController.exec(filePath, 'navigate', where)
   }
 
   _apiOnFileSaved ({ filePath, content }) {
@@ -158,6 +105,7 @@ class Api {
    * @param {string} options.content - editor content
    * @param {boolean} [options.readOnly=false] - read only flag
    * @param {boolean} [options.isTerminal=false] - terminal mode flag
+   * @param {Object} [options.editorConfig={}] - parsed editor config
    * @returns {undefined}
    */
   _apiOnLoadFile (options) {

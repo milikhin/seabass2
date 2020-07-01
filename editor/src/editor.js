@@ -16,15 +16,17 @@ import md5 from 'blueimp-md5'
 export default class Editor {
   constructor ({
     elem = document.getElementById('root'),
+    editorConfig = {},
     isSailfish = false,
     isTerminal = false
   } = {}) {
     this._editorElem = elem
+    this._editorConfig = editorConfig
     this._isTerminal = isTerminal
     this._ace = ace.edit(this._editorElem, {
       wrap: true,
-      tabSize: 2,
-      useSoftTabs: true,
+      tabSize: this._getTabSize(),
+      useSoftTabs: this._editorConfig.indent_style !== 'tab',
       navigateWithinSoftTabs: true,
       showFoldWidgets: false,
       indentedSoftWrap: false,
@@ -129,45 +131,11 @@ export default class Editor {
     this._ace.completer.detach()
   }
 
-  navigateDown () {
+  navigate (where) {
+    const methodName = `navigate${where.charAt(0).toUpperCase()}${where.slice(1)}`
     // 1. Position cursor
-    this._ace.navigateDown()
+    this._ace[methodName]()
     // 2. Scroll editor into the current cursor position
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateLeft () {
-    this._ace.navigateLeft()
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateRight () {
-    this._ace.navigateRight()
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateUp () {
-    this._ace.navigateUp()
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateFileEnd () {
-    this._ace.navigateFileEnd()
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateFileStart () {
-    this._ace.navigateFileStart()
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateLineEnd () {
-    this._ace.navigateLineEnd()
-    this._ace.renderer.scrollCursorIntoView()
-  }
-
-  navigateLineStart () {
-    this._ace.navigateLineStart()
     this._ace.renderer.scrollCursorIntoView()
   }
 
@@ -216,6 +184,19 @@ export default class Editor {
 
       this._lastScrollTop = scrollTop
     })
+  }
+
+  _getTabSize () {
+    if (!isNaN(this._editorConfig.tab_width)) {
+      return this._editorConfig.tab_width
+    }
+
+    if (!isNaN(this._editorConfig.indent_size)) {
+      return this._editorConfig.indent_size
+    }
+
+    // default indent size
+    return 2
   }
 
   _onChange = () => {

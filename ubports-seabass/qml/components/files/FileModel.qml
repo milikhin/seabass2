@@ -9,6 +9,8 @@ Item {
   property bool showDotDot: false
   property var expanded: []
 
+  signal errorOccured(string error)
+
   readonly property var model: ListModel {
     Component.onCompleted: {
       directoryChanged.connect(reload)
@@ -16,6 +18,7 @@ Item {
       py.readyChanged.connect(load)
     }
   }
+
   readonly property var py: Python {
     property bool ready: false
 
@@ -27,7 +30,9 @@ Item {
     }
 
     function listDir(path, expanded, callback) {
-      py.call('fs_utils.list_dir', [path, expanded], callback);
+      py.call('fs_utils.list_dir', [path, expanded], function(res) {
+        callback(res.error, res.result)
+      });
     }
   }
 
@@ -53,12 +58,15 @@ Item {
       return
     }
 
-    py.listDir(directory, expanded, function(entries) {
+    py.listDir(directory, expanded, function(error, entries) {
+      if (error) {
+        return errorOccured(error)
+      }
       const hasDotDot = showDotDot && directory !== rootDirectory
       if (hasDotDot) {
         model.set(0, {
           name: '..',
-          path: directory.split('/').slice(0, -1).join('/'),
+          path: QmlJs.getDirPath(QmlJs.getNormalPath(directory)) + '/',
           isDir: true
         })
       }

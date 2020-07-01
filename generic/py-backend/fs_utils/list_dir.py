@@ -3,6 +3,7 @@
 from os import listdir
 from os.path import commonpath, dirname, join, isdir, isfile, relpath
 from functools import cmp_to_key
+from helpers import exec_fn
 
 def _extract_file_info(directory, root_path, name):
     """Returns file description required for QML FileList component.
@@ -96,7 +97,7 @@ def _file_comparator(a_file, b_file):
 
     return _diff_dir_file_comparator(a_file, b_file)
 
-def list_dir(root_directory, children=None):
+def _list_dir(root_directory, children=None):
     """
     Returns listing of directory content
 
@@ -116,3 +117,7 @@ def list_dir(root_directory, children=None):
                     if file_or_dir["is_dir"] or file_or_dir["is_file"]]
     sorted_files = sorted(tree_entries, key=cmp_to_key(_file_comparator))
     return [_extreact_qml_file_info(file) for file in sorted_files]
+
+def list_dir(root_directory, children=None):
+    """Returns listing of directory content using {error, result} format"""
+    return exec_fn(lambda: _list_dir(root_directory, children))

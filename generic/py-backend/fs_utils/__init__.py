@@ -5,6 +5,7 @@
                                          withing the given root and childrent directories
 """
 
-__all__ = ["list_dir"]
+__all__ = ["list_dir", "get_editor_config"]
 
 from .list_dir import list_dir
+from .editor_config import get_editor_config

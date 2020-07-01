@@ -185,6 +185,9 @@ MainView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            onErrorOccured: function(message) {
+              errorDialog.show(message)
+            }
             onFileSelected: function(filePath) {
               const existingTabIndex = tabsModel.open({
                 id: filePath,

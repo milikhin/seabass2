@@ -40,7 +40,7 @@ def test_same_dir_files(fs): # pylint: disable=invalid-name
     fs.create_file(file1)
     fs.create_file(file2)
 
-    result = list_dir(HOME)
+    result = list_dir(HOME)['result']
     assert len(result) == 3
     assert result[0] == {
         "name": "bar",
@@ -74,7 +74,7 @@ def test_diff_dir_file_lt(fs): # pylint: disable=invalid-name
     fs.create_file(file_path_lt_dir)
     _setup_dir_with_file(fs)
 
-    result = list_dir(HOME, [DIR_PATH])
+    result = list_dir(HOME, [DIR_PATH])['result']
 
     # check that all files are listed
     assert len(result) == 3
@@ -100,7 +100,7 @@ def test_diff_dir_file_gt(fs): # pylint: disable=invalid-name
     file_path_gt_dir = join(HOME, 'z')
     fs.create_file(file_path_gt_dir)
 
-    result = list_dir(HOME, [DIR_PATH])
+    result = list_dir(HOME, [DIR_PATH])['result']
 
     # check that all files are listed
     assert len(result) == 3

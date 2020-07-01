@@ -1,0 +1,6 @@
+[submodule "generic/py-backend/editorconfig-core-py"]
+	path = generic/py-backend/editorconfig-core-py
+	url = https://github.com/editorconfig/editorconfig-core-py.git
+[submodule "generic/py-libs/editorconfig-core-py"]
+	path = generic/py-libs/editorconfig-core-py
+	url = https://github.com/editorconfig/editorconfig-core-py.git

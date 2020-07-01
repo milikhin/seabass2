@@ -29,7 +29,8 @@ export default class TabsController {
       content = '',
       readOnly = false,
       isSailfish = false,
-      isTerminal = false
+      isTerminal = false,
+      editorConfig = {}
     } = options
     const editorElem = document.createElement('div')
     this._rootElem.appendChild(editorElem)
@@ -37,7 +38,7 @@ export default class TabsController {
 
     const tab = {
       filePath,
-      editor: this._editorFactory({ elem: editorElem, isSailfish, isTerminal }),
+      editor: this._editorFactory({ elem: editorElem, editorConfig, isSailfish, isTerminal }),
       elem: editorElem,
       onStateChange: (state) => {
         this._onStateChange({ ...state, filePath })
