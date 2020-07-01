@@ -34,6 +34,44 @@ describe('#loadFile', () => {
     expect(editor._ace.getOption('readOnly')).toEqual(false)
   })
 
+  it('should set tab size = indent_size according to given editorConfig', () => {
+    setup()
+    const indentSize = 9 // cause why not?
+    postMessage({
+      action: 'loadFile',
+      data: {
+        filePath,
+        content,
+        editorConfig: {
+          indent_size: indentSize
+        }
+      }
+    })
+    expect(api._tabsController._tabs).toHaveLength(1)
+
+    const editor = api._tabsController._tabs[0].editor
+    expect(editor._ace.getOption('tabSize')).toEqual(indentSize)
+  })
+
+  it('should set tab size = tab_size according to given editorConfig', () => {
+    setup()
+    const indentSize = 9 // cause why not?
+    postMessage({
+      action: 'loadFile',
+      data: {
+        filePath,
+        content,
+        editorConfig: {
+          tab_width: indentSize
+        }
+      }
+    })
+    expect(api._tabsController._tabs).toHaveLength(1)
+
+    const editor = api._tabsController._tabs[0].editor
+    expect(editor._ace.getOption('tabSize')).toEqual(indentSize)
+  })
+
   it('should create editor with readonly file', () => {
     setup()
     postMessage({

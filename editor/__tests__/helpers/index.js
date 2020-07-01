@@ -32,9 +32,9 @@ export const createEditor = (options = {}) => {
   })
   const editor = api._tabsController._tabs[0].editor
   if (moveToEnd) {
-    editor.navigateFileEnd()
+    editor._ace.navigateFileEnd()
   } else {
-    editor.navigateFileStart()
+    editor._ace.navigateFileStart()
   }
   return {
     api,
