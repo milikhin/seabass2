@@ -6,6 +6,7 @@ import editorFactory from '../../src/editor-factory'
 
 describe('#loadFile', () => {
   let api, filePath, content
+  const indentSize = 9 // cause why not?
 
   function setup ({ isSailfish } = {}) {
     const { welcomeElem, rootElem } = initDom()
@@ -36,7 +37,6 @@ describe('#loadFile', () => {
 
   it('should set tab size = indent_size according to given editorConfig', () => {
     setup()
-    const indentSize = 9 // cause why not?
     postMessage({
       action: 'loadFile',
       data: {
@@ -55,7 +55,6 @@ describe('#loadFile', () => {
 
   it('should set tab size = tab_size according to given editorConfig', () => {
     setup()
-    const indentSize = 9 // cause why not?
     postMessage({
       action: 'loadFile',
       data: {

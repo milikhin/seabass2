@@ -34,6 +34,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     # editor: run linter and build
+    - run: git submodule update --init
     - run: npm ci
     - run: npm run lint
     - run: npm run build
