@@ -27,7 +27,7 @@ TabButton {
     : theme.palette.normal.overlaySecondaryText
   property string accentColor: theme.palette.normal.focus
 
-  width: tabLabel.width + closeIcon.width + tabHasChangesIcon.width + tabSpacing + tabPadding * 2
+  width: tabLabel.width + closeButton.width + tabHasChangesIcon.width + tabSpacing + tabPadding * 2
   background: Rectangle {
     color: backgroundColor
     border.width: 0
@@ -35,8 +35,6 @@ TabButton {
 
   contentItem: RowLayout {
     spacing: 0
-    height: parent.height
-    width: parent.width
 
     Item {
       Layout.fillWidth: true
@@ -72,17 +70,18 @@ TabButton {
       visible: hasChanges
     }
 
-    Item {
+    Rectangle {
+      id: closeButton
       Layout.fillHeight: true
       Layout.rightMargin: tabPadding
-      width: closeIcon.width
+      width: closeIcon.width + units.gu(1)
 
       Icon {
         id: closeIcon
         name: isBusy ? 'package-x-generic-symbolic' : 'close'
         height: tabLabel.height
         width: height
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.centerIn: parent
         color: isBusy ? accentColor : underlineColor
         opacity: isBusy ? 0.25 : 1
 

@@ -18,6 +18,29 @@ Rectangle {
 
   signal tabCloseRequested(int index)
 
+  ScrollBar {
+    id: hbar
+    hoverEnabled: true
+    active: hovered || pressed
+    orientation: Qt.Horizontal
+    size: width / tabBar.contentWidth
+
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
+    anchors.bottomMargin: root.underlineWidth
+
+    onPositionChanged: {
+      tabBar.contentX = position * tabBar.contentWidth
+    }
+
+    Component.onCompleted: {
+      tabBar.contentXChanged.connect(function() {
+        position = tabBar.contentX / tabBar.contentWidth
+      })
+    }
+  }
+
   TabBar {
     id: tabBar
     anchors.fill: parent
@@ -74,29 +97,6 @@ Rectangle {
 
         onClosed: tabCloseRequested(model.index)
       }
-    }
-  }
-
-  ScrollBar {
-    id: hbar
-    hoverEnabled: true
-    active: hovered || pressed
-    orientation: Qt.Horizontal
-    size: width / tabBar.contentWidth
-
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: root.underlineWidth
-
-    onPositionChanged: {
-      tabBar.contentX = position * tabBar.contentWidth
-    }
-
-    Component.onCompleted: {
-      tabBar.contentXChanged.connect(function() {
-        position = tabBar.contentX / tabBar.contentWidth
-      })
     }
   }
 }
