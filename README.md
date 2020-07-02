@@ -22,6 +22,7 @@ Core features:
 * Navigation buttons
 * Light and dark themes
 * Code autocompletion and snippets
+* Setting indentation preferences using .editorconfig files
 
 UBports:
 * Adaptive layout and multiple tabs
@@ -40,19 +41,19 @@ Requirements:
 
 Build steps:
 
-1. Build editor engine  
+1. Build editor engine
    1. Install editor dependencies and build tools: `npm install`
    1. Build editor engine and copy required files to Sailfish/UBports app directory: `npm run build`
-1. Build App  
+1. Build App
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK
    * UBports: run `clickable`
 
 Running tests:
 
 1. Editor: `npm test`
-1. UBports app:  
-   * QML: `clickable test`  
-   * Python modules:  
+1. UBports app:
+   * QML: `clickable test`
+   * Python modules:
       1. `cd generic/py-backend`
       1. `pipenv install -d`
       1. `pipenv run pytest **/*.py`

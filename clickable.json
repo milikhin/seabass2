@@ -3,5 +3,9 @@
   "builder": "pure-qml-cmake",
   "kill": "qmlscene",
   "build_dir": "./build_ubports",
-  "src_dir": "./ubports-seabass"
+  "src_dir": "./ubports-seabass",
+  "scripts": {
+    "fetch": "git submodule update --init"
+  },
+  "prebuild": "clickable fetch"
 }

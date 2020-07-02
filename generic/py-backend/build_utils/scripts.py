@@ -2,6 +2,7 @@
 
 import pyotherside # pylint: disable=import-error
 
+from helpers import exec_fn
 from .build_environment import BuildEnv
 from .config import CONTAINER_ID
 from .helpers import patch_env
@@ -13,17 +14,11 @@ def build(config_file):
     Keyword arguments:
     config_file -- path to clickable.json
     """
-    return _exec_command(lambda: _build(config_file))
+    return exec_fn(lambda: _build(config_file))
 
 def test_container_exists():
     """Returns Trues if Libertine container exists, False otherwise"""
-    return _exec_command(_test_container_exists)
-
-def _exec_command(func):
-    try:
-        return {'result': func()}
-    except Exception as error: # pylint: disable=broad-except
-        return {'error': str(error)}
+    return exec_fn(_test_container_exists)
 
 def _build(config_file):
     patch_env()

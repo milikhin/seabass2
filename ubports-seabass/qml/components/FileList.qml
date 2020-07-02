@@ -22,6 +22,7 @@ Item {
   readonly property string textColor: theme.palette.normal.backgroundText
 
   signal closed()
+  signal errorOccured(string errorMessage)
   signal fileSelected(string filePath)
 
   function createFile(dirPath) {
@@ -103,8 +104,12 @@ Item {
 
   FilesComponents.FileModel {
     id: directoryModel
-    rootDirectory: QmlJs.getNormalPath(homeDir)
-    directory: rootDirectory
+    rootDirectory: '/'
+    directory: QmlJs.getNormalPath(homeDir)
     showDotDot: !treeMode
+
+    onErrorOccured: function(error) {
+      root.errorOccured(error)
+    }
   }
 }

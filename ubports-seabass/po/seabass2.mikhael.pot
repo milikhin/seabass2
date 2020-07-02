@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-26 12:52+0000\n"
+"POT-Creation-Date: 2020-07-02 06:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:237
+#: ../qml/Main.qml:240
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../qml/components/FileList.qml:47 ../qml/components/Header.qml:30
+#: ../qml/components/FileList.qml:48 ../qml/components/Header.qml:30
 msgid "Files"
 msgstr ""
 

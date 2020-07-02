@@ -26,7 +26,7 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.5.1"
+  readonly property string version: "0.6.0"
 
   Settings {
     id: settings
@@ -185,6 +185,9 @@ MainView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            onErrorOccured: function(message) {
+              errorDialog.show(message)
+            }
             onFileSelected: function(filePath) {
               const existingTabIndex = tabsModel.open({
                 id: filePath,

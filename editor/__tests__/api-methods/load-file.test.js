@@ -6,8 +6,9 @@ import editorFactory from '../../src/editor-factory'
 
 describe('#loadFile', () => {
   let api, filePath, content
+  const indentSize = 9 // cause why not?
 
-  function setup ({ isSailfish } = {}) {
+  function setup ({ isSailfish, loadOptions = {} } = {}) {
     const { welcomeElem, rootElem } = initDom()
     const options = { editorFactory, welcomeElem, rootElem }
     if (isSailfish) {
@@ -16,17 +17,19 @@ describe('#loadFile', () => {
     api = registerApi(options)
     filePath = uuid()
     content = uuid()
-  }
 
-  it('should create editor with editable file', () => {
-    setup()
     postMessage({
       action: 'loadFile',
       data: {
         filePath,
-        content
+        content,
+        ...loadOptions
       }
     })
+  }
+
+  it('should create editor with editable file', () => {
+    setup()
     expect(api._tabsController._tabs).toHaveLength(1)
 
     const editor = api._tabsController._tabs[0].editor
@@ -34,17 +37,40 @@ describe('#loadFile', () => {
     expect(editor._ace.getOption('readOnly')).toEqual(false)
   })
 
+  it('should set tab size = indent_size according to given editorConfig', () => {
+    setup({
+      loadOptions: {
+        editorConfig: {
+          indent_size: indentSize
+        }
+      }
+    })
+    expect(api._tabsController._tabs).toHaveLength(1)
+
+    const editor = api._tabsController._tabs[0].editor
+    expect(editor._ace.getOption('tabSize')).toEqual(indentSize)
+  })
+
+  it('should set tab size = tab_size according to given editorConfig', () => {
+    setup({
+      loadOptions: {
+        editorConfig: {
+          tab_width: indentSize
+        }
+      }
+    })
+    expect(api._tabsController._tabs).toHaveLength(1)
+
+    const editor = api._tabsController._tabs[0].editor
+    expect(editor._ace.getOption('tabSize')).toEqual(indentSize)
+  })
+
   it('should create editor with readonly file', () => {
-    setup()
-    postMessage({
-      action: 'loadFile',
-      data: {
-        filePath,
-        content,
+    setup({
+      loadOptions: {
         readOnly: true
       }
     })
-
     expect(api._tabsController._tabs).toHaveLength(1)
 
     const editor = api._tabsController._tabs[0].editor
@@ -53,17 +79,12 @@ describe('#loadFile', () => {
   })
 
   it('should create Terminal window', () => {
-    setup()
-    postMessage({
-      action: 'loadFile',
-      data: {
-        filePath,
-        content,
+    setup({
+      loadOptions: {
         readOnly: true,
         isTerminal: true
       }
     })
-
     expect(api._tabsController._tabs).toHaveLength(1)
 
     const editor = api._tabsController._tabs[0].editor
@@ -75,13 +96,6 @@ describe('#loadFile', () => {
 
   it('should apply SailfishOS workarounds if required', () => {
     setup({ isSailfish: true })
-    postMessage({
-      action: 'loadFile',
-      data: {
-        filePath,
-        content
-      }
-    })
     expect(api._tabsController._tabs).toHaveLength(1)
 
     const editor = api._tabsController._tabs[0].editor
@@ -90,13 +104,6 @@ describe('#loadFile', () => {
 
   it('should add scrollTop debouncer as a SailfishOS workaround', async () => {
     setup({ isSailfish: true })
-    postMessage({
-      action: 'loadFile',
-      data: {
-        filePath,
-        content
-      }
-    })
     const editor = api._tabsController._tabs[0].editor
     editor._ace.session._emit('changeScrollTop')
     editor._ace.session._emit('changeScrollTop')

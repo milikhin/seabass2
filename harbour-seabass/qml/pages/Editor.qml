@@ -157,10 +157,10 @@ Page {
             onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
             onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
             onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
-            onNavigateLineStart: api.postMessage('navigateLineStart')
-            onNavigateLineEnd: api.postMessage('navigateLineEnd')
-            onNavigateFileStart: api.postMessage('navigateFileStart')
-            onNavigateFileEnd: api.postMessage('navigateFileEnd')
+            onNavigateLineStart: api.postMessage('navigate', { where: 'lineStart' })
+            onNavigateLineEnd: api.postMessage('navigate', { where: 'lineEnd' })
+            onNavigateFileStart: api.postMessage('navigate', { where: 'fileStart' })
+            onNavigateFileEnd: api.postMessage('navigate', { where: 'fileEnd' })
         }
     }
 

@@ -34,6 +34,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     # editor: run linter and build
+    - run: git submodule update --init
     - run: npm ci
     - run: npm run lint
     - run: npm run build
@@ -42,8 +43,8 @@ jobs:
     - run: pip install -U pip
     - run: pip install pipenv
     - run: cd generic/py-backend; pipenv install -d
-    - run: cd generic/py-backend; pipenv run pylint **/*.py
-    - run: cd generic/py-backend; pipenv run coverage run --source=fs_utils,build_utils -m pytest
+    - run: cd generic/py-backend; pipenv run pylint build_utils/*.py fs_utils/*.py helpers/*.py tests/*.py
+    - run: cd generic/py-backend; pipenv run coverage run --source=fs_utils,build_utils,helpers -m pytest
     - run: cd generic/py-backend; pipenv run coverage xml
 
     # collect editor test coverage, publish sum coverage to codeclimate

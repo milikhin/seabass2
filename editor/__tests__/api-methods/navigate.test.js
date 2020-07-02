@@ -1,13 +1,13 @@
 /* globals describe, expect, it */
 import { postMessage, createEditor } from '../helpers'
 
-describe('#navigateLeft', () => {
-  it('should execute `navigateLeft` action', () => {
+describe('#navigate(left)', () => {
+  it('should execute `navigate left` action', () => {
     const { editor, cursorPosition, filePath } = createEditor({ moveToEnd: true })
 
     postMessage({
-      action: 'navigateLeft',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'left' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -17,13 +17,13 @@ describe('#navigateLeft', () => {
   })
 })
 
-describe('#navigateRight', () => {
-  it('should execute `navigateRight` action', () => {
+describe('#navigate(right)', () => {
+  it('should execute `navigate right` action', () => {
     const { editor, cursorPosition, filePath } = createEditor()
 
     postMessage({
-      action: 'navigateRight',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'right' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -33,13 +33,13 @@ describe('#navigateRight', () => {
   })
 })
 
-describe('#navigateUp', () => {
-  it('should execute `navigateUp` action', () => {
+describe('#navigate(up)', () => {
+  it('should execute `navigate up` action', () => {
     const { editor, cursorPosition, filePath } = createEditor({ multiLine: true, moveToEnd: true })
 
     postMessage({
-      action: 'navigateUp',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'up' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -49,13 +49,13 @@ describe('#navigateUp', () => {
   })
 })
 
-describe('#navigateDown', () => {
+describe('#navigate(down)', () => {
   it('should execute `navigateDown` action', () => {
     const { editor, cursorPosition, filePath } = createEditor({ multiLine: true })
 
     postMessage({
-      action: 'navigateDown',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'down' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -65,13 +65,13 @@ describe('#navigateDown', () => {
   })
 })
 
-describe('#navigateLineStart', () => {
-  it('should execute `navigateLineStart` action', () => {
+describe('#navigate(lineStart)', () => {
+  it('should execute `navigate to line start` action', () => {
     const { editor, cursorPosition, filePath } = createEditor({ moveToEnd: true })
 
     postMessage({
-      action: 'navigateLineStart',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'lineStart' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -81,13 +81,13 @@ describe('#navigateLineStart', () => {
   })
 })
 
-describe('#navigateLineEnd', () => {
-  it('should execute `navigateLineEnd` action', () => {
+describe('#navigate(lineEnd)', () => {
+  it('should execute `navigate to line end` action', () => {
     const { editor, cursorPosition, filePath } = createEditor()
     const content = editor._ace.getValue()
     postMessage({
-      action: 'navigateLineEnd',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'lineEnd' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -97,13 +97,13 @@ describe('#navigateLineEnd', () => {
   })
 })
 
-describe('#navigateFileStart', () => {
-  it('should execute `navigateFileStart` action', () => {
+describe('#navigate(fileStart)', () => {
+  it('should execute `navigate to file start` action', () => {
     const { editor, filePath } = createEditor({ multiLine: true, moveToEnd: true })
 
     postMessage({
-      action: 'navigateFileStart',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'fileStart' }
     })
 
     expect(editor._ace.getCursorPosition()).toEqual({
@@ -113,14 +113,14 @@ describe('#navigateFileStart', () => {
   })
 })
 
-describe('#navigateFileEnd', () => {
-  it('should execute `navigateFileEnd` action', () => {
+describe('#navigate(fileEnd)', () => {
+  it('should execute `navigate to file end` action', () => {
     const { editor, filePath } = createEditor({ multiLine: true })
     const content = editor._ace.getValue()
 
     postMessage({
-      action: 'navigateFileEnd',
-      data: { filePath }
+      action: 'navigate',
+      data: { filePath, where: 'fileEnd' }
     })
 
     const rowsNumber = content.split('\n').length

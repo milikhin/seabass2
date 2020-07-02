@@ -1,6 +1,6 @@
 Name: harbour-seabass
 Summary: Seabass
-Version: 0.5.1
+Version: 0.6.0
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
@@ -33,6 +33,7 @@ PkgConfigBR:
 Requires:
   - sailfishsilica-qt5 >= 0.10.9
   - libsailfishapp-launcher
+  - pyotherside-qml-plugin-python3-qt5
 
 # All installed files
 Files:

@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import './utils.js' as QmlJs
 
+import io.thp.pyotherside 1.4
+
 QtObject {
     id: api
 
@@ -24,6 +26,25 @@ QtObject {
     property string foregroundTextColor: textColor
     property string homeDir
 
+    readonly property var py: Python {
+      property bool ready: false
+
+      Component.onCompleted: {
+        addImportPath(Qt.resolvedUrl('../py-backend'))
+        addImportPath(Qt.resolvedUrl('../../py-backend'))
+        importModule('fs_utils', function() {
+          ready = true
+        });
+      }
+
+      function getEditorConfig(path, callback) {
+        py.call('fs_utils.get_editor_config', [path], function(res) {
+          callback(res.error, res.result)
+        });
+      }
+    }
+
+
     signal appLoaded(var preferences)
     signal messageSent(string jsonPayload)
     signal errorOccured(string message)
@@ -42,29 +63,38 @@ QtObject {
      * @returns {undefined}
      */
     function loadFile(filePath, readOnly, callback) {
-      QmlJs.readFile(filePath, function(err, text) {
-        if (!err) {
-          postMessage('loadFile', {
-            filePath: filePath,
-            readOnly: readOnly,
-            content: text
-          })
-          return callback(null, false)
+      py.getEditorConfig(filePath, function(err, editorConfig) {
+        if (err) {
+          return callback(err)
         }
 
-        QmlJs.writeFile(filePath, '', function(err) {
-          if (err) {
-            errorOccured(writeErrorMsg.arg(filePath))
-            return callback(err)
+        QmlJs.readFile(filePath, function(err, text) {
+          if (!err) {
+            __load(filePath, editorConfig, readOnly, text)
+            return callback(null, false)
           }
 
-          postMessage('loadFile', {
-            filePath: filePath,
-            content: ''
+          QmlJs.writeFile(filePath, '', function(err) {
+            if (err) {
+              errorOccured(writeErrorMsg.arg(filePath))
+              return callback(err)
+            }
+
+            __load(filePath, editorConfig, false, '')
+            return callback(null, true)
           })
-          return callback(null, true)
         })
       })
+
+      function __load(filePath, editorConfig, readOnly, content) {
+        postMessage('loadFile', {
+          filePath: filePath,
+          editorConfig: editorConfig,
+          readOnly: readOnly,
+          content: content
+        })
+      }
+
     }
 
     function openFile(filePath) {

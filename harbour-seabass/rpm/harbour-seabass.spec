@@ -9,7 +9,7 @@ Name:       harbour-seabass
 # << macros
 
 Summary:    Seabass
-Version:    0.5.1
+Version:    0.6.0
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -19,6 +19,7 @@ Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-seabass.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
 Requires:   libsailfishapp-launcher
+Requires:   pyotherside-qml-plugin-python3-qt5
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.3
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
