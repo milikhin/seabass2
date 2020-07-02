@@ -25,6 +25,7 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/pages/Editor.qml \
     qml/pages/ErrorDialog.qml \
     qml/pages/SaveDialog.qml \
+    qml/py-backend \
     rpm/harbour-seabass.changes.in \
     rpm/harbour-seabass.changes.run.in \
     rpm/harbour-seabass.spec \

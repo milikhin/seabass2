@@ -1,7 +1,7 @@
 """Unit tests for fs_utils"""
 
 from os.path import join
-from fs_utils import list_dir
+from fs_utils import list_dir, get_editor_config
 
 HOME = '/home/user'
 DIR_NAME = 'dir'
@@ -115,3 +115,22 @@ def test_diff_dir_file_gt(fs): # pylint: disable=invalid-name
         "isFile": True,
         "level": 0
     }
+
+def test_editor_config_exists(fs):
+    _setup_dir_with_file(fs)
+    fs.create_file(join(DIR_PATH, '.editorconfig'), contents="""
+                   [**]
+                   indent_style = space
+                   indent_size = 9
+                   """)
+    config = get_editor_config(NESTED_FILE_PATH)['result']
+    assert config == {
+        "indent_style": "space",
+        "indent_size": "9",
+        "tab_width": "9"
+    }
+
+def test_editor_config_not_exists(fs):
+    _setup_dir_with_file(fs)
+    config = get_editor_config(NESTED_FILE_PATH)['result']
+    assert config == {}

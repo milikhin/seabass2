@@ -39,6 +39,10 @@ const sailfishConfig = {
       {
         from: './generic/qml',
         to: path.resolve(__dirname, 'harbour-seabass/qml/generic')
+      },
+      {
+        from: './generic/py-backend',
+        to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
       }
     ])
   ]

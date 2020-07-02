@@ -30,7 +30,8 @@ QtObject {
       property bool ready: false
 
       Component.onCompleted: {
-        addImportPath(Qt.resolvedUrl('../../../py-backend'))
+        addImportPath(Qt.resolvedUrl('../py-backend'))
+        addImportPath(Qt.resolvedUrl('../../py-backend'))
         importModule('fs_utils', function() {
           ready = true
         });
