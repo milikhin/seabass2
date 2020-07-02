@@ -56,6 +56,11 @@ Page {
           url: 'https://gitlab.com/clickable/clickable'
         },
         {
+          title: 'EditorConfig Python Core',
+          text: 'Copyright (c) 2011-2018 EditorConfig Team, including Hong Xu and Trey Hunner, BSD License',
+          url: 'https://github.com/editorconfig/editorconfig-core-py'
+        },
+        {
           title: 'JavaScript-MD5',
           text: 'Copyright (c) 2011 Sebastian Tschan, https://blueimp.net, MIT license',
           url: 'https://github.com/blueimp/JavaScript-MD5'
