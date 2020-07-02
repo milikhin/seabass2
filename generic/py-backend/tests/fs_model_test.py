@@ -116,7 +116,8 @@ def test_diff_dir_file_gt(fs): # pylint: disable=invalid-name
         "level": 0
     }
 
-def test_editor_config_exists(fs):
+def test_editor_config_exists(fs): # pylint: disable=invalid-name
+    """#get_editor_config should return indentation preferences"""
     _setup_dir_with_file(fs)
     fs.create_file(join(DIR_PATH, '.editorconfig'), contents="""
                    [**]
@@ -130,7 +131,8 @@ def test_editor_config_exists(fs):
         "tab_width": "9"
     }
 
-def test_editor_config_not_exists(fs):
+def test_editor_config_not_exists(fs): # pylint: disable=invalid-name
+    """#get_editor_config should return empty object if .editorconfig doesn't exist"""
     _setup_dir_with_file(fs)
     config = get_editor_config(NESTED_FILE_PATH)['result']
     assert config == {}

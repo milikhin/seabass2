@@ -40,7 +40,6 @@ TabButton {
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.leftMargin: tabPadding
-      Layout.rightMargin: tabSpacing
 
       Label {
         id: tabLabel
@@ -70,11 +69,10 @@ TabButton {
       visible: hasChanges
     }
 
-    Rectangle {
+    Item {
       id: closeButton
       Layout.fillHeight: true
-      Layout.rightMargin: tabPadding
-      width: closeIcon.width + units.gu(1)
+      width: closeIcon.width + tabSpacing / 2
 
       Icon {
         id: closeIcon
