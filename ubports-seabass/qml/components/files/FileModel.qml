@@ -6,13 +6,16 @@ import "../../generic/utils.js" as QmlJs
 Item {
   property string rootDirectory
   property string directory
+  property string prevDirectory
   property bool showDotDot: false
   property var expanded: []
+  property var prevExpanded: []
 
   signal errorOccured(string error)
 
   readonly property var model: ListModel {
     Component.onCompleted: {
+      prevDirectory = directory
       directoryChanged.connect(reload)
       showDotDotChanged.connect(reload)
       py.readyChanged.connect(load)
@@ -60,6 +63,9 @@ Item {
 
     py.listDir(directory, expanded, function(error, entries) {
       if (error) {
+        directory = prevDirectory
+        // copy prevExpanded values
+        expanded = [].concat(prevExpanded)
         return errorOccured(error)
       }
       const hasDotDot = showDotDot && directory !== rootDirectory
@@ -84,6 +90,9 @@ Item {
       if (totalEntriesNumber < model.count) {
         model.remove(totalEntriesNumber, model.count - totalEntriesNumber)
       }
+      prevDirectory = directory
+      // copy expanded values
+      prevExpanded = [].concat(expanded)
     })
   }
   function reload() {

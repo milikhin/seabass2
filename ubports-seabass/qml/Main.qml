@@ -53,7 +53,7 @@ MainView {
         }
         api.loadFile(tab.filePath, false, function(err, isNewFile) {
           if (err) {
-            tabsModel.close(filePath)
+            tabsModel.close(tab.filePath)
           }
           if (isNewFile) {
             fileList.reload()
