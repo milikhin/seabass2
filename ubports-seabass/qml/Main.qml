@@ -55,9 +55,6 @@ MainView {
           if (err) {
             tabsModel.close(tab.filePath)
           }
-          if (isNewFile) {
-            fileList.reload()
-          }
         })
       }
       onTabClosed: function(tabId) {

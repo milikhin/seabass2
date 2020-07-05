@@ -24,6 +24,13 @@ Item {
 
   readonly property var py: Python {
     property bool ready: false
+    onReceived: function(evtArgs) {
+      if (evtArgs[0] !== 'fs_event') {
+        return
+      }
+
+      load()
+    }
 
     Component.onCompleted: {
       addImportPath(Qt.resolvedUrl('../../../py-backend'))
@@ -33,9 +40,11 @@ Item {
     }
 
     function listDir(path, expanded, callback) {
-      py.call('fs_utils.list_dir', [path, expanded], function(res) {
+      const directories = [path].concat(expanded)
+      py.call('fs_utils.list_files', [directories], function(res) {
         callback(res.error, res.result)
       });
+      py.call('fs_utils.watch_changes', [directories]);
     }
   }
 

@@ -22,7 +22,8 @@ def test_container_exists():
 
 def _build(config_file):
     patch_env()
-    build_env = BuildEnv(container_id=CONTAINER_ID, print_renderer=pyotherside.send)
+    build_env = BuildEnv(container_id=CONTAINER_ID,
+                         print_renderer=lambda txt: pyotherside.send('stdout', txt))
     build_env.init_container()
     return build_env.build(config_file)
 

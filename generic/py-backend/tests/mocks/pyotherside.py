@@ -1,2 +1,2 @@
-def send(message):
+def send(message, *args):
     pass

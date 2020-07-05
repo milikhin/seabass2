@@ -1,9 +1,21 @@
 """FS utils for QML frontend"""
 
 from os import listdir
-from os.path import commonpath, dirname, join, isdir, isfile, relpath
+from os.path import commonpath, dirname, exists, join, isdir, isfile, relpath
 from functools import cmp_to_key
+import pyotherside # pylint: disable=import-error
 from helpers import exec_fn
+from .watcher import Watcher
+
+default_watcher = Watcher(callback=lambda: pyotherside.send('fs_event'))
+
+def list_files(directories):
+    """Returns listing of directory content using {error, result} format"""
+    return exec_fn(lambda: _list_dir(directories))
+
+def watch_changes(directories):
+    """Watch for changes in given directories"""
+    default_watcher.watch(directories)
 
 def _extract_file_info(directory, root_path, name):
     """Returns file description required for QML FileList component.
@@ -97,18 +109,14 @@ def _file_comparator(a_file, b_file):
 
     return _diff_dir_file_comparator(a_file, b_file)
 
-def _list_dir(root_directory, children=None):
+def _list_dir(directories):
     """
     Returns listing of directory content
 
     Keyword arguments:
-    root_directory -- root directory
-    children -- list of expanded nested directories
+    directories -- directories to list files
     """
-    if children is None:
-        children = []
-
-    request_dirs = [root_directory, *children]
+    request_dirs = list(filter(exists, directories))
     root_path = commonpath(request_dirs)
     dir_content = [_extract_file_info(directory, root_path, file_name)
                    for directory in request_dirs
@@ -117,7 +125,3 @@ def _list_dir(root_directory, children=None):
                     if file_or_dir["is_dir"] or file_or_dir["is_file"]]
     sorted_files = sorted(tree_entries, key=cmp_to_key(_file_comparator))
     return [_extreact_qml_file_info(file) for file in sorted_files]
-
-def list_dir(root_directory, children=None):
-    """Returns listing of directory content using {error, result} format"""
-    return exec_fn(lambda: _list_dir(root_directory, children))
