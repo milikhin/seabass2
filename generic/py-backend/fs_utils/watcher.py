@@ -28,6 +28,10 @@ class Watcher: # pylint: disable=too-few-public-methods
         self._thread = Thread(target=self._notify_changes, args=(directories,))
         self._thread.start()
 
+    def get_notification_thread(self):
+        """Returns notification thread"""
+        return self._thread
+
     def _notify_changes(self, directories):
         """
         Registers notification on FS events.

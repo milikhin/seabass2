@@ -16,6 +16,7 @@ def list_files(directories):
 def watch_changes(directories):
     """Watch for changes in given directories"""
     default_watcher.watch(directories)
+    return default_watcher.get_notification_thread()
 
 def _extract_file_info(directory, root_path, name):
     """Returns file description required for QML FileList component.
