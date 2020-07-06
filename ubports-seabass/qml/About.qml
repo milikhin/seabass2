@@ -57,8 +57,13 @@ Page {
         },
         {
           title: 'EditorConfig Python Core',
-          text: 'Copyright (c) 2011-2018 EditorConfig Team, including Hong Xu and Trey Hunner, BSD License',
+          text: 'Copyright (c) 2011-2018 EditorConfig Team, including Hong Xu and Trey Hunner, BSD license',
           url: 'https://github.com/editorconfig/editorconfig-core-py'
+        },
+        {
+          title: 'inotify-simple',
+          text: 'Copyright (c) 2016, Chris Billington, BSD license',
+          url: 'https://github.com/chrisjbillington/inotify_simple'
         },
         {
           title: 'JavaScript-MD5',

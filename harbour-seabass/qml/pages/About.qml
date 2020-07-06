@@ -25,8 +25,12 @@ Page {
                 url: "github.com/babel/babel"
             }
             ListElement {
-                text: 'EditorConfig Python Core, Copyright (c) 2011-2018 EditorConfig Team, including Hong Xu and Trey Hunner, BSD license:',
+                text: 'EditorConfig Python Core, Copyright (c) 2011-2018 EditorConfig Team, including Hong Xu and Trey Hunner, BSD license:'
                 url: 'github.com/editorconfig/editorconfig-core-py'
+            }
+            ListElement {
+              text: 'inotify-simple, Copyright (c) 2016, Chris Billington, BSD license'
+              url: 'github.com/chrisjbillington/inotify_simple'
             }
             ListElement {
                 text: "JavaScript-MD5, Copyright (c) 2011 Sebastian Tschan, https://blueimp.net, MIT license:"
