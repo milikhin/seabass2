@@ -41,6 +41,7 @@ Requirements:
 
 Build steps:
 
+1. `git submodule update --init`
 1. Build editor engine
    1. Install editor dependencies and build tools: `npm install`
    1. Build editor engine and copy required files to Sailfish/UBports app directory: `npm run build`
