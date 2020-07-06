@@ -69,7 +69,7 @@ def _same_dir_file_comparator(a_file, b_file):
 def _diff_dir_file_comparator(a_file, b_file):
     """
     Cmp function for files within different dirs.
-    Entry's children are sorted before the next sibling.
+    Entry's children are placed before the next sibling.
     """
     a_dir_path = a_file["path"] if a_file["is_dir"] else a_file["dir_name"]
     b_dir_path = b_file["path"] if b_file["is_dir"] else b_file["dir_name"]

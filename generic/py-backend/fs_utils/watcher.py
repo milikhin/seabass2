@@ -1,4 +1,11 @@
-"""Watching for FS events"""
+"""
+Watching for FS events (file created/deleted/moved).
+
+A most simple implementation I could think of.
+Watcher class provides the `watch` method
+that starts a new thread to wait for a first FS event.
+When FS event happens a given callback is executed and the thread exits.
+"""
 from threading import Thread
 from inotify_simple import INotify, flags
 
@@ -12,9 +19,10 @@ class Watcher: # pylint: disable=too-few-public-methods
 
     def watch(self, directories):
         """
-        Creates a thread to watch for fs events.
+        Creates a thread to watch for a single fs event.
         Executes callback once when any monitored event happens.
-        Removes existing watchers and thread on initialization.
+        Removes existing watchers on initialization,
+        so only one watching thread exists at a time.
 
         Keyword arguments:
         directories -- directories to watch
