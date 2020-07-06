@@ -46,6 +46,7 @@ install(DIRECTORY html DESTINATION ${DATA_DIR})
 install(DIRECTORY ../generic/qml/ DESTINATION qml/generic)
 install(DIRECTORY ../generic/py-backend/ DESTINATION py-backend PATTERN py-backend/editorconfig EXCLUDE)
 install(DIRECTORY ../generic/py-libs/editorconfig-core-py/editorconfig/ DESTINATION py-backend/editorconfig)
+install(FILES ../generic/py-libs/inotify_simple/inotify_simple.py DESTINATION py-backend/inotify_simple)
 
 # Translations
 file(GLOB_RECURSE I18N_SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/po qml/*.qml qml/*.js)

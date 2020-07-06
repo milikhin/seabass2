@@ -1,13 +1,37 @@
 """Unit tests for fs_utils"""
 
+import sys
+from tempfile import gettempdir, TemporaryFile
+from time import sleep
 from os.path import join
-from fs_utils import list_dir, get_editor_config
+from unittest.mock import patch
+from fs_utils import list_files, get_editor_config, watch_changes
+
+from .mocks import pyotherside
+sys.modules['pyotherside'] = pyotherside
 
 HOME = '/home/user'
 DIR_NAME = 'dir'
 DIR_PATH = join(HOME, DIR_NAME)
 NESTED_FILE_NAME = 'foo'
 NESTED_FILE_PATH = join(DIR_PATH, NESTED_FILE_NAME)
+
+def _create_tmp_file():
+    tmp_file = TemporaryFile()
+    # modify the file to generate notification
+    tmp_file.write(b"foo")
+    tmp_file.close()
+
+def _generate_notification():
+    """
+    Registers notification for tmp dir and create a file there.
+    Should generate a notification
+    """
+    notification_thread = watch_changes([gettempdir()])
+    sleep(0.25)
+    _create_tmp_file()
+    # wait for notifications thread to end
+    notification_thread.join()
 
 def _setup_dir_with_file(fs): # pylint: disable=invalid-name
     fs.create_dir(DIR_PATH)
@@ -40,7 +64,7 @@ def test_same_dir_files(fs): # pylint: disable=invalid-name
     fs.create_file(file1)
     fs.create_file(file2)
 
-    result = list_dir(HOME)['result']
+    result = list_files([HOME])['result']
     assert len(result) == 3
     assert result[0] == {
         "name": "bar",
@@ -74,7 +98,7 @@ def test_diff_dir_file_lt(fs): # pylint: disable=invalid-name
     fs.create_file(file_path_lt_dir)
     _setup_dir_with_file(fs)
 
-    result = list_dir(HOME, [DIR_PATH])['result']
+    result = list_files([HOME, DIR_PATH])['result']
 
     # check that all files are listed
     assert len(result) == 3
@@ -100,7 +124,7 @@ def test_diff_dir_file_gt(fs): # pylint: disable=invalid-name
     file_path_gt_dir = join(HOME, 'z')
     fs.create_file(file_path_gt_dir)
 
-    result = list_dir(HOME, [DIR_PATH])['result']
+    result = list_files([HOME, DIR_PATH])['result']
 
     # check that all files are listed
     assert len(result) == 3
@@ -136,3 +160,19 @@ def test_editor_config_not_exists(fs): # pylint: disable=invalid-name
     _setup_dir_with_file(fs)
     config = get_editor_config(NESTED_FILE_PATH)['result']
     assert config == {}
+
+@patch('pyotherside.send')
+def test_notification_sent(send): # pylint: disable=invalid-name
+    """#watch_changes should execute callback on file changes"""
+    _generate_notification()
+    send.assert_called_with('fs_event')
+
+@patch('pyotherside.send')
+def test_notification_only_sent_once(send): # pylint: disable=invalid-name
+    """#watch_changes should not execute callback subsequent file changes"""
+    _generate_notification()
+    # check that modifying the file again once a notification has been triggered
+    # doesn't generate a new notification
+    send.reset_mock()
+    _create_tmp_file()
+    send.assert_not_called()

@@ -24,6 +24,13 @@ Item {
 
   readonly property var py: Python {
     property bool ready: false
+    onReceived: function(evtArgs) {
+      if (evtArgs[0] !== 'fs_event') {
+        return
+      }
+
+      load()
+    }
 
     Component.onCompleted: {
       addImportPath(Qt.resolvedUrl('../../../py-backend'))
@@ -33,9 +40,11 @@ Item {
     }
 
     function listDir(path, expanded, callback) {
-      py.call('fs_utils.list_dir', [path, expanded], function(res) {
+      const directories = [path].concat(expanded)
+      py.call('fs_utils.list_files', [directories], function(res) {
         callback(res.error, res.result)
       });
+      py.call('fs_utils.watch_changes', [directories]);
     }
   }
 
@@ -81,9 +90,15 @@ Item {
       entries.forEach(function (fileEntry, i) {
         var index = startIndex + i
         fileEntry.isExpanded = expanded.indexOf(fileEntry.path) !== -1
-        if (index < model.count) {
+        if (index < model.count - 1) {
+          // update non-last model entries
           model.set(index, fileEntry)
+        } else if (index === model.count - 1) {
+          // re-create last model entry to fix issues with rendering list item borders
+          model.remove(index, 1)
+          model.append(fileEntry)
         } else {
+          // append new model entries
           model.append(fileEntry)
         }
       })

@@ -26,7 +26,7 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.6.0"
+  readonly property string version: "0.6.1"
 
   Settings {
     id: settings
@@ -54,9 +54,6 @@ MainView {
         api.loadFile(tab.filePath, false, function(err, isNewFile) {
           if (err) {
             tabsModel.close(tab.filePath)
-          }
-          if (isNewFile) {
-            fileList.reload()
           }
         })
       }

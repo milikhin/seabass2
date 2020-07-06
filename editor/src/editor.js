@@ -1,6 +1,7 @@
 import ace from 'ace-builds/src-noconflict/ace'
 
 import 'ace-builds/webpack-resolver'
+import 'ace-builds/src-noconflict/keybinding-vscode'
 import 'ace-builds/src-noconflict/theme-twilight'
 import 'ace-builds/src-noconflict/theme-chrome'
 
@@ -24,20 +25,20 @@ export default class Editor {
     this._editorConfig = editorConfig
     this._isTerminal = isTerminal
     this._ace = ace.edit(this._editorElem, {
-      wrap: true,
-      tabSize: this._getTabSize(),
-      useSoftTabs: this._editorConfig.indent_style !== 'tab',
-      navigateWithinSoftTabs: true,
-      showFoldWidgets: false,
-      indentedSoftWrap: false,
       animatedScroll: false,
       enableBasicAutocompletion: true,
       enableSnippets: true,
       enableLiveAutocompletion: true,
-
+      indentedSoftWrap: false,
+      keyboardHandler: 'ace/keyboard/vscode',
+      navigateWithinSoftTabs: true,
+      showFoldWidgets: false,
       showGutter: !isTerminal,
       showLineNumbers: !isTerminal,
-      scrollPastEnd: 0.5
+      scrollPastEnd: 0.5,
+      tabSize: this._getTabSize(),
+      useSoftTabs: this._editorConfig.indent_style !== 'tab',
+      wrap: true
     })
     this._initialContentHash = undefined
     this._onChangeTimer = undefined

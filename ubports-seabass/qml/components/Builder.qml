@@ -35,8 +35,12 @@ Item {
         ready = true
       })
     }
-    onReceived: function(lines) {
-      stdout(lines)
+    onReceived: function(evtArgs) {
+      if (evtArgs[0] !== 'stdout') {
+        return
+      }
+
+      stdout(evtArgs[1])
     }
     onError: function(pyErrorMessage) {
       unhandledError(pyErrorMessage)
