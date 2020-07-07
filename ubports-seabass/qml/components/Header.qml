@@ -36,8 +36,8 @@ PageHeader {
 
   trailingActionBar {
     numberOfSlots: buildable
-      ? 3
-      : 2
+      ? 4
+      : 3
     actions: [
       Action {
         iconName: "save"
