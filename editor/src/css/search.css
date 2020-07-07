@@ -1,0 +1,65 @@
+/* Search/Replace bar styling */
+
+/* Consistent touch-friendly button sizes*/
+.ace_search_form,
+.ace_replace_form,
+.ace_button,
+.ace_search_counter,
+.ace_searchbtn_close {
+  font-size: 0.9rem;
+}
+
+.ace_search_options,
+.ace_search_counter,
+.ace_searchbtn_close {
+  line-height: 1.9;
+}
+
+.ace_button {
+  display: inline-block;
+  padding: 0 0.5em;
+}
+
+.ace_button[action="toggleReplace"] {
+  margin-left: 0;
+  margin-top: 0!important;
+  padding: 0 0.5em!important;
+}
+
+/* Search bar's border-radius */
+.ace_search.right {
+  border-radius: 0;
+}
+
+/* Close button */
+.ace_search_form {
+  margin-right: 1.71rem; /* 1.9 * 0.9rem */
+}
+
+.ace_searchbtn_close {
+  text-align: center;
+  top: 4px;
+  right: 6px;
+  height: auto;
+  width: auto;
+  background: none;
+  padding: 0 0.5rem;
+  border-radius: 0;
+}
+
+.ace_searchbtn_close:hover {
+  background: none;
+  color: black;
+}
+
+.ace_searchbtn_close::before {
+  font: inherit;
+  content: "x";
+  display: inline;
+  font-weight: bold;
+}
+
+/* Fit Find/Replace window to mobile screen */
+.ace_search_field {
+  min-width: 10em;
+}

@@ -1,0 +1,27 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#root,
+.editor {
+  width: 100%;
+  height: 100%;
+}
+
+#welcome {
+  font-family: sans-serif;
+  padding: 1rem;
+}
+
+#welcome h1 {
+  font-size: large;
+}
+
+#welcome h2 {
+  font-size: medium
+}
+
+#root {
+  display: none
+}

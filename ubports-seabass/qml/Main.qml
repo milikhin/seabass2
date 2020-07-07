@@ -243,8 +243,10 @@ MainView {
             canBeSaved: api.filePath && api.hasChanges
             buildEnabled: api.filePath && builder.ready
             buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
-            keyboardExtensionAvailable: Qt.inputMethod.visible && main.visible && tabsModel.count
+            keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
+            searchEnabled: main.visible && tabsModel.count
             onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
+            onSearch: api.postMessage('toggleSearch')
           }
 
           CustomComponents.TabBar {

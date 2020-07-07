@@ -56,8 +56,12 @@ class Api {
     this._tabsController.exec(filePath, 'setContent', content, append)
   }
 
+  _apiOnToggleSearch ({ filePath }) {
+    this._tabsController.exec(filePath, 'toggleSearch')
+  }
+
   /**
-   * Simmulates keyDown event within the editor
+   * Simulates keyDown event within the editor
    * @param {string} filePath - /path/to/file
    * @param {int} keyCode - JS keyCode
    * @returns {undefined}
