@@ -1,4 +1,10 @@
 /* Search/Replace bar styling */
+/* Search bar's border-radius */
+.ace_search.right {
+  border-radius: 0;
+  overflow: visible;
+}
+
 /* Consistent touch-friendly button sizes*/
 .ace_search_form,
 .ace_replace_form,
@@ -15,6 +21,8 @@
 }
 
 .ace_button {
+  position: relative;
+  overflow: visible;
   display: inline-block;
   padding: 0 0.5em;
 }
@@ -23,11 +31,6 @@
   margin-left: 0;
   margin-top: 0!important;
   padding: 0 0.5em!important;
-}
-
-/* Search bar's border-radius */
-.ace_search.right {
-  border-radius: 0;
 }
 
 /* Close button */
@@ -60,4 +63,26 @@
 /* Fit Find/Replace window to mobile screen */
 .ace_search_field {
   min-width: 10em;
+}
+
+.ace_button:hover::before {
+  content: attr(title);
+
+  position: absolute;
+  top: 100%;
+  /* Align tooltip right for the buttons on the right */
+  right: 0;
+  margin-top: 4px;
+  display: inline;
+  padding: 5px;
+
+  font-size: 0.75em;
+  white-space: nowrap;
+  border: solid 1px;
+}
+
+/* Align tooltip left for the buttons on the left */
+.ace_button[action="toggleReplace"]:hover::before {
+  left: 0;
+  right: auto;
 }

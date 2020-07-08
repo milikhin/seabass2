@@ -29,16 +29,18 @@
     .ace_search_field {
       /* background-color: #backgroungColor */
       /* color: #textColor */
-      /* border-color: #border-color */
+      /* border-color: #borderColor */
     }
     .ace_button:hover,
     .ace_searchbtn:hover {
       /* background-color: #foregroundColor */
       /* color: #foregroundText */
     }
-    .ace_search {
-      /* background-color: #backgroungColor */
-      /* border-color: #border-color */
+    .ace_search,
+    .ace_button:hover::before {
+      /* background-color: #foregroundColor */
+      /* border-color: #borderColor */
+      /* color: #textColor */
     }
   </style>
 </head>
@@ -46,17 +48,17 @@
 <body>
   <div id="welcome">
     <h1>
-      Seabass2 v0.6.1
+      Seabass2 v0.7.0
     </h1>
     <h2>
       Release notes
     </h2>
     <p>
-      v0.6 adds support for setting indentation preferences using <a href="https://editorconfig.org/">.editorconfig files</a>.
-      <code>indent_style</code> and <code>indent_size</code> options are supported.
+      v0.7 adds find/replace functionality.
     </p>
     <p>
-      It is also possible to access files in the root directory now.
+      v0.6 introduced support for setting indentation preferences using <a href="https://editorconfig.org/">.editorconfig files</a>.
+      <code>indent_style</code> and <code>indent_size</code> options are supported.
     </p>
     <h2>
       Build tools
