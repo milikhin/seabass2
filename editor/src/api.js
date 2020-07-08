@@ -1,6 +1,12 @@
 /* globals localStorage */
 import { InvalidArgError, NotFoundError } from './errors'
 import TabsController from './tabs-controller'
+import {
+  getThemeStyleElem,
+  setMainWindowColors,
+  setAutocompleteColors,
+  setSearchBarColors
+} from './theme.js'
 
 class Api {
   constructor ({
@@ -177,33 +183,23 @@ class Api {
     }
 
     if (options.textColor && options.highlightColor && options.backgroundColor) {
-      const styleElem = document.getElementById('theme-css')
+      const styleElem = getThemeStyleElem()
       if (!styleElem) {
         return console.warn('Theme colors are ignored as corresponding <style> tag is not found')
       }
 
-      const backgroundColor = options.backgroundColor
-      const borderColor = options.borderColor
-      const textColor = options.textColor
-      const foregroundColor = options.foregroundColor || options.backgroundColor
-      const foregroundTextColor = options.foregroundTextColor || options.textColor
-      const highlightColor = options.highlightColor
+      const colors = {
+        backgroundColor: options.backgroundColor,
+        borderColor: options.borderColor,
+        textColor: options.textColor,
+        foregroundColor: options.foregroundColor || options.backgroundColor,
+        foregroundTextColor: options.foregroundTextColor || options.textColor,
+        highlightColor: options.highlightColor
+      }
 
-      styleElem.sheet.cssRules[0].style.backgroundColor = backgroundColor
-      styleElem.sheet.cssRules[1].style.color = textColor
-      styleElem.sheet.cssRules[2].style.color = highlightColor
-      styleElem.sheet.cssRules[3].style.backgroundColor = foregroundColor
-      styleElem.sheet.cssRules[4].style.color = foregroundTextColor
-
-      styleElem.sheet.cssRules[5].style.backgroundColor = backgroundColor
-      styleElem.sheet.cssRules[5].style.borderColor = borderColor
-      styleElem.sheet.cssRules[5].style.color = textColor
-
-      styleElem.sheet.cssRules[6].style.backgroundColor = foregroundColor
-      styleElem.sheet.cssRules[6].style.color = foregroundTextColor
-      styleElem.sheet.cssRules[7].style.backgroundColor = foregroundColor
-      styleElem.sheet.cssRules[7].style.setProperty('border-color', borderColor, 'important')
-      styleElem.sheet.cssRules[7].style.color = textColor
+      setMainWindowColors(colors)
+      setAutocompleteColors(colors)
+      setSearchBarColors(colors)
     }
     this._tabsController.setPreferences(options)
   }
