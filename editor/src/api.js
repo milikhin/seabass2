@@ -176,16 +176,36 @@ class Api {
       window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened)
     }
 
-    if (options.textColor && options.linkColor && options.backgroundColor) {
+    if (options.textColor && options.highlightColor && options.backgroundColor) {
       const styleElem = document.getElementById('theme-css')
       if (!styleElem) {
         return console.warn('Theme colors are ignored as corresponding <style> tag is not found')
       }
-      styleElem.sheet.cssRules[0].style.backgroundColor = options.backgroundColor
-      styleElem.sheet.cssRules[1].style.color = options.textColor
-      styleElem.sheet.cssRules[2].style.color = options.linkColor
-      styleElem.sheet.cssRules[3].style.backgroundColor = options.foregroundColor || options.backgroundColor
-      styleElem.sheet.cssRules[4].style.color = options.foregroundTextColor || options.textColor
+
+      const backgroundColor = options.backgroundColor
+      const borderColor = options.borderColor
+      const textColor = options.textColor
+      const foregroundColor = options.foregroundColor || options.backgroundColor
+      const foregroundTextColor = options.foregroundTextColor || options.textColor
+      const highlightColor = options.highlightColor
+      console.log(JSON.stringify(options))
+
+      styleElem.sheet.cssRules[0].style.backgroundColor = backgroundColor
+      styleElem.sheet.cssRules[1].style.color = textColor
+      styleElem.sheet.cssRules[2].style.color = highlightColor
+      styleElem.sheet.cssRules[3].style.backgroundColor = foregroundColor
+      styleElem.sheet.cssRules[4].style.color = foregroundTextColor
+
+      styleElem.sheet.cssRules[5].style.backgroundColor = backgroundColor
+      styleElem.sheet.cssRules[5].style.borderColor = borderColor
+      styleElem.sheet.cssRules[5].style.color = textColor
+
+      styleElem.sheet.cssRules[6].style.backgroundColor = foregroundColor
+      // styleElem.sheet.cssRules[6].style.borderColor = foregroundTextColor
+      styleElem.sheet.cssRules[6].style.color = foregroundTextColor
+      styleElem.sheet.cssRules[7].style.backgroundColor = foregroundColor
+      styleElem.sheet.cssRules[7].style.borderColor = borderColor
+      styleElem.sheet.cssRules[7].style.color = textColor
     }
     this._tabsController.setPreferences(options)
   }

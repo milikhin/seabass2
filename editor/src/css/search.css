@@ -1,5 +1,4 @@
 /* Search/Replace bar styling */
-
 /* Consistent touch-friendly button sizes*/
 .ace_search_form,
 .ace_replace_form,
@@ -49,7 +48,6 @@
 
 .ace_searchbtn_close:hover {
   background: none;
-  color: black;
 }
 
 .ace_searchbtn_close::before {
