@@ -38,23 +38,44 @@ describe('#setPreferences', () => {
     document.head.innerHTML += `
       <style id="theme-css">
         /* CSS Custom Properties are not supported in Sailfish */
-        /* these values are replaceable via JS */
+        /* these values are going to be replaces with JS: */
         body {
-          background-color: #eee; /* backgroungColor */
+          /*background-color: #backgroungColor */
         }
         #welcome {
-          color: #111; /* textColor */
+          /* color: #textColor */
         }
         #welcome a {
-          color: dodgerblue; /* linkColor */
+          /* color: #highlightColor */
         }
         .ace_tooltip.ace_doc-tooltip {
-          background-color: #eee; /* foregroundColor */
+          /* background-color: #foregroundColor */
         }
         .ace_tooltip.ace_doc-tooltip {
-          color: #111; /* foregroundText */
+          /* color: #foregroundText */
         }
-      </style>
+        .ace_button,
+        .ace_searchbtn,
+        .ace_searchbtn:last-child,
+        .ace_searchbtn_close,
+        .ace_searchbtn_close:hover,
+        .ace_search_field {
+          /* background-color: #backgroungColor */
+          /* color: #textColor */
+          /* border-color: #borderColor */
+        }
+        .ace_button:hover,
+        .ace_searchbtn:hover {
+          /* background-color: #foregroundColor */
+          /* color: #foregroundText */
+        }
+        .ace_search,
+        .ace_button:hover::before {
+          /* background-color: #foregroundColor */
+          /* border-color: #borderColor */
+          /* color: #textColor */
+        }
+       </style>
     `
 
     const colors = [
@@ -68,7 +89,8 @@ describe('#setPreferences', () => {
         filePath,
         textColor: colors[1],
         backgroundColor: colors[0],
-        linkColor: colors[2]
+        highlightColor: colors[2],
+        borderColor: colors[2]
       }
     })
 
@@ -88,7 +110,7 @@ describe('#setPreferences', () => {
         filePath,
         textColor: uuid(),
         backgroundColor: uuid(),
-        linkColor: uuid()
+        highlightColor: uuid()
       }
     })
 
