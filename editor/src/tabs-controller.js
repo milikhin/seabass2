@@ -23,6 +23,17 @@ export default class TabsController {
     this._tabs.splice(tabIndex, 1)
   }
 
+
+  /**
+   * Creates a new tab with an editor
+   * @param {string} filePath - /path/to/file
+   * @param {string} [content=''] - file content
+   * @param {Boolean} [readOnly=false] - true for a read only tab
+   * @param {Boolean} [isSailfish=false] - true to apply SFOS-specific workarounds
+   * @param {Boolean} [isTerminal=false] - true to apply Terminal-specific options
+   * @param {Object} editorConfig - parsed EditorConfig options
+   * @returns {Object} - tab description
+   */
   create (options) {
     const {
       filePath,
@@ -53,6 +64,11 @@ export default class TabsController {
     return tab
   }
 
+  /**
+   * Display tab corresponding to a given file
+   * @param {string} filePath - /path/to/file
+   * @returns {undefined}
+   */
   show (filePath) {
     const tab = this._getTab(filePath)
     if (!tab) {
@@ -67,6 +83,13 @@ export default class TabsController {
     tab.editor.activate()
   }
 
+  /**
+   * Execute given action for the given file
+   * @param {string} filePath - /path/to/file
+   * @param {string} action - action to execute
+   * @param {any[]} args - action params
+   * @returns {any} action result
+   */
   exec (filePath, action, ...args) {
     const tab = this._getTab(filePath)
     if (!tab) {
@@ -75,6 +98,11 @@ export default class TabsController {
     return tab.editor[action](...args)
   }
 
+  /**
+   * Set preferences for all the tabs
+   * @param {Boolean} isDarkTheme - true to set dark theme / false -- for a light one
+   * @returns {undefined}
+   */
   setPreferences (preferences) {
     this._preferences = preferences
     this._tabs.forEach(({ editor }) => {

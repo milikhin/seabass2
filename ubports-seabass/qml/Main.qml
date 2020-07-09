@@ -223,7 +223,12 @@ MainView {
             subtitle: defaultSubTitle
             Layout.fillWidth: true
 
-            onNavBarToggled: navBar.visible = !navBar.visible
+            onNavBarToggled: {
+              navBar.visible = !navBar.visible
+              if (!isWide) {
+                Qt.inputMethod.hide()
+              }
+            }
             onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
             onSaveRequested: {
               api.getFileContent(function(fileContent) {
