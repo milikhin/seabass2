@@ -252,7 +252,10 @@ MainView {
             keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
             searchEnabled: main.visible && tabsModel.count
             onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
-            onSearch: api.postMessage('toggleSearch')
+            onSearch: {
+              api.postMessage('toggleSearch')
+              editor.focus = true
+            }
           }
 
           CustomComponents.TabBar {

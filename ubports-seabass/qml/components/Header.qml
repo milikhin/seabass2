@@ -57,6 +57,7 @@ PageHeader {
         iconName: "find"
         text: i18n.tr("Find/Replace")
         enabled: searchEnabled
+        shortcut: StandardKey.Find
         onTriggered: search()
       },
       Action {
