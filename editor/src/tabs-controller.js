@@ -23,7 +23,6 @@ export default class TabsController {
     this._tabs.splice(tabIndex, 1)
   }
 
-
   /**
    * Creates a new tab with an editor
    * @param {string} filePath - /path/to/file

@@ -1,4 +1,4 @@
-export function setMainWindowColors(colors) {
+export function setMainWindowColors (colors) {
   const styleElem = getThemeStyleElem()
 
   styleElem.sheet.cssRules[0].style.backgroundColor = colors.backgroundColor
@@ -6,14 +6,14 @@ export function setMainWindowColors(colors) {
   styleElem.sheet.cssRules[2].style.color = colors.highlightColor
 }
 
-export function setAutocompleteColors(colors) {
+export function setAutocompleteColors (colors) {
   const styleElem = getThemeStyleElem()
 
   styleElem.sheet.cssRules[3].style.backgroundColor = colors.foregroundColor
   styleElem.sheet.cssRules[4].style.color = colors.foregroundTextColor
 }
 
-export function setSearchBarColors(colors) {
+export function setSearchBarColors (colors) {
   const styleElem = getThemeStyleElem()
 
   styleElem.sheet.cssRules[5].style.backgroundColor = colors.backgroundColor
@@ -27,6 +27,6 @@ export function setSearchBarColors(colors) {
   styleElem.sheet.cssRules[7].style.color = colors.textColor
 }
 
-export function getThemeStyleElem() {
+export function getThemeStyleElem () {
   return document.getElementById('theme-css')
 }
