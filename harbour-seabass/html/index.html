@@ -34,78 +34,45 @@
       font-size: small;
       box-sizing: border-box;
     }
-
-    #welcome h1 {
-      font-size: medium;
-    }
-
-    #welcome h2 {
-      font-size: small;
-    }
-
-    .ace_mobile-menu {
-      display: none !important;
-    }
-
-    /* Fix for incorrect format string's rendering in Erlang */
-    .ace_line > .ace_placeholder {
-      font-family: inherit;
-      transform: none;
-      opacity: 1;
-      margin: 0;
-    }
-
-    .ace_tooltip.ace_doc-tooltip {
-      font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
-      font-size: 12px;
-      background-image: none;
-      border: solid 1px;
-      color: inherit;
-    }
-
-    .ace_tooltip.ace_doc-tooltip hr {
-      border-top: solid 1px;
-      border-bottom: none;
-    }
-
-    /* Fix for incorrect format string's rendering in Erlang */
-    .ace_line > .ace_placeholder {
-      font-family: inherit;
-      transform: none;
-      opacity: 1;
-      margin: 0;
-    }
-
-    .ace_editor.ace_autocomplete,
-    .ace_dark.ace_editor.ace_autocomplete {
-      box-shadow: none;
-      transform: translateY(-1px);
-    }
-
-    .very-important-links {
-      margin: 0;
-    }
-    .very-important-links li {
-      margin-bottom: 0.5em;
-    }
   </style>
   <style id="theme-css">
     /* CSS Custom Properties are not supported in Sailfish */
-    /* these values are replaceable via JS */
+    /* these values are going to be replaces with JS: */
     body {
-      background-color: #eee;
+      /*background-color: #backgroungColor */
     }
     #welcome {
-      color: #111;
+      /* color: #textColor */
     }
     #welcome a {
-      color: dodgerblue;
+      /* color: #highlightColor */
     }
     .ace_tooltip.ace_doc-tooltip {
-      background-color: #eee; /* foregroundColor */
+      /* background-color: #foregroundColor */
     }
     .ace_tooltip.ace_doc-tooltip {
-      color: #111; /* foregroundText */
+      /* color: #foregroundText */
+    }
+    .ace_button,
+    .ace_searchbtn,
+    .ace_searchbtn:last-child,
+    .ace_searchbtn_close,
+    .ace_searchbtn_close:hover,
+    .ace_search_field {
+      /* background-color: #backgroungColor */
+      /* color: #textColor */
+      /* border-color: #borderColor */
+    }
+    .ace_button:hover,
+    .ace_searchbtn:hover {
+      /* background-color: #foregroundColor */
+      /* color: #foregroundText */
+    }
+    .ace_search,
+    .ace_button:hover::before {
+      /* background-color: #foregroundColor */
+      /* border-color: #borderColor */
+      /* color: #textColor */
     }
   </style>
 </head>

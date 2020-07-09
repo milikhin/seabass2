@@ -26,7 +26,7 @@ MainView {
   readonly property bool isWide: width >= units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: "Seabass"
-  readonly property string version: "0.6.1"
+  readonly property string version: "0.7.0"
 
   Settings {
     id: settings
@@ -74,6 +74,7 @@ MainView {
       isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
         theme.palette.normal.backgroundText)
       backgroundColor: theme.palette.normal.background
+      borderColor: theme.palette.normal.overlaySecondaryText
       textColor: theme.palette.normal.backgroundSecondaryText
       linkColor: theme.palette.normal.backgroundText
       foregroundColor: theme.palette.normal.foreground
@@ -222,7 +223,12 @@ MainView {
             subtitle: defaultSubTitle
             Layout.fillWidth: true
 
-            onNavBarToggled: navBar.visible = !navBar.visible
+            onNavBarToggled: {
+              navBar.visible = !navBar.visible
+              if (!isWide) {
+                Qt.inputMethod.hide()
+              }
+            }
             onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
             onSaveRequested: {
               api.getFileContent(function(fileContent) {
@@ -243,8 +249,13 @@ MainView {
             canBeSaved: api.filePath && api.hasChanges
             buildEnabled: api.filePath && builder.ready
             buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
-            keyboardExtensionAvailable: Qt.inputMethod.visible && main.visible && tabsModel.count
+            keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
+            searchEnabled: main.visible && tabsModel.count
             onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
+            onSearch: {
+              api.postMessage('toggleSearch')
+              editor.focus = true
+            }
           }
 
           CustomComponents.TabBar {

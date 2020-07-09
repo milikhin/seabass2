@@ -15,13 +15,15 @@ PageHeader {
   property bool canBeSaved: false
   property bool buildable: false
   property bool buildEnabled: false
-  property bool keyboardExtensionAvailable: false
+  property bool keyboardExtensionEnabled: false
+  property bool searchEnabled: false
 
   signal navBarToggled()
   signal aboutPageRequested()
   signal saveRequested()
   signal buildRequested()
   signal keyboardExtensionToggled()
+  signal search()
 
   navigationActions: [
     Action {
@@ -33,13 +35,10 @@ PageHeader {
   ]
 
   trailingActionBar {
-    numberOfSlots: 4
+    numberOfSlots: buildable
+      ? 4
+      : 3
     actions: [
-      Action {
-        iconName: "info"
-        text: i18n.tr("About")
-        onTriggered: aboutPageRequested()
-      },
       Action {
         iconName: "save"
         text: i18n.tr("Save")
@@ -55,10 +54,22 @@ PageHeader {
         onTriggered: buildRequested()
       },
       Action {
-        iconName: "preferences-desktop-keyboard-shortcuts-symbolic"
-        text: i18n.tr("Toggle keyboard extension")
-        visible: keyboardExtensionAvailable
+        iconName: "find"
+        text: i18n.tr("Find/Replace")
+        enabled: searchEnabled
+        shortcut: StandardKey.Find
+        onTriggered: search()
+      },
+      Action {
+        iconName: keyboardExtensionEnabled ? "select" : "select-none"
+        text: i18n.tr("Keyboard extension")
+        enabled: searchEnabled
         onTriggered: keyboardExtensionToggled()
+      },
+      Action {
+        iconName: "info"
+        text: i18n.tr("About")
+        onTriggered: aboutPageRequested()
       }
     ]
   }

@@ -20,6 +20,7 @@ QtObject {
     property string readErrorMsg: 'Unable to read file %1'
     property string writeErrorMsg: 'Unable to write file %1'
     property string backgroundColor
+    property string borderColor
     property string textColor
     property string linkColor
     property string foregroundColor: backgroundColor
@@ -145,11 +146,12 @@ QtObject {
     function loadTheme() {
         postMessage('setPreferences', {
             isDarkTheme: isDarkTheme,
-            textColor: textColor,
-            linkColor: linkColor,
             backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            highlightColor: linkColor,
             foregroundColor: foregroundColor,
-            foregroundTextColor: foregroundTextColor
+            foregroundTextColor: foregroundTextColor,
+            textColor: textColor
         })
     }
 

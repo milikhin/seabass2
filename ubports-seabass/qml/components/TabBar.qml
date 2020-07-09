@@ -54,7 +54,7 @@ Rectangle {
         anchors.fill: parent
         onWheel: {
           // no need to scroll if content width < container width
-          if (tabBar.contentItem.contentWidth < root.width) {
+          if (tabBar.contentWidth < root.width) {
             return
           }
 

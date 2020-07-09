@@ -1,6 +1,12 @@
 /* globals localStorage */
 import { InvalidArgError, NotFoundError } from './errors'
 import TabsController from './tabs-controller'
+import {
+  getThemeStyleElem,
+  setMainWindowColors,
+  setAutocompleteColors,
+  setSearchBarColors
+} from './theme.js'
 
 class Api {
   constructor ({
@@ -56,8 +62,12 @@ class Api {
     this._tabsController.exec(filePath, 'setContent', content, append)
   }
 
+  _apiOnToggleSearch ({ filePath }) {
+    this._tabsController.exec(filePath, 'toggleSearch')
+  }
+
   /**
-   * Simmulates keyDown event within the editor
+   * Simulates keyDown event within the editor
    * @param {string} filePath - /path/to/file
    * @param {int} keyCode - JS keyCode
    * @returns {undefined}
@@ -172,16 +182,24 @@ class Api {
       window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened)
     }
 
-    if (options.textColor && options.linkColor && options.backgroundColor) {
-      const styleElem = document.getElementById('theme-css')
+    if (options.textColor && options.highlightColor && options.backgroundColor) {
+      const styleElem = getThemeStyleElem()
       if (!styleElem) {
         return console.warn('Theme colors are ignored as corresponding <style> tag is not found')
       }
-      styleElem.sheet.cssRules[0].style.backgroundColor = options.backgroundColor
-      styleElem.sheet.cssRules[1].style.color = options.textColor
-      styleElem.sheet.cssRules[2].style.color = options.linkColor
-      styleElem.sheet.cssRules[3].style.backgroundColor = options.foregroundColor || options.backgroundColor
-      styleElem.sheet.cssRules[4].style.color = options.foregroundTextColor || options.textColor
+
+      const colors = {
+        backgroundColor: options.backgroundColor,
+        borderColor: options.borderColor,
+        textColor: options.textColor,
+        foregroundColor: options.foregroundColor || options.backgroundColor,
+        foregroundTextColor: options.foregroundTextColor || options.textColor,
+        highlightColor: options.highlightColor
+      }
+
+      setMainWindowColors(colors)
+      setAutocompleteColors(colors)
+      setSearchBarColors(colors)
     }
     this._tabsController.setPreferences(options)
   }

@@ -3,91 +3,44 @@
 <head>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <meta charset="utf-8" />
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-    }
-
-    #root,
-    .editor {
-      width: 100%;
-      height: 100%;
-    }
-
-    #welcome {
-      font-family: sans-serif;
-      padding: 1rem;
-    }
-
-    #welcome h1 {
-      font-size: large;
-    }
-
-    #welcome h2 {
-      font-size: medium
-    }
-
-    #root {
-      display: none
-    }
-
-    /* Ace overrides for better styling and minor UI fixes*/
-    .ace_mobile-menu {
-      display: none !important;
-    }
-
-    .ace_tooltip.ace_doc-tooltip {
-      font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
-      font-size: 12px;
-      background-image: none;
-      border: solid 1px;
-      color: inherit;
-    }
-
-    .ace_tooltip.ace_doc-tooltip hr {
-      border-top: solid 1px;
-      border-bottom: none;
-    }
-
-    /* Fix for incorrect format string's rendering in Erlang */
-    .ace_line > .ace_placeholder {
-      font-family: inherit;
-      transform: none;
-      opacity: 1;
-      margin: 0;
-    }
-
-    .ace_editor.ace_autocomplete,
-    .ace_dark.ace_editor.ace_autocomplete {
-      box-shadow: none;
-      transform: translateY(-1px);
-    }
-
-    .very-important-links {
-      margin: 0;
-    }
-    .very-important-links li {
-      margin-bottom: 0.5em;
-    }
-  </style>
   <style id="theme-css">
     /* CSS Custom Properties are not supported in Sailfish */
-    /* these values are replaceable via JS */
+    /* these values are going to be replaces with JS: */
     body {
-      background-color: #eee; /* backgroungColor */
+      /*background-color: #backgroungColor */
     }
     #welcome {
-      color: #111; /* textColor */
+      /* color: #textColor */
     }
     #welcome a {
-      color: dodgerblue; /* linkColor */
+      /* color: #highlightColor */
     }
     .ace_tooltip.ace_doc-tooltip {
-      background-color: #eee; /* foregroundColor */
+      /* background-color: #foregroundColor */
     }
     .ace_tooltip.ace_doc-tooltip {
-      color: #111; /* foregroundText */
+      /* color: #foregroundText */
+    }
+    .ace_button,
+    .ace_searchbtn,
+    .ace_searchbtn:last-child,
+    .ace_searchbtn_close,
+    .ace_searchbtn_close:hover,
+    .ace_search_field {
+      /* background-color: #backgroungColor */
+      /* color: #textColor */
+      /* border-color: #borderColor */
+    }
+    .ace_button:hover,
+    .ace_searchbtn:hover {
+      /* background-color: #foregroundColor */
+      /* color: #foregroundText */
+    }
+    .ace_search,
+    .ace_button:hover::before {
+      /* background-color: #foregroundColor */
+      /* border-color: #borderColor */
+      /* color: #textColor */
     }
   </style>
 </head>
@@ -95,17 +48,17 @@
 <body>
   <div id="welcome">
     <h1>
-      Seabass2 v0.6.1
+      Seabass2 v0.7.0
     </h1>
     <h2>
       Release notes
     </h2>
     <p>
-      v0.6 adds support for setting indentation preferences using <a href="https://editorconfig.org/">.editorconfig files</a>.
-      <code>indent_style</code> and <code>indent_size</code> options are supported.
+      v0.7 adds find/replace functionality.
     </p>
     <p>
-      It is also possible to access files in the root directory now.
+      v0.6 introduced support for setting indentation preferences using <a href="https://editorconfig.org/">.editorconfig files</a>.
+      <code>indent_style</code> and <code>indent_size</code> options are supported.
     </p>
     <h2>
       Build tools

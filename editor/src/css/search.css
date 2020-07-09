@@ -1,0 +1,89 @@
+/* Search/Replace bar styling */
+/* Search bar's border-radius */
+.ace_search.right {
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* Consistent touch-friendly button sizes*/
+.ace_search_form,
+.ace_replace_form,
+.ace_button,
+.ace_search_counter,
+.ace_searchbtn_close {
+  font-size: 0.9rem;
+}
+
+.ace_search_options,
+.ace_search_counter,
+.ace_searchbtn_close {
+  line-height: 1.9;
+}
+
+.ace_button {
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  padding: 0 0.5em;
+}
+
+.ace_button[action="toggleReplace"] {
+  margin-left: 0;
+  margin-top: 0!important;
+  padding: 0 0.5em!important;
+}
+
+/* Close button */
+.ace_search_form {
+  margin-right: 1.71rem; /* 1.9 * 0.9rem */
+}
+
+.ace_searchbtn_close {
+  text-align: center;
+  top: 4px;
+  right: 6px;
+  height: auto;
+  width: auto;
+  background: none;
+  padding: 0 0.5rem;
+  border-radius: 0;
+}
+
+.ace_searchbtn_close:hover {
+  background: none;
+}
+
+.ace_searchbtn_close::before {
+  font: inherit;
+  content: "x";
+  display: inline;
+  font-weight: bold;
+}
+
+/* Fit Find/Replace window to mobile screen */
+.ace_search_field {
+  min-width: 5em;
+  max-width: 10em;
+}
+
+.ace_button:hover::before {
+  content: attr(title);
+
+  position: absolute;
+  top: 100%;
+  /* Align tooltip right for the buttons on the right */
+  right: 0;
+  margin-top: 4px;
+  display: inline;
+  padding: 5px;
+
+  font-size: 0.75em;
+  white-space: nowrap;
+  border: solid 1px;
+}
+
+/* Align tooltip left for the buttons on the left */
+.ace_button[action="toggleReplace"]:hover::before {
+  left: 0;
+  right: auto;
+}

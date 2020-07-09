@@ -164,6 +164,32 @@ export default class Editor {
     this._onChange()
   }
 
+  toggleSearch () {
+    this._ace.execCommand('find')
+    const i = setInterval(() => {
+      const searchBar = this._ace.renderer.container.querySelector('.ace_search')
+      if (!searchBar) {
+        return
+      }
+
+      clearInterval(i)
+      ;['mousedown', 'mouseup', 'touchstart', 'touchend', 'touchmove', 'click'].forEach(evtName => {
+        searchBar.removeEventListener(evtName, this._handleSearchBarTouchEvent)
+        searchBar.addEventListener(evtName, this._handleSearchBarTouchEvent)
+      })
+    }, 100)
+  }
+
+  _handleSearchBarTouchEvent = evt => {
+    evt.stopPropagation()
+    if (evt.target.closest('input')) {
+      return
+    }
+
+    this._ace.focus()
+    this._ace.renderer.scrollCursorIntoView()
+  }
+
   _applyPlatformHaks () {
     // debounce scrollTop workaround too prevent tearing when scroll is animated
     this._isSailfish = true
@@ -218,7 +244,11 @@ export default class Editor {
   }
 
   _onResize = () => {
-    this._ace.focus()
     this._ace.renderer.scrollCursorIntoView()
+
+    if (document.activeElement && document.activeElement.closest('.ace_search')) {
+      return
+    }
+    this._ace.focus()
   }
 }
