@@ -8,6 +8,7 @@ import 'ace-builds/src-noconflict/theme-chrome'
 import modelist from 'ace-builds/src-noconflict/ext-modelist'
 // import beautify from 'ace-builds/src-noconflict/ext-beautify'
 import 'ace-builds/src-noconflict/ext-language_tools'
+import 'ace-builds/src-noconflict/ext-searchbox'
 
 import md5 from 'blueimp-md5'
 
