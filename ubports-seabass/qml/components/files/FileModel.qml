@@ -90,13 +90,9 @@ Item {
       entries.forEach(function (fileEntry, i) {
         var index = startIndex + i
         fileEntry.isExpanded = expanded.indexOf(fileEntry.path) !== -1
-        if (index < model.count - 1) {
+        if (index < model.count) {
           // update non-last model entries
           model.set(index, fileEntry)
-        } else if (index === model.count - 1) {
-          // re-create last model entry to fix issues with rendering list item borders
-          model.remove(index, 1)
-          model.append(fileEntry)
         } else {
           // append new model entries
           model.append(fileEntry)

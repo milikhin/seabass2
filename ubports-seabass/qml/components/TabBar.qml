@@ -1,80 +1,48 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
 import QtQuick.Controls 2.2
-import Ubuntu.Components.Themes 1.3
+import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
 
 import "./tabs" as TabComponents
 import "../generic/utils.js" as QmlJs
 
-Rectangle {
+Item {
   id: root
 
+  property real minTabLabelWidth: Suru.units.gu(8)
+  property real maxTabLabelWidth: Suru.units.gu(30)
   property ListModel model
-  property real minTabLabelWidth: units.gu(10)
-  property real maxTabLabelWidth: units.gu(30)
-  property real underlineWidth: units.gu(1) / 4
-  property alias currentIndex: tabBar.currentIndex
 
+  property alias currentIndex: tabBar.currentIndex
   signal tabCloseRequested(int index)
 
-  ScrollBar {
-    id: hbar
-    hoverEnabled: true
-    active: hovered || pressed
-    orientation: Qt.Horizontal
-    size: width / tabBar.contentWidth
+  MouseArea {
+    anchors.fill: parent
+    onWheel: {
+      // no need to scroll if content width < container width
+      if (tabBar.contentItem.contentWidth < root.width) {
+        return
+      }
 
-    anchors.left: parent.left
-    anchors.right: parent.right
-    anchors.bottom: parent.bottom
-    anchors.bottomMargin: root.underlineWidth
-
-    onPositionChanged: {
-      tabBar.contentX = position * tabBar.contentWidth
-    }
-
-    Component.onCompleted: {
-      tabBar.contentXChanged.connect(function() {
-        position = tabBar.contentX / tabBar.contentWidth
-      })
+      const step = Suru.units.gu(10)
+      if (wheel.angleDelta.y > 0 || wheel.angleDelta.x > 0) {
+        const minX = 0
+        tabBar.contentItem.contentX = Math.max(minX, tabBar.contentItem.contentX - step)
+      } else {
+        const maxX = tabBar.contentItem.contentWidth - tabBar.width
+        tabBar.contentItem.contentX = Math.min(maxX, tabBar.contentItem.contentX + step)
+      }
     }
   }
 
   TabBar {
     id: tabBar
+    clip: true
     anchors.fill: parent
 
-    property real contentX
-
-    background: Rectangle {
-      color: theme.palette.normal.background
-      border.width: 0
-      MouseArea {
-        anchors.fill: parent
-        onWheel: {
-          // no need to scroll if content width < container width
-          if (tabBar.contentWidth < root.width) {
-            return
-          }
-
-          if (wheel.angleDelta.y > 0 || wheel.angleDelta.x > 0) {
-            hbar.decrease()
-          } else {
-            hbar.increase()
-          }
-        }
-      }
-    }
-
-    // Two-way binding for `contentX` between the TabBar and its contentItem, so it can be set manually
     Component.onCompleted: {
-      contentXChanged.connect(function() {
-        contentItem.contentX = contentX
-      })
-      contentItem.contentXChanged.connect(function() {
-        contentX = contentItem.contentX
-      })
+      tabBar.contentItem.highlightRangeMode = ListView.NoHighlightRange
+      tabBar.contentItem.snapMode = ListView.NoSnap
     }
 
     Repeater {
@@ -82,21 +50,21 @@ Rectangle {
       model: root.model
 
       onItemAdded: function(index) {
-        root.currentIndex = index
+        tabBar.currentIndex = index
       }
 
       TabComponents.TabButton {
-        height: root.height
-        isActive: model.index === root.currentIndex
         maxLabelWidth: Math.min(root.width / 2, maxTabLabelWidth)
         minLabelWidth: minTabLabelWidth
         text: model.title
         hasChanges: model.hasChanges
-        underlineWidth: root.underlineWidth
+        isActive: model.index === tabBar.currentIndex
         isBusy: model.isBusy
+        useSystemFocusVisuals: false
 
         onClosed: tabCloseRequested(model.index)
       }
     }
   }
 }
+

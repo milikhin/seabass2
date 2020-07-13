@@ -262,8 +262,8 @@ MainView {
             id: tabBar
             model: tabsModel
             visible: model.count
-            Layout.minimumHeight: model.count ? units.gu(4.5) : 0
             Layout.fillWidth: true
+            Layout.preferredHeight: units.gu(4.5)
 
             onCurrentIndexChanged: {
               if (!model.count) {
@@ -310,7 +310,6 @@ MainView {
 
           CustomComponents.EditorView {
             id: editor
-            width: parent.width
             Layout.fillWidth: true
             Layout.fillHeight: true
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-09 16:41+0000\n"
+"POT-Creation-Date: 2020-07-13 07:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,6 +69,18 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#: ../qml/components/ContextMenu.qml:15
+msgid "Create file..."
+msgstr ""
+
+#: ../qml/components/ContextMenu.qml:21
+msgid "Rename..."
+msgstr ""
+
+#: ../qml/components/ContextMenu.qml:25
+msgid "Delete"
+msgstr ""
+
 #: ../qml/components/ErrorDialog.qml:7
 msgid "unknown error"
 msgstr ""
@@ -82,7 +94,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../qml/components/FileList.qml:48 ../qml/components/Header.qml:32
+#: ../qml/components/FileList.qml:44 ../qml/components/Header.qml:32
 msgid "Files"
 msgstr ""
 
