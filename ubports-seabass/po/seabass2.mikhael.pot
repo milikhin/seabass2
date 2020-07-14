@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-13 07:37+0000\n"
+"POT-Creation-Date: 2020-07-14 06:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:12 ../qml/components/Header.qml:71
+#: ../qml/About.qml:22 ../qml/components/Header.qml:62
 msgid "About"
 msgstr ""
 
-#: ../qml/About.qml:19
-msgid "Feed the Seabass!"
-msgstr ""
-
-#: ../qml/About.qml:40
+#: ../qml/About.qml:35
 msgid ""
 "Click here to open project page and find docs, support, donation options and "
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:21
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:85
+#: ../qml/Main.qml:22 seabass2.desktop.in.h:1
+msgid "Seabass2"
+msgstr ""
+
+#: ../qml/Main.qml:45
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:86
+#: ../qml/Main.qml:46
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:243
+#: ../qml/Main.qml:232
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
@@ -69,18 +69,6 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: ../qml/components/ContextMenu.qml:15
-msgid "Create file..."
-msgstr ""
-
-#: ../qml/components/ContextMenu.qml:21
-msgid "Rename..."
-msgstr ""
-
-#: ../qml/components/ContextMenu.qml:25
-msgid "Delete"
-msgstr ""
-
 #: ../qml/components/ErrorDialog.qml:7
 msgid "unknown error"
 msgstr ""
@@ -90,27 +78,15 @@ msgid "Error occured"
 msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
+#: ../qml/components/files/Header.qml:41
 msgid "Close"
 msgstr ""
 
-#: ../qml/components/FileList.qml:44 ../qml/components/Header.qml:32
+#: ../qml/components/FileList.qml:58
 msgid "Files"
 msgstr ""
 
-#: ../qml/components/Header.qml:44 ../qml/components/SaveDialog.qml:26
-msgid "Save"
-msgstr ""
-
-#: ../qml/components/Header.qml:51
-msgid "Build"
-msgstr ""
-
-#: ../qml/components/Header.qml:58
-msgid "Find/Replace"
-msgstr ""
-
-#: ../qml/components/Header.qml:65
+#: ../qml/components/Header.qml:56
 msgid "Keyboard extension"
 msgstr ""
 
@@ -142,18 +118,30 @@ msgstr ""
 msgid "Changes will be lost if you close the file without saving."
 msgstr ""
 
-#: ../qml/components/files/Header.qml:23
+#: ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr ""
+
+#: ../qml/components/files/ContextMenu.qml:20
+msgid "Create file..."
+msgstr ""
+
+#: ../qml/components/files/ContextMenu.qml:26
+msgid "Rename..."
+msgstr ""
+
+#: ../qml/components/files/ContextMenu.qml:32
+msgid "Delete"
+msgstr ""
+
+#: ../qml/components/files/Header.qml:26
 msgid "New file..."
 msgstr ""
 
-#: ../qml/components/files/Header.qml:28
+#: ../qml/components/files/Header.qml:31
 msgid "Tree mode"
 msgstr ""
 
-#: ../qml/components/files/Header.qml:33
+#: ../qml/components/files/Header.qml:36
 msgid "Reload"
-msgstr ""
-
-#: seabass2.desktop.in.h:1
-msgid "Seabass2"
 msgstr ""

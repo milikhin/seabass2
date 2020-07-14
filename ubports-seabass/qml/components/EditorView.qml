@@ -1,11 +1,9 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
 import QtQuick.Layouts 1.3
 import Morph.Web 0.1
 import QtWebEngine 1.1
 
 WebView {
-  id: editor
   zoomFactor: units.gu(1) / 8
   url: "../../html/index.html"
 

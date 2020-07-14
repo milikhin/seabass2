@@ -2,35 +2,44 @@ import QtQuick 2.9
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
 
+import '../common' as CustomComponents
+
 Menu {
   modal: true
+  dim: false
   property bool isDirectoryMenu
+  property bool isDotDotMenu
   property string contextPath
 
   signal createTriggered()
   signal renameTriggered()
   signal deleteTriggered()
 
-  MenuItem {
+  CustomComponents.MenuItem {
+    icon: "add"
     text: i18n.tr("Create file...")
     visible: isDirectoryMenu
-    height: isDirectoryMenu ? undefined: 0
     onTriggered: createTriggered()
   }
-  MenuItem {
+  CustomComponents.MenuItem {
+    icon: "edit"
     text: i18n.tr("Rename...")
+    visible: !isDotDotMenu
     onTriggered: renameTriggered()
   }
-  MenuItem {
+  CustomComponents.MenuItem {
+    icon: "delete"
     text: i18n.tr("Delete")
+    visible: !isDotDotMenu
     onTriggered: deleteTriggered()
   }
 
-  function show(mouseX, mouseY, path, isDir) {
+  function show(mouseX, mouseY, path, isDir, isDotDot) {
     x = mouseX
     y = mouseY
     contextPath = path
     isDirectoryMenu = isDir
+    isDotDotMenu = isDotDot
 
     open()
   }
