@@ -60,7 +60,6 @@ Item {
         hasChanges: model.hasChanges
         isActive: model.index === tabBar.currentIndex
         isBusy: model.isBusy
-        useSystemFocusVisuals: false
 
         onClosed: tabCloseRequested(model.index)
       }

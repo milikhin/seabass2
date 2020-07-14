@@ -50,7 +50,6 @@ CustomComponents.ToolBar {
       id: menu
       y: parent.height
       modal: true
-      dim: false
       CustomComponents.MenuItem {
         icon: keyboardExtensionEnabled ? "select" : "select-none"
         text: i18n.tr("Keyboard extension")

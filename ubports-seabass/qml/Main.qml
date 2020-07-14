@@ -17,6 +17,10 @@ ApplicationWindow {
   width: Suru.units.gu(100)
   height: Suru.units.gu(60)
 
+  overlay.modal: Rectangle {
+    color: "transparent"
+  }
+
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")

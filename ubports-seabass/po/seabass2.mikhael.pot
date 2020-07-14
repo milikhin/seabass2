@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 06:55+0000\n"
+"POT-Creation-Date: 2020-07-14 17:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:62
+#: ../qml/About.qml:22 ../qml/components/Header.qml:61
 msgid "About"
 msgstr ""
 
@@ -27,24 +27,24 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:21
+#: ../qml/Main.qml:25
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:22 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:45
+#: ../qml/Main.qml:49
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:46
+#: ../qml/Main.qml:50
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:232
+#: ../qml/Main.qml:236
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgid "Error occured"
 msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:41
+#: ../qml/components/files/Header.qml:40
 msgid "Close"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: ../qml/components/Header.qml:56
+#: ../qml/components/Header.qml:55
 msgid "Keyboard extension"
 msgstr ""
 
@@ -122,26 +122,26 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: ../qml/components/files/ContextMenu.qml:20
+#: ../qml/components/files/ContextMenu.qml:19
 msgid "Create file..."
 msgstr ""
 
-#: ../qml/components/files/ContextMenu.qml:26
+#: ../qml/components/files/ContextMenu.qml:25
 msgid "Rename..."
 msgstr ""
 
-#: ../qml/components/files/ContextMenu.qml:32
+#: ../qml/components/files/ContextMenu.qml:31
 msgid "Delete"
 msgstr ""
 
-#: ../qml/components/files/Header.qml:26
+#: ../qml/components/files/Header.qml:25
 msgid "New file..."
 msgstr ""
 
-#: ../qml/components/files/Header.qml:31
+#: ../qml/components/files/Header.qml:30
 msgid "Tree mode"
 msgstr ""
 
-#: ../qml/components/files/Header.qml:36
+#: ../qml/components/files/Header.qml:35
 msgid "Reload"
 msgstr ""

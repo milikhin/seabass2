@@ -6,7 +6,6 @@ import '../common' as CustomComponents
 
 Menu {
   modal: true
-  dim: false
   property bool isDirectoryMenu
   property bool isDotDotMenu
   property string contextPath

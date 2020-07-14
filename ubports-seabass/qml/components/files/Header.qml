@@ -20,7 +20,6 @@ CustomComponents.ToolBar {
       id: menu
       y: parent.height
       modal: true
-      dim: false
       CustomComponents.MenuItem {
         icon: "add"
         text: i18n.tr("New file...")
