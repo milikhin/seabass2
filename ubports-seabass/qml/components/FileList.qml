@@ -70,24 +70,6 @@ Item {
       z: 1
     }
 
-<<<<<<< HEAD
-=======
-    FilesComponents.Header {
-      Layout.fillWidth: true
-
-      id: header
-      hasLeadingButton: root.isPage
-      onLeadingAction: closed()
-      title: i18n.tr("Files")
-      subtitle: directoryModel.getPrintableDirPath()
-      onClosed: root.closed()
-      onFileCreationInitialised: root.createFile(directoryModel.getDirPath())
-      onReloaded: directoryModel.load()
-      onTreeModeChanged: root.treeMode = treeMode
-      z: 1
-    }
-
->>>>>>> master
     ListView {
       id: list
       Layout.fillWidth: true
@@ -111,10 +93,7 @@ Item {
         MouseArea {
           anchors.fill: parent
           acceptedButtons: Qt.LeftButton | Qt.RightButton
-<<<<<<< HEAD
           hoverEnabled: true
-=======
->>>>>>> master
 
           onPressAndHold: {
             menu.show(mouseX, _getWindowY(mouseY), path)
@@ -136,22 +115,15 @@ Item {
 
           Rectangle {
             anchors.fill: parent
-<<<<<<< HEAD
             color: parent.containsMouse
               ? Suru.secondaryBackgroundColor
               : Suru.backgroundColor
             border {
               width: menu.visible && menu.contextPath === path
-=======
-            color: "transparent"
-            border {
-              width: parent.pressed || (menu.visible && menu.contextPath === path)
->>>>>>> master
                 ? units.dp(1)
                 : 0
               color: Suru.highlightColor
             }
-<<<<<<< HEAD
             Behavior on color {
               ColorAnimation {
                 duration: Suru.animations.FastDuration
@@ -159,8 +131,6 @@ Item {
               }
             }
 
-=======
->>>>>>> master
             RowLayout {
               anchors.left: parent.left
               anchors.right: parent.right
