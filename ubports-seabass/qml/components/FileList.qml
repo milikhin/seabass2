@@ -24,7 +24,7 @@ Item {
   ConfirmDialog {
     id: confirmDialog
     title: i18n.tr("Delete file?")
-    okColor: Suru.theme == Suru.Dark ? Suru.lightNegative : Suru.darkNegative
+    okColor: Suru.theme === Suru.Dark ? Suru.darkNegative : Suru.lightNegative
     okText: i18n.tr("Delete")
   }
   FilesComponents.NewFileDialog {
@@ -53,6 +53,7 @@ Item {
 
   ColumnLayout {
     anchors.fill: parent
+    spacing: 0
 
     FilesComponents.Header {
       Layout.fillWidth: true
@@ -92,6 +93,7 @@ Item {
         MouseArea {
           anchors.fill: parent
           acceptedButtons: Qt.LeftButton | Qt.RightButton
+          hoverEnabled: true
 
           onPressAndHold: {
             menu.show(mouseX, _getWindowY(mouseY), path)
@@ -113,13 +115,22 @@ Item {
 
           Rectangle {
             anchors.fill: parent
-            color: "transparent"
+            color: parent.containsMouse
+              ? Suru.secondaryBackgroundColor
+              : Suru.backgroundColor
             border {
-              width: parent.pressed || (menu.visible && menu.contextPath === path)
+              width: menu.visible && menu.contextPath === path
                 ? units.dp(1)
                 : 0
               color: Suru.highlightColor
             }
+            Behavior on color {
+              ColorAnimation {
+                duration: Suru.animations.FastDuration
+                easing: Suru.animations.EasingIn
+              }
+            }
+
             RowLayout {
               anchors.left: parent.left
               anchors.right: parent.right

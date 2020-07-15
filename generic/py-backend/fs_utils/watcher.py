@@ -6,6 +6,7 @@ Watcher class provides the `watch` method
 that starts a new thread to wait for a first FS event.
 When FS event happens a given callback is executed and the thread exits.
 """
+from os.path import exists
 from threading import Thread
 from inotify_simple import INotify, flags
 
@@ -52,7 +53,8 @@ class Watcher: # pylint: disable=too-few-public-methods
         watch_flags = flags.CREATE | flags.DELETE | flags.MODIFY | flags.MOVED_FROM | \
                       flags.MOVED_TO | flags.DELETE_SELF
         for directory in directories:
-            self._watch_descriptors.append(self._inotify.add_watch(directory, watch_flags))
+            if exists(directory):
+                self._watch_descriptors.append(self._inotify.add_watch(directory, watch_flags))
 
         # wait for event
         try:

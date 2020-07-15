@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-22 06:58+0000\n"
-"PO-Revision-Date: 2020-06-22 18:34+0700\n"
+"POT-Creation-Date: 2020-07-15 16:07+0000\n"
+"PO-Revision-Date: 2020-07-15 23:12+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -19,15 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
-#: ../qml/About.qml:12 ../qml/components/Header.qml:39
+#: ../qml/About.qml:22 ../qml/components/Header.qml:70
 msgid "About"
 msgstr "О программе"
 
-#: ../qml/About.qml:19
-msgid "Feed the Seabass!"
-msgstr "Покормить Сибаса!"
-
-#: ../qml/About.qml:40
+#: ../qml/About.qml:35
 msgid ""
 "Click here to open project page and find docs, support, donation options and "
 "list of contributors!"
@@ -35,17 +31,21 @@ msgstr ""
 "Нажмите здесь, чтобы открыть сайт проекта. Там Вы найдете документацию, "
 "техническую поддержку, способы пожертвований и список участников проекта!"
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:25
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
-#: ../qml/Main.qml:87
+#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+msgid "Seabass2"
+msgstr ""
+
+#: ../qml/Main.qml:49
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Ошибка чтения файла. Пожалуйста, убедитесь, что у Вас есть права на чтение "
 "из %1"
 
-#: ../qml/Main.qml:88
+#: ../qml/Main.qml:50
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
@@ -58,7 +58,11 @@ msgstr ""
 "Сборка проекта (%1) завершилась с ошибкой. Сведения об ошибке можно найти во "
 "вкладке Build output"
 
-#: ../qml/components/Builder.qml:75
+#: ../qml/components/Builder.qml:28
+msgid "Creating build container"
+msgstr "Создание контейнера для сборки проектов"
+
+#: ../qml/components/Builder.qml:80
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -70,16 +74,13 @@ msgstr ""
 "использовать Seabass в это время. Активное сетевое соединение будет "
 "использовано для скачивания необходимых пакетов."
 
-#: ../qml/components/ConfirmDialog.qml:25
-msgid "Creating build container"
-msgstr "Создание контейнера для сборки проектов"
-
-#: ../qml/components/ConfirmDialog.qml:27
+#: ../qml/components/ConfirmDialog.qml:11
 msgid "Ok"
 msgstr ""
 
-#: ../qml/components/ConfirmDialog.qml:35
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/ConfirmDialog.qml:39 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/files/NewFileDialog.qml:45
+#: ../qml/components/files/RenameDialog.qml:52
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -92,25 +93,31 @@ msgid "Error occured"
 msgstr "Ошибка"
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
+#: ../qml/components/files/Header.qml:40
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../qml/components/FileList.qml:47 ../qml/components/Header.qml:30
+#: ../qml/components/FileList.qml:26
+msgid "Delete file?"
+msgstr "Удалить файл?"
+
+#: ../qml/components/FileList.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:27
+#: ../qml/components/files/FileMenu.qml:21
+msgid "Delete"
+msgstr "Удалить"
+
+#: ../qml/components/FileList.qml:64
 msgid "Files"
 msgstr "Файлы"
 
-#: ../qml/components/Header.qml:44 ../qml/components/SaveDialog.qml:26
-msgid "Save"
-msgstr "Сохранить"
+#: ../qml/components/FileList.qml:199
+msgid "%1 will be deleted"
+msgstr "%1 будет удален"
 
-#: ../qml/components/Header.qml:51
-msgid "Build"
-msgstr "Сборка"
-
-#: ../qml/components/Header.qml:58
-msgid "Toggle keyboard extension"
-msgstr "Расширение для виртуальной клавиатуры"
+#: ../qml/components/Header.qml:64
+msgid "Keyboard extension"
+msgstr "Расширение вирт. клавиатуры"
 
 #: ../qml/components/KeyboardExtension.qml:33
 msgid "Tab"
@@ -120,18 +127,6 @@ msgstr ""
 msgid "Esc"
 msgstr ""
 
-#: ../qml/components/NewFileDialog.qml:22
-msgid "Create new file"
-msgstr "Создать файл"
-
-#: ../qml/components/NewFileDialog.qml:27
-msgid "file.txt"
-msgstr ""
-
-#: ../qml/components/NewFileDialog.qml:37
-msgid "Create"
-msgstr "Создать"
-
 #: ../qml/components/SaveDialog.qml:23
 msgid "Save changes in %1?"
 msgstr "Сохранить изменения в %1?"
@@ -140,18 +135,52 @@ msgstr "Сохранить изменения в %1?"
 msgid "Changes will be lost if you close the file without saving."
 msgstr "Изменения будут потеряны, если Вы закроете файл без сохранения."
 
-#: ../qml/components/files/Header.qml:23
+#: ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr "Сохранить"
+
+#: ../qml/components/files/DirectoryMenu.qml:17
+#: ../qml/components/files/DotDotMenu.qml:15
+#: ../qml/components/files/Header.qml:25
 msgid "New file..."
 msgstr "Новый файл..."
 
-#: ../qml/components/files/Header.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:22
+#: ../qml/components/files/FileMenu.qml:16
+msgid "Rename..."
+msgstr "Переименовать..."
+
+#: ../qml/components/files/Header.qml:30
 msgid "Tree mode"
 msgstr "Дерево файлов"
 
-#: ../qml/components/files/Header.qml:33
+#: ../qml/components/files/Header.qml:35
 msgid "Reload"
 msgstr "Обновить"
 
-#: seabass2.desktop.in.h:1
-msgid "Seabass2"
+#: ../qml/components/files/NewFileDialog.qml:22
+msgid "Create new file"
+msgstr "Создать файл"
+
+#: ../qml/components/files/NewFileDialog.qml:27
+#: ../qml/components/files/RenameDialog.qml:33
+msgid "file.txt"
 msgstr ""
+
+#: ../qml/components/files/NewFileDialog.qml:37
+msgid "Create"
+msgstr "Создать"
+
+#: ../qml/components/files/RenameDialog.qml:28
+msgid "Rename %1"
+msgstr "Переименовать %1"
+
+#: ../qml/components/files/RenameDialog.qml:44
+msgid "Rename"
+msgstr "Переименовать"
+
+#~ msgid "Feed the Seabass!"
+#~ msgstr "Покормить Сибаса!"
+
+#~ msgid "Build"
+#~ msgstr "Сборка"

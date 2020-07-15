@@ -26,6 +26,10 @@ ApplicationWindow {
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
   readonly property string version: "0.8.0"
 
+  Component.onCompleted: {
+    i18n.domain = "seabass2.mikhael"
+  }
+
   Settings {
     id: settings
     property bool isKeyboardExtensionVisible: true
@@ -165,8 +169,9 @@ ApplicationWindow {
         spacing: 0
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.minimumWidth: isWide ? Suru.units.gu(30) : parent.width
-        Layout.maximumWidth: isWide ? Suru.units.gu(40) : parent.width
+        Layout.minimumWidth: isWide ? Suru.units.gu(35) : parent.width
+        Layout.maximumWidth: Layout.minimumWidth
+        Layout.preferredWidth: Layout.minimumWidth
 
         CustomComponents.FileList {
           id: fileList
