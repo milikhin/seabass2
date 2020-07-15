@@ -31,7 +31,10 @@ class Watcher: # pylint: disable=too-few-public-methods
         """
         if self._inotify:
             for descriptor in self._watch_descriptors:
-                self._inotify.rm_watch(descriptor)
+                try:
+                    self._inotify.rm_watch(descriptor)
+                except OSError:
+                    pass
             self._watch_descriptors = []
             self._inotify.close()
         self._thread = Thread(target=self._notify_changes, args=(directories,))
