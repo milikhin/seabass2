@@ -10,7 +10,6 @@ export function setAutocompleteColors (colors) {
   const styleElem = getThemeStyleElem()
 
   styleElem.sheet.cssRules[3].style.backgroundColor = colors.foregroundColor
-  console.log(colors.foregroundTextColor)
   styleElem.sheet.cssRules[3].style.color = colors.foregroundTextColor
 }
 
