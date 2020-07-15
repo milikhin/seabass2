@@ -1,16 +1,13 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
-import QtQuick.Layouts 1.3
-import Morph.Web 0.1
-import QtWebEngine 1.1
 import QtQuick.Controls 2.2
-import Ubuntu.Components.Themes 1.3
-import Ubuntu.Components.Popups 1.3
-import Qt.labs.platform 1.0
-import Qt.labs.settings 1.0
+import QtQuick.Controls.Suru 2.2
+import QtQuick.Layouts 1.3
 
-PageHeader {
+import './common' as CustomComponents
+
+CustomComponents.ToolBar {
   id: root
+
   property bool navBarCanBeOpened: false
   property bool canBeSaved: false
   property bool buildable: false
@@ -25,52 +22,54 @@ PageHeader {
   signal keyboardExtensionToggled()
   signal search()
 
-  navigationActions: [
-    Action {
-      visible: navBarCanBeOpened
-      iconName: "document-open"
-      text: i18n.tr("Files")
-      onTriggered: navBarToggled()
-    }
-  ]
+  hasLeadingButton: navBarCanBeOpened
+  leadingIcon: "document-open"
+  onLeadingAction: navBarToggled()
 
-  trailingActionBar {
-    numberOfSlots: buildable
-      ? 4
-      : 3
-    actions: [
-      Action {
-        iconName: "save"
-        text: i18n.tr("Save")
-        enabled: canBeSaved
-        shortcut: StandardKey.Save
-        onTriggered: saveRequested()
-      },
-      Action {
-        iconName: "package-x-generic-symbolic"
-        text: i18n.tr("Build")
-        visible: buildable
-        enabled: buildEnabled
-        onTriggered: buildRequested()
-      },
-      Action {
-        iconName: "find"
-        text: i18n.tr("Find/Replace")
-        enabled: searchEnabled
-        shortcut: StandardKey.Find
-        onTriggered: search()
-      },
-      Action {
-        iconName: keyboardExtensionEnabled ? "select" : "select-none"
+  readonly property var saveShortcut: Shortcut {
+    sequence: StandardKey.Save
+    onActivated: saveRequested()
+  }
+  readonly property var findShortcut: Shortcut {
+    sequence: StandardKey.Find
+    onActivated: searchEnabled ? search() : Function.prototype
+  }
+
+  CustomComponents.ToolButton {
+    icon: "package-x-generic-symbolic"
+    visible: buildable
+    enabled: buildEnabled
+    onClicked: buildRequested()
+  }
+  CustomComponents.ToolButton {
+    icon: "search"
+    enabled: searchEnabled
+    onClicked: search()
+  }
+  CustomComponents.ToolButton {
+    icon: "save"
+    enabled: canBeSaved
+    onClicked: saveRequested()
+  }
+  CustomComponents.ToolButton {
+    icon: "contextual-menu"
+    onClicked: menu.open()
+
+    Menu {
+      id: menu
+      y: parent.height
+      modal: true
+      CustomComponents.MenuItem {
+        icon: keyboardExtensionEnabled ? "select" : "select-none"
         text: i18n.tr("Keyboard extension")
         enabled: searchEnabled
         onTriggered: keyboardExtensionToggled()
-      },
-      Action {
-        iconName: "info"
+      }
+      CustomComponents.MenuItem {
+        icon: "info"
         text: i18n.tr("About")
         onTriggered: aboutPageRequested()
       }
-    ]
+    }
   }
 }

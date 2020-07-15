@@ -1,12 +1,10 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.2
+import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
-
-import Ubuntu.Components 1.3
-import Ubuntu.Components.Themes 1.3
-
 import Qt.labs.platform 1.0
 
+import "./common" as CustomComponents
 import "../generic/utils.js" as QmlJs
 import "./files" as FilesComponents
 
@@ -14,92 +12,141 @@ Item {
   id: root
   property bool isPage: false
   property bool showHidden: false
-  property string homeDir
-  property real rowHeight: units.gu(4.5)
   property bool treeMode: false
 
-  readonly property string backgroundColor: theme.palette.normal.background
-  readonly property string textColor: theme.palette.normal.backgroundText
+  property string homeDir
+  property real rowHeight: units.gu(4.5)
 
   signal closed()
   signal errorOccured(string errorMessage)
   signal fileSelected(string filePath)
 
-  function createFile(dirPath) {
-    const normalDirPath = QmlJs.getNormalPath(dirPath)
-    newFileDialog.show(normalDirPath, function(fileName) {
-      const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
-      fileSelected(filePath)
-    })
+  ConfirmDialog {
+    id: confirmDialog
+    title: i18n.tr("Delete file?")
+    okColor: Suru.theme == Suru.Dark ? Suru.lightNegative : Suru.darkNegative
+    okText: i18n.tr("Delete")
   }
-
-  function reload() {
-    directoryModel.load()
-  }
-
-  NewFileDialog {
+  FilesComponents.NewFileDialog {
     id: newFileDialog
     homeDir: parent.homeDir
   }
-
-  FilesComponents.Header {
-    id: header
-    flickable: list
-    title: i18n.tr("Files")
-    subtitle: directoryModel.getPrintableDirPath()
-    onClosed: root.closed()
-    onFileCreationInitialised: root.createFile(directoryModel.getDirPath())
-    onReloaded: directoryModel.load()
-    onTreeModeChanged: root.treeMode = treeMode
-    z: 1
+  FilesComponents.RenameDialog {
+    id: renameDialog
+    homeDir: parent.homeDir
+  }
+  FilesComponents.FileMenu {
+    id: fileMenu
+    onRenameTriggered: renameFile(contextPath)
+    onDeleteTriggered: _rm(contextPath)
+  }
+  FilesComponents.DirectoryMenu {
+    id: dirMenu
+    onCreateTriggered: createFile(contextPath)
+    onRenameTriggered: renameFile(contextPath)
+    onDeleteTriggered: _rm(contextPath)
+  }
+  FilesComponents.DotDotMenu {
+    id: dotDotMenu
+    onCreateTriggered: createFile(contextPath)
   }
 
-  ListView {
-    id: list
+  ColumnLayout {
     anchors.fill: parent
 
-    model: directoryModel.model
-    delegate: ListItem {
-      height: rowHeight
-      color: backgroundColor
-      onClicked: {
-        if (model.isDir) {
-          if (treeMode) {
-            return directoryModel.toggleExpanded(model.path)
-          }
-          return directoryModel.directory = model.path
-        }
+    FilesComponents.Header {
+      Layout.fillWidth: true
 
-        fileSelected(model.path)
-      }
-
-      RowLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.leftMargin: units.gu(2) * (model.level + 1)
-        anchors.rightMargin: units.gu(2)
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: units.gu(1)
-
-        Icon {
-          height: parent.height
-          name: model.isFile
-            ? QmlJs.getFileIcon(model.name)
-            : directoryModel.getDirIcon(model.path, model.isExpanded)
-          color: textColor
-        }
-        Label {
-          Layout.fillWidth: true
-          Layout.fillHeight: true
-
-          elide: Text.ElideRight
-          text: model.name
-          color: textColor
-        }
-      }
+      id: header
+      hasLeadingButton: root.isPage
+      onLeadingAction: closed()
+      title: i18n.tr("Files")
+      subtitle: directoryModel.getPrintableDirPath()
+      onClosed: root.closed()
+      onFileCreationInitialised: root.createFile(directoryModel.getDirPath())
+      onReloaded: directoryModel.load()
+      onTreeModeChanged: root.treeMode = treeMode
+      z: 1
     }
 
-    ScrollBar.vertical: ScrollBar {}
+    ListView {
+      id: list
+      Layout.fillWidth: true
+      Layout.fillHeight: true
+
+      model: directoryModel.model
+      delegate: Item {
+        id: item
+        height: rowHeight
+        width: parent.width
+        property var menu: model.isFile
+          ? fileMenu
+          : model.name === '..'
+            ? dotDotMenu
+            : dirMenu
+
+        function _getWindowY(mouseY) {
+          return mouseY + item.y + list.y - list.contentY
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+          onPressAndHold: {
+            menu.show(mouseX, _getWindowY(mouseY), path)
+          }
+          onClicked: {
+            if (mouse.button === Qt.RightButton) {
+              return menu.show(mouseX, _getWindowY(mouseY), path)
+            }
+
+            if (model.isDir) {
+              if (treeMode) {
+                return directoryModel.toggleExpanded(model.path)
+              }
+              return directoryModel.directory = model.path
+            }
+
+            fileSelected(model.path)
+          }
+
+          Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            border {
+              width: parent.pressed || (menu.visible && menu.contextPath === path)
+                ? units.dp(1)
+                : 0
+              color: Suru.highlightColor
+            }
+            RowLayout {
+              anchors.left: parent.left
+              anchors.right: parent.right
+              anchors.leftMargin: units.gu(2) * (model.level + 1)
+              anchors.rightMargin: units.gu(2)
+              anchors.verticalCenter: parent.verticalCenter
+              spacing: units.gu(1)
+              CustomComponents.Icon {
+                height: parent.height
+                name: model.isFile
+                  ? QmlJs.getFileIcon(model.name)
+                  : directoryModel.getDirIcon(model.path, model.isExpanded)
+              }
+              Label {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                elide: Text.ElideRight
+                text: model.name
+              }
+            }
+          }
+        }
+      }
+
+      ScrollBar.vertical: ScrollBar {}
+    }
   }
 
   FilesComponents.FileModel {
@@ -108,8 +155,46 @@ Item {
     directory: QmlJs.getNormalPath(homeDir)
     showDotDot: !treeMode
 
-    onErrorOccured: function(error) {
-      root.errorOccured(error)
+    onErrorOccured: function(err) {
+      root.errorOccured(err)
     }
+  }
+
+  function createFile(dirPath) {
+    const normalDirPath = QmlJs.getNormalPath(dirPath)
+    newFileDialog.show(normalDirPath, function(fileName) {
+      const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
+      fileSelected(filePath)
+    })
+  }
+  function renameFile(filePath) {
+    const originalFilePath = QmlJs.getNormalPath(filePath)
+    renameDialog.show(originalFilePath, function(newFilePath) {
+      directoryModel.rename(originalFilePath, newFilePath, function(err) {
+        if (!err) {
+          return
+        }
+        errorOccured(err)
+      })
+    })
+  }
+
+  function reload() {
+    directoryModel.load()
+  }
+
+  function _rm(path) {
+    confirmDialog.show({
+        text: i18n.tr("%1 will be deleted").arg(QmlJs.getPrintableFilePath(path, homeDir)),
+        onOk: function() {
+          directoryModel.rm(path, function(err) {
+            if (!err) {
+              return
+            }
+            errorOccured(err)
+          })
+        },
+        onCancel: function() {}
+      })
   }
 }

@@ -1,42 +1,41 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
 import QtQuick.Controls 2.2
-import Ubuntu.Components.Themes 1.3
+import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
+
+import Ubuntu.Components 1.3 as UITK
 
 TabButton {
   id: root
+  padding: 0
+  height: parent.height
   property real minLabelWidth: 0
   property real maxLabelWidth: Infinity
   property bool isActive: false
   property bool isBusy: false
   property bool hasChanges: false
-  property real underlineWidth: units.gu(1) / 4
 
-  readonly property real tabPadding: units.gu(1)
-  readonly property real tabSpacing: units.gu(2)
+  readonly property real tabPadding: Suru.units.gu(1)
 
   signal closed()
 
   property string backgroundColor: theme.palette.normal.background
-  property string titleColor: isActive
-    ? theme.palette.normal.backgroundText
-    : theme.palette.normal.backgroundSecondaryText
-  property string underlineColor: isActive
-    ? theme.palette.normal.focus
-    : theme.palette.normal.overlaySecondaryText
   property string accentColor: theme.palette.normal.focus
 
-  width: tabLabel.width + closeButton.width + tabHasChangesIcon.width + tabSpacing + tabPadding * 2
-  background: Rectangle {
-    color: backgroundColor
-    border.width: 0
-  }
+  width: tabLabel.width + hasChangesIcon.width + closeButton.width + tabPadding
 
   contentItem: RowLayout {
     spacing: 0
+    opacity: root.checked || root.down || root.hovered ? 1.0 : 0.7
 
-    Item {
+    Behavior on opacity {
+      NumberAnimation {
+        duration: Suru.animations.FastDuration
+        easing: Suru.animations.EasingIn
+      }
+    }
+
+    Row {
       Layout.fillWidth: true
       Layout.fillHeight: true
       Layout.leftMargin: tabPadding
@@ -44,9 +43,9 @@ TabButton {
       Label {
         id: tabLabel
         anchors.verticalCenter: parent.verticalCenter
-        color: titleColor
         elide: Text.ElideRight
         text: root.text
+        color: Suru.foregroundColor
         Component.onCompleted: {
           tabLabel.width = Math.max(
             Math.min(contentWidth, root.maxLabelWidth),
@@ -61,26 +60,27 @@ TabButton {
           })
         }
       }
-    }
-    Label {
-      id: tabHasChangesIcon
-      text: '*'
-      color: accentColor
-      visible: hasChanges
+      Label {
+        id: hasChangesIcon
+        text: ' *'
+        visible: hasChanges
+        anchors.verticalCenter: parent.verticalCenter
+        color: Suru.highlightColor
+      }
     }
 
     Item {
       id: closeButton
       Layout.fillHeight: true
-      width: closeIcon.width + tabSpacing / 2
+      width: closeIcon.width + tabPadding * 2
 
-      Icon {
+      UITK.Icon {
         id: closeIcon
         name: isBusy ? 'package-x-generic-symbolic' : 'close'
         height: tabLabel.height
         width: height
         anchors.centerIn: parent
-        color: isBusy ? accentColor : underlineColor
+        color: isBusy ? Suru.highlightColor : tabLabel.color
         opacity: isBusy ? 0.25 : 1
 
         NumberAnimation on opacity {
@@ -88,7 +88,7 @@ TabButton {
           running: isBusy
           loops: Animation.Infinite
           from: 0.25
-          to: 0.85
+          to: 1
           duration: 3000
         }
       }
@@ -99,12 +99,5 @@ TabButton {
         onClicked: closed()
       }
     }
-  }
-  Rectangle {
-    height: underlineWidth
-    x: 0
-    y: parent.height - height
-    width: parent.width
-    color: underlineColor
   }
 }

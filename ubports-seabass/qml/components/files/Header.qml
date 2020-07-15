@@ -1,45 +1,46 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Suru 2.2
+import QtQuick.Layouts 1.3
 
-PageHeader {
+import '../common' as CustomComponents
+
+CustomComponents.ToolBar {
   property bool treeMode: false
 
   signal closed()
   signal fileCreationInitialised()
   signal reloaded()
 
-  navigationActions:[
-    Action {
-      visible: isPage
-      iconName: "back"
-      text: i18n.tr("Close")
-      onTriggered: closed()
-    }
-  ]
-  trailingActionBar {
-    actions: [
-      Action {
-        iconName: "add"
+  CustomComponents.ToolButton {
+    icon: "contextual-menu"
+    onClicked: menu.open()
+
+    Menu {
+      id: menu
+      y: parent.height
+      modal: true
+      CustomComponents.MenuItem {
+        icon: "add"
         text: i18n.tr("New file...")
         onTriggered: fileCreationInitialised()
-      },
-      Action {
-        iconName: treeMode ? "select" : "select-none"
+      }
+      CustomComponents.MenuItem {
+        icon: treeMode ? "select" : "select-none"
         text: i18n.tr("Tree mode")
         onTriggered: treeMode = !treeMode
-      },
-      Action {
-        iconName: "reload"
+      }
+      CustomComponents.MenuItem {
+        icon: "reload"
         text: i18n.tr("Reload")
         onTriggered: reloaded()
-      },
-      Action {
-        visible: !isPage
-        iconName: "close"
+      }
+      CustomComponents.MenuItem {
+        icon: "close"
         text: i18n.tr("Close")
         onTriggered: closed()
+        visible: !hasLeadingButton
       }
-    ]
-    numberOfSlots: 1
+    }
   }
 }

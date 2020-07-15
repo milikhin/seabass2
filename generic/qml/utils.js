@@ -14,11 +14,13 @@ function getDirPath(filePath) {
 }
 
 /**
-  * Extracts file name from a given path
-  * @returns {string} - file name
-  */
- function getFileName(filePath) {
-  return filePath.split('/').slice(-1)[0]
+ * Extracts file name from a given path
+ * @returns {string} - file name
+ */
+function getFileName(filePath) {
+  return getNormalPath(filePath)
+    .split('/')
+    .slice(-1)[0]
 }
 
 /**

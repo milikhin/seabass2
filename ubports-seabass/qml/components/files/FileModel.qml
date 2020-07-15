@@ -90,13 +90,9 @@ Item {
       entries.forEach(function (fileEntry, i) {
         var index = startIndex + i
         fileEntry.isExpanded = expanded.indexOf(fileEntry.path) !== -1
-        if (index < model.count - 1) {
+        if (index < model.count) {
           // update non-last model entries
           model.set(index, fileEntry)
-        } else if (index === model.count - 1) {
-          // re-create last model entry to fix issues with rendering list item borders
-          model.remove(index, 1)
-          model.append(fileEntry)
         } else {
           // append new model entries
           model.append(fileEntry)
@@ -110,10 +106,32 @@ Item {
       prevExpanded = [].concat(expanded)
     })
   }
+
   function reload() {
     expanded = []
     load()
   }
+
+  function rm(path, callback) {
+    if (!py.ready) {
+      return
+    }
+
+    py.call('fs_utils.rm', [path], function(res) {
+      callback(res.error)
+    })
+  }
+
+  function rename(originalPath, newPath, callback) {
+    if (!py.ready) {
+      return
+    }
+
+    py.call('fs_utils.rename', [originalPath, newPath], function(res) {
+      callback(res.error)
+    })
+  }
+
   function toggleExpanded(path) {
     if (expanded.indexOf(path) === -1) {
       expanded.push(path)
