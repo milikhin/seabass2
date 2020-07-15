@@ -24,7 +24,7 @@ Item {
   ConfirmDialog {
     id: confirmDialog
     title: i18n.tr("Delete file?")
-    okColor: Suru.theme == Suru.Dark ? Suru.lightNegative : Suru.darkNegative
+    okColor: Suru.theme === Suru.Dark ? Suru.darkNegative : Suru.lightNegative
     okText: i18n.tr("Delete")
   }
   FilesComponents.NewFileDialog {
