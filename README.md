@@ -70,8 +70,4 @@ There are a few labels used to indicate issue progress.
 * `help wanted`: in my opinion, the issue is worth fixing, but I'm not going to fix it myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
 * `wontfix`: in my opinion, the issue requires to much work out of the project's scope or too many workarounds for SDK issues. Pull requests are still welcome though. It might be worth discussing implementation beforehand if there going to be lots of changes.
 
-## Credits
-
-* [Danfro](https://github.com/Danfro): basic internationalization and German translation for ubports-seabass
-* [Anne017](https://github.com/Anne017): French translation
-* [Pohli](https://github.com/Pohli): testing harbour-seabass
+Thanks to the [contributors](https://github.com/milikhin/seabass2/graphs/contributors)!
