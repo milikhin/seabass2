@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-14 17:54+0000\n"
+"POT-Creation-Date: 2020-07-15 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:61
+#: ../qml/About.qml:22 ../qml/components/Header.qml:70
 msgid "About"
 msgstr ""
 
@@ -48,7 +48,11 @@ msgstr ""
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/components/Builder.qml:79
+#: ../qml/components/Builder.qml:28
+msgid "Creating build container"
+msgstr ""
+
+#: ../qml/components/Builder.qml:80
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -56,16 +60,13 @@ msgid ""
 "be used to fetch required packages."
 msgstr ""
 
-#: ../qml/components/ConfirmDialog.qml:25
-msgid "Creating build container"
-msgstr ""
-
-#: ../qml/components/ConfirmDialog.qml:27
+#: ../qml/components/ConfirmDialog.qml:11
 msgid "Ok"
 msgstr ""
 
-#: ../qml/components/ConfirmDialog.qml:35
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/ConfirmDialog.qml:39 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/files/NewFileDialog.qml:45
+#: ../qml/components/files/RenameDialog.qml:52
 msgid "Cancel"
 msgstr ""
 
@@ -82,11 +83,25 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: ../qml/components/FileList.qml:58
+#: ../qml/components/FileList.qml:26
+msgid "Delete file?"
+msgstr ""
+
+#: ../qml/components/FileList.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:27
+#: ../qml/components/files/FileMenu.qml:21
+msgid "Delete"
+msgstr ""
+
+#: ../qml/components/FileList.qml:63
 msgid "Files"
 msgstr ""
 
-#: ../qml/components/Header.qml:55
+#: ../qml/components/FileList.qml:188
+msgid "%1 will be deleted"
+msgstr ""
+
+#: ../qml/components/Header.qml:64
 msgid "Keyboard extension"
 msgstr ""
 
@@ -96,18 +111,6 @@ msgstr ""
 
 #: ../qml/components/KeyboardExtension.qml:37
 msgid "Esc"
-msgstr ""
-
-#: ../qml/components/NewFileDialog.qml:22
-msgid "Create new file"
-msgstr ""
-
-#: ../qml/components/NewFileDialog.qml:27
-msgid "file.txt"
-msgstr ""
-
-#: ../qml/components/NewFileDialog.qml:37
-msgid "Create"
 msgstr ""
 
 #: ../qml/components/SaveDialog.qml:23
@@ -122,20 +125,15 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: ../qml/components/files/ContextMenu.qml:19
-msgid "Create file..."
-msgstr ""
-
-#: ../qml/components/files/ContextMenu.qml:25
-msgid "Rename..."
-msgstr ""
-
-#: ../qml/components/files/ContextMenu.qml:31
-msgid "Delete"
-msgstr ""
-
+#: ../qml/components/files/DirectoryMenu.qml:17
+#: ../qml/components/files/DotDotMenu.qml:15
 #: ../qml/components/files/Header.qml:25
 msgid "New file..."
+msgstr ""
+
+#: ../qml/components/files/DirectoryMenu.qml:22
+#: ../qml/components/files/FileMenu.qml:16
+msgid "Rename..."
 msgstr ""
 
 #: ../qml/components/files/Header.qml:30
@@ -144,4 +142,25 @@ msgstr ""
 
 #: ../qml/components/files/Header.qml:35
 msgid "Reload"
+msgstr ""
+
+#: ../qml/components/files/NewFileDialog.qml:22
+msgid "Create new file"
+msgstr ""
+
+#: ../qml/components/files/NewFileDialog.qml:27
+#: ../qml/components/files/RenameDialog.qml:33
+msgid "file.txt"
+msgstr ""
+
+#: ../qml/components/files/NewFileDialog.qml:37
+msgid "Create"
+msgstr ""
+
+#: ../qml/components/files/RenameDialog.qml:28
+msgid "Rename file"
+msgstr ""
+
+#: ../qml/components/files/RenameDialog.qml:44
+msgid "Rename"
 msgstr ""

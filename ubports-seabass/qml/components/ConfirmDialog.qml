@@ -5,13 +5,17 @@ import "../generic/utils.js" as QmlJs
 
 Item {
   id: root
-  property var onOk: function() {}
-  property var onCancel: function() {}
+  property string title
   property string text: ''
+  property string okColor: theme.palette.normal.positive
+  property string okText: i18n.tr("Ok")
+  property var onOk: Function.prototype
+  property var onCancel: Function.prototype
+
 
   function show(options) {
     onOk = options.onOk
-    onCancel = options.onCancel || function() {}
+    onCancel = options.onCancel || Function.prototype
     text = options.text
     PopupUtils.open(dialog)
   }
@@ -22,10 +26,10 @@ Item {
     Dialog {
       id: dialogue
       text: root.text
-      title: i18n.tr("Creating build container")
+      title: root.title
       Button {
-        text: i18n.tr("Ok")
-        color: theme.palette.normal.positive
+        text: okText
+        color: okColor
         onClicked: {
           PopupUtils.close(dialogue)
           onOk()

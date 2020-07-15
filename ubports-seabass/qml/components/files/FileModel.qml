@@ -106,10 +106,32 @@ Item {
       prevExpanded = [].concat(expanded)
     })
   }
+
   function reload() {
     expanded = []
     load()
   }
+
+  function rm(path, callback) {
+    if (!py.ready) {
+      return
+    }
+
+    py.call('fs_utils.rm', [path], function(res) {
+      callback(res.error)
+    })
+  }
+
+  function rename(originalPath, newPath, callback) {
+    if (!py.ready) {
+      return
+    }
+
+    py.call('fs_utils.rename', [originalPath, newPath], function(res) {
+      callback(res.error)
+    })
+  }
+
   function toggleExpanded(path) {
     if (expanded.indexOf(path) === -1) {
       expanded.push(path)

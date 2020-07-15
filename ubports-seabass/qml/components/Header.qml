@@ -26,6 +26,15 @@ CustomComponents.ToolBar {
   leadingIcon: "document-open"
   onLeadingAction: navBarToggled()
 
+  readonly property var saveShortcut: Shortcut {
+    sequence: StandardKey.Save
+    onActivated: saveRequested()
+  }
+  readonly property var findShortcut: Shortcut {
+    sequence: StandardKey.Find
+    onActivated: searchEnabled ? search() : Function.prototype
+  }
+
   CustomComponents.ToolButton {
     icon: "package-x-generic-symbolic"
     visible: buildable

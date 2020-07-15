@@ -25,6 +25,7 @@ Item {
 
   ConfirmDialog {
     id: confirmDialog
+    title: i18n.tr("Creating build container")
   }
 
   Python {

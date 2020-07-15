@@ -4,8 +4,7 @@ import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.platform 1.0
 
-import Ubuntu.Components 1.3 as UITK
-
+import "./common" as CustomComponents
 import "../generic/utils.js" as QmlJs
 import "./files" as FilesComponents
 
@@ -22,28 +21,34 @@ Item {
   signal errorOccured(string errorMessage)
   signal fileSelected(string filePath)
 
-  function createFile(dirPath) {
-    const normalDirPath = QmlJs.getNormalPath(dirPath)
-    newFileDialog.show(normalDirPath, function(fileName) {
-      const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
-      fileSelected(filePath)
-    })
+  ConfirmDialog {
+    id: confirmDialog
+    title: i18n.tr("Delete file?")
+    okColor: Suru.theme == Suru.Dark ? Suru.lightNegative : Suru.darkNegative
+    okText: i18n.tr("Delete")
   }
-
-  function reload() {
-    directoryModel.load()
-  }
-
-  NewFileDialog {
+  FilesComponents.NewFileDialog {
     id: newFileDialog
     homeDir: parent.homeDir
   }
-
-  FilesComponents.ContextMenu {
-    id: menu
-    onCreateTriggered: {
-      createFile(contextPath)
-    }
+  FilesComponents.RenameDialog {
+    id: renameDialog
+    homeDir: parent.homeDir
+  }
+  FilesComponents.FileMenu {
+    id: fileMenu
+    onRenameTriggered: renameFile(contextPath)
+    onDeleteTriggered: _rm(contextPath)
+  }
+  FilesComponents.DirectoryMenu {
+    id: dirMenu
+    onCreateTriggered: createFile(contextPath)
+    onRenameTriggered: renameFile(contextPath)
+    onDeleteTriggered: _rm(contextPath)
+  }
+  FilesComponents.DotDotMenu {
+    id: dotDotMenu
+    onCreateTriggered: createFile(contextPath)
   }
 
   ColumnLayout {
@@ -74,6 +79,11 @@ Item {
         id: item
         height: rowHeight
         width: parent.width
+        property var menu: model.isFile
+          ? fileMenu
+          : model.name === '..'
+            ? dotDotMenu
+            : dirMenu
 
         function _getWindowY(mouseY) {
           return mouseY + item.y + list.y - list.contentY
@@ -84,11 +94,11 @@ Item {
           acceptedButtons: Qt.LeftButton | Qt.RightButton
 
           onPressAndHold: {
-            menu.show(mouseX, _getWindowY(mouseY), path, isDir, model.name === '..')
+            menu.show(mouseX, _getWindowY(mouseY), path)
           }
           onClicked: {
             if (mouse.button === Qt.RightButton) {
-              return menu.show(mouseX, _getWindowY(mouseY), path, isDir, model.name === '..')
+              return menu.show(mouseX, _getWindowY(mouseY), path)
             }
 
             if (model.isDir) {
@@ -103,9 +113,11 @@ Item {
 
           Rectangle {
             anchors.fill: parent
-            color: Suru.backgroundColor
+            color: "transparent"
             border {
-              width: menu.visible && menu.contextPath === path ? units.dp(1) : 0
+              width: menu.visible && menu.contextPath === path
+                ? units.dp(1)
+                : 0
               color: Suru.highlightColor
             }
             RowLayout {
@@ -115,7 +127,7 @@ Item {
               anchors.rightMargin: units.gu(2)
               anchors.verticalCenter: parent.verticalCenter
               spacing: units.gu(1)
-              UITK.Icon {
+              CustomComponents.Icon {
                 height: parent.height
                 name: model.isFile
                   ? QmlJs.getFileIcon(model.name)
@@ -143,8 +155,46 @@ Item {
     directory: QmlJs.getNormalPath(homeDir)
     showDotDot: !treeMode
 
-    onErrorOccured: function(error) {
-      root.errorOccured(error)
+    onErrorOccured: function(err) {
+      root.errorOccured(err)
     }
+  }
+
+  function createFile(dirPath) {
+    const normalDirPath = QmlJs.getNormalPath(dirPath)
+    newFileDialog.show(normalDirPath, function(fileName) {
+      const filePath = QmlJs.getNormalPath(Qt.resolvedUrl(normalDirPath + '/' + fileName))
+      fileSelected(filePath)
+    })
+  }
+  function renameFile(filePath) {
+    const originalFilePath = QmlJs.getNormalPath(filePath)
+    renameDialog.show(originalFilePath, function(newFilePath) {
+      directoryModel.rename(originalFilePath, newFilePath, function(err) {
+        if (!err) {
+          return
+        }
+        errorOccured(err)
+      })
+    })
+  }
+
+  function reload() {
+    directoryModel.load()
+  }
+
+  function _rm(path) {
+    confirmDialog.show({
+        text: i18n.tr("%1 will be deleted").arg(QmlJs.getPrintableFilePath(path, homeDir)),
+        onOk: function() {
+          directoryModel.rm(path, function(err) {
+            if (!err) {
+              return
+            }
+            errorOccured(err)
+          })
+        },
+        onCancel: function() {}
+      })
   }
 }

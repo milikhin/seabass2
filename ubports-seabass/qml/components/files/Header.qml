@@ -39,6 +39,7 @@ CustomComponents.ToolBar {
         icon: "close"
         text: i18n.tr("Close")
         onTriggered: closed()
+        visible: !hasLeadingButton
       }
     }
   }

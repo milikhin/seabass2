@@ -97,6 +97,7 @@ Item {
           width: parent.width
 
           Rectangle {
+            color: "transparent"
             width: parent.width
             height: Suru.units.gu(1)
           }
@@ -130,6 +131,7 @@ Item {
             Suru.textStyle: Suru.TertiaryText
           }
           Rectangle {
+            color: "transparent"
             width: parent.width
             height: Suru.units.gu(1)
           }
