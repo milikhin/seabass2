@@ -36,7 +36,6 @@ ToolBar {
           elide: Label.ElideRight
           horizontalAlignment: Qt.AlignHLeft
           verticalAlignment: Qt.AlignBottom
-          anchors.verticalCenterOffset: -Suru.units.gu(0.5)
           Suru.textLevel: Suru.HeadingThree
           Suru.textStyle: Suru.PrimaryText
         }

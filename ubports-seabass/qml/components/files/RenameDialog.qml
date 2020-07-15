@@ -25,7 +25,7 @@ Item {
 
     Dialog {
       id: dialogue
-      title: i18n.tr("Rename file")
+      title: i18n.tr("Rename %1").arg(originalFileName)
       text: QmlJs.getPrintableDirPath(dirPath, homeDir)
       TextField {
         id: fileName
