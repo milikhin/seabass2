@@ -150,19 +150,11 @@ ApplicationWindow {
   CustomComponents.ErrorDialog {
     id: errorDialog
   }
-<<<<<<< HEAD
 
   CustomComponents.SaveDialog {
     id: saveDialog
   }
 
-=======
-
-  CustomComponents.SaveDialog {
-    id: saveDialog
-  }
-
->>>>>>> master
   Item {
     id: mainView
 
@@ -177,14 +169,9 @@ ApplicationWindow {
         spacing: 0
         Layout.fillWidth: true
         Layout.fillHeight: true
-<<<<<<< HEAD
         Layout.minimumWidth: isWide ? Suru.units.gu(35) : parent.width
         Layout.maximumWidth: Layout.minimumWidth
         Layout.preferredWidth: Layout.minimumWidth
-=======
-        Layout.minimumWidth: isWide ? Suru.units.gu(30) : parent.width
-        Layout.maximumWidth: isWide ? Suru.units.gu(40) : parent.width
->>>>>>> master
 
         CustomComponents.FileList {
           id: fileList
