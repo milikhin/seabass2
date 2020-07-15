@@ -115,7 +115,7 @@ Item {
             anchors.fill: parent
             color: "transparent"
             border {
-              width: menu.visible && menu.contextPath === path
+              width: parent.pressed || (menu.visible && menu.contextPath === path)
                 ? units.dp(1)
                 : 0
               color: Suru.highlightColor
