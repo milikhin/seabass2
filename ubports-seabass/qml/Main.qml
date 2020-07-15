@@ -26,6 +26,10 @@ ApplicationWindow {
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
   readonly property string version: "0.8.0"
 
+  Component.onCompleted: {
+    i18n.domain = "seabass2.mikhael"
+  }
+
   Settings {
     id: settings
     property bool isKeyboardExtensionVisible: true
