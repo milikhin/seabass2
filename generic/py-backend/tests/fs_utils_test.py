@@ -177,20 +177,20 @@ def test_notification_only_sent_once(send): # pylint: disable=invalid-name
     _create_tmp_file()
     send.assert_not_called()
 
-def test_rename(fs): # pylint: disable=invalid-name
+def test_rename_file(fs): # pylint: disable=invalid-name
     """#rename should rename files"""
     _setup_dir_with_file(fs)
     rename(NESTED_FILE_PATH, NESTED_FILE_PATH + '_renamed')
-    assert fs.exists(NESTED_FILE_PATH + '_renamed') == True
+    assert fs.exists(NESTED_FILE_PATH + '_renamed')
 
-def test_rename(fs): # pylint: disable=invalid-name
+def test_rename_dir(fs): # pylint: disable=invalid-name
     """#rename should rename directories"""
     _setup_dir_with_file(fs)
     rename(DIR_PATH, DIR_PATH + '_renamed')
-    assert fs.exists(DIR_PATH + '_renamed') == True
+    assert fs.exists(DIR_PATH + '_renamed')
 
 def test_remove(fs): # pylint: disable=invalid-name
     """#remove should remove files"""
     _setup_dir_with_file(fs)
     rm(NESTED_FILE_PATH)
-    assert fs.exists(NESTED_FILE_PATH) == False
+    assert not fs.exists(NESTED_FILE_PATH)
