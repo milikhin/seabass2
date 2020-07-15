@@ -14,7 +14,7 @@ Currently supported platforms:
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
-![Seabass on UBports](https://milikhin.name/img/seabass/seabass-desktop.png)
+![Seabass on UBports](https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-desktop.png)
 
 ## Features
 Core features:
@@ -26,7 +26,7 @@ Core features:
 
 UBports:
 * Adaptive layout and multiple tabs
-* Ability to create new files
+* Create/Rename/Delete files
 * Tree mode for the file list
 * Building QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
 
