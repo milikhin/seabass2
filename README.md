@@ -14,7 +14,7 @@ Currently supported platforms:
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
-![Seabass on UBports](https://milikhin.name/img/seabass/seabass-desktop-03.png)
+![Seabass on UBports](https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-desktop.png)
 
 ## Features
 Core features:
@@ -26,7 +26,7 @@ Core features:
 
 UBports:
 * Adaptive layout and multiple tabs
-* Ability to create new files
+* Create/Rename/Delete files
 * Tree mode for the file list
 * Building QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
 
@@ -70,8 +70,4 @@ There are a few labels used to indicate issue progress.
 * `help wanted`: in my opinion, the issue is worth fixing, but I'm not going to fix it myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
 * `wontfix`: in my opinion, the issue requires to much work out of the project's scope or too many workarounds for SDK issues. Pull requests are still welcome though. It might be worth discussing implementation beforehand if there going to be lots of changes.
 
-## Credits
-
-* [Danfro](https://github.com/Danfro): basic internationalization and German translation for ubports-seabass
-* [Anne017](https://github.com/Anne017): French translation
-* [Pohli](https://github.com/Pohli): testing harbour-seabass
+Thanks to the [contributors](https://github.com/milikhin/seabass2/graphs/contributors)!
