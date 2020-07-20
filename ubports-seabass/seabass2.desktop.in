@@ -1,6 +1,6 @@
 [Desktop Entry]
 _Name=Seabass2
-Exec=env QT_QUICK_CONTROLS_CONF=qml/qtquickcontrols2.conf qmlscene %U qml/Main.qml
+Exec=env QTWEBENGINE_CHROMIUM_FLAGS="--disable-pinch" env QT_QUICK_CONTROLS_CONF=qml/qtquickcontrols2.conf qmlscene %U qml/Main.qml
 Icon=assets/logo.png
 Terminal=false
 Type=Application
