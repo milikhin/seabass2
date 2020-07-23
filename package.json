@@ -7,8 +7,8 @@
     "lint": "(cd editor/; standard --parser=babel-eslint)",
     "test": "jest --config=./editor/jest.config.js",
     "test-watch": "jest --watch --config=./editor/jest.config.js",
-    "build": "./node_modules/.bin/webpack",
-    "build-watch": "./node_modules/.bin/webpack --watch"
+    "build": "webpack",
+    "build-watch": "webpack --watch"
   },
   "standard": {
     "parser": "babel-eslint"

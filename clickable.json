@@ -1,11 +1,12 @@
 {
   "clickable_minimum_required": "6.12.2",
+  "build_dir": "./build_ubports",
   "builder": "pure-qml-cmake",
   "kill": "qmlscene",
-  "build_dir": "./build_ubports",
-  "src_dir": "./ubports-seabass",
+  "prebuild": "clickable fetch && clickable build-editor",
   "scripts": {
+    "build-editor": "npm ci && npm run build -- --config-name=ubports",
     "fetch": "git submodule update --init"
   },
-  "prebuild": "clickable fetch"
+  "src_dir": "./ubports-seabass"
 }

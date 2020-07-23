@@ -230,7 +230,9 @@ class Api {
   }
 
   _getSavedPreferences () {
-    const isSailfishToolbarOpened = localStorage.getItem('sailfish__isToolbarOpened')
+    const isSailfishToolbarOpened = this._isSailfish
+      ? localStorage.getItem('sailfish__isToolbarOpened')
+      : false
     return {
       isSailfishToolbarOpened: isSailfishToolbarOpened ? JSON.parse(isSailfishToolbarOpened) : undefined
     }

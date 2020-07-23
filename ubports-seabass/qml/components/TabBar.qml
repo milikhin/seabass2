@@ -56,7 +56,7 @@ Item {
       TabComponents.TabButton {
         maxLabelWidth: Math.min(root.width / 2, maxTabLabelWidth)
         minLabelWidth: minTabLabelWidth
-        text: model.title
+        text: model.uniqueTitle
         hasChanges: model.hasChanges
         isActive: model.index === tabBar.currentIndex
         isBusy: model.isBusy

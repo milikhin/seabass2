@@ -58,6 +58,13 @@ TabButton {
               root.minLabelWidth
             )
           })
+          root.textChanged.connect(function() {
+            tabLabel.width = undefined
+            tabLabel.width = Math.max(
+              Math.min(contentWidth, root.maxLabelWidth),
+              root.minLabelWidth
+            )
+          })
         }
       }
       Label {
