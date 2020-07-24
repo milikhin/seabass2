@@ -3,28 +3,24 @@
 # This file is distributed under the same license as the seabass2.mikhael package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-23 04:28+0000\n"
-"PO-Revision-Date: 2020-06-23 16:47+0000\n"
+"POT-Creation-Date: 2020-07-20 04:19+0000\n"
+"PO-Revision-Date: 2020-07-24 20:01+0200\n"
 "Last-Translator: Anne017 <anneonyme017@openmailbox.org>\n"
+"Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:12 ../qml/components/Header.qml:40
+#: ../qml/About.qml:22 ../qml/components/Header.qml:70
 msgid "About"
 msgstr "À propos"
 
-#: ../qml/About.qml:19
-msgid "Feed the Seabass!"
-msgstr "Nourrissez le bar !"
-
-#: ../qml/About.qml:40
+#: ../qml/About.qml:35
 msgid ""
 "Click here to open project page and find docs, support, donation options and "
 "list of contributors!"
@@ -32,30 +28,38 @@ msgstr ""
 "Cliquez ici pour ouvrir la page du projet et trouver des documents, de "
 "l'aide, les options de dons et la liste des contributeurs/trices !"
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:25
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: ../qml/Main.qml:87
+#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+msgid "Seabass2"
+msgstr "Seabass 2"
+
+#: ../qml/Main.qml:53
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Impossible de lire le fichier. Veuillez vous assurez que vous avez accès en "
 "lecture à %1."
 
-#: ../qml/Main.qml:88
+#: ../qml/Main.qml:54
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Impossible de modifier le fichier. Veuillez vous assurer que vous avez accès "
 "en modification à %1."
 
-#: ../qml/Main.qml:237
+#: ../qml/Main.qml:241
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "La compilation (%1) a échoué. Consultez la sortie de celle-ci pour plus de "
 "détails."
 
-#: ../qml/components/Builder.qml:75
+#: ../qml/components/Builder.qml:28
+msgid "Creating build container"
+msgstr "Création d'un conteneur de compilation"
+
+#: ../qml/components/Builder.qml:80
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -68,16 +72,13 @@ msgstr ""
 "créé. Votre connexion au réseau sera utilisée pour récupérer les paquets "
 "nécessaires."
 
-#: ../qml/components/ConfirmDialog.qml:25
-msgid "Creating build container"
-msgstr "Création d'un conteneur de compilation"
-
-#: ../qml/components/ConfirmDialog.qml:27
+#: ../qml/components/ConfirmDialog.qml:11
 msgid "Ok"
 msgstr "Valider"
 
-#: ../qml/components/ConfirmDialog.qml:35
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/ConfirmDialog.qml:39 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/files/NewFileDialog.qml:45
+#: ../qml/components/files/RenameDialog.qml:52
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -90,25 +91,31 @@ msgid "Error occured"
 msgstr "Une erreur s'est produite"
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
+#: ../qml/components/files/Header.qml:40
 msgid "Close"
 msgstr "Fermer"
 
-#: ../qml/components/FileList.qml:47 ../qml/components/Header.qml:30
+#: ../qml/components/FileList.qml:26
+msgid "Delete file?"
+msgstr "Supprimer le fichier ?"
+
+#: ../qml/components/FileList.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:27
+#: ../qml/components/files/FileMenu.qml:21
+msgid "Delete"
+msgstr "Supprimer"
+
+#: ../qml/components/FileList.qml:64
 msgid "Files"
 msgstr "Fichiers"
 
-#: ../qml/components/Header.qml:45 ../qml/components/SaveDialog.qml:26
-msgid "Save"
-msgstr "Enregistrer"
+#: ../qml/components/FileList.qml:199
+msgid "%1 will be deleted"
+msgstr "%1 sera supprimé"
 
-#: ../qml/components/Header.qml:52
-msgid "Build"
-msgstr "Compiler"
-
-#: ../qml/components/Header.qml:59
-msgid "Toggle keyboard extension"
-msgstr "Basculer les touches du clavier"
+#: ../qml/components/Header.qml:64
+msgid "Keyboard extension"
+msgstr "Extension du clavier"
 
 #: ../qml/components/KeyboardExtension.qml:33
 msgid "Tab"
@@ -117,18 +124,6 @@ msgstr "Tab"
 #: ../qml/components/KeyboardExtension.qml:37
 msgid "Esc"
 msgstr "Échap"
-
-#: ../qml/components/NewFileDialog.qml:22
-msgid "Create new file"
-msgstr "Créer un nouveau fichier"
-
-#: ../qml/components/NewFileDialog.qml:27
-msgid "file.txt"
-msgstr "fichier.txt"
-
-#: ../qml/components/NewFileDialog.qml:37
-msgid "Create"
-msgstr "Créer"
 
 #: ../qml/components/SaveDialog.qml:23
 msgid "Save changes in %1?"
@@ -139,18 +134,52 @@ msgid "Changes will be lost if you close the file without saving."
 msgstr ""
 "Les modifications seront perdues si vous fermez le fichier sans enregistrer."
 
-#: ../qml/components/files/Header.qml:23
+#: ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr "Enregistrer"
+
+#: ../qml/components/files/DirectoryMenu.qml:17
+#: ../qml/components/files/DotDotMenu.qml:15
+#: ../qml/components/files/Header.qml:25
 msgid "New file..."
 msgstr "Nouveau fichier..."
 
-#: ../qml/components/files/Header.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:22
+#: ../qml/components/files/FileMenu.qml:16
+msgid "Rename..."
+msgstr "Renommer..."
+
+#: ../qml/components/files/Header.qml:30
 msgid "Tree mode"
 msgstr "Mode arborescent"
 
-#: ../qml/components/files/Header.qml:33
+#: ../qml/components/files/Header.qml:35
 msgid "Reload"
 msgstr "Actualiser"
 
-#: seabass2.desktop.in.h:1
-msgid "Seabass2"
-msgstr "Seabass 2"
+#: ../qml/components/files/NewFileDialog.qml:22
+msgid "Create new file"
+msgstr "Créer un nouveau fichier"
+
+#: ../qml/components/files/NewFileDialog.qml:27
+#: ../qml/components/files/RenameDialog.qml:33
+msgid "file.txt"
+msgstr "fichier.txt"
+
+#: ../qml/components/files/NewFileDialog.qml:37
+msgid "Create"
+msgstr "Créer"
+
+#: ../qml/components/files/RenameDialog.qml:28
+msgid "Rename %1"
+msgstr "Renommer %1"
+
+#: ../qml/components/files/RenameDialog.qml:44
+msgid "Rename"
+msgstr "Renommer"
+
+#~ msgid "Feed the Seabass!"
+#~ msgstr "Nourrissez le bar !"
+
+#~ msgid "Build"
+#~ msgstr "Compiler"
