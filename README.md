@@ -17,6 +17,7 @@ Currently supported platforms:
 ![Seabass on UBports](https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-desktop.png)
 
 ## Features
+
 Core features:
 * Syntax highlighting for over 120 programming/markup languages
 * Navigation buttons
@@ -32,32 +33,35 @@ UBports:
 
 ## Build instructions
 
-Requirements:
+### Requirements:
 
-* Node.js, tested using v12
+* Node.js (tested using v12)
 * pipenv (optional, to run tests for python modules)
 * Sailfish SDK (for Sailfish OS)
 * clickable (for UBports)
 
-Build steps:
+### UBports
+
+Run `clickable`
+
+### Sailfish OS
 
 1. `git submodule update --init`
 1. Build editor engine
-   1. Install editor dependencies and build tools: `npm install`
-   1. Build editor engine and copy required files to Sailfish/UBports app directory: `npm run build`
+   1. Install editor dependencies and build tools: `npm ci`
+   1. Build editor engine and copy required files to the build directory: `npm run build -- --config-name=sfos`
 1. Build App
    * Sailfish OS: build `harbour-seabass` using Sailfish SDK
-   * UBports: run `clickable`
 
-Running tests:
+### Running tests:
 
 1. Editor: `npm test`
+1. Python modules:  
+   1. `cd generic/py-backend`
+   1. `pipenv install -d`
+   1. `pipenv run pytest **/*.py` 
 1. UBports app:
    * QML: `clickable test`
-   * Python modules:
-      1. `cd generic/py-backend`
-      1. `pipenv install -d`
-      1. `pipenv run pytest **/*.py`
 
 ## Contribution
 

@@ -24,7 +24,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.8.0"
+  readonly property string version: "0.8.1"
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
@@ -251,8 +251,8 @@ ApplicationWindow {
           searchEnabled: main.visible && tabsModel.count
           onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           onSearch: {
+            editor.forceActiveFocus()
             api.postMessage('toggleSearch')
-            editor.focus = true
           }
         }
         Rectangle {

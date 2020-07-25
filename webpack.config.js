@@ -45,7 +45,8 @@ const sailfishConfig = {
         to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
       }
     ])
-  ]
+  ],
+  name: 'sfos'
 }
 
 const ubportsConfig = {
@@ -54,7 +55,8 @@ const ubportsConfig = {
     path: path.resolve(__dirname, 'ubports-seabass/html/dist'),
     publicPath: 'dist/',
     filename: 'bundle.js'
-  }
+  },
+  name: 'ubports'
 }
 
 module.exports = [sailfishConfig, ubportsConfig]

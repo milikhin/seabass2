@@ -41,9 +41,7 @@ describe('#registerApi', () => {
     // Check for 'appLoaded' action
     const [message] = navigator.qt.postMessage.mock.calls[0]
     expect(JSON.parse(message).action).toEqual('appLoaded')
-    expect(JSON.parse(message).data).toEqual({
-      isSailfishToolbarOpened: undefined
-    })
+    expect(JSON.parse(message).data).toEqual({})
   })
 
   it('should notify when app is loaded (`url` backend)', () => {
@@ -57,7 +55,7 @@ describe('#registerApi', () => {
 
   it('should notify when app is loaded (notifyOnLoaded: true, toolbar opened)', () => {
     localStorage.setItem('sailfish__isToolbarOpened', true)
-    registerApi({ editorFactory, notifyOnLoaded: true })
+    registerApi({ editorFactory, isSailfish: true, notifyOnLoaded: true })
 
     expect(navigator.qt.postMessage).toHaveBeenCalledTimes(1)
 
