@@ -7,6 +7,7 @@ import '.' as CustomComponents
 
 ToolButton {
   id: root
+  focusPolicy: Qt.NoFocus
   property string icon
 
   CustomComponents.Icon {

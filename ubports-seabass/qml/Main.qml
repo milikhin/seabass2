@@ -251,8 +251,8 @@ ApplicationWindow {
           searchEnabled: main.visible && tabsModel.count
           onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           onSearch: {
+            editor.forceActiveFocus()
             api.postMessage('toggleSearch')
-            editor.focus = true
           }
         }
         Rectangle {

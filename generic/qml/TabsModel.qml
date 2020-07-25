@@ -117,7 +117,7 @@ ListModel {
     for (var i = 0; i < count; i++) {
       var tab = get(i)
       if (tab.isTerminal) {
-        return
+        continue
       }
 
       var fileName = QmlJs.getFileName(tab.filePath)

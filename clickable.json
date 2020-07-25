@@ -3,7 +3,6 @@
   "build_dir": "./build_ubports",
   "builder": "pure-qml-cmake",
   "kill": "qmlscene",
-  "prebuild": "clickable fetch && clickable build-editor",
   "scripts": {
     "build-editor": "npm ci && npm run build -- --config-name=ubports",
     "fetch": "git submodule update --init"
