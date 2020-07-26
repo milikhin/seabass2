@@ -65,13 +65,14 @@ Run `clickable`
 
 ## Contribution
 
-Your reviews, bug reports and feature requests are very appreciated!
-As so pull requests! Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
+Your reviews, bug reports and feature requests are very appreciated, as so pull requests.
+Feel free to submit PRs for any non-assigned issues!
+Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
 [python modules](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
 [ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
 
 There are a few labels used to indicate issue progress.
-* `help wanted`: in my opinion, the issue is worth fixing, but I'm not going to fix it myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
+* `help wanted`: I'm not going to fix the issue myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
 * `wontfix`: in my opinion, the issue requires to much work out of the project's scope or too many workarounds for SDK issues. Pull requests are still welcome though. It might be worth discussing implementation beforehand if there going to be lots of changes.
 
 Thanks to the [contributors](https://github.com/milikhin/seabass2/graphs/contributors)!
