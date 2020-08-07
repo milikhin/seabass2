@@ -14,7 +14,9 @@ Item {
   property ListModel model
 
   property alias currentIndex: tabBar.currentIndex
-  signal tabCloseRequested(int index)
+  signal close(int index)
+  signal closeAll()
+  signal closeToTheRight(int index)
 
   MouseArea {
     anchors.fill: parent
@@ -37,8 +39,8 @@ Item {
 
   TabBar {
     id: tabBar
-    clip: true
     anchors.fill: parent
+    anchors.topMargin: 1
 
     Component.onCompleted: {
       tabBar.contentItem.highlightRangeMode = ListView.NoHighlightRange
@@ -58,10 +60,19 @@ Item {
         minLabelWidth: minTabLabelWidth
         text: model.uniqueTitle
         hasChanges: model.hasChanges
-        isActive: model.index === tabBar.currentIndex
+        hasMoveLeft: model.index > 0
+        hasMoveRight: model.index < root.model.count - 1
         isBusy: model.isBusy
 
         onClosed: tabCloseRequested(model.index)
+        onCloseAll: root.closeAll()
+        onCloseToTheRight: root.closeToTheRight(model.index)
+        onMoveLeft: function() {
+          root.model.move(model.index, model.index - 1, 1)
+        }
+        onMoveRight: function(index) {
+          root.model.move(model.index, model.index + 1, 1)
+        }
       }
     }
   }
