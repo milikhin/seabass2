@@ -7,58 +7,61 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-06 13:26+0000\n"
-"PO-Revision-Date: 2020-07-08 22:26+0200\n"
+"POT-Creation-Date: 2020-08-09 06:50+0000\n"
+"PO-Revision-Date: 2020-08-09 12:04+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"X-Generator: Poedit 2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: nl\n"
 
-#: ../qml/About.qml:12 ../qml/components/Header.qml:40
+#: ../qml/About.qml:22 ../qml/components/Header.qml:70
 msgid "About"
 msgstr "Over"
 
-#: ../qml/About.qml:19
-msgid "Feed the Seabass!"
-msgstr "Voer de zeebaars!"
-
-#: ../qml/About.qml:40
+#: ../qml/About.qml:35
 msgid ""
 "Click here to open project page and find docs, support, donation options and "
 "list of contributors!"
 msgstr ""
-"Klik hier om de projectpagina te openen, alwaar je documentatie, "
-"ondersteuning, en donatie-opties treft. En natuurlijk een lijst met "
+"Klik hier om de projectpagina te openen, waar je documentatie, "
+"ondersteuning, en donatie-opties kunt vinden. En natuurlijk een lijst met "
 "bijdragers!"
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:25
 msgid "Welcome"
 msgstr "Welkom"
 
-#: ../qml/Main.qml:84
+#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+msgid "Seabass2"
+msgstr "Seabass2"
+
+#: ../qml/Main.qml:53
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
-"Het bestand kan niet worden uitgelezen. Zorg dat je schrijfrechten hebt op "
-"de %1"
+"Het bestand kan niet worden uitgelezen. Zorg dat je leesrechten hebt op de %1"
 
-#: ../qml/Main.qml:85
+#: ../qml/Main.qml:54
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Het bestand kan niet worden weggeschreven. Zorg dat je schrijfrechten hebt "
 "op de %1"
 
-#: ../qml/Main.qml:237
+#: ../qml/Main.qml:240
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "Het compileren (%1) is mislukt. Bekijk de compilatie-uitvoer voor meer "
 "informatie."
 
-#: ../qml/components/Builder.qml:79
+#: ../qml/components/Builder.qml:28
+msgid "Creating build container"
+msgstr "Bezig met aanmaken van container"
+
+#: ../qml/components/Builder.qml:80
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -70,16 +73,13 @@ msgstr ""
 "gebruiken. Er wordt gebruikgemaakt van je internetverbinding om vereiste "
 "pakketten op te halen."
 
-#: ../qml/components/ConfirmDialog.qml:25
-msgid "Creating build container"
-msgstr "Bezig met aanmaken van container"
-
-#: ../qml/components/ConfirmDialog.qml:27
+#: ../qml/components/ConfirmDialog.qml:11
 msgid "Ok"
 msgstr "Oké"
 
-#: ../qml/components/ConfirmDialog.qml:35
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/ConfirmDialog.qml:39 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/files/NewFileDialog.qml:45
+#: ../qml/components/files/RenameDialog.qml:52
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -92,25 +92,31 @@ msgid "Error occured"
 msgstr "Er is een fout opgetreden"
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
+#: ../qml/components/files/Header.qml:40
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../qml/components/FileList.qml:48 ../qml/components/Header.qml:30
+#: ../qml/components/FileList.qml:26
+msgid "Delete file?"
+msgstr "Bestand verwijderen?"
+
+#: ../qml/components/FileList.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:27
+#: ../qml/components/files/FileMenu.qml:21
+msgid "Delete"
+msgstr "Verwijderen"
+
+#: ../qml/components/FileList.qml:64
 msgid "Files"
 msgstr "Bestanden"
 
-#: ../qml/components/Header.qml:45 ../qml/components/SaveDialog.qml:26
-msgid "Save"
-msgstr "Opslaan"
+#: ../qml/components/FileList.qml:199
+msgid "%1 will be deleted"
+msgstr "%1 wordt verwijderd"
 
-#: ../qml/components/Header.qml:52
-msgid "Build"
-msgstr "Compileren"
-
-#: ../qml/components/Header.qml:59
-msgid "Toggle keyboard extension"
-msgstr "Toetsenborduitbreiding aan/uit"
+#: ../qml/components/Header.qml:64
+msgid "Keyboard extension"
+msgstr "Toetsenborduitbreiding"
 
 #: ../qml/components/KeyboardExtension.qml:33
 msgid "Tab"
@@ -120,38 +126,76 @@ msgstr "Tab"
 msgid "Esc"
 msgstr "Esc"
 
-#: ../qml/components/NewFileDialog.qml:22
-msgid "Create new file"
-msgstr "Bestand maken"
-
-#: ../qml/components/NewFileDialog.qml:27
-msgid "file.txt"
-msgstr "bestand.txt"
-
-#: ../qml/components/NewFileDialog.qml:37
-msgid "Create"
-msgstr "Maken"
-
 #: ../qml/components/SaveDialog.qml:23
 msgid "Save changes in %1?"
-msgstr "Wil je de wijzigingen in %1 opslaan?"
+msgstr "Wil je de wijzigingen aan %1 opslaan?"
 
 #: ../qml/components/SaveDialog.qml:24
 msgid "Changes will be lost if you close the file without saving."
 msgstr "Als je het bestand niet opslaat, gaan de wijzigingen verloren."
 
-#: ../qml/components/files/Header.qml:23
+#: ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr "Opslaan"
+
+#: ../qml/components/files/DirectoryMenu.qml:17
+#: ../qml/components/files/DotDotMenu.qml:15
+#: ../qml/components/files/Header.qml:25
 msgid "New file..."
 msgstr "Nieuw bestand..."
 
-#: ../qml/components/files/Header.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:22
+#: ../qml/components/files/FileMenu.qml:16
+msgid "Rename..."
+msgstr "Naam wijzigen..."
+
+#: ../qml/components/files/Header.qml:30
 msgid "Tree mode"
 msgstr "Boomstructuurmodus"
 
-#: ../qml/components/files/Header.qml:33
+#: ../qml/components/files/Header.qml:35
 msgid "Reload"
 msgstr "Herladen"
 
-#: seabass2.desktop.in.h:1
-msgid "Seabass2"
-msgstr "Seabass2"
+#: ../qml/components/files/NewFileDialog.qml:22
+msgid "Create new file"
+msgstr "Bestand maken"
+
+#: ../qml/components/files/NewFileDialog.qml:27
+#: ../qml/components/files/RenameDialog.qml:33
+msgid "file.txt"
+msgstr "bestand.txt"
+
+#: ../qml/components/files/NewFileDialog.qml:37
+msgid "Create"
+msgstr "Maken"
+
+#: ../qml/components/files/RenameDialog.qml:28
+msgid "Rename %1"
+msgstr "Naam van %1 wijzigen"
+
+#: ../qml/components/files/RenameDialog.qml:44
+msgid "Rename"
+msgstr "Naam wijzigen"
+
+#: ../qml/components/tabs/TabMenu.qml:19
+msgid "Move left"
+msgstr "Naar links verplaatsen"
+
+#: ../qml/components/tabs/TabMenu.qml:25
+msgid "Move right"
+msgstr "Naar rechts verplaatsen"
+
+#: ../qml/components/tabs/TabMenu.qml:31
+msgid "Close to the Right"
+msgstr "Rechtertabblad sluiten"
+
+#: ../qml/components/tabs/TabMenu.qml:37
+msgid "Close All"
+msgstr "Alles sluiten"
+
+#~ msgid "Feed the Seabass!"
+#~ msgstr "Voer de zeebaars!"
+
+#~ msgid "Build"
+#~ msgstr "Compileren"
