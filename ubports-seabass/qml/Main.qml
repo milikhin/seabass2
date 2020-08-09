@@ -24,7 +24,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.8.1"
+  readonly property string version: "0.9.0"
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
@@ -200,10 +200,9 @@ ApplicationWindow {
             }
           }
         }
-        Rectangle {
-          Layout.minimumWidth: 1
-          Layout.fillHeight: true
-          color: theme.palette.normal.overlaySecondaryText
+
+        CustomComponents.Divider {
+          isVertical: true
           visible: isWide
         }
       }
@@ -255,11 +254,6 @@ ApplicationWindow {
             api.postMessage('toggleSearch')
           }
         }
-        Rectangle {
-          Layout.fillWidth: true
-          height: 1
-          color: Suru.neutralColor
-        }
 
         CustomComponents.TabBar {
           id: tabBar
@@ -285,19 +279,49 @@ ApplicationWindow {
             header.subtitle = tab.subTitle
             api.openFile(tab.id)
           }
-          onTabCloseRequested: function(index) {
-            const file = model.get(index)
+          onClose: function(index) {
+            _close([model.get(index)])
+          }
+          onCloseAll: function() {
+            const files = []
+            for (var i = 0; i < model.count; i++) {
+              const file = model.get(i)
+              files.push({ hasChanges: file.hasChanges, id: file.id })
+            }
+            _close(files)
+          }
+          onCloseToTheRight: function(startIndex) {
+            if (startIndex === model.count - 1) {
+              return
+            }
+
+            const files = []
+            for (var i = startIndex + 1; i < model.count; i++) {
+              const file = model.get(i)
+              files.push({ hasChanges: file.hasChanges, id: file.id })
+            }
+            _close(files)
+          }
+
+          function _close(files) {
+            const file = files.shift()
             if (!file.hasChanges) {
-              return __close()
+              return __closeAndContinue()
             }
 
             saveDialog.show(file.id, {
-              onSaved: function() { api.getFileContent(__saveAndClose) },
-              onDismissed: __close
+              onSaved: function() {
+                api.getFileContent(__saveAndClose)
+              },
+              onDismissed: __closeAndContinue
             })
 
-            function __close() {
+            function __closeAndContinue() {
               model.close(file.id)
+              if (!files.length) {
+                return
+              }
+              _close(files)
             }
 
             function __saveAndClose(fileContent) {
@@ -305,7 +329,7 @@ ApplicationWindow {
                 if (err) {
                   return
                 }
-                __close()
+                __closeAndContinue()
               })
             }
           }
@@ -321,10 +345,7 @@ ApplicationWindow {
           }
         }
 
-        Rectangle {
-          Layout.fillWidth: true
-          height: 1
-          color: theme.palette.normal.overlaySecondaryText
+        CustomComponents.Divider {
           visible: keyboardExtension.visible
         }
 
@@ -342,5 +363,4 @@ ApplicationWindow {
       }
     }
   }
-  // }
 }
