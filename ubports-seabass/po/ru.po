@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-15 16:07+0000\n"
-"PO-Revision-Date: 2020-07-15 23:12+0700\n"
+"POT-Creation-Date: 2020-08-09 06:18+0000\n"
+"PO-Revision-Date: 2020-08-09 13:43+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
@@ -39,20 +39,20 @@ msgstr "Добро пожаловать"
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:49
+#: ../qml/Main.qml:53
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Ошибка чтения файла. Пожалуйста, убедитесь, что у Вас есть права на чтение "
 "из %1"
 
-#: ../qml/Main.qml:50
+#: ../qml/Main.qml:54
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Ошибка записи файла. Пожалуйста, убедитесь, что у Вас есть права на запись в "
 "%1"
 
-#: ../qml/Main.qml:237
+#: ../qml/Main.qml:240
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "Сборка проекта (%1) завершилась с ошибкой. Сведения об ошибке можно найти во "
@@ -178,6 +178,22 @@ msgstr "Переименовать %1"
 #: ../qml/components/files/RenameDialog.qml:44
 msgid "Rename"
 msgstr "Переименовать"
+
+#: ../qml/components/tabs/TabMenu.qml:19
+msgid "Move left"
+msgstr "Переместить влево"
+
+#: ../qml/components/tabs/TabMenu.qml:25
+msgid "Move right"
+msgstr "Переместить вправо"
+
+#: ../qml/components/tabs/TabMenu.qml:31
+msgid "Close to the Right"
+msgstr "Закрыть все Справа"
+
+#: ../qml/components/tabs/TabMenu.qml:37
+msgid "Close All"
+msgstr "Закрыть Все"
 
 #~ msgid "Feed the Seabass!"
 #~ msgstr "Покормить Сибаса!"
