@@ -32,7 +32,7 @@ TabButton {
   contentItem: Rectangle {
     color: "transparent"
     border {
-      width: 1
+      width: Suru.units.dp(1)
       color: contextMenu.visible ? Suru.highlightColor : "transparent"
     }
     opacity: root.checked || root.down || root.hovered ? 1.0 : 0.7

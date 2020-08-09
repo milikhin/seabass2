@@ -43,7 +43,9 @@ Item {
     anchors.topMargin: 1
 
     Component.onCompleted: {
+      // disable "scroll-animation" when switching between tabs
       tabBar.contentItem.highlightRangeMode = ListView.NoHighlightRange
+      // allow scrolling past the selected tab
       tabBar.contentItem.snapMode = ListView.NoSnap
     }
 
@@ -64,7 +66,7 @@ Item {
         hasMoveRight: model.index < root.model.count - 1
         isBusy: model.isBusy
 
-        onClosed: tabCloseRequested(model.index)
+        onClosed: root.close(model.index)
         onCloseAll: root.closeAll()
         onCloseToTheRight: root.closeToTheRight(model.index)
         onMoveLeft: function() {

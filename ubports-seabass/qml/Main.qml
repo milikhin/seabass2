@@ -24,7 +24,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.8.1"
+  readonly property string version: "0.9.0"
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
