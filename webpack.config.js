@@ -32,19 +32,21 @@ const sailfishConfig = {
   },
   plugins: [
     ...commonConfig.plugins,
-    new CopyPlugin([
-      {
-        from: './harbour-seabass/html'
-      },
-      {
-        from: './generic/qml',
-        to: path.resolve(__dirname, 'harbour-seabass/qml/generic')
-      },
-      {
-        from: './generic/py-backend',
-        to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
-      }
-    ])
+    new CopyPlugin({
+      patterns: [
+        {
+          from: './harbour-seabass/html'
+        },
+        {
+          from: './generic/qml',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/generic')
+        },
+        {
+          from: './generic/py-backend',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
+        }
+      ]
+    })
   ],
   name: 'sfos'
 }
