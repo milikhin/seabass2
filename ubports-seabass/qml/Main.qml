@@ -175,6 +175,7 @@ ApplicationWindow {
 
         CustomComponents.FileList {
           id: fileList
+          isReady: api.isLoaded
           homeDir: api.homeDir
           onClosed: navBar.visible = false
           isPage: !isWide

@@ -11,6 +11,7 @@ import "./files" as FilesComponents
 
 Item {
   id: root
+  property bool isReady: false
   property bool isPage: false
   property bool showHidden: false
   property bool treeMode: false
@@ -22,6 +23,26 @@ Item {
   signal errorOccured(string errorMessage)
   signal fileSelected(string filePath)
 
+  Timer {
+    id: timer
+    running: false
+    repeat: false
+
+    property var callback
+    onTriggered: callback()
+
+    function setTimeout(callback, delay) {
+      if (timer.running) {
+        console.error("nested calls to setTimeout are not supported!");
+        return;
+      }
+      timer.callback = callback;
+      // note: an interval of 0 is directly triggered, so add a little padding
+      timer.interval = delay + 1;
+      timer.running = true;
+    }
+  }
+
   Connections {
     target: ContentHub
     onImportRequested: {
@@ -32,12 +53,19 @@ Item {
 
       // Try to guess original file path by parsing filemanager logs
       // as there is no official API to open the original file
-      directoryModel.guessFilePath(transfer.source, fileName, function(err, filePath) {
-        if (err) {
-          return errorOccured('Unable to open file: ' + err)
+      var callback = function() {
+        if (!isReady) {
+          return timer.setTimeout(callback, 100)
         }
-        fileSelected(filePath)
-      })
+
+        directoryModel.guessFilePath(transfer.source, fileName, function(err, filePath) {
+          if (err) {
+            return errorOccured('Unable to open file: ' + err)
+          }
+          fileSelected(filePath)
+        })
+      }
+      callback()
     }
   }
 

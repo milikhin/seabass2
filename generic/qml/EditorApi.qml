@@ -15,6 +15,7 @@ QtObject {
     property bool hasRedo: false
     property bool isDarkTheme: false
     property bool isReadOnly: false
+    property bool isLoaded: false
     // true when the file is being saved
     property bool isSaveInProgress: false
     property string readErrorMsg: 'Unable to read file %1'
@@ -158,7 +159,7 @@ QtObject {
     function startup() {
         loadTheme()
         if (filePath) {
-          loadFile(filePath)
+          loadFile(filePath, false, Function.prototype)
         }
     }
 
@@ -177,6 +178,7 @@ QtObject {
                 console.error(data.message)
                 return errorOccured(data.message || 'unknown error')
             case 'appLoaded':
+                api.isLoaded = true
                 return appLoaded(data)
             case 'stateChanged':
                 if (data.filePath !== filePath) {
