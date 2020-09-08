@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.platform 1.0
+import Ubuntu.Content 1.3
 
 import "./common" as CustomComponents
 import "../generic/utils.js" as QmlJs
@@ -20,6 +21,25 @@ Item {
   signal closed()
   signal errorOccured(string errorMessage)
   signal fileSelected(string filePath)
+
+  Connections {
+    target: ContentHub
+    onImportRequested: {
+      // Import single file
+      const url = transfer.items[0].url.toString()
+      const fileName = QmlJs.getFileName(url)
+      transfer.finalize()
+
+      // Try to guess original file path by parsing filemanager logs
+      // as there is no official API to open the original file
+      directoryModel.guessFilePath(transfer.source, fileName, function(err, filePath) {
+        if (err) {
+          return errorOccured('Unable to open file: ' + err)
+        }
+        fileSelected(filePath)
+      })
+    }
+  }
 
   ConfirmDialog {
     id: confirmDialog
