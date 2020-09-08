@@ -5,59 +5,59 @@
     <name>About</name>
     <message>
         <source>Seabass v%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Seabass v%1</translation>
     </message>
 </context>
 <context>
     <name>Editor</name>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Open file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei öffnen...</translation>
     </message>
     <message>
         <source>Saving...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern...</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Über</translation>
     </message>
     <message>
         <source>Unable to read file. Please ensure that you have read access to the %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei kann nicht gelesen werden. Bitte stelle sicher, dass Lesezugriff besteht für %1</translation>
     </message>
     <message>
         <source>Unable to write the file. Please ensure that you have write access to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei kann nicht geschrieben werden. Bitte stelle sicher, dass Schreibzugriff besteht für %1</translation>
     </message>
 </context>
 <context>
     <name>ErrorDialog</name>
     <message>
         <source>Error occured</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler entdeckt</translation>
     </message>
 </context>
 <context>
     <name>SaveDialog</name>
     <message>
         <source>Discard changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Änderungen verwerfen?</translation>
     </message>
     <message>
         <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungespeicherte Änderungen an %1 gehen beim Öffnen einer anderen Datei verloren. Fortfahren?</translation>
     </message>
 </context>
 <context>
     <name>harbour-seabass</name>
     <message>
         <source>Welcome</source>
-        <translation type="unfinished"></translation>
+        <translation>Willkommen</translation>
     </message>
 </context>
 </TS>
