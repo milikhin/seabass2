@@ -36,18 +36,23 @@ Item {
       addImportPath(Qt.resolvedUrl('../../../py-backend'))
       importModule('fs_utils', function() {
         ready = true
-      });
+      })
     }
 
     function listDir(path, expanded, callback) {
       const directories = [path].concat(expanded)
       py.call('fs_utils.list_files', [directories], function(res) {
         callback(res.error, res.result)
-      });
-      py.call('fs_utils.watch_changes', [directories]);
+      })
+      py.call('fs_utils.watch_changes', [directories])
     }
   }
 
+  function guessFilePath(sourceApp, fileName, callback) {
+    py.call('fs_utils.guess_file_path', [sourceApp, fileName], function(res) {
+      callback(res.error, res.result)
+    })
+  }
   function getDirIcon(path, isExpanded) {
     if (!treeMode) {
       return 'folder-symbolic'
