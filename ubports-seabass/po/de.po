@@ -7,26 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-02 17:44+0000\n"
-"PO-Revision-Date: 2020-07-05 16:10+0200\n"
+"POT-Creation-Date: 2020-09-08 09:44+0000\n"
+"PO-Revision-Date: 2020-09-08 20:21+0200\n"
 "Last-Translator: Daniel Frost <one@frostinfo.de>\n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../qml/About.qml:12 ../qml/components/Header.qml:40
+#: ../qml/About.qml:22 ../qml/components/Header.qml:70
 msgid "About"
 msgstr "Über"
 
-#: ../qml/About.qml:19
-msgid "Feed the Seabass!"
-msgstr "Füttere den Seabass!"
-
-#: ../qml/About.qml:40
+#: ../qml/About.qml:35
 msgid ""
 "Click here to open project page and find docs, support, donation options and "
 "list of contributors!"
@@ -34,28 +30,36 @@ msgstr ""
 "Hier klicken um die Projektseite zu öffen. Da gibt es Dokumentation, "
 "Unterstützung, Sponsoroptionen und die Liste der Mitwirkenden!"
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:25
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: ../qml/Main.qml:87
+#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+msgid "Seabass2"
+msgstr "Seabass2"
+
+#: ../qml/Main.qml:53
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Datei kann nicht gelesen werden. Bitte stelle sicher, dass Lesezugriff "
 "besteht für %1"
 
-#: ../qml/Main.qml:88
+#: ../qml/Main.qml:54
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Datei kann nicht geschrieben werden. Bitte stelle sicher, dass "
 "Schreibzugriff besteht für %1"
 
-#: ../qml/Main.qml:240
+#: ../qml/Main.qml:241
 msgid "Build (%1) failed. See build output for details"
 msgstr "Build (%1) fehlgeschlagen. Schaue in die build-Ausgabe für Details"
 
-#: ../qml/components/Builder.qml:75
+#: ../qml/components/Builder.qml:28
+msgid "Creating build container"
+msgstr "Erstelle build-Container"
+
+#: ../qml/components/Builder.qml:80
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -67,16 +71,13 @@ msgstr ""
 "der Container erstellt wird. Deine Internetverbindung wird verwendet um die "
 "benötigten Pakete herunterzuladen."
 
-#: ../qml/components/ConfirmDialog.qml:25
-msgid "Creating build container"
-msgstr "Erstelle build-Container"
-
-#: ../qml/components/ConfirmDialog.qml:27
+#: ../qml/components/ConfirmDialog.qml:11
 msgid "Ok"
 msgstr "Ok"
 
-#: ../qml/components/ConfirmDialog.qml:35
-#: ../qml/components/NewFileDialog.qml:45 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/ConfirmDialog.qml:39 ../qml/components/SaveDialog.qml:42
+#: ../qml/components/files/NewFileDialog.qml:45
+#: ../qml/components/files/RenameDialog.qml:52
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -89,25 +90,31 @@ msgid "Error occured"
 msgstr "Fehler entdeckt"
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:15 ../qml/components/files/Header.qml:39
+#: ../qml/components/files/Header.qml:40
 msgid "Close"
 msgstr "Schließen"
 
-#: ../qml/components/FileList.qml:48 ../qml/components/Header.qml:30
+#: ../qml/components/FileList.qml:74
+msgid "Delete file?"
+msgstr "Datei löschen?"
+
+#: ../qml/components/FileList.qml:76
+#: ../qml/components/files/DirectoryMenu.qml:27
+#: ../qml/components/files/FileMenu.qml:21
+msgid "Delete"
+msgstr "Löschen"
+
+#: ../qml/components/FileList.qml:112
 msgid "Files"
 msgstr "Dateien"
 
-#: ../qml/components/Header.qml:45 ../qml/components/SaveDialog.qml:26
-msgid "Save"
-msgstr "Speichern"
+#: ../qml/components/FileList.qml:247
+msgid "%1 will be deleted"
+msgstr "%1 wird gelöscht"
 
-#: ../qml/components/Header.qml:52
-msgid "Build"
-msgstr "Build"
-
-#: ../qml/components/Header.qml:59
-msgid "Toggle keyboard extension"
-msgstr "Tastaturerweiterung umschalten"
+#: ../qml/components/Header.qml:64
+msgid "Keyboard extension"
+msgstr "Tastaturerweiterung"
 
 #: ../qml/components/KeyboardExtension.qml:33
 msgid "Tab"
@@ -116,18 +123,6 @@ msgstr "Tab"
 #: ../qml/components/KeyboardExtension.qml:37
 msgid "Esc"
 msgstr "Esc"
-
-#: ../qml/components/NewFileDialog.qml:22
-msgid "Create new file"
-msgstr "Neue Datei erstellen"
-
-#: ../qml/components/NewFileDialog.qml:27
-msgid "file.txt"
-msgstr "Datei.txt"
-
-#: ../qml/components/NewFileDialog.qml:37
-msgid "Create"
-msgstr "Erstellen"
 
 #: ../qml/components/SaveDialog.qml:23
 msgid "Save changes in %1?"
@@ -138,18 +133,73 @@ msgid "Changes will be lost if you close the file without saving."
 msgstr ""
 "Änderungen gehen verloren wenn die Datei ohne speichern geschlossen wird."
 
-#: ../qml/components/files/Header.qml:23
+#: ../qml/components/SaveDialog.qml:26
+msgid "Save"
+msgstr "Speichern"
+
+#: ../qml/components/files/DirectoryMenu.qml:17
+#: ../qml/components/files/DotDotMenu.qml:15
+#: ../qml/components/files/Header.qml:25
 msgid "New file..."
 msgstr "Neue Datei..."
 
-#: ../qml/components/files/Header.qml:28
+#: ../qml/components/files/DirectoryMenu.qml:22
+#: ../qml/components/files/FileMenu.qml:16
+msgid "Rename..."
+msgstr "Umbenennen..."
+
+#: ../qml/components/files/Header.qml:30
 msgid "Tree mode"
 msgstr "Baumansicht"
 
-#: ../qml/components/files/Header.qml:33
+#: ../qml/components/files/Header.qml:35
 msgid "Reload"
 msgstr "Neu laden"
 
-#: seabass2.desktop.in.h:1
-msgid "Seabass2"
-msgstr "Seabass2"
+#: ../qml/components/files/NewFileDialog.qml:22
+msgid "Create new file"
+msgstr "Neue Datei erstellen"
+
+#: ../qml/components/files/NewFileDialog.qml:27
+#: ../qml/components/files/RenameDialog.qml:33
+msgid "file.txt"
+msgstr "Datei.txt"
+
+#: ../qml/components/files/NewFileDialog.qml:37
+msgid "Create"
+msgstr "Erstellen"
+
+#: ../qml/components/files/RenameDialog.qml:28
+msgid "Rename %1"
+msgstr "%1 umbenennen"
+
+#: ../qml/components/files/RenameDialog.qml:44
+msgid "Rename"
+msgstr "Umbenennen"
+
+#: ../qml/components/tabs/TabMenu.qml:19
+msgid "Move left"
+msgstr "Nach links bewegen"
+
+#: ../qml/components/tabs/TabMenu.qml:25
+msgid "Move right"
+msgstr "Nach rechts bewegen"
+
+#: ../qml/components/tabs/TabMenu.qml:31
+msgid "Close to the Right"
+msgstr "Nach rechts schließen"
+
+#: ../qml/components/tabs/TabMenu.qml:37
+msgid "Close All"
+msgstr ""
+"Alle s\n"
+"chließen"
+
+#~ msgid "Feed the Seabass!"
+#~ msgstr "Füttere den Seabass!"
+
+#~ msgid "Build"
+#~ msgstr "Build"
+
+#~ msgid "Find/Replace"
+#~ msgstr "Suchen/Ersetzen"
