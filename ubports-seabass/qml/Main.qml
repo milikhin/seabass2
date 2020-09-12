@@ -25,14 +25,17 @@ ApplicationWindow {
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
   readonly property string version: "0.10.0"
+  signal themeChanged()
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
+    setCurrentTheme();
   }
 
   Settings {
     id: settings
     property bool isKeyboardExtensionVisible: true
+    property string selectedTheme: "System"
   }
 
   GenericComponents.EditorApi {
@@ -228,6 +231,7 @@ ApplicationWindow {
             }
           }
           onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
+          onSettingsPageRequested: pageStack.push(Qt.resolvedUrl("Settings.qml"))
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
               api.saveFile(api.filePath, fileContent)
@@ -364,4 +368,27 @@ ApplicationWindow {
       }
     }
   }
+
+    /*
+      Sets the system theme according to the theme selected
+      under settings.
+    */
+    function setCurrentTheme() {
+        if (settings.selectedTheme == "System") {
+          theme.name = "";
+          QmlJs.isDarker(theme.palette.normal.background,
+            theme.palette.normal.backgroundText);
+        } else if (settings.selectedTheme == "Suru-dark") {
+          theme.name = "Ubuntu.Components.Themes.SuruDark";
+          api.isDarkTheme = true;
+        } else if (settings.selectedTheme == "Ambiance") {
+          theme.name = "Ubuntu.Components.Themes.Ambiance";
+          api.isDarkTheme = false;
+        } else {
+          theme.name = "";
+        }
+    }
+
+    onThemeChanged: setCurrentTheme()
+
 }
