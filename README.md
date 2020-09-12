@@ -42,7 +42,7 @@ UBports:
 
 ### UBports
 
-Run `clickable`
+Run `clickable` in the main seabass2 folder, not in ubports-seabass subfolder.
 
 ### Sailfish OS
 
@@ -59,7 +59,7 @@ Run `clickable`
 1. Python modules:  
    1. `cd generic/py-backend`
    1. `pipenv install -d`
-   1. `pipenv run pytest **/*.py` 
+   1. `pipenv run pytest **/*.py`
 1. UBports app:
    * QML: `clickable test`
 
