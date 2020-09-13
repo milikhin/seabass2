@@ -42,7 +42,7 @@ UBports:
 
 ### UBports
 
-Run `clickable`
+Run `clickable` (in the project root directory).
 
 ### Sailfish OS
 
@@ -51,7 +51,7 @@ Run `clickable`
    1. Install editor dependencies and build tools: `npm ci`
    1. Build editor engine and copy required files to the build directory: `npm run build -- --config-name=sfos`
 1. Build App
-   * Sailfish OS: build `harbour-seabass` using Sailfish SDK
+   * Build `harbour-seabass` using Sailfish SDK
 
 ### Running tests:
 
@@ -59,7 +59,7 @@ Run `clickable`
 1. Python modules:  
    1. `cd generic/py-backend`
    1. `pipenv install -d`
-   1. `pipenv run pytest **/*.py` 
+   1. `pipenv run pytest **/*.py`
 1. UBports app:
    * QML: `clickable test`
 
