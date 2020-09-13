@@ -42,7 +42,7 @@ UBports:
 
 ### UBports
 
-Run `clickable` in the main seabass2 folder, not in ubports-seabass subfolder.
+Run `clickable` (in the project root directory).
 
 ### Sailfish OS
 
@@ -51,7 +51,7 @@ Run `clickable` in the main seabass2 folder, not in ubports-seabass subfolder.
    1. Install editor dependencies and build tools: `npm ci`
    1. Build editor engine and copy required files to the build directory: `npm run build -- --config-name=sfos`
 1. Build App
-   * Sailfish OS: build `harbour-seabass` using Sailfish SDK
+   * Build `harbour-seabass` using Sailfish SDK
 
 ### Running tests:
 
