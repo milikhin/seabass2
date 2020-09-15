@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-12 21:25+0000\n"
+"POT-Creation-Date: 2020-09-15 19:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,16 +60,8 @@ msgstr ""
 msgid "Select theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:54
+#: ../qml/Settings.qml:59
 msgid "System theme"
-msgstr ""
-
-#: ../qml/Settings.qml:61
-msgid "Ambiance theme"
-msgstr ""
-
-#: ../qml/Settings.qml:68
-msgid "Suru-dark theme"
 msgstr ""
 
 #: ../qml/components/Builder.qml:28

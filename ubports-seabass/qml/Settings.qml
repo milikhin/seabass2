@@ -48,27 +48,47 @@ Item {
 
                 Label {
                     text: i18n.tr("Select theme:")
+                    font.bold: true
                 }
 
-                Button {
-                    text: i18n.tr("System theme")
-                    onClicked: {
-                        settings.selectedTheme = "System";
-                        root.setCurrentTheme();
+                Row {
+                    id: themeRow
+                    spacing: units.gu(1.5)
+                    Label {
+                        id: systemLabel
+                        text: i18n.tr("System theme")
+                        color: settings.selectedTheme === "System" ? theme.palette.normal.selection : theme.palette.normal.backgroundSecondaryText
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                settings.selectedTheme = "System";
+                                root.setCurrentTheme();
+                            }
+                        }
                     }
-                }
-                Button {
-                    text: i18n.tr("Ambiance theme")
-                    onClicked: {
-                        settings.selectedTheme = "Ambiance";
-                        root.setCurrentTheme();
+                    Label {
+                        id: ambianceLabel
+                        text: "Ambiance"
+                        color: settings.selectedTheme === "Ambiance" ? theme.palette.normal.selection : theme.palette.normal.backgroundSecondaryText
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                settings.selectedTheme = "Ambiance";
+                                root.setCurrentTheme();
+                            }
+                        }
                     }
-                }
-                Button {
-                    text: i18n.tr("Suru-dark theme")
-                    onClicked: {
-                        settings.selectedTheme = "Suru-dark";
-                        root.setCurrentTheme();
+                    Label {
+                        id: surudarkLabel
+                        text: "Suru-Dark"
+                        color: settings.selectedTheme === "Suru-Dark" ? theme.palette.normal.selection : theme.palette.normal.backgroundSecondaryText
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                settings.selectedTheme = "Suru-Dark";
+                                root.setCurrentTheme();
+                            }
+                        }
                     }
                 }
             }

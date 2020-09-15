@@ -376,17 +376,19 @@ ApplicationWindow {
     function setCurrentTheme() {
         if (settings.selectedTheme == "System") {
           theme.name = "";
-          QmlJs.isDarker(theme.palette.normal.background,
-            theme.palette.normal.backgroundText);
-        } else if (settings.selectedTheme == "Suru-dark") {
+          Suru.theme = undefined;
+        } else if (settings.selectedTheme == "Suru-Dark") {
           theme.name = "Ubuntu.Components.Themes.SuruDark";
-          api.isDarkTheme = true;
+          Suru.theme = Suru.Dark;
         } else if (settings.selectedTheme == "Ambiance") {
-          theme.name = "Ubuntu.Components.Themes.Ambiance";
-          api.isDarkTheme = false;
+          theme.name = "Ubuntu.Components.Themes.Ambiance"
+          Suru.theme = Suru.Light;
         } else {
           theme.name = "";
+          Suru.theme = undefined;
         }
+        api.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
+          theme.palette.normal.backgroundText);
     }
 
     onThemeChanged: setCurrentTheme()
