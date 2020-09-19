@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-19 14:56+0000\n"
+"POT-Creation-Date: 2020-09-19 15:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,15 +48,15 @@ msgstr ""
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Settings.qml:25 ../qml/components/Header.qml:71
+#: ../qml/Settings.qml:23 ../qml/components/Header.qml:71
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:43
+#: ../qml/Settings.qml:41
 msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:51
+#: ../qml/Settings.qml:49
 msgid "System"
 msgstr ""
 
