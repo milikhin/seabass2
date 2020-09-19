@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 09:44+0000\n"
+"POT-Creation-Date: 2020-09-15 19:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:70
+#: ../qml/About.qml:22 ../qml/components/Header.qml:76
 msgid "About"
 msgstr ""
 
@@ -35,17 +35,33 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:53
+#: ../qml/Main.qml:56
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:54
+#: ../qml/Main.qml:57
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:241
+#: ../qml/Main.qml:245
 msgid "Build (%1) failed. See build output for details"
+msgstr ""
+
+#: ../qml/Settings.qml:22 ../qml/components/Header.qml:71
+msgid "Settings"
+msgstr ""
+
+#: ../qml/Settings.qml:23
+msgid "for seabass2"
+msgstr ""
+
+#: ../qml/Settings.qml:50
+msgid "Select theme:"
+msgstr ""
+
+#: ../qml/Settings.qml:59
+msgid "System theme"
 msgstr ""
 
 #: ../qml/components/Builder.qml:28
@@ -101,7 +117,7 @@ msgstr ""
 msgid "%1 will be deleted"
 msgstr ""
 
-#: ../qml/components/Header.qml:64
+#: ../qml/components/Header.qml:65
 msgid "Keyboard extension"
 msgstr ""
 
