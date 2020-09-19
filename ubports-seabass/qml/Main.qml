@@ -10,6 +10,7 @@ import Ubuntu.Components.Themes 1.3
 import "./components" as CustomComponents
 import "./generic" as GenericComponents
 import "./generic/utils.js" as QmlJs
+import "./constants.js" as Constants
 
 ApplicationWindow {
   id: root
@@ -25,17 +26,16 @@ ApplicationWindow {
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
   readonly property string version: "0.10.0"
-  signal themeChanged()
+  property int activeTheme: parseInt(settings.theme)
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
-    setCurrentTheme();
   }
 
   Settings {
     id: settings
     property bool isKeyboardExtensionVisible: true
-    property string selectedTheme: "System"
+    property string theme: Constants.Theme.System
   }
 
   GenericComponents.EditorApi {
@@ -231,7 +231,7 @@ ApplicationWindow {
             }
           }
           onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
-          onSettingsPageRequested: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+          onSettingsPageRequested: pageStack.push(Qt.resolvedUrl("Settings.qml"), { version: root.version })
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
               api.saveFile(api.filePath, fileContent)
@@ -369,28 +369,29 @@ ApplicationWindow {
     }
   }
 
-    /*
-      Sets the system theme according to the theme selected
-      under settings.
-    */
-    function setCurrentTheme() {
-        if (settings.selectedTheme == "System") {
-          theme.name = "";
-          Suru.theme = undefined;
-        } else if (settings.selectedTheme == "Suru-Dark") {
-          theme.name = "Ubuntu.Components.Themes.SuruDark";
-          Suru.theme = Suru.Dark;
-        } else if (settings.selectedTheme == "Ambiance") {
-          theme.name = "Ubuntu.Components.Themes.Ambiance"
-          Suru.theme = Suru.Light;
-        } else {
-          theme.name = "";
-          Suru.theme = undefined;
-        }
-        api.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
-          theme.palette.normal.backgroundText);
+  /*
+    Sets the system theme according to the theme selected
+    under settings.
+  */
+  function setCurrentTheme() {
+    switch (activeTheme) {
+      case Constants.Theme.System:
+        theme.name = "";
+        Suru.theme = undefined;
+        break;
+      case Constants.Theme.SuruLight:
+        theme.name = "Ubuntu.Components.Themes.Ambiance";
+        Suru.theme = Suru.Light;
+        break;
+      case Constants.Theme.SuruDark:
+        theme.name = "Ubuntu.Components.Themes.SuruDark";
+        Suru.theme = Suru.Dark;
+        break;
     }
 
-    onThemeChanged: setCurrentTheme()
+    api.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
+      theme.palette.normal.backgroundText);
+  }
 
+  onActiveThemeChanged: setCurrentTheme()
 }

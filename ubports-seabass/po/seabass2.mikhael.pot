@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 19:27+0000\n"
+"POT-Creation-Date: 2020-09-19 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,11 +27,11 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:25
+#: ../qml/Main.qml:26
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:27 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
@@ -48,20 +48,16 @@ msgstr ""
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Settings.qml:22 ../qml/components/Header.qml:71
+#: ../qml/Settings.qml:25 ../qml/components/Header.qml:71
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:23
-msgid "for seabass2"
+#: ../qml/Settings.qml:43
+msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:50
-msgid "Select theme:"
-msgstr ""
-
-#: ../qml/Settings.qml:59
-msgid "System theme"
+#: ../qml/Settings.qml:51
+msgid "System"
 msgstr ""
 
 #: ../qml/components/Builder.qml:28
@@ -121,11 +117,11 @@ msgstr ""
 msgid "Keyboard extension"
 msgstr ""
 
-#: ../qml/components/KeyboardExtension.qml:33
+#: ../qml/components/KeyboardExtension.qml:34
 msgid "Tab"
 msgstr ""
 
-#: ../qml/components/KeyboardExtension.qml:37
+#: ../qml/components/KeyboardExtension.qml:38
 msgid "Esc"
 msgstr ""
 

@@ -4,6 +4,7 @@ import Ubuntu.Components.Themes 1.3
 import QtQuick.Layouts 1.3
 
 Toolbar {
+  id: root
   signal tabBtnClicked()
   signal escBtnClicked()
   signal leftArrowClicked()
@@ -41,8 +42,8 @@ Toolbar {
   leadingActionBar.delegate: AbstractButton {
     id: toolbarButton
     anchors {
-      top: parent.top
-      bottom: parent.bottom
+      top: parent ? parent.top : undefined
+      bottom: parent ? parent.bottom : undefined
     }
     width: buttonsRow.width + units.gu(2)
     action: modelData
