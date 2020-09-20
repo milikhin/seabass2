@@ -27,6 +27,7 @@ QtObject {
     property string foregroundColor: backgroundColor
     property string foregroundTextColor: textColor
     property string homeDir
+    property int fontSize
 
     readonly property var py: Python {
       property bool ready: false
@@ -53,10 +54,10 @@ QtObject {
 
     Component.onCompleted: {
         appLoaded.connect(startup)
-        // filePathChanged.connect(loadFile)
         isDarkThemeChanged.connect(loadTheme)
         linkColorChanged.connect(loadTheme)
         textColorChanged.connect(loadTheme)
+        fontSizeChanged.connect(loadTheme)
     }
 
     /**
@@ -152,7 +153,8 @@ QtObject {
             highlightColor: linkColor,
             foregroundColor: foregroundColor,
             foregroundTextColor: foregroundTextColor,
-            textColor: textColor
+            textColor: textColor,
+            fontSize: fontSize
         })
     }
 

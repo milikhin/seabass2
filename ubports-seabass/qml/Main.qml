@@ -10,6 +10,7 @@ import Ubuntu.Components.Themes 1.3
 import "./components" as CustomComponents
 import "./generic" as GenericComponents
 import "./generic/utils.js" as QmlJs
+import "./constants.js" as Constants
 
 ApplicationWindow {
   id: root
@@ -24,7 +25,8 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.10.0"
+  readonly property string version: "0.11.0"
+  property int activeTheme: parseInt(settings.theme)
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
@@ -33,12 +35,15 @@ ApplicationWindow {
   Settings {
     id: settings
     property bool isKeyboardExtensionVisible: true
+    property string theme: Constants.Theme.System
+    property int fontSize: 12
   }
 
   GenericComponents.EditorApi {
     id: api
 
     // UI theme
+    fontSize: settings.fontSize
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background
@@ -228,6 +233,7 @@ ApplicationWindow {
             }
           }
           onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
+          onSettingsPageRequested: pageStack.push(Qt.resolvedUrl("Settings.qml"), { version: root.version })
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
               api.saveFile(api.filePath, fileContent)
@@ -364,4 +370,30 @@ ApplicationWindow {
       }
     }
   }
+
+  /*
+    Sets the system theme according to the theme selected
+    under settings.
+  */
+  function setCurrentTheme() {
+    switch (activeTheme) {
+      case Constants.Theme.System:
+        theme.name = "";
+        Suru.theme = undefined;
+        break;
+      case Constants.Theme.SuruLight:
+        theme.name = "Ubuntu.Components.Themes.Ambiance";
+        Suru.theme = Suru.Light;
+        break;
+      case Constants.Theme.SuruDark:
+        theme.name = "Ubuntu.Components.Themes.SuruDark";
+        Suru.theme = Suru.Dark;
+        break;
+    }
+
+    api.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
+      theme.palette.normal.backgroundText);
+  }
+
+  onActiveThemeChanged: setCurrentTheme()
 }

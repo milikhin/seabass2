@@ -17,6 +17,7 @@ CustomComponents.ToolBar {
 
   signal navBarToggled()
   signal aboutPageRequested()
+  signal settingsPageRequested()
   signal saveRequested()
   signal buildRequested()
   signal keyboardExtensionToggled()
@@ -64,6 +65,11 @@ CustomComponents.ToolBar {
         text: i18n.tr("Keyboard extension")
         enabled: searchEnabled
         onTriggered: keyboardExtensionToggled()
+      }
+      CustomComponents.MenuItem {
+        icon: "settings"
+        text: i18n.tr("Settings")
+        onTriggered: settingsPageRequested()
       }
       CustomComponents.MenuItem {
         icon: "info"

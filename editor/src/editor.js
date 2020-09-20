@@ -153,7 +153,10 @@ export default class Editor {
     this._changeListeners = [callback]
   }
 
-  setPreferences ({ isDarkTheme }) {
+  setPreferences ({ fontSize, isDarkTheme }) {
+    if (fontSize !== undefined) {
+      this._ace.setFontSize(fontSize)
+    }
     if (isDarkTheme !== undefined) {
       this._ace.setTheme(`ace/theme/${isDarkTheme ? 'twilight' : 'chrome'}`)
     }
