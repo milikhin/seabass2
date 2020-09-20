@@ -25,7 +25,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.10.0"
+  readonly property string version: "0.11.0"
   property int activeTheme: parseInt(settings.theme)
 
   Component.onCompleted: {
@@ -36,12 +36,14 @@ ApplicationWindow {
     id: settings
     property bool isKeyboardExtensionVisible: true
     property string theme: Constants.Theme.System
+    property int fontSize: 12
   }
 
   GenericComponents.EditorApi {
     id: api
 
     // UI theme
+    fontSize: settings.fontSize
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background

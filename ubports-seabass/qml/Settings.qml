@@ -14,6 +14,7 @@ Item {
 
   ColumnLayout {
     anchors.fill: parent
+    spacing: Suru.units.gu(1)
 
     CustomComponents.ToolBar {
       Layout.fillWidth: true
@@ -60,6 +61,35 @@ Item {
           textRole: "text"
           onCurrentIndexChanged: {
             settings.theme = themeList.get(currentIndex).value
+          }
+        }
+      }
+
+      Row {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: Suru.units.gu(1)
+        anchors.rightMargin: Suru.units.gu(1)
+        spacing: Suru.units.gu(1)
+
+        Label {
+          anchors.verticalCenter: parent.verticalCenter
+          text: i18n.tr("Font size, CSS px:")
+        }
+
+        TextField {
+          maximumLength: 2
+          inputMethodHints: Qt.ImhFormattedNumbersOnly
+          Component.onCompleted: {
+            text = settings.fontSize
+          }
+          onTextChanged: {
+            const value = parseInt(text)
+            if (isNaN(value) || value < 0) {
+              return
+            }
+
+            settings.fontSize = value
           }
         }
       }

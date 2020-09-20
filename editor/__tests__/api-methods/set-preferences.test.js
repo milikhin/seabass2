@@ -21,6 +21,18 @@ describe('#setPreferences', () => {
     expect(editor._ace.getTheme()).toEqual('ace/theme/twilight')
   })
 
+  it('should set font size', () => {
+    const { editor, filePath } = createEditor()
+    const fontSize = 87
+
+    postMessage({
+      action: 'setPreferences',
+      data: { filePath, fontSize }
+    })
+
+    expect(editor._ace.getFontSize()).toEqual(fontSize)
+  })
+
   it('should save toolbar preferences to localStorage', () => {
     const { filePath } = createEditor()
 
