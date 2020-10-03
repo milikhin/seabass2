@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-09 06:50+0000\n"
-"PO-Revision-Date: 2020-08-13 18:36+0200\n"
+"POT-Creation-Date: 2020-09-20 16:26+0000\n"
+"PO-Revision-Date: 2020-10-03 16:15+0200\n"
 "Last-Translator: Anne017 <anneonyme017@openmailbox.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:70
+#: ../qml/About.qml:22 ../qml/components/Header.qml:76
 msgid "About"
 msgstr "À propos"
 
@@ -28,32 +28,48 @@ msgstr ""
 "Cliquez ici pour ouvrir la page du projet et trouver des documents, de "
 "l'aide, les options de dons et la liste des contributeurs/trices !"
 
-#: ../qml/Main.qml:25
+#: ../qml/Main.qml:26
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:27 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr "Seabass 2"
 
-#: ../qml/Main.qml:53
+#: ../qml/Main.qml:58
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Impossible de lire le fichier. Veuillez vous assurez que vous avez accès en "
 "lecture à %1."
 
-#: ../qml/Main.qml:54
+#: ../qml/Main.qml:59
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Impossible de modifier le fichier. Veuillez vous assurer que vous avez accès "
 "en modification à %1."
 
-#: ../qml/Main.qml:240
+#: ../qml/Main.qml:247
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "La compilation (%1) a échoué. Consultez la sortie de celle-ci pour plus de "
 "détails."
+
+#: ../qml/Settings.qml:24 ../qml/components/Header.qml:71
+msgid "Settings"
+msgstr "Paramètres"
+
+#: ../qml/Settings.qml:42
+msgid "Theme:"
+msgstr "Thème :"
+
+#: ../qml/Settings.qml:50
+msgid "System"
+msgstr "Système"
+
+#: ../qml/Settings.qml:77
+msgid "Font size, CSS px:"
+msgstr "Taille de la police, en pixels dans la CSS :"
 
 #: ../qml/components/Builder.qml:28
 msgid "Creating build container"
@@ -95,33 +111,33 @@ msgstr "Une erreur s'est produite"
 msgid "Close"
 msgstr "Fermer"
 
-#: ../qml/components/FileList.qml:26
+#: ../qml/components/FileList.qml:74
 msgid "Delete file?"
 msgstr "Supprimer le fichier ?"
 
-#: ../qml/components/FileList.qml:28
+#: ../qml/components/FileList.qml:76
 #: ../qml/components/files/DirectoryMenu.qml:27
 #: ../qml/components/files/FileMenu.qml:21
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../qml/components/FileList.qml:64
+#: ../qml/components/FileList.qml:112
 msgid "Files"
 msgstr "Fichiers"
 
-#: ../qml/components/FileList.qml:199
+#: ../qml/components/FileList.qml:247
 msgid "%1 will be deleted"
 msgstr "%1 sera supprimé"
 
-#: ../qml/components/Header.qml:64
+#: ../qml/components/Header.qml:65
 msgid "Keyboard extension"
 msgstr "Extension du clavier"
 
-#: ../qml/components/KeyboardExtension.qml:33
+#: ../qml/components/KeyboardExtension.qml:34
 msgid "Tab"
 msgstr "Tab"
 
-#: ../qml/components/KeyboardExtension.qml:37
+#: ../qml/components/KeyboardExtension.qml:38
 msgid "Esc"
 msgstr "Échap"
 
