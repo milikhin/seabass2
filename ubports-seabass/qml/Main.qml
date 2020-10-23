@@ -260,6 +260,11 @@ ApplicationWindow {
             editor.forceActiveFocus()
             api.postMessage('toggleSearch')
           }
+          onOpenTerminalApp: {
+              if (api.filePath) {
+                  Qt.openUrlExternally("terminal://?path=" + api.filePath.split('/').slice(0, -1).join('/'))
+              }
+          }
         }
 
         CustomComponents.TabBar {
