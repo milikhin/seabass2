@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 09:44+0000\n"
-"PO-Revision-Date: 2020-09-08 20:21+0200\n"
+"POT-Creation-Date: 2020-10-23 17:57+0000\n"
+"PO-Revision-Date: 2020-10-23 20:00+0200\n"
 "Last-Translator: Daniel Frost <one@frostinfo.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Poedit 2.4.1\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:70
+#: ../qml/About.qml:22 ../qml/components/Header.qml:81
 msgid "About"
 msgstr "Über"
 
@@ -30,30 +30,46 @@ msgstr ""
 "Hier klicken um die Projektseite zu öffen. Da gibt es Dokumentation, "
 "Unterstützung, Sponsoroptionen und die Liste der Mitwirkenden!"
 
-#: ../qml/Main.qml:25
+#: ../qml/Main.qml:26
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: ../qml/Main.qml:26 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:27 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr "Seabass2"
 
-#: ../qml/Main.qml:53
+#: ../qml/Main.qml:58
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Datei kann nicht gelesen werden. Bitte stelle sicher, dass Lesezugriff "
 "besteht für %1"
 
-#: ../qml/Main.qml:54
+#: ../qml/Main.qml:59
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Datei kann nicht geschrieben werden. Bitte stelle sicher, dass "
 "Schreibzugriff besteht für %1"
 
-#: ../qml/Main.qml:241
+#: ../qml/Main.qml:247
 msgid "Build (%1) failed. See build output for details"
 msgstr "Build (%1) fehlgeschlagen. Schaue in die build-Ausgabe für Details"
+
+#: ../qml/Settings.qml:24 ../qml/components/Header.qml:76
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: ../qml/Settings.qml:42
+msgid "Theme:"
+msgstr "Design:"
+
+#: ../qml/Settings.qml:50
+msgid "System"
+msgstr "System"
+
+#: ../qml/Settings.qml:77
+msgid "Font size, CSS px:"
+msgstr "Schriftgröße, CSS px:"
 
 #: ../qml/components/Builder.qml:28
 msgid "Creating build container"
@@ -112,15 +128,15 @@ msgstr "Dateien"
 msgid "%1 will be deleted"
 msgstr "%1 wird gelöscht"
 
-#: ../qml/components/Header.qml:64
+#: ../qml/components/Header.qml:70
 msgid "Keyboard extension"
 msgstr "Tastaturerweiterung"
 
-#: ../qml/components/KeyboardExtension.qml:33
+#: ../qml/components/KeyboardExtension.qml:34
 msgid "Tab"
 msgstr "Tab"
 
-#: ../qml/components/KeyboardExtension.qml:37
+#: ../qml/components/KeyboardExtension.qml:38
 msgid "Esc"
 msgstr "Esc"
 
