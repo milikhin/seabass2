@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import QtQuick.Window 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
@@ -149,7 +150,9 @@ ApplicationWindow {
     id: pageStack
     initialItem: mainView
     anchors.fill: parent
-    anchors.bottomMargin: Qt.inputMethod.visible ? Qt.inputMethod.keyboardRectangle.height : 0
+    anchors.bottomMargin: Qt.inputMethod.visible
+      ? Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio
+      : 0
   }
 
   CustomComponents.ErrorDialog {
