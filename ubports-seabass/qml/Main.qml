@@ -48,7 +48,7 @@ ApplicationWindow {
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background
-    borderColor: theme.palette.normal.overlaySecondaryText
+    borderColor: Suru.neutralColor
     textColor: theme.palette.normal.backgroundSecondaryText
     linkColor: theme.palette.normal.backgroundText
     foregroundColor: theme.palette.normal.foreground

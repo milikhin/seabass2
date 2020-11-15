@@ -25,6 +25,8 @@ export function setSearchBarColors (colors) {
   styleElem.sheet.cssRules[6].style.backgroundColor = colors.foregroundColor
   styleElem.sheet.cssRules[6].style.setProperty('border-color', colors.borderColor, 'important')
   styleElem.sheet.cssRules[6].style.color = colors.textColor
+
+  styleElem.sheet.cssRules[7].style.borderColor = colors.borderColor
 }
 
 export function getThemeStyleElem () {
