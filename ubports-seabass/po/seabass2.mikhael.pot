@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 16:26+0000\n"
+"POT-Creation-Date: 2020-11-16 20:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,24 +27,24 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:26
+#: ../qml/Main.qml:27
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:27 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:28 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:58
+#: ../qml/Main.qml:60
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:59
+#: ../qml/Main.qml:61
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:247
+#: ../qml/Main.qml:251
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: ../qml/components/FileList.qml:247
+#: ../qml/components/FileList.qml:248
 msgid "%1 will be deleted"
 msgstr ""
 

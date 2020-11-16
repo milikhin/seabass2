@@ -87,3 +87,11 @@
   left: 0;
   right: auto;
 }
+
+.ace_button.checked[action="toggleReplace"] {
+  opacity: 0.7
+}
+
+.ace_button.checked[action="toggleReplace"]:hover {
+  opacity: 1
+}

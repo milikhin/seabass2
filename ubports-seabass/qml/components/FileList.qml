@@ -187,7 +187,8 @@ Item {
               anchors.verticalCenter: parent.verticalCenter
               spacing: units.gu(1)
               CustomComponents.Icon {
-                height: parent.height
+                Layout.preferredWidth: units.gu(2)
+                Layout.preferredHeight: units.gu(2)
                 name: model.isFile
                   ? QmlJs.getFileIcon(model.name)
                   : directoryModel.getDirIcon(model.path, model.isExpanded)

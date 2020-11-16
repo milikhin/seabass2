@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import QtQuick.Window 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
@@ -25,7 +26,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.11.0"
+  readonly property string version: "0.11.1"
   property int activeTheme: parseInt(settings.theme)
 
   Component.onCompleted: {
@@ -47,7 +48,8 @@ ApplicationWindow {
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background
-    borderColor: theme.palette.normal.overlaySecondaryText
+    borderColor: QmlJs.isDarker(theme.palette.normal.background,
+      theme.palette.normal.backgroundText) ? Suru.darkMid: Suru.lightMid
     textColor: theme.palette.normal.backgroundSecondaryText
     linkColor: theme.palette.normal.backgroundText
     foregroundColor: theme.palette.normal.foreground
@@ -149,7 +151,9 @@ ApplicationWindow {
     id: pageStack
     initialItem: mainView
     anchors.fill: parent
-    anchors.bottomMargin: Qt.inputMethod.visible ? Qt.inputMethod.keyboardRectangle.height : 0
+    anchors.bottomMargin: Qt.inputMethod.visible
+      ? Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio
+      : 0
   }
 
   CustomComponents.ErrorDialog {

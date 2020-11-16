@@ -125,7 +125,7 @@ TabButton {
           id: closeIcon
           name: isBusy ? 'package-x-generic-symbolic' : 'close'
           height: tabLabel.height
-          width: height
+          width: Suru.units.gu(2)
           anchors.centerIn: parent
           color: isBusy ? Suru.highlightColor : tabLabel.color
           opacity: isBusy ? 0.25 : 1

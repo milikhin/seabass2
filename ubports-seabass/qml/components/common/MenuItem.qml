@@ -16,6 +16,8 @@ MenuItem {
 
     CustomComponents.Icon {
       name: root.icon
+      Layout.preferredWidth: Suru.units.gu(2)
+      Layout.preferredHeight: Suru.units.gu(2)
       Layout.leftMargin: Suru.units.gu(1)
       Layout.rightMargin: Suru.units.gu(1)
     }
