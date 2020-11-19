@@ -8,4 +8,5 @@ import Ubuntu.Components.Themes 1.3
 UITK.Icon {
   color: theme.palette.normal.backgroundText
   height: Suru.units.gu(2)
+  width: Suru.units.gu(2)
 }

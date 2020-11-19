@@ -8,7 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2020-11-19 22:26+0000\n"
+=======
+"POT-Creation-Date: 2020-11-16 20:03+0000\n"
+>>>>>>> d22b506e7929302e615023ff58bd94e7077878ad
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,11 +31,11 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:26
+#: ../qml/Main.qml:27
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:27 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:28 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
@@ -165,7 +169,7 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: ../qml/components/FileList.qml:247
+#: ../qml/components/FileList.qml:248
 msgid "%1 will be deleted"
 msgstr ""
 
