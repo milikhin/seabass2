@@ -26,6 +26,7 @@ ApplicationWindow {
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
   readonly property string version: "0.11.0"
+  property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
   Component.onCompleted: {
@@ -143,6 +144,20 @@ ApplicationWindow {
     onUnhandledError: function(message) {
       errorDialog.show('Unhandled python backend error:\n' + message)
     }
+
+    Component.onCompleted: {
+      readyChanged.connect(handleBuilderStateChanged)
+    }
+
+    function handleBuilderStateChanged() {
+      builder._testContainer(function(err, containerExists) {
+        builder.readyChanged.disconnect(handleBuilderStateChanged)
+        if (err) {
+          return
+        }
+        root.hasBuildContainer = containerExists
+      })
+    }
   }
 
   StackView {
@@ -233,7 +248,35 @@ ApplicationWindow {
             }
           }
           onAboutPageRequested: pageStack.push(Qt.resolvedUrl("About.qml"), { version: root.version })
-          onSettingsPageRequested: pageStack.push(Qt.resolvedUrl("Settings.qml"), { version: root.version })
+          onSettingsPageRequested: {
+            pageStack.push(Qt.resolvedUrl("Settings.qml"), {
+              version: root.version,
+              buildContainerReady: builder.ready,
+              hasBuildContainer: root.hasBuildContainer
+            })
+
+            pageStack.currentItem.containerCreationStarted.connect(function() {
+              function onStartedHandler() {
+                pageStack.pop()
+                builder.started.disconnect(onStartedHandler)
+              }
+
+              builder.started.connect(onStartedHandler)
+              builder.ensureContainer(function(err) {
+                if (err) {
+                  // disconnect from 'started' event in case of Error
+                  // because ther won't be any output anymore
+                  builder.started.disconnect(onStartedHandler)
+                  return errorDialog.show(
+                    i18n.tr('Container creation failed. See build output or log files for details')
+                  )
+                }
+              }, function() {
+                // disconnect from 'started' event onCancel
+                builder.started.disconnect(onStartedHandler)
+              })
+            })
+          }
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
               api.saveFile(api.filePath, fileContent)

@@ -52,6 +52,10 @@ Item {
     _exec('build_utils.build', [config], callback)
   }
 
+  function ensureContainer(callback, onCancel) {
+    _exec('build_utils.ensure_container', [], callback)
+  }
+
   function _exec(fn, args, callback) {
     _ensureContainer(function(err) {
       if (err) {
@@ -66,7 +70,7 @@ Item {
     })
   }
 
-  function _ensureContainer(callback) {
+  function _ensureContainer(callback, onCancel) {
     builder._testContainer(function(err, containerExists) {
       if (err) {
         return callback(err)
@@ -82,7 +86,7 @@ Item {
           "while the container is being created. " +
           "Your network connection will be used to fetch required packages."),
         onOk: callback,
-        onCancel: function() {}
+        onCancel: onCancel || Function.prototype
       })
     })
   }

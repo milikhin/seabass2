@@ -16,15 +16,24 @@ def build(config_file):
     """
     return exec_fn(lambda: _build(config_file))
 
+def ensure_container():
+    """
+    Creates a Libertine container to execute clickable if not exists
+    """
+    return exec_fn(_init_container)
+
 def test_container_exists():
     """Returns Trues if Libertine container exists, False otherwise"""
     return exec_fn(_test_container_exists)
 
-def _build(config_file):
+def _init_container():
     patch_env()
     build_env = BuildEnv(container_id=CONTAINER_ID,
                          print_renderer=lambda txt: pyotherside.send('stdout', txt))
     build_env.init_container()
+
+def _build(config_file):
+    _init_container()
     return build_env.build(config_file)
 
 def _test_container_exists():

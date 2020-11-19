@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-20 16:26+0000\n"
+"POT-Creation-Date: 2020-11-19 21:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,40 +35,84 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:58
+#: ../qml/Main.qml:59
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:59
+#: ../qml/Main.qml:60
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:247
+#: ../qml/Main.qml:271
+msgid "Container creation failed. See build output or log files for details"
+msgstr ""
+
+#: ../qml/Main.qml:290
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Settings.qml:24 ../qml/components/Header.qml:71
+#: ../qml/Settings.qml:27 ../qml/components/Header.qml:71
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:42
+#: ../qml/Settings.qml:46
+msgid "User interface"
+msgstr ""
+
+#: ../qml/Settings.qml:59
 msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:50
+#: ../qml/Settings.qml:67
 msgid "System"
 msgstr ""
 
-#: ../qml/Settings.qml:77
+#: ../qml/Settings.qml:94
 msgid "Font size, CSS px:"
+msgstr ""
+
+#: ../qml/Settings.qml:130
+msgid "Build container"
+msgstr ""
+
+#: ../qml/Settings.qml:148
+msgid ""
+"You can create and build projects for UBports from within the Seabass using "
+"Clickable."
+msgstr ""
+
+#: ../qml/Settings.qml:156
+msgid ""
+"In order to execute Clickable Seabass requires a special Libertine container "
+"with build tools to be created first. Once the container is created (its ID "
+"is `seabass2-build`) you can manage it as usual using `libertine-container-"
+"manager` or via the System Settings. "
+msgstr ""
+
+#: ../qml/Settings.qml:167
+msgid ""
+"Should anything goes wrong with container feel free to delete and recreate "
+"it once again."
+msgstr ""
+
+#: ../qml/Settings.qml:183
+msgid "Container status:"
+msgstr ""
+
+#: ../qml/Settings.qml:191
+msgid "ready"
+msgstr ""
+
+#: ../qml/Settings.qml:206
+msgid "Create build container"
 msgstr ""
 
 #: ../qml/components/Builder.qml:28
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:80
+#: ../qml/components/Builder.qml:84
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "

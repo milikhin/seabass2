@@ -11,6 +11,9 @@ import "./constants.js" as Constants
 Item {
   id: settingsPage
   property string version
+  property bool buildContainerReady: false
+  property bool hasBuildContainer: false
+  signal containerCreationStarted()
 
   ColumnLayout {
     anchors.fill: parent
@@ -29,6 +32,20 @@ Item {
       Layout.fillWidth: true
       Layout.fillHeight: true
       spacing: Suru.units.gu(1)
+
+      Row {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: Suru.units.gu(1)
+        anchors.rightMargin: Suru.units.gu(1)
+        spacing: Suru.units.gu(1)
+
+        Label {
+          anchors.verticalCenter: parent.verticalCenter
+          font.bold: true
+          text: i18n.tr("User interface")
+        }
+      }
 
       Row {
         anchors.left: parent.left
@@ -90,6 +107,106 @@ Item {
             }
 
             settings.fontSize = value
+          }
+        }
+      }
+
+      Rectangle {
+        width: parent.width
+        height: Suru.units.dp(1)
+        color: Suru.neutralColor
+      }
+
+      Row {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: Suru.units.gu(1)
+        anchors.rightMargin: Suru.units.gu(1)
+        spacing: Suru.units.gu(1)
+
+        Label {
+          anchors.verticalCenter: parent.verticalCenter
+          font.bold: true
+          text: i18n.tr("Build container")
+        }
+      }
+
+      Row {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: Suru.units.gu(1)
+        anchors.rightMargin: Suru.units.gu(1)
+        spacing: Suru.units.gu(1)
+
+        ColumnLayout {
+          width: parent.width
+          spacing: Suru.units.gu(1)
+
+          Label {
+            Layout.fillWidth: true
+            text: i18n.tr(
+              "You can create and build projects for UBports from within the Seabass using Clickable."
+            )
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+          }
+
+          Label {
+            Layout.fillWidth: true
+            text: i18n.tr(
+              "In order to execute Clickable Seabass requires a special Libertine container " +
+              "with build tools to be created first. " +
+              "Once the container is created (its ID is `seabass2-build`) you can manage it as usual " +
+              "using `libertine-container-manager` or via the System Settings. "
+            )
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+          }
+
+          Label {
+            Layout.fillWidth: true
+            text: i18n.tr(
+              "Should anything goes wrong with container feel free to delete and recreate it once again."
+            )
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+          }
+        }
+      }
+
+      Row {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: Suru.units.gu(1)
+        anchors.rightMargin: Suru.units.gu(1)
+        spacing: Suru.units.gu(1)
+
+        Label {
+          anchors.verticalCenter: parent.verticalCenter
+          text: i18n.tr("Container status:")
+        }
+
+        Label {
+          anchors.verticalCenter: parent.verticalCenter
+          font.bold: true
+          text: i18n.tr(buildContainerReady
+            ? hasBuildContainer
+              ? "ready"
+              : "not exists"
+            : "busy...")
+        }
+      }
+
+      Row {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: Suru.units.gu(1)
+        anchors.rightMargin: Suru.units.gu(1)
+        spacing: Suru.units.gu(1)
+
+        Button {
+          visible: !hasBuildContainer
+          text: i18n.tr("Create build container")
+          enabled: buildContainerReady
+          onClicked: {
+            containerCreationStarted()
           }
         }
       }
