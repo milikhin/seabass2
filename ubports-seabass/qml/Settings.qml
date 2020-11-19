@@ -15,6 +15,10 @@ Item {
   property bool hasBuildContainer: false
   signal containerCreationStarted()
 
+  readonly property string stateReady: i18n.tr("ready")
+  readonly property string stateBusy: i18n.tr("busy...")
+  readonly property string stateNotExists: i18n.tr("not exists")
+
   ColumnLayout {
     anchors.fill: parent
     spacing: Suru.units.gu(1)
@@ -186,11 +190,11 @@ Item {
         Label {
           anchors.verticalCenter: parent.verticalCenter
           font.bold: true
-          text: i18n.tr(buildContainerReady
+          text: buildContainerReady
             ? hasBuildContainer
-              ? "ready"
-              : "not exists"
-            : "busy...")
+              ? stateReady
+              : stateNotExists
+            : stateBusy
         }
       }
 

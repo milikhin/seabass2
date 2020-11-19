@@ -10,13 +10,13 @@ PACKAGES = [
     'nano',
     'git',
 
-    # 3. now this isn't great. but without these installation of qtbase5-private-dev would fail
+    # 3. now this isn't great. but without these lines installation of qtbase5-private-dev would fail
     'libwayland-server0=1.12.0-1~ubuntu16.04.3',
     'libwayland-client0=1.12.0-1~ubuntu16.04.3',
     'libwayland-cursor0=1.12.0-1~ubuntu16.04.3',
     'qtchooser',
 
-    # 4. finally, the inspired by clickable Docker image
+    # 4. finally, packages inspired by the clickable Docker image
     'build-essential',
     'cmake',
     'git',

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-19 21:22+0000\n"
+"POT-Creation-Date: 2020-11-19 22:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,37 +52,49 @@ msgstr ""
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Settings.qml:27 ../qml/components/Header.qml:71
+#: ../qml/Settings.qml:18
+msgid "ready"
+msgstr ""
+
+#: ../qml/Settings.qml:19
+msgid "busy..."
+msgstr ""
+
+#: ../qml/Settings.qml:20
+msgid "not exists"
+msgstr ""
+
+#: ../qml/Settings.qml:31 ../qml/components/Header.qml:71
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:46
+#: ../qml/Settings.qml:50
 msgid "User interface"
 msgstr ""
 
-#: ../qml/Settings.qml:59
+#: ../qml/Settings.qml:63
 msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:67
+#: ../qml/Settings.qml:71
 msgid "System"
 msgstr ""
 
-#: ../qml/Settings.qml:94
+#: ../qml/Settings.qml:98
 msgid "Font size, CSS px:"
 msgstr ""
 
-#: ../qml/Settings.qml:130
+#: ../qml/Settings.qml:134
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:148
+#: ../qml/Settings.qml:152
 msgid ""
 "You can create and build projects for UBports from within the Seabass using "
 "Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:156
+#: ../qml/Settings.qml:160
 msgid ""
 "In order to execute Clickable Seabass requires a special Libertine container "
 "with build tools to be created first. Once the container is created (its ID "
@@ -90,21 +102,17 @@ msgid ""
 "manager` or via the System Settings. "
 msgstr ""
 
-#: ../qml/Settings.qml:167
+#: ../qml/Settings.qml:171
 msgid ""
 "Should anything goes wrong with container feel free to delete and recreate "
 "it once again."
 msgstr ""
 
-#: ../qml/Settings.qml:183
+#: ../qml/Settings.qml:187
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:191
-msgid "ready"
-msgstr ""
-
-#: ../qml/Settings.qml:206
+#: ../qml/Settings.qml:210
 msgid "Create build container"
 msgstr ""
 

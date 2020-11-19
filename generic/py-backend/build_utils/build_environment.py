@@ -99,6 +99,7 @@ class BuildEnv:
             self._print('Step 3/3. Installing Clickable.', margin_top=True)
             self._install_clickable()
             self._delete_desktop_files()
+            self._print("\r\nDONE: Build container has been successfully created")
         except subprocess.CalledProcessError as err:
             self._print('ERROR: Creating a container failed', margin_top=True)
             self._print(err)
