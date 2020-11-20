@@ -8,11 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2020-11-19 22:26+0000\n"
-=======
-"POT-Creation-Date: 2020-11-16 20:03+0000\n"
->>>>>>> d22b506e7929302e615023ff58bd94e7077878ad
+"POT-Creation-Date: 2020-11-20 20:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,20 +35,20 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:59
+#: ../qml/Main.qml:61
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:60
+#: ../qml/Main.qml:62
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:271
+#: ../qml/Main.qml:270
 msgid "Container creation failed. See build output or log files for details"
 msgstr ""
 
-#: ../qml/Main.qml:290
+#: ../qml/Main.qml:289
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 

@@ -147,13 +147,8 @@ ApplicationWindow {
       errorDialog.show('Unhandled python backend error:\n' + message)
     }
 
-    Component.onCompleted: {
-      readyChanged.connect(handleBuilderStateChanged)
-    }
-
-    function handleBuilderStateChanged() {
+    onReadyChanged: {
       builder._testContainer(function(err, containerExists) {
-        builder.readyChanged.disconnect(handleBuilderStateChanged)
         if (err) {
           return
         }
