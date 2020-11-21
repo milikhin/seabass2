@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-20 20:25+0000\n"
+"POT-Creation-Date: 2020-11-21 12:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../qml/About.qml:22 ../qml/components/Header.qml:76
@@ -68,51 +68,70 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:50
+#: ../qml/Settings.qml:53
 msgid "User interface"
 msgstr ""
 
-#: ../qml/Settings.qml:63
+#: ../qml/Settings.qml:66
 msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:71
+#: ../qml/Settings.qml:74
 msgid "System"
 msgstr ""
 
-#: ../qml/Settings.qml:98
+#: ../qml/Settings.qml:101
 msgid "Font size, CSS px:"
 msgstr ""
 
-#: ../qml/Settings.qml:134
+#: ../qml/Settings.qml:136
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:152
-msgid ""
-"You can create and build projects for UBports from within the Seabass using "
-"Clickable."
+#: ../qml/Settings.qml:153
+msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:160
+#: ../qml/Settings.qml:161
 msgid ""
-"In order to execute Clickable Seabass requires a special Libertine container "
-"with build tools to be created first. Once the container is created (its ID "
-"is `seabass2-build`) you can manage it as usual using `libertine-container-"
-"manager` or via the System Settings. "
+"In order to execute Clickable, Seabass requires a special Libertine "
+"container to be created first. Once the container is created you can manage "
+"it as usual using `libertine-container-manager` (container ID is `seabass2-"
+"build`) or via the System Settings. "
 msgstr ""
 
 #: ../qml/Settings.qml:171
 msgid ""
-"Should anything goes wrong with container feel free to delete and recreate "
-"it once again."
+"Should anything goes wrong with the container you can delete and recreate it "
+"once again."
 msgstr ""
 
-#: ../qml/Settings.qml:187
+#: ../qml/Settings.qml:192
+msgid "Notes:"
+msgstr ""
+
+#: ../qml/Settings.qml:202
+msgid ""
+"• To build a project you need to open a corresponding clickable.json file "
+"and click the 'Build' button: "
+msgstr ""
+
+#: ../qml/Settings.qml:219
+msgid ""
+"• Project files should be located inside ~/Downloads or ~/Documents "
+"directories. These directories are automatically mounted into Libertine "
+"containers. Alternatively you can create additional bind mounts manually."
+msgstr ""
+
+#: ../qml/Settings.qml:229
+msgid "• clickable.json file should be named 'clickable.json'."
+msgstr ""
+
+#: ../qml/Settings.qml:245
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:210
+#: ../qml/Settings.qml:267
 msgid "Create build container"
 msgstr ""
 

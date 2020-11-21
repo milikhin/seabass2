@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-19 21:56+0000\n"
-"PO-Revision-Date: 2020-11-20 00:00+0200\n"
+"POT-Creation-Date: 2020-11-21 12:46+0000\n"
+"PO-Revision-Date: 2020-11-21 14:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -31,34 +31,34 @@ msgstr ""
 "Нажмите здесь, чтобы открыть сайт проекта. Там Вы найдете документацию, "
 "техническую поддержку, способы пожертвований и список участников проекта!"
 
-#: ../qml/Main.qml:26
+#: ../qml/Main.qml:27
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
-#: ../qml/Main.qml:27 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:28 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:59
+#: ../qml/Main.qml:61
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Ошибка чтения файла. Пожалуйста, убедитесь, что у Вас есть права на чтение "
 "из %1"
 
-#: ../qml/Main.qml:60
+#: ../qml/Main.qml:62
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Ошибка записи файла. Пожалуйста, убедитесь, что у Вас есть права на запись в "
 "%1"
 
-#: ../qml/Main.qml:271
+#: ../qml/Main.qml:270
 msgid "Container creation failed. See build output or log files for details"
 msgstr ""
 "Создание контейнера завершилось с ошибкой. Сведения об ошибке можно найти во "
 "вкладке Build output или в логах"
 
-#: ../qml/Main.qml:290
+#: ../qml/Main.qml:289
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "Сборка проекта (%1) завершилась с ошибкой. Сведения об ошибке можно найти во "
@@ -80,59 +80,82 @@ msgstr "отсутствует"
 msgid "Settings"
 msgstr "Настройки"
 
-#: ../qml/Settings.qml:50
+#: ../qml/Settings.qml:53
 msgid "User interface"
 msgstr ""
 
-#: ../qml/Settings.qml:63
+#: ../qml/Settings.qml:66
 msgid "Theme:"
 msgstr "Тема оформления:"
 
-#: ../qml/Settings.qml:71
+#: ../qml/Settings.qml:74
 msgid "System"
 msgstr "Системная"
 
-#: ../qml/Settings.qml:98
+#: ../qml/Settings.qml:101
 msgid "Font size, CSS px:"
 msgstr "Размер шрифта, CSS px:"
 
-#: ../qml/Settings.qml:134
+#: ../qml/Settings.qml:136
 msgid "Build container"
 msgstr "Контейнера для сборки проектов"
 
-#: ../qml/Settings.qml:152
-msgid ""
-"You can create and build projects for UBports from within the Seabass using "
-"Clickable."
-msgstr ""
-"Вы можете создавать и собирать проекты для UBports из Seabass, используя "
-"Clickable."
+#: ../qml/Settings.qml:153
+msgid "You can use the Seabass to build projects with Clickable."
+msgstr "Используя Seabass, Вы можете собирать проекты с помощью Clickable."
 
-#: ../qml/Settings.qml:160
+#: ../qml/Settings.qml:161
 msgid ""
-"In order to execute Clickable Seabass requires a special Libertine container "
-"with build tools to be created first. Once the container is created (its ID "
-"is `seabass2-build`) you can manage it as usual using `libertine-container-"
-"manager` or via the System Settings. "
+"In order to execute Clickable, Seabass requires a special Libertine "
+"container to be created first. Once the container is created you can manage "
+"it as usual using `libertine-container-manager` (container ID is `seabass2-"
+"build`) or via the System Settings. "
 msgstr ""
-"Для запуска Clickable сначала необходимо создать специальный контейнер "
-"Libertine, содержащий необходимые пакеты. Если контейнер уже создан (его ID "
-"- `seabass2-build`), Вы можете управлять им как обычно с помощью `libertine-"
-"container-manager` или через Настройки Системы."
+"Перед запуском Clickable необходимо создать специальный контейнер Libertine. "
+"Если контейнер уже создан (его ID - `seabass2-build`), Вы можете управлять "
+"им как обычно с помощью `libertine-container-manager` или через Настройки "
+"Системы."
 
 #: ../qml/Settings.qml:171
 msgid ""
-"Should anything goes wrong with container feel free to delete and recreate "
-"it once again."
+"Should anything goes wrong with the container you can delete and recreate it "
+"once again."
 msgstr ""
 "Если с контейнером что-то случится, Вы всегда можете удалить и пересоздать "
 "его."
 
-#: ../qml/Settings.qml:187
+#: ../qml/Settings.qml:192
+msgid "Notes:"
+msgstr "Примечания:"
+
+#: ../qml/Settings.qml:202
+msgid ""
+"• To build a project you need to open a corresponding clickable.json file "
+"and click the 'Build' button: "
+msgstr ""
+"• Чтобы запустить сборку проекта, откройте файл clickable.json и нажмите "
+"кнопку 'Build':"
+
+#: ../qml/Settings.qml:219
+msgid ""
+"• Project files should be located inside ~/Downloads or ~/Documents "
+"directories. These directories are automatically mounted into Libertine "
+"containers. Alternatively you can create additional bind mounts manually."
+msgstr ""
+"• Все файлы проекта должны находиться в директориях ~/Загрузки или ~/"
+"Документы. Эти директории автоматически подключаются в контейнеры Libertine. "
+"В качестве альтернативы Вы можете создать настроить подключение других "
+"директорий в Libertine вручную."
+
+#: ../qml/Settings.qml:229
+msgid "• clickable.json file should be named 'clickable.json'."
+msgstr "• Файлы clickable.json должны называться 'clickable.json'."
+
+#: ../qml/Settings.qml:245
 msgid "Container status:"
 msgstr "Статус контейнера"
 
-#: ../qml/Settings.qml:210
+#: ../qml/Settings.qml:267
 msgid "Create build container"
 msgstr "Создать контейнер"
 
@@ -189,7 +212,7 @@ msgstr "Удалить"
 msgid "Files"
 msgstr "Файлы"
 
-#: ../qml/components/FileList.qml:247
+#: ../qml/components/FileList.qml:248
 msgid "%1 will be deleted"
 msgstr "%1 будет удален"
 
