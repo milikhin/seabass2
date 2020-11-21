@@ -31,9 +31,10 @@ def _init_container():
     build_env = BuildEnv(container_id=CONTAINER_ID,
                          print_renderer=lambda txt: pyotherside.send('stdout', txt))
     build_env.init_container()
+    return build_env
 
 def _build(config_file):
-    _init_container()
+    build_env = _init_container()
     return build_env.build(config_file)
 
 def _test_container_exists():

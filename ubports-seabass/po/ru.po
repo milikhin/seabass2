@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-21 12:46+0000\n"
-"PO-Revision-Date: 2020-11-21 14:50+0200\n"
+"PO-Revision-Date: 2020-11-21 14:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -98,11 +98,12 @@ msgstr "Размер шрифта, CSS px:"
 
 #: ../qml/Settings.qml:136
 msgid "Build container"
-msgstr "Контейнера для сборки проектов"
+msgstr "Контейнер для сборки проектов"
 
 #: ../qml/Settings.qml:153
 msgid "You can use the Seabass to build projects with Clickable."
-msgstr "Используя Seabass, Вы можете собирать проекты с помощью Clickable."
+msgstr ""
+"Во можете использовать Seabass, чтобы собирать проекты с помощью Clickable."
 
 #: ../qml/Settings.qml:161
 msgid ""
