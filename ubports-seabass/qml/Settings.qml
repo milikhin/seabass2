@@ -160,7 +160,7 @@ Item {
               text: i18n.tr(
                 "In order to execute Clickable, Seabass requires a special Libertine container to be created first. " +
                 "Once the container is created you can manage it as usual " +
-                "using `libertine-container-manager` (container ID is `seabass2-build`) or via the System Settings. "
+                "using `libertine-container-manager` (container ID is `seabass2-build`) or via the System Settings."
               )
               wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
@@ -199,7 +199,7 @@ Item {
               Label {
                 Layout.maximumWidth: parent.parent.width - Suru.units.gu(3)
                 text: i18n.tr(
-                  "• To build a project you need to open a corresponding clickable.json file and click the 'Build' button: "
+                  "• To build a project you need to open a corresponding clickable.json file and click the 'Build' button:"
                 )
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
               }

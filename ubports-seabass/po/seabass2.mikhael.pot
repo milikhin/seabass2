@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-21 12:58+0000\n"
+"POT-Creation-Date: 2020-11-21 13:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,7 +97,7 @@ msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can manage "
 "it as usual using `libertine-container-manager` (container ID is `seabass2-"
-"build`) or via the System Settings. "
+"build`) or via the System Settings."
 msgstr ""
 
 #: ../qml/Settings.qml:171
@@ -113,7 +113,7 @@ msgstr ""
 #: ../qml/Settings.qml:202
 msgid ""
 "• To build a project you need to open a corresponding clickable.json file "
-"and click the 'Build' button: "
+"and click the 'Build' button:"
 msgstr ""
 
 #: ../qml/Settings.qml:219

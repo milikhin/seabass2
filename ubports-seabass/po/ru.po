@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-21 12:46+0000\n"
-"PO-Revision-Date: 2020-11-21 14:57+0200\n"
+"POT-Creation-Date: 2020-11-21 13:04+0000\n"
+"PO-Revision-Date: 2020-11-21 15:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -106,11 +106,17 @@ msgstr ""
 "Во можете использовать Seabass, чтобы собирать проекты с помощью Clickable."
 
 #: ../qml/Settings.qml:161
+#, fuzzy
+#| msgid ""
+#| "In order to execute Clickable, Seabass requires a special Libertine "
+#| "container to be created first. Once the container is created you can "
+#| "manage it as usual using `libertine-container-manager` (container ID is "
+#| "`seabass2-build`) or via the System Settings. "
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can manage "
 "it as usual using `libertine-container-manager` (container ID is `seabass2-"
-"build`) or via the System Settings. "
+"build`) or via the System Settings."
 msgstr ""
 "Перед запуском Clickable необходимо создать специальный контейнер Libertine. "
 "Если контейнер уже создан (его ID - `seabass2-build`), Вы можете управлять "
@@ -132,7 +138,7 @@ msgstr "Примечания:"
 #: ../qml/Settings.qml:202
 msgid ""
 "• To build a project you need to open a corresponding clickable.json file "
-"and click the 'Build' button: "
+"and click the 'Build' button:"
 msgstr ""
 "• Чтобы запустить сборку проекта, откройте файл clickable.json и нажмите "
 "кнопку 'Build':"
@@ -145,8 +151,8 @@ msgid ""
 msgstr ""
 "• Все файлы проекта должны находиться в директориях ~/Загрузки или ~/"
 "Документы. Эти директории автоматически подключаются в контейнеры Libertine. "
-"В качестве альтернативы Вы можете создать настроить подключение других "
-"директорий в Libertine вручную."
+"В качестве альтернативы Вы можете настроить подключение других директорий в "
+"Libertine вручную."
 
 #: ../qml/Settings.qml:229
 msgid "• clickable.json file should be named 'clickable.json'."
@@ -154,7 +160,7 @@ msgstr "• Файлы clickable.json должны называться 'clickab
 
 #: ../qml/Settings.qml:245
 msgid "Container status:"
-msgstr "Статус контейнера"
+msgstr "Статус контейнера:"
 
 #: ../qml/Settings.qml:267
 msgid "Create build container"
