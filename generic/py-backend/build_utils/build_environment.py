@@ -64,6 +64,7 @@ class BuildEnv:
         return LibertineContainer(CONTAINER_ID, self._libertine_config)
 
     def _install_packages(self):
+        self._container.configure_add_archive('ppa:deadsnakes/ppa', None)
         self._container.update_libertine_container()
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
@@ -99,6 +100,7 @@ class BuildEnv:
             self._print('Step 3/3. Installing Clickable.', margin_top=True)
             self._install_clickable()
             self._delete_desktop_files()
+            self._print("\r\nDONE: Build container has been successfully created")
         except subprocess.CalledProcessError as err:
             self._print('ERROR: Creating a container failed', margin_top=True)
             self._print(err)

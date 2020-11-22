@@ -3,26 +3,26 @@
 CONTAINER_ID = 'seabass2-build'
 CONTAINER_NAME = 'Seabass2 build container'
 PACKAGES = [
-    # 1. to install clickable
+    # 1. required to install clickable
+    'python3.6',
     'python3-pip',
 
     # 2. cause why not?
     'nano',
     'git',
 
-    # 3. now this isn't great. but without these installation of qtbase5-private-dev would fail
+    # 3. now this isn't great
+    # but without these lines installation of qtbase5-private-dev would fail
     'libwayland-server0=1.12.0-1~ubuntu16.04.3',
     'libwayland-client0=1.12.0-1~ubuntu16.04.3',
     'libwayland-cursor0=1.12.0-1~ubuntu16.04.3',
     'qtchooser',
 
-    # 4. finally, the inspired by clickable Docker image
+    # 4. finally, packages inspired by the clickable Docker image
     'build-essential',
     'cmake',
     'git',
-    'gdb-multiarch',
-    'gdbserver',
-    'libc6-dbg',
+    'g++',
     'libc-dev',
     'libicu-dev',
     'nodejs',
@@ -44,7 +44,5 @@ PACKAGES = [
     'libnotify-dev',
     'libtag1-dev',
     'libsmbclient-dev',
-    'libpam0g-dev',
-    'python3-requests',
-    'python3-gnupg'
+    'libpam0g-dev'
 ]
