@@ -40,12 +40,12 @@ def get_destroy_cmd():
 def get_install_clickable_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
     return 'libertine-launch -i {} \
-            pip3 install --user git+https://gitlab.com/clickable/clickable.git'\
+            python3.6 -m pip install --user git+https://gitlab.com/clickable/clickable.git'\
         .format(CONTAINER_ID)
 
 def get_run_clickable_cmd(config_file):
     """Returns cmd string to run clickable from a Seabass Libertine container"""
-    return 'libertine-launch -i {} clickable --container-mode --config={}'\
+    return 'libertine-launch -i {} clickable --container-mode --skip-review --config={}'\
         .format(CONTAINER_ID, config_file)
 
 def get_delete_desktop_files_cmd():

@@ -64,6 +64,7 @@ class BuildEnv:
         return LibertineContainer(CONTAINER_ID, self._libertine_config)
 
     def _install_packages(self):
+        self._container.configure_add_archive('ppa:deadsnakes/ppa', None)
         self._container.update_libertine_container()
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
