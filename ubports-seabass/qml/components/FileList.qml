@@ -22,6 +22,7 @@ Item {
   signal closed()
   signal errorOccured(string errorMessage)
   signal fileSelected(string filePath)
+  signal projectCreationInitialized(string dirName)
 
   Timer {
     id: timer
@@ -112,7 +113,8 @@ Item {
       title: i18n.tr("Files")
       subtitle: directoryModel.getPrintableDirPath()
       onClosed: root.closed()
-      onFileCreationInitialised: root.createFile(directoryModel.getDirPath())
+      onFileCreationInitialized: root.createFile(directoryModel.getDirPath())
+      onProjectCreationInitialized: root.projectCreationInitialized(directoryModel.directory)
       onReloaded: directoryModel.load()
       onTreeModeChanged: root.treeMode = treeMode
       z: 1

@@ -16,6 +16,15 @@ def build(config_file):
     """
     return exec_fn(lambda: _build(config_file))
 
+def create(dir_name, options):
+    """
+    Creates a new project
+
+    Keyword arguments:
+    options -- options for `clickable create --non-interactive ...`
+    """
+    return exec_fn(lambda: _create(dir_name, options))
+
 def ensure_container():
     """
     Creates a Libertine container to execute clickable if not exists
@@ -36,6 +45,10 @@ def _init_container():
 def _build(config_file):
     build_env = _init_container()
     return build_env.build(config_file)
+
+def _create(dir_name, options):
+    build_env = _init_container()
+    return build_env.create(dir_name, options)
 
 def _test_container_exists():
     build_env = BuildEnv(container_id=CONTAINER_ID, print_renderer=pyotherside.send)

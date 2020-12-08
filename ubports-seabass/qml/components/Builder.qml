@@ -52,6 +52,11 @@ Item {
     _exec('build_utils.build', [config], callback)
   }
 
+  function create(dir_name, args, callback) {
+    console.log(dir_name, JSON.stringify(args))
+    _exec('build_utils.create', [dir_name, args], callback)
+  }
+
   function ensureContainer(callback, onCancel) {
     _exec('build_utils.ensure_container', [], callback)
   }

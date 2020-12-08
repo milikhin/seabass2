@@ -30,6 +30,30 @@ ApplicationWindow {
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
+  function runBuilder(callback) {
+    callback = callback || Function.prototype
+    function onStartedHandler() {
+      pageStack.pop()
+      builder.started.disconnect(onStartedHandler)
+    }
+
+    builder.started.connect(onStartedHandler)
+    builder.ensureContainer(function(err) {
+      // disconnect from 'started' event in case of Error
+      builder.started.disconnect(onStartedHandler)
+      if (err) {
+        return errorDialog.show(
+          i18n.tr('Container creation failed. See build output or log files for details')
+        )
+      }
+
+      callback()
+    }, function() {
+      // disconnect from 'started' event onCancel
+      builder.started.disconnect(onStartedHandler)
+    })
+  }
+
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
   }
@@ -219,6 +243,19 @@ ApplicationWindow {
               navBar.visible = false
             }
           }
+          onProjectCreationInitialized: function(dirName) {
+            pageStack.push(Qt.resolvedUrl("NewProject.qml"), {
+              buildContainerReady: builder.ready,
+              hasBuildContainer: root.hasBuildContainer,
+              dirName: dirName
+            })
+
+            pageStack.currentItem.projectCreationRequested.connect(function(dirName, options) {
+              runBuilder(function() {
+                builder.create(dirName, options, console.log)
+              })
+            })
+          }
         }
 
         CustomComponents.Divider {
@@ -254,27 +291,7 @@ ApplicationWindow {
               hasBuildContainer: root.hasBuildContainer
             })
 
-            pageStack.currentItem.containerCreationStarted.connect(function() {
-              function onStartedHandler() {
-                pageStack.pop()
-                builder.started.disconnect(onStartedHandler)
-              }
-
-              builder.started.connect(onStartedHandler)
-              builder.ensureContainer(function(err) {
-                if (err) {
-                  // disconnect from 'started' event in case of Error
-                  // because ther won't be any output anymore
-                  builder.started.disconnect(onStartedHandler)
-                  return errorDialog.show(
-                    i18n.tr('Container creation failed. See build output or log files for details')
-                  )
-                }
-              }, function() {
-                // disconnect from 'started' event onCancel
-                builder.started.disconnect(onStartedHandler)
-              })
-            })
+            pageStack.currentItem.containerCreationStarted.connect(runBuilder)
           }
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
