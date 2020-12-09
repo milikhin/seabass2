@@ -30,28 +30,11 @@ ApplicationWindow {
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
-  function runBuilder(callback) {
-    callback = callback || Function.prototype
-    function onStartedHandler() {
-      pageStack.pop()
-      builder.started.disconnect(onStartedHandler)
+  function handleBuilderStarted() {
+    if (!isWide) {
+      navBar.visible = false
     }
-
-    builder.started.connect(onStartedHandler)
-    builder.ensureContainer(function(err) {
-      // disconnect from 'started' event in case of Error
-      builder.started.disconnect(onStartedHandler)
-      if (err) {
-        return errorDialog.show(
-          i18n.tr('Container creation failed. See build output or log files for details')
-        )
-      }
-
-      callback()
-    }, function() {
-      // disconnect from 'started' event onCancel
-      builder.started.disconnect(onStartedHandler)
-    })
+    pageStack.pop(mainView)
   }
 
   Component.onCompleted: {
@@ -251,9 +234,13 @@ ApplicationWindow {
             })
 
             pageStack.currentItem.projectCreationRequested.connect(function(dirName, options) {
-              runBuilder(function() {
-                builder.create(dirName, options, console.log)
-              })
+              builder.create(dirName, options, function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Creating a project failed. See build output for details')
+                  )
+                }
+              }, handleBuilderStarted)
             })
           }
         }
@@ -291,7 +278,15 @@ ApplicationWindow {
               hasBuildContainer: root.hasBuildContainer
             })
 
-            pageStack.currentItem.containerCreationStarted.connect(runBuilder)
+            pageStack.currentItem.containerCreationStarted.connect(function() {
+              builder.ensureContainer(function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Creating a Libertine container failed. See build output for details')
+                  )
+                }
+              }, handleBuilderStarted)
+            })
           }
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
@@ -306,7 +301,7 @@ ApplicationWindow {
                   i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
                 )
               }
-            })
+            }, handleBuilderStarted)
           }
           navBarCanBeOpened: !isWide || !navBar.visible
           canBeSaved: api.filePath && api.hasChanges

@@ -48,20 +48,15 @@ Item {
     }
   }
 
-  function build(config, callback) {
-    _exec('build_utils.build', [config], callback)
+  function build(config, callback, onStarted) {
+    _exec('build_utils.build', [config], callback, onStarted)
   }
 
-  function create(dir_name, args, callback) {
-    console.log(dir_name, JSON.stringify(args))
-    _exec('build_utils.create', [dir_name, args], callback)
+  function create(dir_name, args, callback, onStarted) {
+    _exec('build_utils.create', [dir_name, args], callback, onStarted)
   }
 
-  function ensureContainer(callback, onCancel) {
-    _exec('build_utils.ensure_container', [], callback)
-  }
-
-  function _exec(fn, args, callback) {
+  function _exec(fn, args, callback, onStarted) {
     _ensureContainer(function(err) {
       if (err) {
         return callback(err)
@@ -72,16 +67,18 @@ Item {
         completed()
         callback(res.error, res.result)
       })
-    })
+    }, onStarted)
   }
 
-  function _ensureContainer(callback, onCancel) {
+  function _ensureContainer(callback, onStarted) {
+    onStarted = onStarted || Function.prototype
     builder._testContainer(function(err, containerExists) {
       if (err) {
         return callback(err)
       }
 
       if (containerExists) {
+        onStarted()
         return callback(null)
       }
 
@@ -90,8 +87,15 @@ Item {
           "The process might take a while, but you can continue using the Seabass " +
           "while the container is being created. " +
           "Your network connection will be used to fetch required packages."),
-        onOk: callback,
-        onCancel: onCancel || Function.prototype
+        onOk: function() {
+          started()
+          onStarted()
+          py.call('build_utils.ensure_container', [], function(res) {
+            completed()
+            callback(res.error)
+          })
+        },
+        onCancel: Function.prototype
       })
     })
   }

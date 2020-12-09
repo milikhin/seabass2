@@ -35,7 +35,7 @@ Item {
 
       Column {
         width: newProjectPage.width
-        spacing: Suru.units.gu(1)
+        spacing: Suru.units.gu(2)
 
         GridLayout {
           id: grid
@@ -158,6 +158,18 @@ Item {
           Switch {
             id: gitTagVersioning
           }
+        }
+
+        Label {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+          visible: !hasBuildContainer || !buildContainerReady
+          text: !buildContainerReady
+            ? i18n.tr("Please wait, the build container is busy...")
+            : i18n.tr("Note: your device must support Libertine to create and build projects")
+          wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         }
 
         Row {

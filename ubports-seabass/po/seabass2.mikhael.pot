@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-08 12:33+0000\n"
+"POT-Creation-Date: 2020-12-09 22:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,20 +35,24 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:46
-msgid "Container creation failed. See build output or log files for details"
-msgstr ""
-
-#: ../qml/Main.qml:85
+#: ../qml/Main.qml:68
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:86
+#: ../qml/Main.qml:69
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:306
+#: ../qml/Main.qml:240
+msgid "Creating a project failed. See build output for details"
+msgstr ""
+
+#: ../qml/Main.qml:285
+msgid "Creating a Libertine container failed. See build output for details"
+msgstr ""
+
+#: ../qml/Main.qml:301
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
@@ -105,6 +109,14 @@ msgid "Git tag versioning:"
 msgstr ""
 
 #: ../qml/NewProject.qml:170
+msgid "Please wait, the build container is busy..."
+msgstr ""
+
+#: ../qml/NewProject.qml:171
+msgid "Note: your device must support Libertine to create and build projects"
+msgstr ""
+
+#: ../qml/NewProject.qml:182
 msgid "Create project"
 msgstr ""
 
@@ -195,7 +207,7 @@ msgstr ""
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:89
+#: ../qml/components/Builder.qml:86
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
