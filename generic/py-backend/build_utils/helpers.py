@@ -45,7 +45,8 @@ def get_install_clickable_cmd():
 
 def get_run_clickable_cmd(config_file):
     """Returns cmd string to run clickable from a Seabass Libertine container"""
-    return 'libertine-launch -i {} clickable build --non-interactive --container-mode --skip-review --config={}'\
+    return 'libertine-launch -i {} clickable build --non-interactive --container-mode \
+        --skip-review --config={}'\
         .format(CONTAINER_ID, config_file)
 
 def get_create_project_cmd(options):
