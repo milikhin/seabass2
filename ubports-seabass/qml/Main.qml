@@ -26,7 +26,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.11.2"
+  readonly property string version: "1.0.0-beta-1"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
@@ -230,7 +230,8 @@ ApplicationWindow {
             pageStack.push(Qt.resolvedUrl("NewProject.qml"), {
               buildContainerReady: builder.ready,
               hasBuildContainer: root.hasBuildContainer,
-              dirName: dirName
+              dirName: dirName,
+              homeDir: api.homeDir
             })
 
             pageStack.currentItem.projectCreationRequested.connect(function(dirName, options) {
@@ -283,6 +284,16 @@ ApplicationWindow {
                 if (err) {
                   return errorDialog.show(
                     i18n.tr('Creating a Libertine container failed. See build output for details')
+                  )
+                }
+              }, handleBuilderStarted)
+            })
+
+            pageStack.currentItem.containerUpdateStarted.connect(function() {
+              builder.update(function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Update failed. See build output for details')
                   )
                 }
               }, handleBuilderStarted)

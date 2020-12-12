@@ -40,7 +40,7 @@ def get_destroy_cmd():
 def get_install_clickable_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
     return 'libertine-launch -i {} \
-            python3.6 -m pip install --user git+https://gitlab.com/clickable/clickable.git'\
+            python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@subcommands-reduced'\
         .format(CONTAINER_ID)
 
 def get_run_clickable_cmd(config_file):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-09 22:41+0000\n"
+"POT-Creation-Date: 2020-12-12 11:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,170 +44,181 @@ msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:240
+#: ../qml/Main.qml:241
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:285
+#: ../qml/Main.qml:286
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:301
+#: ../qml/Main.qml:296
+msgid "Update failed. See build output for details"
+msgstr ""
+
+#: ../qml/Main.qml:312
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/NewProject.qml:28
+#: ../qml/NewProject.qml:31
 msgid "New Project"
 msgstr ""
 
-#: ../qml/NewProject.qml:29
-msgid "Enter details:"
+#: ../qml/NewProject.qml:48
+msgid ""
+"Note: it is only possible to create new projects inside directories that are "
+"mounted into Libertine containers (only ~/Downloads and ~/Documents are "
+"mounted by default)"
 msgstr ""
 
-#: ../qml/NewProject.qml:49
+#: ../qml/NewProject.qml:64
 msgid "Template:"
 msgstr ""
 
-#: ../qml/NewProject.qml:70
+#: ../qml/NewProject.qml:85
 msgid "Title:"
 msgstr ""
 
-#: ../qml/NewProject.qml:79
+#: ../qml/NewProject.qml:99
 msgid "Package name:"
 msgstr ""
 
-#: ../qml/NewProject.qml:88
+#: ../qml/NewProject.qml:114
 msgid "Package namespace:"
 msgstr ""
 
-#: ../qml/NewProject.qml:97
+#: ../qml/NewProject.qml:129
 msgid "Description:"
 msgstr ""
 
-#: ../qml/NewProject.qml:101
+#: ../qml/NewProject.qml:140
 msgid "A short description of your app"
 msgstr ""
 
-#: ../qml/NewProject.qml:106
+#: ../qml/NewProject.qml:145
 msgid "Maintainer Name:"
 msgstr ""
 
-#: ../qml/NewProject.qml:115
+#: ../qml/NewProject.qml:160
 msgid "Maintainer Email:"
 msgstr ""
 
-#: ../qml/NewProject.qml:124
+#: ../qml/NewProject.qml:174
 msgid "License:"
 msgstr ""
 
-#: ../qml/NewProject.qml:147
+#: ../qml/NewProject.qml:197
 msgid "Copyright year:"
 msgstr ""
 
-#: ../qml/NewProject.qml:156
+#: ../qml/NewProject.qml:213
 msgid "Git tag versioning:"
 msgstr ""
 
-#: ../qml/NewProject.qml:170
+#: ../qml/NewProject.qml:227
 msgid "Please wait, the build container is busy..."
 msgstr ""
 
-#: ../qml/NewProject.qml:171
+#: ../qml/NewProject.qml:228
 msgid "Note: your device must support Libertine to create and build projects"
 msgstr ""
 
-#: ../qml/NewProject.qml:182
+#: ../qml/NewProject.qml:239
 msgid "Create project"
 msgstr ""
 
-#: ../qml/Settings.qml:18
+#: ../qml/Settings.qml:19
 msgid "ready"
 msgstr ""
 
-#: ../qml/Settings.qml:19
+#: ../qml/Settings.qml:20
 msgid "busy..."
 msgstr ""
 
-#: ../qml/Settings.qml:20
+#: ../qml/Settings.qml:21
 msgid "not exists"
 msgstr ""
 
-#: ../qml/Settings.qml:31 ../qml/components/Header.qml:71
+#: ../qml/Settings.qml:32 ../qml/components/Header.qml:71
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:53
+#: ../qml/Settings.qml:54
 msgid "User interface"
 msgstr ""
 
-#: ../qml/Settings.qml:66
+#: ../qml/Settings.qml:67
 msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:74
+#: ../qml/Settings.qml:75
 msgid "System"
 msgstr ""
 
-#: ../qml/Settings.qml:101
+#: ../qml/Settings.qml:102
 msgid "Font size, CSS px:"
 msgstr ""
 
-#: ../qml/Settings.qml:136
+#: ../qml/Settings.qml:137
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:153
+#: ../qml/Settings.qml:154
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:161
+#: ../qml/Settings.qml:162
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
-"container to be created first. Once the container is created you can manage "
-"it as usual using `libertine-container-manager` (container ID is `seabass2-"
-"build`) or via the System Settings."
+"container to be created first. Once the container is created you can update "
+"it here and manage it as usual using `libertine-container-manager` "
+"(container ID is `seabass2-build`) or via the System Settings."
 msgstr ""
 
-#: ../qml/Settings.qml:171
+#: ../qml/Settings.qml:172
 msgid ""
 "Should anything goes wrong with the container you can delete and recreate it "
 "once again."
 msgstr ""
 
-#: ../qml/Settings.qml:192
+#: ../qml/Settings.qml:193
 msgid "Notes:"
 msgstr ""
 
-#: ../qml/Settings.qml:202
+#: ../qml/Settings.qml:203
 msgid ""
 "• To build a project you need to open a corresponding clickable.json file "
 "and click the 'Build' button:"
 msgstr ""
 
-#: ../qml/Settings.qml:219
+#: ../qml/Settings.qml:220
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. These directories are automatically mounted into Libertine "
 "containers. Alternatively you can create additional bind mounts manually."
 msgstr ""
 
-#: ../qml/Settings.qml:229
+#: ../qml/Settings.qml:230
 msgid "• clickable.json file should be named 'clickable.json'."
 msgstr ""
 
-#: ../qml/Settings.qml:245
+#: ../qml/Settings.qml:246
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:267
+#: ../qml/Settings.qml:268
 msgid "Create build container"
+msgstr ""
+
+#: ../qml/Settings.qml:277
+msgid "Update build container"
 msgstr ""
 
 #: ../qml/components/Builder.qml:28
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:86
+#: ../qml/components/Builder.qml:90
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "

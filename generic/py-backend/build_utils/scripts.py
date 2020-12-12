@@ -31,6 +31,12 @@ def ensure_container():
     """
     return exec_fn(_init_container)
 
+def update_container():
+    """
+    Upgrades built tools within a Libertine container
+    """
+    return exec_fn(_update_container)
+
 def test_container_exists():
     """Returns Trues if Libertine container exists, False otherwise"""
     return exec_fn(_test_container_exists)
@@ -53,3 +59,7 @@ def _create(dir_name, options):
 def _test_container_exists():
     build_env = BuildEnv(container_id=CONTAINER_ID, print_renderer=pyotherside.send)
     return build_env.test_container_exists()
+
+def _update_container():
+    build_env = _init_container()
+    return build_env.update_container()

@@ -59,6 +59,10 @@ class BuildEnv:
         self._libertine_config.refresh_database()
         return self._libertine_config.container_exists(self._container_id)
 
+    def update_container(self):
+        """Upgrades built tools within the container"""
+        self._install_clickable()
+
     def _create_container(self):
         cmd = get_create_cmd()
         self._shell_exec(cmd)

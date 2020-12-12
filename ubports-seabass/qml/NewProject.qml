@@ -5,12 +5,15 @@ import QtQuick.Layouts 1.3
 import QtQml.Models 2.2
 import Qt.labs.settings 1.0
 
+import "./generic/utils.js" as QmlJs
+
 import "./components/common" as CustomComponents
 import "./constants.js" as Constants
 
 Item {
-  id: newProjectPage
+  id: root
   property string dirName
+  property string homeDir
   property bool buildContainerReady: false
   property bool hasBuildContainer: false
 
@@ -26,7 +29,7 @@ Item {
       hasLeadingButton: true
       onLeadingAction: pageStack.pop()
       title: i18n.tr("New Project")
-      subtitle: i18n.tr("Enter details:")
+      subtitle: QmlJs.getPrintableDirPath(dirName, homeDir)
     }
 
     ScrollView {
@@ -34,14 +37,26 @@ Item {
       Layout.fillHeight: true
 
       Column {
-        width: newProjectPage.width
+        width: root.width
         spacing: Suru.units.gu(2)
+
+        Label {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+          text: i18n.tr("Note: it is only possible to create new projects inside directories " +
+              "that are mounted into Libertine containers " +
+              "(only ~/Downloads and ~/Documents are mounted by default)")
+          wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        }
 
         GridLayout {
           id: grid
           columns: 2
           columnSpacing: Suru.units.gu(1)
           anchors.left: parent.left
+          anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
 
@@ -69,56 +84,91 @@ Item {
           Label {
             text: i18n.tr("Title:")
           }
-          TextField {
-            id: title
-            placeholderText: 'App Title'
-          }
+          RowLayout {
+            Layout.fillWidth: true
 
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
+              id: title
+              placeholderText: 'App Title'
+            }
+          }
 
           Label {
             text: i18n.tr("Package name:")
           }
-          TextField {
-            id: appName
-            placeholderText: 'appname'
+          RowLayout {
+            Layout.fillWidth: true
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
+
+              id: appName
+              placeholderText: 'appname'
+            }
           }
 
 
           Label {
             text: i18n.tr("Package namespace:")
           }
-          TextField {
-            id: namespace
-            placeholderText: 'yourname'
+          RowLayout {
+            Layout.fillWidth: true
+
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
+              id: namespace
+              placeholderText: 'yourname'
+            }
           }
 
 
           Label {
             text: i18n.tr("Description:")
           }
-          TextField {
-            id: description
-            placeholderText: i18n.tr('A short description of your app')
-          }
+          RowLayout {
+            Layout.fillWidth: true
 
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
+              wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+
+              id: description
+              placeholderText: i18n.tr('A short description of your app')
+            }
+          }
 
           Label {
             text: i18n.tr("Maintainer Name:")
           }
-          TextField {
-            id: name
-            placeholderText: 'Your Full Name'
-          }
+          RowLayout {
+            Layout.fillWidth: true
 
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
+
+              id: name
+              placeholderText: 'Your Full Name'
+            }
+          }
 
           Label {
             text: i18n.tr("Maintainer Email:")
           }
-          TextField {
-            id: email
-            placeholderText: 'email@domain.org'
-          }
+          RowLayout {
+            Layout.fillWidth: true
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
 
+              id: email
+              placeholderText: 'email@domain.org'
+            }
+          }
 
           Label {
             text: i18n.tr("License:")
@@ -146,9 +196,16 @@ Item {
           Label {
             text: i18n.tr("Copyright year:")
           }
-          TextField {
-            id: copyright
-            placeholderText: '2020'
+          RowLayout {
+            Layout.fillWidth: true
+
+            TextField {
+              Layout.maximumWidth: Suru.units.gu(40)
+              Layout.fillWidth: true
+
+              id: copyright
+              placeholderText: '2020'
+            }
           }
 
 

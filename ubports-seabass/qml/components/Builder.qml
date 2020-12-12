@@ -52,6 +52,10 @@ Item {
     _exec('build_utils.build', [config], callback, onStarted)
   }
 
+  function update(callback, onStarted) {
+    _exec('build_utils.update_container', [], callback, onStarted)
+  }
+
   function create(dir_name, args, callback, onStarted) {
     _exec('build_utils.create', [dir_name, args], callback, onStarted)
   }
