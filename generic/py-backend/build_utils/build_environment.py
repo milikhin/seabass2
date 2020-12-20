@@ -41,7 +41,7 @@ class BuildEnv:
         cmd = get_run_clickable_cmd(config_file)
         cwd = dirname(config_file)
         return self._shell_exec(cmd, cwd)
-    
+
     def create(self, dir_name, options):
         """
         Executes clickable --config=<config_file> from a <config_file> directory
