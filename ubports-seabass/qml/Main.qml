@@ -297,6 +297,7 @@ ApplicationWindow {
           buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
           keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
           searchEnabled: main.visible && tabsModel.count
+          terminalEnabled: main.visible && tabsModel.count
           onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           onSearch: {
             editor.forceActiveFocus()
