@@ -9,8 +9,7 @@ CustomComponents.ToolBar {
   property bool treeMode: false
 
   signal closed()
-  signal fileCreationInitialized()
-  signal projectCreationInitialized()
+  signal fileCreationInitialised()
   signal reloaded()
 
   CustomComponents.ToolButton {
@@ -24,12 +23,7 @@ CustomComponents.ToolBar {
       CustomComponents.MenuItem {
         icon: "add"
         text: i18n.tr("New file...")
-        onTriggered: fileCreationInitialized()
-      }
-      CustomComponents.MenuItem {
-        icon: "add"
-        text: i18n.tr("New project...")
-        onTriggered: projectCreationInitialized()
+        onTriggered: fileCreationInitialised()
       }
       CustomComponents.MenuItem {
         icon: treeMode ? "select" : "select-none"

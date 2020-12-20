@@ -79,26 +79,6 @@ def test_build_command(shell_exec):
     cmd = helpers.get_run_clickable_cmd(config_file)
     shell_exec.assert_called_with(cmd, dirname(config_file))
 
-@patch('build_utils.build_environment.shell_exec')
-def test_create_command(shell_exec):
-    """Should execute clickable create"""
-
-    dir_name = 'foo'
-    options = {'name': 'bar', 'description': 'baz'}
-    scripts.create(dir_name, options)
-
-    cmd = helpers.get_create_project_cmd(options)
-    shell_exec.assert_called_with(cmd, dir_name)
-
-@patch('build_utils.build_environment.shell_exec')
-def test_update_container_command(shell_exec):
-    """Should install latest clickable"""
-
-    scripts.update_container()
-
-    cmd = helpers.get_install_clickable_cmd()
-    shell_exec.assert_called_with(cmd, None)
-
 def test_test_container_exists_false():
     """Should return False if container not exists"""
 

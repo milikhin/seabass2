@@ -14,7 +14,6 @@ Item {
   property bool buildContainerReady: false
   property bool hasBuildContainer: false
   signal containerCreationStarted()
-  signal containerUpdateStarted()
 
   readonly property string stateReady: i18n.tr("ready")
   readonly property string stateBusy: i18n.tr("busy...")
@@ -160,7 +159,7 @@ Item {
               Layout.fillWidth: true
               text: i18n.tr(
                 "In order to execute Clickable, Seabass requires a special Libertine container to be created first. " +
-                "Once the container is created you can update it here and manage it as usual " +
+                "Once the container is created you can manage it as usual " +
                 "using `libertine-container-manager` (container ID is `seabass2-build`) or via the System Settings."
               )
               wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -269,15 +268,6 @@ Item {
             enabled: buildContainerReady
             onClicked: {
               containerCreationStarted()
-            }
-          }
-
-          Button {
-            visible: hasBuildContainer
-            text: i18n.tr("Update build container")
-            enabled: buildContainerReady
-            onClicked: {
-              containerUpdateStarted()
             }
           }
         }

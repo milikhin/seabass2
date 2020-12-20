@@ -7,8 +7,7 @@ from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: d
 
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
-    get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd
+    get_run_clickable_cmd, get_delete_desktop_files_cmd, get_destroy_cmd
 
 class BuildEnv:
     """
@@ -42,26 +41,10 @@ class BuildEnv:
         cwd = dirname(config_file)
         return self._shell_exec(cmd, cwd)
 
-    def create(self, dir_name, options):
-        """
-        Executes clickable --config=<config_file> from a <config_file> directory
-
-        Keyword arguments:
-        options -- path to clickable.json
-        """
-        cmd = get_create_project_cmd(options)
-        cwd = dirname(dir_name)
-        print(cwd)
-        return self._shell_exec(cmd, dir_name)
-
     def test_container_exists(self):
         """Returns True if Seabass Libertine container exists, False otherwise"""
         self._libertine_config.refresh_database()
         return self._libertine_config.container_exists(self._container_id)
-
-    def update_container(self):
-        """Upgrades built tools within the container"""
-        self._install_clickable()
 
     def _create_container(self):
         cmd = get_create_cmd()
