@@ -22,6 +22,7 @@ CustomComponents.ToolBar {
   signal buildRequested()
   signal keyboardExtensionToggled()
   signal search()
+  signal openTerminalApp()
 
   hasLeadingButton: navBarCanBeOpened
   leadingIcon: "document-open"
@@ -41,6 +42,10 @@ CustomComponents.ToolBar {
     visible: buildable
     enabled: buildEnabled
     onClicked: buildRequested()
+  }
+  CustomComponents.ToolButton {
+    icon: "terminal-app-symbolic"
+    onClicked: openTerminalApp()
   }
   CustomComponents.ToolButton {
     icon: "search"
