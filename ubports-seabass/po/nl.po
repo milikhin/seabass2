@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-22 11:29+0000\n"
-"PO-Revision-Date: 2020-11-22 17:04+0100\n"
+"POT-Creation-Date: 2020-12-12 11:59+0000\n"
+"PO-Revision-Date: 2020-12-12 17:33+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -39,83 +39,165 @@ msgstr "Welkom"
 msgid "Seabass2"
 msgstr "Seabass2"
 
-#: ../qml/Main.qml:61
+#: ../qml/Main.qml:68
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Het bestand kan niet worden uitgelezen. Zorg dat je leesrechten hebt op de %1"
 
-#: ../qml/Main.qml:62
+#: ../qml/Main.qml:69
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Het bestand kan niet worden weggeschreven. Zorg dat je schrijfrechten hebt "
 "op de %1"
 
-#: ../qml/Main.qml:270
-msgid "Container creation failed. See build output or log files for details"
+#: ../qml/Main.qml:241
+msgid "Creating a project failed. See build output for details"
 msgstr ""
-"Het aanmaken van de container is mislukt. Bekijk de compilatie-uitvoer of "
-"het logboek voor meer informatie."
+"Het aanmaken is mislukt. Bekijk de compilatie-uitvoer voor meer informatie."
 
-#: ../qml/Main.qml:289
+#: ../qml/Main.qml:286
+msgid "Creating a Libertine container failed. See build output for details"
+msgstr ""
+"Het aanmaken van de container is mislukt. Bekijk de compilatie-uitvoer voor "
+"meer informatie."
+
+#: ../qml/Main.qml:296
+msgid "Update failed. See build output for details"
+msgstr ""
+"Het bijwerken is mislukt. Bekijk de compilatie-uitvoer voor meer informatie."
+
+#: ../qml/Main.qml:312
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "Het compileren (%1) is mislukt. Bekijk de compilatie-uitvoer voor meer "
 "informatie."
 
-#: ../qml/Settings.qml:18
+#: ../qml/NewProject.qml:31
+msgid "New Project"
+msgstr "Nieuw project"
+
+#: ../qml/NewProject.qml:48
+msgid ""
+"Note: it is only possible to create new projects inside directories that are "
+"mounted into Libertine containers (only ~/Downloads and ~/Documents are "
+"mounted by default)"
+msgstr ""
+"Let op: het is alleen mogelijk om projecten aan te maken in mappen die zijn "
+"aangekoppeld in Libertine-containers (standaard zijn dit ~/Downloads en ~/"
+"Documenten)."
+
+#: ../qml/NewProject.qml:64
+msgid "Template:"
+msgstr "Sjabloon:"
+
+#: ../qml/NewProject.qml:85
+msgid "Title:"
+msgstr "Naam:"
+
+#: ../qml/NewProject.qml:99
+msgid "Package name:"
+msgstr "Pakketnaam:"
+
+#: ../qml/NewProject.qml:114
+msgid "Package namespace:"
+msgstr "Pakket-naamruimte:"
+
+#: ../qml/NewProject.qml:129
+msgid "Description:"
+msgstr "Omschrijving:"
+
+#: ../qml/NewProject.qml:140
+msgid "A short description of your app"
+msgstr "Een korte omschrijving van je app"
+
+#: ../qml/NewProject.qml:145
+msgid "Maintainer Name:"
+msgstr "Naam van beheerder:"
+
+#: ../qml/NewProject.qml:160
+msgid "Maintainer Email:"
+msgstr "E-mailadres van beheerder:"
+
+#: ../qml/NewProject.qml:174
+msgid "License:"
+msgstr "Licentie:"
+
+#: ../qml/NewProject.qml:197
+msgid "Copyright year:"
+msgstr "Auteursrechtjaar:"
+
+#: ../qml/NewProject.qml:213
+msgid "Git tag versioning:"
+msgstr "Git-tagversie-opmaak:"
+
+#: ../qml/NewProject.qml:227
+msgid "Please wait, the build container is busy..."
+msgstr "De compilatiecontainer is bezig - even geduld..."
+
+#: ../qml/NewProject.qml:228
+msgid "Note: your device must support Libertine to create and build projects"
+msgstr ""
+"Let op: je apparaat dient Libertine te ondersteunen om projecten aan te "
+"maken en te bouwen."
+
+#: ../qml/NewProject.qml:239
+msgid "Create project"
+msgstr "Project maken"
+
+#: ../qml/Settings.qml:19
 msgid "ready"
 msgstr "klaar"
 
-#: ../qml/Settings.qml:19
+#: ../qml/Settings.qml:20
 msgid "busy..."
 msgstr "bezig..."
 
-#: ../qml/Settings.qml:20
+#: ../qml/Settings.qml:21
 msgid "not exists"
 msgstr "bestaat niet"
 
-#: ../qml/Settings.qml:31 ../qml/components/Header.qml:71
+#: ../qml/Settings.qml:32 ../qml/components/Header.qml:71
 msgid "Settings"
 msgstr "Instellingen"
 
-#: ../qml/Settings.qml:53
+#: ../qml/Settings.qml:54
 msgid "User interface"
 msgstr "Vormgeving"
 
-#: ../qml/Settings.qml:66
+#: ../qml/Settings.qml:67
 msgid "Theme:"
 msgstr "Thema:"
 
-#: ../qml/Settings.qml:74
+#: ../qml/Settings.qml:75
 msgid "System"
 msgstr "Systeem"
 
-#: ../qml/Settings.qml:101
+#: ../qml/Settings.qml:102
 msgid "Font size, CSS px:"
 msgstr "Lettergrootte, in css-pixels:"
 
-#: ../qml/Settings.qml:136
+#: ../qml/Settings.qml:137
 msgid "Build container"
 msgstr "Compilatiecontainer"
 
-#: ../qml/Settings.qml:153
+#: ../qml/Settings.qml:154
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr "Middels Seabass kun je projecten bouwen met Clickable."
 
-#: ../qml/Settings.qml:161
+#: ../qml/Settings.qml:162
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
-"container to be created first. Once the container is created you can manage "
-"it as usual using `libertine-container-manager` (container ID is `seabass2-"
-"build`) or via the System Settings."
+"container to be created first. Once the container is created you can update "
+"it here and manage it as usual using `libertine-container-manager` "
+"(container ID is `seabass2-build`) or via the System Settings."
 msgstr ""
 "Er is een speciale Libertine-container benodigd om Clickable uit te kunnen "
 "voeren. Zodra de container is aangemaakt, kun je deze beheren met `libertine-"
 "container-manager` (de container-id is `seabass2-build`) of via "
 "Systeeminstellingen."
 
-#: ../qml/Settings.qml:171
+#: ../qml/Settings.qml:172
 msgid ""
 "Should anything goes wrong with the container you can delete and recreate it "
 "once again."
@@ -123,11 +205,11 @@ msgstr ""
 "Als er iets misgaat met je container, kun je deze verwijderen en opnieuw "
 "aanmaken."
 
-#: ../qml/Settings.qml:192
+#: ../qml/Settings.qml:193
 msgid "Notes:"
 msgstr "Opmerkingen:"
 
-#: ../qml/Settings.qml:202
+#: ../qml/Settings.qml:203
 msgid ""
 "• To build a project you need to open a corresponding clickable.json file "
 "and click the 'Build' button:"
@@ -135,7 +217,7 @@ msgstr ""
 "• Om een project te compileren, moet je een bijbehorend clickable.json-"
 "bestand openen en drukken op de knop 'Compileren':"
 
-#: ../qml/Settings.qml:219
+#: ../qml/Settings.qml:220
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. These directories are automatically mounted into Libertine "
@@ -145,23 +227,27 @@ msgstr ""
 "Documenten. Deze mappen worden automatisch aangekoppeld in de Libertine-"
 "containers. Ook kun je handmatig aanvullende aankoppeltoewijzingen maken."
 
-#: ../qml/Settings.qml:229
+#: ../qml/Settings.qml:230
 msgid "• clickable.json file should be named 'clickable.json'."
 msgstr "• Het clickable.json-bestand dient de naam 'clickable.json' te hebben."
 
-#: ../qml/Settings.qml:245
+#: ../qml/Settings.qml:246
 msgid "Container status:"
 msgstr "Containerstatus:"
 
-#: ../qml/Settings.qml:267
+#: ../qml/Settings.qml:268
 msgid "Create build container"
 msgstr "Container aanmaken"
+
+#: ../qml/Settings.qml:277
+msgid "Update build container"
+msgstr "Container bijwerken"
 
 #: ../qml/components/Builder.qml:28
 msgid "Creating build container"
 msgstr "Bezig met aanmaken van container"
 
-#: ../qml/components/Builder.qml:84
+#: ../qml/components/Builder.qml:90
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -192,25 +278,25 @@ msgid "Error occured"
 msgstr "Er is een fout opgetreden"
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:40
+#: ../qml/components/files/Header.qml:46
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../qml/components/FileList.qml:74
+#: ../qml/components/FileList.qml:75
 msgid "Delete file?"
 msgstr "Bestand verwijderen?"
 
-#: ../qml/components/FileList.qml:76
+#: ../qml/components/FileList.qml:77
 #: ../qml/components/files/DirectoryMenu.qml:27
 #: ../qml/components/files/FileMenu.qml:21
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: ../qml/components/FileList.qml:112
+#: ../qml/components/FileList.qml:113
 msgid "Files"
 msgstr "Bestanden"
 
-#: ../qml/components/FileList.qml:248
+#: ../qml/components/FileList.qml:250
 msgid "%1 will be deleted"
 msgstr "%1 wordt verwijderd"
 
@@ -240,7 +326,7 @@ msgstr "Opslaan"
 
 #: ../qml/components/files/DirectoryMenu.qml:17
 #: ../qml/components/files/DotDotMenu.qml:15
-#: ../qml/components/files/Header.qml:25
+#: ../qml/components/files/Header.qml:26
 msgid "New file..."
 msgstr "Nieuw bestand..."
 
@@ -249,11 +335,15 @@ msgstr "Nieuw bestand..."
 msgid "Rename..."
 msgstr "Naam wijzigen..."
 
-#: ../qml/components/files/Header.qml:30
+#: ../qml/components/files/Header.qml:31
+msgid "New project..."
+msgstr "Nieuw project..."
+
+#: ../qml/components/files/Header.qml:36
 msgid "Tree mode"
 msgstr "Boomstructuurmodus"
 
-#: ../qml/components/files/Header.qml:35
+#: ../qml/components/files/Header.qml:41
 msgid "Reload"
 msgstr "Herladen"
 
