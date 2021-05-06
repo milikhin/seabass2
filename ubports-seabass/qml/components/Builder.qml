@@ -61,7 +61,7 @@ Item {
   }
 
   function _exec(fn, args, callback, onStarted) {
-    _ensureContainer(function(err) {
+    ensureContainer(function(err) {
       if (err) {
         return callback(err)
       }
@@ -74,7 +74,7 @@ Item {
     }, onStarted)
   }
 
-  function _ensureContainer(callback, onStarted) {
+  function ensureContainer(callback, onStarted) {
     onStarted = onStarted || Function.prototype
     builder._testContainer(function(err, containerExists) {
       if (err) {

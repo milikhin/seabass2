@@ -204,7 +204,7 @@ Item {
               Layout.fillWidth: true
 
               id: copyright
-              placeholderText: '2020'
+              placeholderText: ''
             }
           }
 
