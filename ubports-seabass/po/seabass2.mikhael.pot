@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-06 13:12+0000\n"
+"POT-Creation-Date: 2020-12-20 12:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:81
+#: ../qml/About.qml:22 ../qml/components/Header.qml:83
 msgid "About"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr ""
 msgid "not exists"
 msgstr ""
 
-#: ../qml/Settings.qml:32 ../qml/components/Header.qml:76
+#: ../qml/Settings.qml:31 ../qml/components/Header.qml:78
 msgid "Settings"
 msgstr ""
 
@@ -267,7 +267,7 @@ msgstr ""
 msgid "%1 will be deleted"
 msgstr ""
 
-#: ../qml/components/Header.qml:70
+#: ../qml/components/Header.qml:72
 msgid "Keyboard extension"
 msgstr ""
 
