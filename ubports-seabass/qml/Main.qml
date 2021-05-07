@@ -26,9 +26,16 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "0.12.0"
+  readonly property string version: "1.0.0"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
+
+  function handleBuilderStarted() {
+    if (!isWide) {
+      navBar.visible = false
+    }
+    pageStack.pop(mainView)
+  }
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
@@ -219,6 +226,24 @@ ApplicationWindow {
               navBar.visible = false
             }
           }
+          onProjectCreationInitialized: function(dirName) {
+            pageStack.push(Qt.resolvedUrl("NewProject.qml"), {
+              buildContainerReady: builder.ready,
+              hasBuildContainer: root.hasBuildContainer,
+              dirName: dirName,
+              homeDir: api.homeDir
+            })
+
+            pageStack.currentItem.projectCreationRequested.connect(function(dirName, options) {
+              builder.create(dirName, options, function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Creating a project failed. See build output for details')
+                  )
+                }
+              }, handleBuilderStarted)
+            })
+          }
         }
 
         CustomComponents.Divider {
@@ -255,25 +280,23 @@ ApplicationWindow {
             })
 
             pageStack.currentItem.containerCreationStarted.connect(function() {
-              function onStartedHandler() {
-                pageStack.pop()
-                builder.started.disconnect(onStartedHandler)
-              }
-
-              builder.started.connect(onStartedHandler)
-              builder.ensureContainer(function(err) {
+              builder.ensureContainer(function(err, result) {
                 if (err) {
-                  // disconnect from 'started' event in case of Error
-                  // because ther won't be any output anymore
-                  builder.started.disconnect(onStartedHandler)
                   return errorDialog.show(
-                    i18n.tr('Container creation failed. See build output or log files for details')
+                    i18n.tr('Creating a Libertine container failed. See build output for details')
                   )
                 }
-              }, function() {
-                // disconnect from 'started' event onCancel
-                builder.started.disconnect(onStartedHandler)
-              })
+              }, handleBuilderStarted)
+            })
+
+            pageStack.currentItem.containerUpdateStarted.connect(function() {
+              builder.update(function(err, result) {
+                if (err) {
+                  return errorDialog.show(
+                    i18n.tr('Update failed. See build output for details')
+                  )
+                }
+              }, handleBuilderStarted)
             })
           }
           onSaveRequested: {
@@ -289,7 +312,7 @@ ApplicationWindow {
                   i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
                 )
               }
-            })
+            }, handleBuilderStarted)
           }
           navBarCanBeOpened: !isWide || !navBar.visible
           canBeSaved: api.filePath && api.hasChanges
@@ -315,7 +338,6 @@ ApplicationWindow {
           model: tabsModel
           visible: model.count
           Layout.fillWidth: true
-          Layout.preferredHeight: Suru.units.gu(4.5)
 
           onCurrentIndexChanged: {
             if (!model.count) {
