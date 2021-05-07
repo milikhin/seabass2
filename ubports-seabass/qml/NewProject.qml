@@ -69,7 +69,7 @@ Item {
               id: templateModel
               Component.onCompleted: {
                 append({ text: "QML Only", value: 'pure-qml-cmake' })
-                append({ text: "C++", value: 'main-cpp' })
+                append({ text: "C++", value: 'cmake' })
                 append({ text: "Python", value: 'python-cmake' })
                 append({ text: "HTML", value: 'html' })
               }
@@ -204,7 +204,7 @@ Item {
               Layout.fillWidth: true
 
               id: copyright
-              placeholderText: ''
+              placeholderText: new Date().getFullYear()
             }
           }
 

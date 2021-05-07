@@ -42,14 +42,13 @@ Item {
     id: tabBar
     anchors.topMargin: 1
     contentHeight: Suru.units.gu(4.5)
+    width: parent.width
 
     Component.onCompleted: {
       // disable "scroll-animation" when switching between tabs
       tabBar.contentItem.highlightRangeMode = ListView.NoHighlightRange
       // allow scrolling past the selected tab
       tabBar.contentItem.snapMode = ListView.NoSnap
-      // disable tabbar background because of its width != 100%
-      tabBar.background.color = 'transparent'
     }
 
     Repeater {
