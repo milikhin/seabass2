@@ -8,6 +8,7 @@ import "../generic/utils.js" as QmlJs
 
 Item {
   id: root
+  height: tabBar.height
 
   property real minTabLabelWidth: Suru.units.gu(8)
   property real maxTabLabelWidth: Suru.units.gu(30)
@@ -39,8 +40,9 @@ Item {
 
   TabBar {
     id: tabBar
-    anchors.fill: parent
     anchors.topMargin: 1
+    contentHeight: Suru.units.gu(4.5)
+    width: parent.width
 
     Component.onCompleted: {
       // disable "scroll-animation" when switching between tabs

@@ -14,6 +14,7 @@ CustomComponents.ToolBar {
   property bool buildEnabled: false
   property bool keyboardExtensionEnabled: false
   property bool searchEnabled: false
+  property bool terminalEnabled: false
 
   signal navBarToggled()
   signal aboutPageRequested()
@@ -22,6 +23,7 @@ CustomComponents.ToolBar {
   signal buildRequested()
   signal keyboardExtensionToggled()
   signal search()
+  signal openTerminalApp()
 
   hasLeadingButton: navBarCanBeOpened
   leadingIcon: "document-open"
@@ -41,6 +43,11 @@ CustomComponents.ToolBar {
     visible: buildable
     enabled: buildEnabled
     onClicked: buildRequested()
+  }
+  CustomComponents.ToolButton {
+    icon: "terminal-app-symbolic"
+    enabled: terminalEnabled
+    onClicked: openTerminalApp()
   }
   CustomComponents.ToolButton {
     icon: "search"

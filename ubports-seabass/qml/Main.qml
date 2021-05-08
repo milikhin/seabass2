@@ -26,7 +26,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.0.0-beta-1"
+  readonly property string version: "1.0.0"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
@@ -320,10 +320,16 @@ ApplicationWindow {
           buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
           keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
           searchEnabled: main.visible && tabsModel.count
+          terminalEnabled: main.visible && tabsModel.count
           onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           onSearch: {
             editor.forceActiveFocus()
             api.postMessage('toggleSearch')
+          }
+          onOpenTerminalApp: {
+              if (api.filePath) {
+                  Qt.openUrlExternally("terminal://?path=" + api.filePath.split('/').slice(0, -1).join('/'))
+              }
           }
         }
 
@@ -332,7 +338,6 @@ ApplicationWindow {
           model: tabsModel
           visible: model.count
           Layout.fillWidth: true
-          Layout.preferredHeight: Suru.units.gu(4.5)
 
           onCurrentIndexChanged: {
             if (!model.count) {

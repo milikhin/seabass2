@@ -10,7 +10,7 @@
             "content-hub": "content-hub.json"
         }
     },
-    "version": "1.0.0-beta-1",
+    "version": "1.0.0",
     "maintainer": "Mikhael Milikhin <mikhael@milikhin.name>",
-    "framework" : "ubuntu-sdk-16.04"
+    "framework" : "ubuntu-sdk-16.04.5"
 }
