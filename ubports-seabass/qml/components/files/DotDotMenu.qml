@@ -11,7 +11,7 @@ Menu {
   signal createTriggered()
 
   CustomComponents.MenuItem {
-    icon: "add"
+    iconName: "add"
     text: i18n.tr("New file...")
     onTriggered: createTriggered()
   }

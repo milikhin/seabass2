@@ -18,7 +18,7 @@ ToolBar {
     anchors.fill: parent
 
     CustomComponents.ToolButton {
-      icon: leadingIcon || "back"
+      iconName: leadingIcon || "back"
       visible: hasLeadingButton
       onClicked: leadingAction()
     }

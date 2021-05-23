@@ -7,7 +7,7 @@ import '.' as CustomComponents
 
 MenuItem {
   id: root
-  property string icon
+  property string iconName
   height: visible ? undefined : 0
 
   contentItem: RowLayout {
@@ -15,7 +15,7 @@ MenuItem {
     anchors.leftMargin: Suru.units.gu(1)
 
     CustomComponents.Icon {
-      name: root.icon
+      name: root.iconName
       Layout.preferredWidth: Suru.units.gu(2)
       Layout.preferredHeight: Suru.units.gu(2)
       Layout.leftMargin: Suru.units.gu(1)
