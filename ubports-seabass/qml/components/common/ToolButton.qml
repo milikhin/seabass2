@@ -8,10 +8,10 @@ import '.' as CustomComponents
 ToolButton {
   id: root
   focusPolicy: Qt.NoFocus
-  property string icon
+  property string iconName
 
   CustomComponents.Icon {
     anchors.centerIn: parent
-    name: root.icon
+    name: root.iconName
   }
 }

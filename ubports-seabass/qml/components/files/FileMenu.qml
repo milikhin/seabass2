@@ -12,12 +12,12 @@ Menu {
   signal deleteTriggered()
 
   CustomComponents.MenuItem {
-    icon: "edit"
+    iconName: "edit"
     text: i18n.tr("Rename...")
     onTriggered: renameTriggered()
   }
   CustomComponents.MenuItem {
-    icon: "delete"
+    iconName: "delete"
     text: i18n.tr("Delete")
     onTriggered: deleteTriggered()
   }

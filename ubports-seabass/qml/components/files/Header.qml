@@ -14,7 +14,7 @@ CustomComponents.ToolBar {
   signal reloaded()
 
   CustomComponents.ToolButton {
-    icon: "contextual-menu"
+    iconName: "contextual-menu"
     onClicked: menu.open()
 
     Menu {
@@ -22,27 +22,27 @@ CustomComponents.ToolBar {
       y: parent.height
       modal: true
       CustomComponents.MenuItem {
-        icon: "add"
+        iconName: "add"
         text: i18n.tr("New file...")
         onTriggered: fileCreationInitialized()
       }
       CustomComponents.MenuItem {
-        icon: "add"
+        iconName: "add"
         text: i18n.tr("New project...")
         onTriggered: projectCreationInitialized()
       }
       CustomComponents.MenuItem {
-        icon: treeMode ? "select" : "select-none"
+        iconName: treeMode ? "select" : "select-none"
         text: i18n.tr("Tree mode")
         onTriggered: treeMode = !treeMode
       }
       CustomComponents.MenuItem {
-        icon: "reload"
+        iconName: "reload"
         text: i18n.tr("Reload")
         onTriggered: reloaded()
       }
       CustomComponents.MenuItem {
-        icon: "close"
+        iconName: "close"
         text: i18n.tr("Close")
         onTriggered: closed()
         visible: !hasLeadingButton
