@@ -77,10 +77,11 @@ class BuildEnv:
         self._shell_exec(cmd)
 
     def _shell_exec(self, cmd, cwd=None):
-        stdout_line = ''
+        res = ''
         for stdout_line in shell_exec(cmd, cwd):
             self._print(stdout_line, eol='')
-        return stdout_line
+            res = stdout_line
+        return res
 
     def _get_container(self):
         self._libertine_config.refresh_database()
