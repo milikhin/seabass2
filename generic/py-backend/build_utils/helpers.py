@@ -15,19 +15,17 @@ def shell_exec(command_string, cwd):
     """
     patch_env()
     cmd_args = shlex.split(command_string)
-    process = subprocess.Popen(cmd_args,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
-                               universal_newlines=True,
-                               cwd=cwd,
-                               env=environ)
-
-    for stdout_line in iter(process.stdout.readline, ''):
-        yield strip_color(stdout_line)
-    process.stdout.close()
-    return_code = process.wait()
-    if return_code:
-        raise subprocess.CalledProcessError(return_code, command_string)
+    with subprocess.Popen(cmd_args,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT,
+                          universal_newlines=True,
+                          cwd=cwd,
+                          env=environ) as process:
+        for stdout_line in iter(process.stdout.readline, ''):
+            yield strip_color(stdout_line)
+        return_code = process.wait()
+        if return_code:
+            raise subprocess.CalledProcessError(return_code, command_string)
 
 def get_create_cmd():
     """Returns cmd string to create Seabass Libertine container"""
@@ -48,7 +46,8 @@ def get_update_pip_cmd():
 def get_install_clickable_cmd():
     """
     Returns cmd string to install clickable into a Seabass Libertine container.
-    In order to avoid issues with breaking changes in the `dev` branch, commit hash is updated manually
+    In order to avoid issues with breaking changes in the `dev` branch,
+    commit hash is updated manually
     """
     return 'libertine-launch -i {} \
             python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@312b644c485844691258505dd6fd2b837639b2d7'\
