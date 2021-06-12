@@ -26,7 +26,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.0.1"
+  readonly property string version: "1.0.2"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 

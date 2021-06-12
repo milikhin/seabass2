@@ -1,6 +1,7 @@
 """The module provides build environment inside a Libertine container"""
 
 import subprocess
+import re
 from os.path import dirname
 
 from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: disable=import-error
@@ -8,7 +9,7 @@ from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: d
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd
+    get_destroy_cmd, get_update_pip_cmd, get_install_cmd
 
 class BuildEnv:
     """
@@ -40,7 +41,12 @@ class BuildEnv:
         """
         cmd = get_run_clickable_cmd(config_file)
         cwd = dirname(config_file)
-        return self._shell_exec(cmd, cwd)
+        last_line = self._shell_exec(cmd, cwd)
+        click_names = re.findall('^Successfully built package in \'\.\/(.*)\'', last_line)
+        if len(click_names) == 1:
+            self._print('Installing click package.')
+            install_cmd = get_install_cmd(click_names[0])
+            self._shell_exec(install_cmd, cwd)
 
     def create(self, dir_name, options):
         """
@@ -51,8 +57,7 @@ class BuildEnv:
         """
         cmd = get_create_project_cmd(options)
         cwd = dirname(dir_name)
-        print(cwd)
-        return self._shell_exec(cmd, dir_name)
+        self._shell_exec(cmd, dir_name)
 
     def test_container_exists(self):
         """Returns True if Seabass Libertine container exists, False otherwise"""
@@ -75,6 +80,7 @@ class BuildEnv:
     def _shell_exec(self, cmd, cwd=None):
         for stdout_line in shell_exec(cmd, cwd):
             self._print(stdout_line, eol='')
+        return stdout_line
 
     def _get_container(self):
         self._libertine_config.refresh_database()
@@ -96,9 +102,11 @@ class BuildEnv:
         self._shell_exec(cmd)
 
     def _install_clickable(self):
+        cmd_pip = get_update_pip_cmd()
         cmd = get_install_clickable_cmd()
         # This function is available in Python but doesn't provide progress:
         #   `self._container.start_application(cmd, environ)`
+        self._shell_exec(cmd_pip)
         self._shell_exec(cmd)
 
     def _print(self, message, margin_top=False, eol='\n'):

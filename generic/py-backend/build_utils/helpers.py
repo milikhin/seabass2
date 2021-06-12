@@ -39,10 +39,19 @@ def get_destroy_cmd():
     return 'libertine-container-manager destroy -i {}'\
         .format(CONTAINER_ID)
 
-def get_install_clickable_cmd():
+def get_update_pip_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
     return 'libertine-launch -i {} \
-            python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@dev'\
+            python3.6 -m pip install --upgrade pip'\
+        .format(CONTAINER_ID)
+
+def get_install_clickable_cmd():
+    """
+    Returns cmd string to install clickable into a Seabass Libertine container.
+    In order to avoid issues with breaking changes in the `dev` branch, commit hash is updated manually
+    """
+    return 'libertine-launch -i {} \
+            python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@312b644c485844691258505dd6fd2b837639b2d7'\
         .format(CONTAINER_ID)
 
 def get_run_clickable_cmd(config_file):
@@ -50,6 +59,11 @@ def get_run_clickable_cmd(config_file):
     return 'libertine-launch -i {} clickable build --non-interactive --container-mode \
             --skip-review --config={}'\
         .format(CONTAINER_ID, config_file)
+
+def get_install_cmd(click_name):
+    """Returns cmd string to run clickable from a Seabass Libertine container"""
+    return 'bash -c "pkcon install-local --allow-untrusted $(find -name {})"'\
+        .format(click_name)
 
 def get_create_project_cmd(options):
     """Returns cmd string to run clickable from a Seabass Libertine container"""
