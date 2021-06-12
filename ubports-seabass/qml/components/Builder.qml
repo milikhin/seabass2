@@ -52,6 +52,10 @@ Item {
     _exec('build_utils.build', [config], callback, onStarted)
   }
 
+  function launch(config, callback, onStarted) {
+    _exec('build_utils.build', [config, true], callback, onStarted)
+  }
+
   function update(callback, onStarted) {
     _exec('build_utils.update_container', [], callback, onStarted)
   }

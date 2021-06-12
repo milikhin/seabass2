@@ -9,7 +9,7 @@ from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: d
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd, get_update_pip_cmd, get_install_cmd
+    get_destroy_cmd, get_update_pip_cmd, get_install_cmd, get_launch_cmd
 
 class BuildEnv:
     """
@@ -32,21 +32,34 @@ class BuildEnv:
             self._print(error)
             raise error
 
-    def build(self, config_file):
+    def build(self, config_file, install=False):
         """
         Executes clickable --config=<config_file> from a <config_file> directory
 
         Keyword arguments:
         config_file -- path to clickable.json
+        install -- true to install/launch buit app
         """
         cmd = get_run_clickable_cmd(config_file)
         cwd = dirname(config_file)
         last_line = self._shell_exec(cmd, cwd)
+        if install is False:
+            return
+
         click_names = re.findall(r'^Successfully built package in \'\.\/(.*)\'', last_line)
         if len(click_names) == 1:
             self._print('Installing click package.')
             install_cmd = get_install_cmd(click_names[0])
             self._shell_exec(install_cmd, cwd)
+            app_namings = re.findall(r'^(.*?)\.(.*?)_', click_names[0])
+            if len(app_namings) == 1:
+                self._print('Launching app.')
+                launch_app_cmd = get_launch_cmd(app_namings[0][0], app_namings[0][1])
+                self._shell_exec(launch_app_cmd, cwd, True)
+            else:
+                self._print('Unable to launch app (can\'t find app name)')
+        else:
+            self._print('Unable to install app (can\'t locate package file)')
 
     def create(self, dir_name, options):
         """
@@ -76,9 +89,9 @@ class BuildEnv:
         cmd = get_destroy_cmd()
         self._shell_exec(cmd)
 
-    def _shell_exec(self, cmd, cwd=None):
+    def _shell_exec(self, cmd, cwd=None, nowait=False):
         res = ''
-        for stdout_line in shell_exec(cmd, cwd):
+        for stdout_line in shell_exec(cmd, cwd, nowait):
             self._print(stdout_line, eol='')
             res = stdout_line
         return res

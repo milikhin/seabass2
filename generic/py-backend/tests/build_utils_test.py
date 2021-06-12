@@ -18,7 +18,7 @@ def test_create_new_container(shell_exec):
     res = scripts.build(config_file)
 
     cmd = helpers.get_create_cmd()
-    shell_exec.assert_any_call(cmd, None)
+    shell_exec.assert_any_call(cmd, None, False)
     assert not 'error' in res
 
 @patch('build_utils.build_environment.shell_exec')
@@ -42,7 +42,7 @@ def test_install_error_cleanup(shell_exec): # pylint: disable=unused-argument
         with patch.object(Libertine.ContainersConfig, 'container_exists') as container_exists:
             container_exists.side_effect = [False, True]
             scripts.build(cmd)
-            shell_exec.assert_called_with(destroy_cmd, None)
+            shell_exec.assert_called_with(destroy_cmd, None, False)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_install_error(shell_exec): # pylint: disable=unused-argument
@@ -67,7 +67,7 @@ def test_use_existing_container(shell_exec):
         # check that shell_exec has only been called once: to exec clickable
         assert shell_exec.call_count == 1
         cmd = helpers.get_run_clickable_cmd(config_file)
-        shell_exec.assert_called_with(cmd, dirname(config_file))
+        shell_exec.assert_called_with(cmd, dirname(config_file), False)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_build_command(shell_exec):
@@ -77,7 +77,7 @@ def test_build_command(shell_exec):
     scripts.build(config_file)
 
     cmd = helpers.get_run_clickable_cmd(config_file)
-    shell_exec.assert_called_with(cmd, dirname(config_file))
+    shell_exec.assert_called_with(cmd, dirname(config_file), False)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_create_command(shell_exec):
@@ -88,7 +88,7 @@ def test_create_command(shell_exec):
     scripts.create(dir_name, options)
 
     cmd = helpers.get_create_project_cmd(options)
-    shell_exec.assert_called_with(cmd, dir_name)
+    shell_exec.assert_called_with(cmd, dir_name, False)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_update_container_command(shell_exec):
@@ -97,7 +97,7 @@ def test_update_container_command(shell_exec):
     scripts.update_container()
 
     cmd = helpers.get_install_clickable_cmd()
-    shell_exec.assert_any_call(cmd, None)
+    shell_exec.assert_any_call(cmd, None, False)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_update_pip(shell_exec):
@@ -106,7 +106,7 @@ def test_update_pip(shell_exec):
     scripts.update_container()
 
     cmd = helpers.get_update_pip_cmd()
-    shell_exec.assert_any_call(cmd, None)
+    shell_exec.assert_any_call(cmd, None, False)
 
 def test_test_container_exists_false():
     """Should return False if container not exists"""

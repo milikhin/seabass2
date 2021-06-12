@@ -6,7 +6,7 @@ import re
 from os import environ
 from .config import CONTAINER_ID, CONTAINER_NAME
 
-def shell_exec(command_string, cwd):
+def shell_exec(command_string, cwd, nowait=False):
     """
     Executes given subprocess, returns iterable list of stdout lines
 
@@ -21,6 +21,9 @@ def shell_exec(command_string, cwd):
                           universal_newlines=True,
                           cwd=cwd,
                           env=environ) as process:
+        if nowait is True:
+            return
+
         for stdout_line in iter(process.stdout.readline, ''):
             yield strip_color(stdout_line)
         return_code = process.wait()
@@ -36,6 +39,11 @@ def get_destroy_cmd():
     """Returns cmd string to destroy Seabass Libertine container"""
     return 'libertine-container-manager destroy -i {}'\
         .format(CONTAINER_ID)
+
+def get_launch_cmd(app_name, developer_name):
+    """Returns cmd string to launch application"""
+    return 'bash -c "ubuntu-app-launch {0}.{1}_{0} &"'\
+        .format(app_name, developer_name)
 
 def get_update_pip_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
