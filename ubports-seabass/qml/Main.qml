@@ -26,7 +26,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.0.1"
+  readonly property string version: "1.1.0"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
@@ -310,6 +310,16 @@ ApplicationWindow {
               if (err) {
                 return errorDialog.show(
                   i18n.tr('Build (%1) failed. See build output for details').arg(configFile)
+                )
+              }
+            }, handleBuilderStarted)
+          }
+          onLaunchRequested: {
+            const configFile = api.filePath
+            builder.launch(configFile, function(err, result) {
+              if (err) {
+                return errorDialog.show(
+                  i18n.tr('Build and run (%1) failed. See build output for details').arg(configFile)
                 )
               }
             }, handleBuilderStarted)

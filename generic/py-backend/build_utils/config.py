@@ -34,4 +34,6 @@ PACKAGES = [
     'ubuntu-sdk-libs-tools',
     'ubuntu-sdk-libs',
     'libconnectivity-qt1-dev',
+
+    'tls-padding'
 ]

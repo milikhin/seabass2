@@ -21,6 +21,7 @@ CustomComponents.ToolBar {
   signal settingsPageRequested()
   signal saveRequested()
   signal buildRequested()
+  signal launchRequested()
   signal keyboardExtensionToggled()
   signal search()
   signal openTerminalApp()
@@ -43,6 +44,12 @@ CustomComponents.ToolBar {
     visible: buildable
     enabled: buildEnabled
     onClicked: buildRequested()
+  }
+  CustomComponents.ToolButton {
+    iconName: "media-playback-start"
+    visible: buildable
+    enabled: buildEnabled
+    onClicked: launchRequested()
   }
   CustomComponents.ToolButton {
     iconName: "terminal-app-symbolic"

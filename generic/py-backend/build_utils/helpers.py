@@ -6,7 +6,7 @@ import re
 from os import environ
 from .config import CONTAINER_ID, CONTAINER_NAME
 
-def shell_exec(command_string, cwd):
+def shell_exec(command_string, cwd, nowait=False):
     """
     Executes given subprocess, returns iterable list of stdout lines
 
@@ -15,19 +15,20 @@ def shell_exec(command_string, cwd):
     """
     patch_env()
     cmd_args = shlex.split(command_string)
-    process = subprocess.Popen(cmd_args,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
-                               universal_newlines=True,
-                               cwd=cwd,
-                               env=environ)
+    with subprocess.Popen(cmd_args,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT,
+                          universal_newlines=True,
+                          cwd=cwd,
+                          env=environ) as process:
+        if nowait is True:
+            return
 
-    for stdout_line in iter(process.stdout.readline, ''):
-        yield strip_color(stdout_line)
-    process.stdout.close()
-    return_code = process.wait()
-    if return_code:
-        raise subprocess.CalledProcessError(return_code, command_string)
+        for stdout_line in iter(process.stdout.readline, ''):
+            yield strip_color(stdout_line)
+        return_code = process.wait()
+        if return_code:
+            raise subprocess.CalledProcessError(return_code, command_string)
 
 def get_create_cmd():
     """Returns cmd string to create Seabass Libertine container"""
@@ -39,10 +40,25 @@ def get_destroy_cmd():
     return 'libertine-container-manager destroy -i {}'\
         .format(CONTAINER_ID)
 
-def get_install_clickable_cmd():
+def get_launch_cmd(app_name, developer_name):
+    """Returns cmd string to launch application"""
+    return 'bash -c "ubuntu-app-launch {0}.{1}_{0} &"'\
+        .format(app_name, developer_name)
+
+def get_update_pip_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
     return 'libertine-launch -i {} \
-            python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@dev'\
+            python3.6 -m pip install --upgrade pip'\
+        .format(CONTAINER_ID)
+
+def get_install_clickable_cmd():
+    """
+    Returns cmd string to install clickable into a Seabass Libertine container.
+    In order to avoid issues with breaking changes in the `dev` branch,
+    commit hash is updated manually
+    """
+    return 'libertine-launch -i {} \
+            python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@312b644c485844691258505dd6fd2b837639b2d7'\
         .format(CONTAINER_ID)
 
 def get_run_clickable_cmd(config_file):
@@ -50,6 +66,11 @@ def get_run_clickable_cmd(config_file):
     return 'libertine-launch -i {} clickable build --non-interactive --container-mode \
             --skip-review --config={}'\
         .format(CONTAINER_ID, config_file)
+
+def get_install_cmd(click_name):
+    """Returns cmd string to run clickable from a Seabass Libertine container"""
+    return 'bash -c "pkcon install-local --allow-untrusted $(find -name {})"'\
+        .format(click_name)
 
 def get_create_project_cmd(options):
     """Returns cmd string to run clickable from a Seabass Libertine container"""

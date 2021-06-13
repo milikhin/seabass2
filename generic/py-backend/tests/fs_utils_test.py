@@ -17,10 +17,9 @@ NESTED_FILE_NAME = 'foo'
 NESTED_FILE_PATH = join(DIR_PATH, NESTED_FILE_NAME)
 
 def _create_tmp_file():
-    tmp_file = TemporaryFile()
-    # modify the file to generate notification
-    tmp_file.write(b"foo")
-    tmp_file.close()
+    with TemporaryFile() as tmp_file:
+        # modify the file to generate notification
+        tmp_file.write(b"foo")
 
 def _generate_notification():
     """
