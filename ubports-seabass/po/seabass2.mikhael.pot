@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-12 20:05+0000\n"
+"POT-Creation-Date: 2021-07-02 09:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,32 +35,32 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:68
+#: ../qml/Main.qml:82
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:69
+#: ../qml/Main.qml:83
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:241
+#: ../qml/Main.qml:267
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:286
+#: ../qml/Main.qml:312
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:296
+#: ../qml/Main.qml:322
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:312
+#: ../qml/Main.qml:338
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:322
+#: ../qml/Main.qml:348
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 

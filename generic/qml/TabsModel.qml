@@ -36,6 +36,7 @@ ListModel {
       id: options.id,
       hasChanges: false,
       isBusy: false,
+      isInitial: options.isInitial,
       isTerminal: options.isTerminal || false,
       title: options.title,
       subTitle: options.subTitle,

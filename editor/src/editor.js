@@ -124,6 +124,7 @@ export default class Editor {
 
   activate () {
     this._onChange()
+    this._ace.resize()
   }
 
   deactivate () {

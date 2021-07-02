@@ -62,10 +62,10 @@ QtObject {
 
     /**
      * Loads file at `filePath` into the editor.
-     * Creates file if not exists.
+     * It is possible to creates file if not exists.
      * @returns {undefined}
      */
-    function loadFile(filePath, readOnly, callback) {
+    function loadFile(filePath, readOnly, createIfNotExtist, callback) {
       py.getEditorConfig(filePath, function(err, editorConfig) {
         if (err) {
           return callback(err)
@@ -75,6 +75,10 @@ QtObject {
           if (!err) {
             __load(filePath, editorConfig, readOnly, text)
             return callback(null, false)
+          }
+
+          if (!createIfNotExtist) {
+            return callback(err)
           }
 
           QmlJs.writeFile(filePath, '', function(err) {
@@ -160,9 +164,6 @@ QtObject {
 
     function startup() {
         loadTheme()
-        if (filePath) {
-          loadFile(filePath, false, Function.prototype)
-        }
     }
 
     /**
