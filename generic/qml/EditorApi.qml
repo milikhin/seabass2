@@ -65,7 +65,7 @@ QtObject {
      * It is possible to creates file if not exists.
      * @returns {undefined}
      */
-    function loadFile(filePath, readOnly, createIfNotExtist, callback) {
+    function loadFile(filePath, readOnly, createIfNotExtist, doNotActivate, callback) {
       py.getEditorConfig(filePath, function(err, editorConfig) {
         if (err) {
           return callback(err)
@@ -98,10 +98,10 @@ QtObject {
           filePath: filePath,
           editorConfig: editorConfig,
           readOnly: readOnly,
-          content: content
+          content: content,
+          doNotActivate: doNotActivate
         })
       }
-
     }
 
     function openFile(filePath) {

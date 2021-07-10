@@ -42,6 +42,7 @@ ListModel {
       subTitle: options.subTitle,
       uniqueTitle: options.title,
       readOnly: options.isTerminal || options.readOnly || false,
+      doNotActivate: options.doNotActivate,
 
       filePath: options.filePath
     }

@@ -37,7 +37,11 @@ ApplicationWindow {
       if (tab.isTerminal) {
         continue
       }
+
       files.push(tab.filePath)
+      if (i === tabBar.currentIndex) {
+        settings.initialTab = files.length - 1
+      }
     }
 
     settings.initialFiles = files
@@ -60,6 +64,8 @@ ApplicationWindow {
     property string theme: Constants.Theme.System
     property int fontSize: 12
     property var initialFiles: []
+    property int initialTab: 0
+    property bool restoreOpenedTabs: true
   }
 
   GenericComponents.EditorApi {
@@ -87,15 +93,18 @@ ApplicationWindow {
       errorDialog.show(message)
     }
     onAppLoaded: {
-      for (var i = 0; i < settings.initialFiles.length; i++) {
-        var filePath = settings.initialFiles[i]
-        tabsModel.open({
-          id: filePath,
-          filePath: filePath,
-          subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
-          title: QmlJs.getFileName(filePath),
-          isInitial: true
-        })
+      if (settings.restoreOpenedTabs) {
+        for (var i = 0; i < settings.initialFiles.length; i++) {
+          var filePath = settings.initialFiles[i]
+          tabsModel.open({
+            id: filePath,
+            filePath: filePath,
+            subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+            title: QmlJs.getFileName(filePath),
+            isInitial: true,
+            doNotActivate: settings.initialTab !== i
+          })
+        }
       }
     }
     onMessageSent: function(jsonPayload) {
@@ -139,7 +148,7 @@ ApplicationWindow {
           isTerminal: true
         })
       }
-      api.loadFile(tab.filePath, false, !tab.isInitial, function(err, isNewFile) {
+      api.loadFile(tab.filePath, false, !tab.isInitial, tab.doNotActivate, function(err, isNewFile) {
         if (err) {
           tabsModel.close(tab.filePath)
         }

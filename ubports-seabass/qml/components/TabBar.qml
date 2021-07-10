@@ -56,7 +56,10 @@ Item {
       model: root.model
 
       onItemAdded: function(index) {
-        tabBar.currentIndex = index
+        var tab = model.get(index)
+        if (!tab.doNotActivate) {
+          tabBar.currentIndex = index
+        }
       }
 
       TabComponents.TabButton {

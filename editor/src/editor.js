@@ -36,7 +36,7 @@ export default class Editor {
       showFoldWidgets: false,
       showGutter: !isTerminal,
       showLineNumbers: !isTerminal,
-      scrollPastEnd: 0.5,
+      scrollPastEnd: 1,
       tabSize: this._getTabSize(),
       useSoftTabs: this._editorConfig.indent_style !== 'tab',
       wrap: true
