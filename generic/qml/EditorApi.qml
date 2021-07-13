@@ -62,7 +62,7 @@ QtObject {
 
     /**
      * Loads file at `filePath` into the editor.
-     * It is possible to creates file if not exists.
+     * It is possible to create file if not exists.
      * @returns {undefined}
      */
     function loadFile(filePath, readOnly, createIfNotExtist, doNotActivate, callback) {

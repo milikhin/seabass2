@@ -36,7 +36,7 @@ export default class Editor {
       showFoldWidgets: false,
       showGutter: !isTerminal,
       showLineNumbers: !isTerminal,
-      scrollPastEnd: 1,
+      scrollPastEnd: 0.5,
       tabSize: this._getTabSize(),
       useSoftTabs: this._editorConfig.indent_style !== 'tab',
       wrap: true
@@ -106,7 +106,10 @@ export default class Editor {
     // load new content and activate required mode
     this._ace.setValue(content)
     if (!this._isTerminal) {
-      const { mode } = modelist.getModeForPath(filePath)
+      let { mode } = modelist.getModeForPath(filePath)
+      if (filePath.endsWith('.mjs')) {
+        mode = 'ace/mode/javascript'
+      }
       editorSession.setMode(mode)
     }
     this._ace.clearSelection()
