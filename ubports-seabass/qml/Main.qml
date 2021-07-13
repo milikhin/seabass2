@@ -26,9 +26,26 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.1.0"
+  readonly property string version: "1.2.0"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
+
+  onClosing: {
+    var files = []
+    for (var i = 0; i < tabsModel.count; i++) {
+      var tab = tabsModel.get(i)
+      if (tab.isTerminal) {
+        continue
+      }
+
+      files.push(tab.filePath)
+      if (i === tabBar.currentIndex) {
+        settings.initialTab = files.length - 1
+      }
+    }
+
+    settings.initialFiles = files
+  }
 
   function handleBuilderStarted() {
     if (!isWide) {
@@ -46,6 +63,9 @@ ApplicationWindow {
     property bool isKeyboardExtensionVisible: true
     property string theme: Constants.Theme.System
     property int fontSize: 12
+    property var initialFiles: []
+    property int initialTab: 0
+    property bool restoreOpenedTabs: true
   }
 
   GenericComponents.EditorApi {
@@ -71,6 +91,21 @@ ApplicationWindow {
     // API methods
     onErrorOccured: function(message) {
       errorDialog.show(message)
+    }
+    onAppLoaded: {
+      if (settings.restoreOpenedTabs) {
+        for (var i = 0; i < settings.initialFiles.length; i++) {
+          var filePath = settings.initialFiles[i]
+          tabsModel.open({
+            id: filePath,
+            filePath: filePath,
+            subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+            title: QmlJs.getFileName(filePath),
+            isInitial: true,
+            doNotActivate: settings.initialTab !== i
+          })
+        }
+      }
     }
     onMessageSent: function(jsonPayload) {
       editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
@@ -113,7 +148,7 @@ ApplicationWindow {
           isTerminal: true
         })
       }
-      api.loadFile(tab.filePath, false, function(err, isNewFile) {
+      api.loadFile(tab.filePath, false, !tab.isInitial, tab.doNotActivate, function(err, isNewFile) {
         if (err) {
           tabsModel.close(tab.filePath)
         }

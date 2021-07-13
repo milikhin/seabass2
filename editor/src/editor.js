@@ -106,7 +106,10 @@ export default class Editor {
     // load new content and activate required mode
     this._ace.setValue(content)
     if (!this._isTerminal) {
-      const { mode } = modelist.getModeForPath(filePath)
+      let { mode } = modelist.getModeForPath(filePath)
+      if (filePath.endsWith('.mjs')) {
+        mode = 'ace/mode/javascript'
+      }
       editorSession.setMode(mode)
     }
     this._ace.clearSelection()
@@ -124,6 +127,7 @@ export default class Editor {
 
   activate () {
     this._onChange()
+    this._ace.resize()
   }
 
   deactivate () {
