@@ -156,6 +156,13 @@ ApplicationWindow {
     }
     onTabClosed: function(tabId) {
       api.closeFile(tabId)
+
+      // display current tab
+      if (!count) {
+        return
+      }
+      var currentFile = get(tabBar.currentIndex)
+      api.openFile(currentFile.filePath)
     }
     onCountChanged: {
       if (!count) {
