@@ -128,6 +128,26 @@ Item {
 
           Label {
             anchors.verticalCenter: parent.verticalCenter
+            text: i18n.tr("Soft wrap:")
+          }
+
+          Switch {
+            checked: settings.useWrapMode
+            onCheckedChanged: {
+              settings.useWrapMode = checked
+            }
+          }
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+          spacing: Suru.units.gu(1)
+
+          Label {
+            anchors.verticalCenter: parent.verticalCenter
             text: i18n.tr("Restore previous session at startup:")
           }
 

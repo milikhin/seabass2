@@ -28,6 +28,7 @@ QtObject {
     property string foregroundTextColor: textColor
     property string homeDir
     property int fontSize
+    property bool useWrapMode: true
 
     readonly property var py: Python {
       property bool ready: false
@@ -58,6 +59,7 @@ QtObject {
         linkColorChanged.connect(loadTheme)
         textColorChanged.connect(loadTheme)
         fontSizeChanged.connect(loadTheme)
+        useWrapModeChanged.connect(loadTheme)
     }
 
     /**
@@ -158,7 +160,8 @@ QtObject {
             foregroundColor: foregroundColor,
             foregroundTextColor: foregroundTextColor,
             textColor: textColor,
-            fontSize: fontSize
+            fontSize: fontSize,
+            useWrapMode: useWrapMode,
         })
     }
 

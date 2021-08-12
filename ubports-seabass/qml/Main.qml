@@ -26,7 +26,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.2.0"
+  readonly property string version: "1.3.0"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
@@ -66,6 +66,7 @@ ApplicationWindow {
     property var initialFiles: []
     property int initialTab: 0
     property bool restoreOpenedTabs: true
+    property bool useWrapMode: true
   }
 
   GenericComponents.EditorApi {
@@ -73,6 +74,7 @@ ApplicationWindow {
 
     // UI theme
     fontSize: settings.fontSize
+    useWrapMode: settings.useWrapMode
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background

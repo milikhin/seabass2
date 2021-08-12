@@ -157,13 +157,14 @@ export default class Editor {
     this._changeListeners = [callback]
   }
 
-  setPreferences ({ fontSize, isDarkTheme }) {
+  setPreferences ({ fontSize, isDarkTheme, useWrapMode }) {
     if (fontSize !== undefined) {
       this._ace.setFontSize(fontSize)
     }
     if (isDarkTheme !== undefined) {
       this._ace.setTheme(`ace/theme/${isDarkTheme ? 'twilight' : 'chrome'}`)
     }
+    this._ace.getSession().setUseWrapMode(useWrapMode)
   }
 
   toggleReadOnly () {
@@ -190,12 +191,6 @@ export default class Editor {
 
   _handleSearchBarTouchEvent = evt => {
     evt.stopPropagation()
-    if (evt.target.closest('input')) {
-      return
-    }
-
-    this._ace.focus()
-    this._ace.renderer.scrollCursorIntoView()
   }
 
   _applyPlatformHaks () {
