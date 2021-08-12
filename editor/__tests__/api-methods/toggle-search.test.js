@@ -23,7 +23,7 @@ describe('#toggleSearch', () => {
     expect(editor._ace.container.querySelector('.ace_search')).toBeTruthy()
   })
 
-  it('should set focus to editor when search bar clicked', () => {
+  it.skip('should set focus to editor when search bar clicked', () => {
     const { editor, filePath } = createEditor()
     window.setInterval = callback => callback()
     editor._ace.focus = jest.fn()
