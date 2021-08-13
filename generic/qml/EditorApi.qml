@@ -28,6 +28,7 @@ QtObject {
     property string foregroundTextColor: textColor
     property string homeDir
     property int fontSize
+    property bool useWrapMode: true
 
     readonly property var py: Python {
       property bool ready: false
@@ -58,14 +59,15 @@ QtObject {
         linkColorChanged.connect(loadTheme)
         textColorChanged.connect(loadTheme)
         fontSizeChanged.connect(loadTheme)
+        useWrapModeChanged.connect(loadTheme)
     }
 
     /**
      * Loads file at `filePath` into the editor.
-     * Creates file if not exists.
+     * It is possible to create file if not exists.
      * @returns {undefined}
      */
-    function loadFile(filePath, readOnly, callback) {
+    function loadFile(filePath, readOnly, createIfNotExtist, doNotActivate, callback) {
       py.getEditorConfig(filePath, function(err, editorConfig) {
         if (err) {
           return callback(err)
@@ -75,6 +77,10 @@ QtObject {
           if (!err) {
             __load(filePath, editorConfig, readOnly, text)
             return callback(null, false)
+          }
+
+          if (!createIfNotExtist) {
+            return callback(err)
           }
 
           QmlJs.writeFile(filePath, '', function(err) {
@@ -94,10 +100,10 @@ QtObject {
           filePath: filePath,
           editorConfig: editorConfig,
           readOnly: readOnly,
-          content: content
+          content: content,
+          doNotActivate: doNotActivate
         })
       }
-
     }
 
     function openFile(filePath) {
@@ -154,15 +160,13 @@ QtObject {
             foregroundColor: foregroundColor,
             foregroundTextColor: foregroundTextColor,
             textColor: textColor,
-            fontSize: fontSize
+            fontSize: fontSize,
+            useWrapMode: useWrapMode,
         })
     }
 
     function startup() {
         loadTheme()
-        if (filePath) {
-          loadFile(filePath, false, Function.prototype)
-        }
     }
 
     /**

@@ -175,7 +175,7 @@ Page {
                 if (api.filePath) {
                     api.closeFile(api.filePath)
                 }
-                api.loadFile(selectedContentProperties.filePath, false, Function.prototype)
+                api.loadFile(selectedContentProperties.filePath, false, true, false, Function.prototype)
                 api.openFile(selectedContentProperties.filePath)
             }
         }

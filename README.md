@@ -7,14 +7,14 @@
 
 Seabass is a code editor for mobile devices.
 
-Currently supported platforms:
+Supported platforms:
 
-* Sailfish OS
-* UBports
+* Ubuntu Touch
+* Sailfish OS (proof of concept version, not actively developed)
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
-![Seabass on UBports](https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-desktop.png)
+![Seabass on Ubuntu Touch](https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-desktop.png)
 
 ## Features
 
@@ -25,11 +25,11 @@ Core features:
 * Code autocompletion and snippets
 * Setting indentation preferences using .editorconfig files
 
-UBports:
+Ubuntu Touch:
 * Adaptive layout and multiple tabs
 * Create/Rename/Delete files
 * Tree mode for the file list
-* Building QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
+* Create and build QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
 
 ## Build instructions
 
@@ -38,9 +38,9 @@ UBports:
 * Node.js (tested using v12)
 * pipenv (optional, to run tests for python modules)
 * Sailfish SDK (for Sailfish OS)
-* clickable (for UBports)
+* clickable (for Ubuntu Touch)
 
-### UBports
+### Ubuntu Touch
 
 Run `clickable` (in the project root directory).
 
@@ -60,7 +60,7 @@ Run `clickable` (in the project root directory).
    1. `cd generic/py-backend`
    1. `pipenv install -d`
    1. `pipenv run pytest **/*.py`
-1. UBports app:
+1. Ubuntu Touch app:
    * QML: `clickable test`
 
 ## Contribution
@@ -70,9 +70,5 @@ Feel free to submit PRs for any non-assigned issues!
 Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
 [python modules](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
 [ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
-
-There are a few labels used to indicate issue progress.
-* `help wanted`: I'm not going to fix the issue myself due to its complexity, time required, if I just don't know how to fix it, or everything above. Pull requests are welcome if you'd like to see the feature implemented!
-* `wontfix`: in my opinion, the issue requires to much work out of the project's scope or too many workarounds for SDK issues. Pull requests are still welcome though. It might be worth discussing implementation beforehand if there going to be lots of changes.
 
 Thanks to the [contributors](https://github.com/milikhin/seabass2/graphs/contributors)!

@@ -40,9 +40,11 @@ export default class TabsController {
       readOnly = false,
       isSailfish = false,
       isTerminal = false,
+      doNotActivate = false,
       editorConfig = {}
     } = options
     const editorElem = document.createElement('div')
+    editorElem.style.display = 'none'
     this._rootElem.appendChild(editorElem)
     editorElem.classList.add('editor')
 
@@ -59,7 +61,9 @@ export default class TabsController {
     tab.editor.onChange(tab.onStateChange)
 
     this._tabs.push(tab)
-    this.show(filePath)
+    if (!doNotActivate) {
+      this.show(filePath)
+    }
     return tab
   }
 

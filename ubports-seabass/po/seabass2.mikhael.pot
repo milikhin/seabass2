@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-07 09:14+0000\n"
+"POT-Creation-Date: 2021-08-12 22:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:83
+#: ../qml/About.qml:22 ../qml/components/Header.qml:90
 msgid "About"
 msgstr ""
 
@@ -35,29 +35,33 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:68
+#: ../qml/Main.qml:90
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 
-#: ../qml/Main.qml:69
+#: ../qml/Main.qml:91
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
-#: ../qml/Main.qml:241
+#: ../qml/Main.qml:285
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:286
+#: ../qml/Main.qml:330
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:296
+#: ../qml/Main.qml:340
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:312
+#: ../qml/Main.qml:356
 msgid "Build (%1) failed. See build output for details"
+msgstr ""
+
+#: ../qml/Main.qml:366
+msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 
 #: ../qml/NewProject.qml:31
@@ -139,7 +143,7 @@ msgstr ""
 msgid "not exists"
 msgstr ""
 
-#: ../qml/Settings.qml:32 ../qml/components/Header.qml:78
+#: ../qml/Settings.qml:32 ../qml/components/Header.qml:85
 msgid "Settings"
 msgstr ""
 
@@ -159,15 +163,23 @@ msgstr ""
 msgid "Font size, CSS px:"
 msgstr ""
 
-#: ../qml/Settings.qml:137
+#: ../qml/Settings.qml:131
+msgid "Soft wrap:"
+msgstr ""
+
+#: ../qml/Settings.qml:151
+msgid "Restore previous session at startup:"
+msgstr ""
+
+#: ../qml/Settings.qml:177
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:154
+#: ../qml/Settings.qml:194
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:162
+#: ../qml/Settings.qml:202
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can update "
@@ -175,42 +187,42 @@ msgid ""
 "(container ID is `seabass2-build`) or via the System Settings."
 msgstr ""
 
-#: ../qml/Settings.qml:172
+#: ../qml/Settings.qml:212
 msgid ""
 "Should anything goes wrong with the container you can delete and recreate it "
 "once again."
 msgstr ""
 
-#: ../qml/Settings.qml:193
+#: ../qml/Settings.qml:233
 msgid "Notes:"
 msgstr ""
 
-#: ../qml/Settings.qml:203
+#: ../qml/Settings.qml:243
 msgid ""
 "• To build a project you need to open a corresponding clickable.json file "
 "and click the 'Build' button:"
 msgstr ""
 
-#: ../qml/Settings.qml:220
+#: ../qml/Settings.qml:260
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. These directories are automatically mounted into Libertine "
 "containers. Alternatively you can create additional bind mounts manually."
 msgstr ""
 
-#: ../qml/Settings.qml:230
+#: ../qml/Settings.qml:270
 msgid "• clickable.json file should be named 'clickable.json'."
 msgstr ""
 
-#: ../qml/Settings.qml:246
+#: ../qml/Settings.qml:286
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:268
+#: ../qml/Settings.qml:308
 msgid "Create build container"
 msgstr ""
 
-#: ../qml/Settings.qml:277
+#: ../qml/Settings.qml:317
 msgid "Update build container"
 msgstr ""
 
@@ -218,7 +230,7 @@ msgstr ""
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:90
+#: ../qml/components/Builder.qml:94
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -267,7 +279,7 @@ msgstr ""
 msgid "%1 will be deleted"
 msgstr ""
 
-#: ../qml/components/Header.qml:72
+#: ../qml/components/Header.qml:79
 msgid "Keyboard extension"
 msgstr ""
 

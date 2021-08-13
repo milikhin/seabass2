@@ -106,7 +106,10 @@ export default class Editor {
     // load new content and activate required mode
     this._ace.setValue(content)
     if (!this._isTerminal) {
-      const { mode } = modelist.getModeForPath(filePath)
+      let { mode } = modelist.getModeForPath(filePath)
+      if (filePath.endsWith('.mjs')) {
+        mode = 'ace/mode/javascript'
+      }
       editorSession.setMode(mode)
     }
     this._ace.clearSelection()
@@ -124,6 +127,7 @@ export default class Editor {
 
   activate () {
     this._onChange()
+    this._ace.resize()
   }
 
   deactivate () {
@@ -153,13 +157,14 @@ export default class Editor {
     this._changeListeners = [callback]
   }
 
-  setPreferences ({ fontSize, isDarkTheme }) {
+  setPreferences ({ fontSize, isDarkTheme, useWrapMode }) {
     if (fontSize !== undefined) {
       this._ace.setFontSize(fontSize)
     }
     if (isDarkTheme !== undefined) {
       this._ace.setTheme(`ace/theme/${isDarkTheme ? 'twilight' : 'chrome'}`)
     }
+    this._ace.getSession().setUseWrapMode(useWrapMode)
   }
 
   toggleReadOnly () {
@@ -186,12 +191,6 @@ export default class Editor {
 
   _handleSearchBarTouchEvent = evt => {
     evt.stopPropagation()
-    if (evt.target.closest('input')) {
-      return
-    }
-
-    this._ace.focus()
-    this._ace.renderer.scrollCursorIntoView()
   }
 
   _applyPlatformHaks () {

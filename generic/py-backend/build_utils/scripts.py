@@ -7,14 +7,15 @@ from .build_environment import BuildEnv
 from .config import CONTAINER_ID
 from .helpers import patch_env
 
-def build(config_file):
+def build(config_file, install=False):
     """
     Runs build for the given clickable.json file
 
     Keyword arguments:
     config_file -- path to clickable.json
+    install -- true to install/launch buit app
     """
-    return exec_fn(lambda: _build(config_file))
+    return exec_fn(lambda: _build(config_file, install))
 
 def create(dir_name, options):
     """
@@ -48,9 +49,9 @@ def _init_container():
     build_env.init_container()
     return build_env
 
-def _build(config_file):
+def _build(config_file, install):
     build_env = _init_container()
-    return build_env.build(config_file)
+    return build_env.build(config_file, install)
 
 def _create(dir_name, options):
     build_env = _init_container()

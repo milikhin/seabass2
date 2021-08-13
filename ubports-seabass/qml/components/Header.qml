@@ -21,6 +21,7 @@ CustomComponents.ToolBar {
   signal settingsPageRequested()
   signal saveRequested()
   signal buildRequested()
+  signal launchRequested()
   signal keyboardExtensionToggled()
   signal search()
   signal openTerminalApp()
@@ -39,28 +40,34 @@ CustomComponents.ToolBar {
   }
 
   CustomComponents.ToolButton {
-    icon: "package-x-generic-symbolic"
+    iconName: "package-x-generic-symbolic"
     visible: buildable
     enabled: buildEnabled
     onClicked: buildRequested()
   }
   CustomComponents.ToolButton {
-    icon: "terminal-app-symbolic"
+    iconName: "media-playback-start"
+    visible: buildable
+    enabled: buildEnabled
+    onClicked: launchRequested()
+  }
+  CustomComponents.ToolButton {
+    iconName: "terminal-app-symbolic"
     enabled: terminalEnabled
     onClicked: openTerminalApp()
   }
   CustomComponents.ToolButton {
-    icon: "search"
+    iconName: "search"
     enabled: searchEnabled
     onClicked: search()
   }
   CustomComponents.ToolButton {
-    icon: "save"
+    iconName: "save"
     enabled: canBeSaved
     onClicked: saveRequested()
   }
   CustomComponents.ToolButton {
-    icon: "contextual-menu"
+    iconName: "contextual-menu"
     onClicked: menu.open()
 
     Menu {
@@ -68,18 +75,18 @@ CustomComponents.ToolBar {
       y: parent.height
       modal: true
       CustomComponents.MenuItem {
-        icon: keyboardExtensionEnabled ? "select" : "select-none"
+        iconName: keyboardExtensionEnabled ? "select" : "select-none"
         text: i18n.tr("Keyboard extension")
         enabled: searchEnabled
         onTriggered: keyboardExtensionToggled()
       }
       CustomComponents.MenuItem {
-        icon: "settings"
+        iconName: "settings"
         text: i18n.tr("Settings")
         onTriggered: settingsPageRequested()
       }
       CustomComponents.MenuItem {
-        icon: "info"
+        iconName: "info"
         text: i18n.tr("About")
         onTriggered: aboutPageRequested()
       }
