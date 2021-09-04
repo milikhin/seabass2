@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-14 20:42+0000\n"
-"PO-Revision-Date: 2021-07-18 18:05+0200\n"
+"POT-Creation-Date: 2021-08-12 22:46+0000\n"
+"PO-Revision-Date: 2021-08-14 18:00+0200\n"
 "Last-Translator: Anne017 <anneonyme017@openmailbox.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -36,44 +36,44 @@ msgstr "Bienvenue"
 msgid "Seabass2"
 msgstr "Seabass 2"
 
-#: ../qml/Main.qml:88
+#: ../qml/Main.qml:90
 msgid "Unable to read file. Please ensure that you have read access to the %1"
 msgstr ""
 "Impossible de lire le fichier. Veuillez vous assurez que vous avez accès en "
 "lecture à %1."
 
-#: ../qml/Main.qml:89
+#: ../qml/Main.qml:91
 msgid ""
 "Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 "Impossible de modifier le fichier. Veuillez vous assurer que vous avez accès "
 "en modification à %1."
 
-#: ../qml/Main.qml:283
+#: ../qml/Main.qml:285
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 "La création du projet a échoué. Consultez la sortie de lacompilation pour "
 "plus de détails."
 
-#: ../qml/Main.qml:328
+#: ../qml/Main.qml:330
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 "La création du conteneur Libertine a échoué. Consultez la sortie de la "
 "compilation plus de détails."
 
-#: ../qml/Main.qml:338
+#: ../qml/Main.qml:340
 msgid "Update failed. See build output for details"
 msgstr ""
 "La mise à jour a échoué. Consultez la sortie de la compilation plus de "
 "détails."
 
-#: ../qml/Main.qml:354
+#: ../qml/Main.qml:356
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 "La compilation (%1) a échoué. Consultez la sortie de celle-ci pour plus de "
 "détails."
 
-#: ../qml/Main.qml:364
+#: ../qml/Main.qml:366
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 "La compilation et l'exécution de (%1) a échoué. Consultez la sortie de celle-"
@@ -184,19 +184,23 @@ msgid "Font size, CSS px:"
 msgstr "Taille de la police, en pixels dans la CSS :"
 
 #: ../qml/Settings.qml:131
+msgid "Soft wrap:"
+msgstr "Retour à la ligne :"
+
+#: ../qml/Settings.qml:151
 msgid "Restore previous session at startup:"
 msgstr "Restaurer la session précédente au démarrage :"
 
-#: ../qml/Settings.qml:157
+#: ../qml/Settings.qml:177
 msgid "Build container"
 msgstr "Conteneur de compilation"
 
-#: ../qml/Settings.qml:174
+#: ../qml/Settings.qml:194
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 "Vous pouvez utiliser Seabass pour construire des projets avec Clickable."
 
-#: ../qml/Settings.qml:182
+#: ../qml/Settings.qml:202
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can update "
@@ -209,7 +213,7 @@ msgstr ""
 "manager » (l'identifiant du conteneur est « seabass2-build ») ou via les "
 "Paramètres du système."
 
-#: ../qml/Settings.qml:192
+#: ../qml/Settings.qml:212
 msgid ""
 "Should anything goes wrong with the container you can delete and recreate it "
 "once again."
@@ -217,11 +221,11 @@ msgstr ""
 "Si quelque chose devait mal tourner avec le conteneur, vous pouvez le "
 "supprimer pour le recréer après."
 
-#: ../qml/Settings.qml:213
+#: ../qml/Settings.qml:233
 msgid "Notes:"
 msgstr "Notes :"
 
-#: ../qml/Settings.qml:223
+#: ../qml/Settings.qml:243
 msgid ""
 "• To build a project you need to open a corresponding clickable.json file "
 "and click the 'Build' button:"
@@ -229,7 +233,7 @@ msgstr ""
 "• Pour compiler un projet, vous devez ouvrir le fichier clickable.json "
 "correspondant et cliquer sur le bouton « Compiler » :"
 
-#: ../qml/Settings.qml:240
+#: ../qml/Settings.qml:260
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. These directories are automatically mounted into Libertine "
@@ -240,19 +244,19 @@ msgstr ""
 "dans les conteneurs de Libertine. Vous pouvez également créer manuellement "
 "des montages liés supplémentaires."
 
-#: ../qml/Settings.qml:250
+#: ../qml/Settings.qml:270
 msgid "• clickable.json file should be named 'clickable.json'."
 msgstr "• Le fichier clickable.json doit être intitulé « clickable.json »."
 
-#: ../qml/Settings.qml:266
+#: ../qml/Settings.qml:286
 msgid "Container status:"
 msgstr "Statut du conteneur :"
 
-#: ../qml/Settings.qml:288
+#: ../qml/Settings.qml:308
 msgid "Create build container"
 msgstr "Créer un conteneur de compilation"
 
-#: ../qml/Settings.qml:297
+#: ../qml/Settings.qml:317
 msgid "Update build container"
 msgstr "Mettre à jour un conteneur de compilation"
 
