@@ -27,7 +27,7 @@ QtObject {
     property string foregroundColor: backgroundColor
     property string foregroundTextColor: textColor
     property string homeDir
-    property int fontSize
+    property int fontSize: 12
     property bool useWrapMode: true
 
     readonly property var py: Python {
