@@ -214,9 +214,15 @@ Item {
   FilesComponents.FileModel {
     id: directoryModel
     rootDirectory: '/'
-    directory: QmlJs.getNormalPath(homeDir)
+    prevDirectory: QmlJs.getNormalPath(homeDir)
+    directory: QmlJs.getNormalPath(settings.restoreOpenedTabs
+      ? settings.initialDir
+      : homeDir)
     showDotDot: !treeMode
 
+    onDirectoryChanged: {
+      settings.initialDir = directory
+    }
     onErrorOccured: function(err) {
       root.errorOccured(err)
     }
