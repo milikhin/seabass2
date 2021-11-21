@@ -268,7 +268,7 @@ class Api {
   _registerApiHandler () {
     switch (this._apiBackend) {
       case 'navigatorQt': {
-        navigator.qt.onmessage = this._handleQtMessage
+        window.postSeabassApiMessage = this._onMessage
         return
       }
       case 'url': {
@@ -294,7 +294,10 @@ class Api {
     const payload = JSON.stringify({ action, data })
     switch (this._apiBackend) {
       case 'navigatorQt': {
-        return navigator.qt.postMessage(payload)
+        var evt = new CustomEvent("framescript:action", {
+          detail: { action, data }
+        });
+        return document.dispatchEvent(evt);
       }
       case 'url': {
         return window.location.assign(`http://seabass/${encodeURIComponent(payload)}`)

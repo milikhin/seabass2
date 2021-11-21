@@ -1,8 +1,8 @@
 import QtQuick 2.2
 
-import QtWebKit 3.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
+import Sailfish.WebView 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
@@ -20,8 +20,8 @@ Page {
         // UI theme
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
         backgroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 0.75)'
-            : 'rgba(255, 255, 255, 0.75)'
+            ? 'rgba(0, 0, 0, 1)'
+            : 'rgba(255, 255, 255, 1)'
         foregroundColor: isDarkTheme
             ? 'rgba(0, 0, 0, 1)'
             : 'rgba(255, 255, 255, 1)'
@@ -44,47 +44,17 @@ Page {
                 Qt.inputMethod.hide()
             }
         }
-        onMessageSent: function(jsonMessage) {
-            webView.experimental.postMessage(jsonMessage)
+        onMessageSent: function(jsonPayload) {
+            webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
         onFilePathChanged: {
             seabassFilePath = filePath
         }
     }
+    // onOrientationChanged: fixResize()
 
-    onOrientationChanged: fixResize()
-
-    SilicaWebView {
-        id: webView
-        url: '../html/index.html'
-
-        anchors.top: page.top
-        anchors.bottom: toolbar.open ? toolbar.top : page.bottom
-        width: page.width
-
-        experimental.transparentBackground: true
-        experimental.deviceWidth: getDeviceWidth()
-        experimental.preferences.navigatorQtObjectEnabled: true
-        experimental.onMessageReceived: {
-            var msg = JSON.parse(message.data)
-            // automatically copy selected text to the Clipboard
-            if (msg.data && msg.data.selectedText) {
-                Clipboard.text = msg.data.selectedText
-            }
-
-            api.handleMessage(msg.action, msg.data)
-        }
-
-        onNavigationRequested: function(request) {
-            const urlStr = request.url.toString()
-            const isHttpRequest = urlStr.indexOf('http') === 0
-            if (!isHttpRequest) {
-                return
-            }
-
-            request.action = WebView.IgnoreRequest;
-            Qt.openUrlExternally(request.url)
-        }
+    SilicaFlickable {
+        anchors.fill: parent
 
         PullDownMenu {
             busy: api.isSaveInProgress
@@ -93,10 +63,10 @@ Page {
                 onClicked: {
                     api.hasChanges
                         ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
-                              filePath: api.filePath,
-                              acceptDestination: filePickerPage,
-                              acceptDestinationAction: PageStackAction.Replace
-                          })
+                                filePath: api.filePath,
+                                acceptDestination: filePickerPage,
+                                acceptDestinationAction: PageStackAction.Replace
+                            })
                         : pageStack.push(filePickerPage)
                 }
             }
@@ -118,38 +88,76 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
             }
         }
-    }
 
-    DockedPanel {
-        id: toolbar
-        dock: Dock.Bottom
-        width: parent.width
-        height: Theme.itemSizeMedium
-        focus: false
-        open: false
-        onOpenChanged: {
-            api.postMessage('setPreferences', {
-                isSailfishToolbarOpened: open
-            })
+        WebView {
+            id: webView
+            url: '../html/index.html'
+
+            anchors.top: parent.top
+            anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            viewportHeight: height
+
+            Component.onCompleted: {
+                for (var i in webView) {
+                    console.log(i, webView[i])
+                }
+            }
+
+            onViewInitialized: {
+                webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
+                webView.addMessageListener("webview:action")
+            }
+
+            onRecvAsyncMessage: {
+                switch (message) {
+                    case "webview:action": {
+                        if (data.data && data.data.selectedText) {
+                            Clipboard.text = data.data.selectedText
+                        }
+
+                        return api.handleMessage(data.action, data.data)
+                    }
+                }
+            }
+
+            onLinkClicked: function(url) {
+                Qt.openUrlExternally(url)
+            }
         }
 
-        PlatformComponents.Toolbar {
-            hasUndo: api.hasUndo
-            hasRedo: api.hasRedo
-            readOnly: api.isReadOnly
-            readOnlyEnabled: !api.forceReadOnly
+        DockedPanel {
+            id: toolbar
+            dock: Dock.Bottom
+            width: parent.width
+            height: Theme.itemSizeMedium
+            focus: false
+            open: false
+            onOpenChanged: {
+                api.postMessage('setPreferences', {
+                    isSailfishToolbarOpened: open
+                })
+            }
 
-            onUndo: api.postMessage('undo')
-            onRedo: api.postMessage('redo')
-            onToggleReadOnly: api.postMessage('toggleReadOnly')
-            onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
-            onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
-            onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
-            onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
-            onNavigateLineStart: api.postMessage('navigate', { where: 'lineStart' })
-            onNavigateLineEnd: api.postMessage('navigate', { where: 'lineEnd' })
-            onNavigateFileStart: api.postMessage('navigate', { where: 'fileStart' })
-            onNavigateFileEnd: api.postMessage('navigate', { where: 'fileEnd' })
+            PlatformComponents.Toolbar {
+                hasUndo: api.hasUndo
+                hasRedo: api.hasRedo
+                readOnly: api.isReadOnly
+                readOnlyEnabled: !api.forceReadOnly
+
+                onUndo: api.postMessage('undo')
+                onRedo: api.postMessage('redo')
+                onToggleReadOnly: api.postMessage('toggleReadOnly')
+                onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
+                onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
+                onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
+                onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
+                onNavigateLineStart: api.postMessage('navigate', { where: 'lineStart' })
+                onNavigateLineEnd: api.postMessage('navigate', { where: 'lineEnd' })
+                onNavigateFileStart: api.postMessage('navigate', { where: 'fileStart' })
+                onNavigateFileEnd: api.postMessage('navigate', { where: 'fileEnd' })
+            }
         }
     }
 
