@@ -191,9 +191,6 @@ QtObject {
                     return
                 }
 
-                // disable word suggestions
-                Qt.inputMethod.commit()
-
                 hasChanges = !data.isReadOnly && data.hasChanges
                 hasUndo = !data.isReadOnly && data.hasUndo
                 hasRedo = !data.isReadOnly && data.hasRedo

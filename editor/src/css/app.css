@@ -1,4 +1,38 @@
-@import 'page.css';
-@import 'overrides.css';
-@import 'autocomplete.css';
-@import 'search.css';
+body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+#welcome {
+  width: 100%;
+  height: 100%;
+
+  font-family: sans-serif;
+  padding: 1rem;
+  font-size: small;
+  box-sizing: border-box;
+}
+
+#welcome h1 {
+  font-size: large;
+}
+
+#welcome h2 {
+  font-size: medium
+}
+
+.editor {
+  width: 100%;
+  height: 100%;
+}

@@ -8,12 +8,9 @@ describe('#loadFile', () => {
   let api, filePath, content
   const indentSize = 9 // cause why not?
 
-  function setup ({ isSailfish, loadOptions = {} } = {}) {
+  function setup ({ loadOptions = {} } = {}) {
     const { welcomeElem, rootElem } = initDom()
     const options = { editorFactory, welcomeElem, rootElem }
-    if (isSailfish) {
-      options.isSailfish = isSailfish
-    }
     api = registerApi(options)
     filePath = uuid()
     content = uuid()
@@ -92,26 +89,6 @@ describe('#loadFile', () => {
     expect(editor._ace.getValue()).toEqual(content)
     expect(editor._ace.getOption('showGutter')).toEqual(false)
     expect(editor._ace.getOption('showLineNumbers')).toEqual(false)
-  })
-
-  it('should apply SailfishOS workarounds if required', () => {
-    setup({ isSailfish: true })
-    expect(api._tabsController._tabs).toHaveLength(1)
-
-    const editor = api._tabsController._tabs[0].editor
-    expect(editor._isSailfish).toEqual(true)
-  })
-
-  it('should add scrollTop debouncer as a SailfishOS workaround', async () => {
-    setup({ isSailfish: true })
-    const editor = api._tabsController._tabs[0].editor
-    editor._ace.session._emit('changeScrollTop')
-    editor._ace.session._emit('changeScrollTop')
-    expect(window.scrollTo).toHaveBeenCalledTimes(1)
-
-    await new Promise(resolve => setTimeout(resolve, 100))
-    editor._ace.session._emit('changeScrollTop')
-    expect(window.scrollTo).toHaveBeenCalledTimes(2)
   })
 
   it('should throw if `filePath` is missing', () => {

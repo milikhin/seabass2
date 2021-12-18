@@ -7,7 +7,7 @@ const commonConfig = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: [/\.js$/, /\.ts$/],
         exclude: /node_modules/,
         use: ['babel-loader']
       },
@@ -20,6 +20,9 @@ const commonConfig = {
   plugins: [
     new CleanWebpackPlugin()
   ],
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
   mode: 'production'
 }
 
@@ -27,7 +30,7 @@ const sailfishConfig = {
   ...commonConfig,
   output: {
     path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
-    publicPath: '/usr/share/harbour-seabass/qml/html/',
+    // publicPath: '/usr/share/harbour-seabass/qml/html/',
     filename: 'bundle.js'
   },
   plugins: [

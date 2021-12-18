@@ -45,16 +45,33 @@ Page {
             }
         }
         onMessageSent: function(jsonPayload) {
-            webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
+            viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
         onFilePathChanged: {
             seabassFilePath = filePath
         }
     }
-    // onOrientationChanged: fixResize()
 
-    SilicaFlickable {
+    WebViewFlickable {
+        id: viewFlickable
         anchors.fill: parent
+        webView.url: '../html/index.html'
+        webView.viewportHeight: getEditorHeight()
+        webView.opacity: api.filePath ? 1 : 0.75
+        webView.onViewInitialized: {
+            webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
+            webView.addMessageListener("webview:action")
+        }
+        webView.onRecvAsyncMessage: {
+            switch (message) {
+                case "webview:action": {
+                    api.handleMessage(data.action, data.data)
+                }
+            }
+        }
+        webView.onLinkClicked: function(url) {
+            Qt.openUrlExternally(url)
+        }
 
         PullDownMenu {
             busy: api.isSaveInProgress
@@ -89,44 +106,6 @@ Page {
             }
         }
 
-        WebView {
-            id: webView
-            url: '../html/index.html'
-
-            anchors.top: parent.top
-            anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            viewportHeight: height
-
-            Component.onCompleted: {
-                for (var i in webView) {
-                    console.log(i, webView[i])
-                }
-            }
-
-            onViewInitialized: {
-                webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
-                webView.addMessageListener("webview:action")
-            }
-
-            onRecvAsyncMessage: {
-                switch (message) {
-                    case "webview:action": {
-                        if (data.data && data.data.selectedText) {
-                            Clipboard.text = data.data.selectedText
-                        }
-
-                        return api.handleMessage(data.action, data.data)
-                    }
-                }
-            }
-
-            onLinkClicked: function(url) {
-                Qt.openUrlExternally(url)
-            }
-        }
-
         DockedPanel {
             id: toolbar
             dock: Dock.Bottom
@@ -153,10 +132,10 @@ Page {
                 onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
                 onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
                 onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
-                onNavigateLineStart: api.postMessage('navigate', { where: 'lineStart' })
-                onNavigateLineEnd: api.postMessage('navigate', { where: 'lineEnd' })
-                onNavigateFileStart: api.postMessage('navigate', { where: 'fileStart' })
-                onNavigateFileEnd: api.postMessage('navigate', { where: 'fileEnd' })
+                onNavigateLineStart: api.postMessage('navigate', { where: 'LineStart' })
+                onNavigateLineEnd: api.postMessage('navigate', { where: 'LineEnd' })
+                onNavigateFileStart: api.postMessage('navigate', { where: 'DocStart' })
+                onNavigateFileEnd: api.postMessage('navigate', { where: 'DocEnd' })
             }
         }
     }
@@ -179,17 +158,6 @@ Page {
     }
 
     /**
-     * Returns HTML device-width scaled correctly for the current device
-     * @returns {int} - device width in CSS pixels
-     */
-    function getDeviceWidth() {
-        const deviceWidth = page.orientation === Orientation.Portrait
-            ? Screen.width
-            : Screen.height
-        return deviceWidth / Theme.pixelRatio / (540 / 320)
-    }
-
-    /**
      * Displays error message
      * @param {string} [errorMessage] - error message to display
      * @returns {undefined}
@@ -201,17 +169,14 @@ Page {
         })
     }
 
-    function getDeviceScale() {
-        return Theme.pixelRatio * (540 / 320)
-    }
-
-    /**
-     * Simple hak to fix issue with WebView not resized properly automatically when changing device orientation.
-     * @returns {undefined}
-     */
-    function fixResize() {
-        webView.experimental.deviceWidth = getDeviceWidth()
-        page.x = 1
-        page.x = 0
+    function getEditorHeight() {
+        const dockHeight = toolbar.open ? toolbar.height : 0
+        const windowHeight = page.orientation & Orientation.PortraitMask
+            ? Screen.height
+            : Screen.width
+        const keyboardHeight = Qt.inputMethod.visible
+            ? Qt.inputMethod.keyboardRectangle.height
+            : 0
+        return windowHeight - dockHeight - keyboardHeight
     }
 }
