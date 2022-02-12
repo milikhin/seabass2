@@ -175,10 +175,6 @@ QtObject {
      * @returns {undefined}
      */
     function handleMessage(action, data) {
-        if (data && data.responseTo === 'requestSaveFile') {
-            isSaveInProgress = false
-        }
-
         switch (action) {
             case 'error':
                 console.error(data.message)

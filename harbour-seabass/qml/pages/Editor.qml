@@ -3,16 +3,20 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
+import Sailfish.Silica.Background 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
 import '../generic' as GenericComponents
 
-Page {
+WebViewPage {
     id: page
     property string seabassFilePath
-
     allowedOrientations: Orientation.All
+
+    Component.onCompleted: {
+        console.log(Theme.backgroundImage)
+    }
 
     GenericComponents.EditorApi {
         id: api
@@ -20,9 +24,6 @@ Page {
         // UI theme
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
         backgroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 1)'
-            : 'rgba(255, 255, 255, 1)'
-        foregroundColor: isDarkTheme
             ? 'rgba(0, 0, 0, 1)'
             : 'rgba(255, 255, 255, 1)'
         textColor: Theme.highlightColor
@@ -75,6 +76,7 @@ Page {
 
         PullDownMenu {
             busy: api.isSaveInProgress
+            enabled: !Qt.inputMethod.visible
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
@@ -96,6 +98,7 @@ Page {
         }
 
         PushUpMenu {
+            enabled: !Qt.inputMethod.visible
             MenuItem {
                 text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
                 onClicked: toolbar.open = !toolbar.open
@@ -113,6 +116,14 @@ Page {
             height: Theme.itemSizeMedium
             focus: false
             open: false
+            background: ThemeBackground {
+                backgroundMaterial: 'glass'
+                // use oneDark/white color depending on the theme
+                color: api.isDarkTheme ? '#282C34' : '#EFEFEF'
+                // default background doesn't have background when virtual keyboard is opened
+                // hence the workaround with ThemeBackground
+            }
+
             onOpenChanged: {
                 api.postMessage('setPreferences', {
                     isSailfishToolbarOpened: open
@@ -177,6 +188,6 @@ Page {
         const keyboardHeight = Qt.inputMethod.visible
             ? Qt.inputMethod.keyboardRectangle.height
             : 0
-        return windowHeight - dockHeight - keyboardHeight
+        return windowHeight - dockHeight
     }
 }

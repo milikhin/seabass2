@@ -1,62 +1,53 @@
 /* globals localStorage */
-import Editor from './editor/editor'
-import { InvalidArgError, NotFoundError } from './errors'
-import TabsController from './tabs'
+
+import Editor from '../editor/editor'
+import { SeabassEditorState } from '../editor/types'
+import { InvalidArgError, NotFoundError } from '../errors'
+import TabsController from '../tabs'
 import {
-  getThemeStyleElem,
-  setMainWindowColors
-} from './theme'
-import {
-  IncomingMessage,
-  OutgoingMessage,
-  RawEditorConfig,
   SavedSeabassPreferences,
-  SeabassEditorState,
   SeabassPreferenes,
   TabActionPayload
+} from '../types'
+import { parseEditorConfig } from '../utils'
+import { setWelcomeScreenColors } from './theme'
+import {
+  API_BACKEND,
+  ApiOptions,
+  LoadFileOptions,
+  IncomingMessage,
+  OutgoingMessage
 } from './types'
-import { parseEditorConfig } from './utils'
 
-enum API_BACKEND {
-  /** SailfishOS-specific API backend */
-  SAILFISH_WEBVIEW = 'Sailfish webView',
-  /** Common URL-based API backend, used in Ubuntu Touch */
-  URL_HANDLER = 'URL handler',
-}
-
+/** `postSeabassApiMessage` global function is used to communicate with UI */
 declare global {
   interface Window {
     postSeabassApiMessage: <T>(msg: IncomingMessage<T>) => void
   }
 }
 
-interface ApiOptions {
-  welcomeElem: HTMLElement
-  rootElem: HTMLElement
-  apiBackend: API_BACKEND
-}
-
-interface LoadFileOptions {
-  filePath: string
-  content: string
-  isTerminal: boolean
-  isReadOnly: boolean
-  editorConfig: RawEditorConfig
-}
-
 class SeabassApi {
+  /** Wecome notes root elem */
   _welcomeElem: HTMLElement
+  /** Tabs container elem */
   _tabsRootElem: HTMLElement
+  /** Platform-specific API backend name */
   _apiBackend: API_BACKEND
+  /** Tabs controller instance */
   _tabsController: TabsController
+  /** Opened editors */
   _editors: Map<string, Editor>
+  _editorPreferences: {
+    isDarkTheme: boolean
+  }
 
   constructor ({ apiBackend, rootElem, welcomeElem }: ApiOptions) {
-    this._tabsController = new TabsController({ rootElem })
     this._apiBackend = apiBackend
+    this._editors = new Map()
+    this._tabsController = new TabsController({ rootElem })
     this._tabsRootElem = rootElem
     this._welcomeElem = welcomeElem
-    this._editors = new Map()
+    this._editorPreferences = { isDarkTheme: false }
 
     this._registerApiHandler()
     this._sendApiMessage({ action: 'appLoaded', data: this._getSavedPreferences() })
@@ -82,6 +73,7 @@ class SeabassApi {
       filePath: data.filePath,
       isReadOnly: data.isReadOnly,
       isTerminal: data.isTerminal,
+      isDarkTheme: this._editorPreferences.isDarkTheme,
       onChange: this._handleStateChanged
     })
     this._editors.set(data.filePath, editor)
@@ -92,8 +84,8 @@ class SeabassApi {
   }
 
   /**
-   * 'requestFileSave' command handler: intended to request and save file content
-   * @param {string} filePath - /path/to/file - used as file ID
+   * 'requestFileSave' command handler: request file saving operation
+   * @param {string} filePath - /path/to/file - full path, used as file ID
    * @returns {undefined}
    */
   _apiOnRequestSaveFile ({ filePath }: TabActionPayload): void {
@@ -102,13 +94,11 @@ class SeabassApi {
       throw new InvalidArgError(`File ${filePath} is not opened`)
     }
 
-    const value = editor.getContent()
     this._sendApiMessage({
       action: 'saveFile',
       data: {
-        content: value,
-        filePath,
-        responseTo: 'requestSaveFile'
+        content: editor.getContent(),
+        filePath
       }
     })
   }
@@ -119,40 +109,37 @@ class SeabassApi {
    * @returns {undefined}
    */
   _apiOnCloseFile ({ filePath }: TabActionPayload): void {
-    const editor = this._editors.get(filePath)
-    if (editor === undefined) {
-      throw new InvalidArgError(`File ${filePath} is not opened`)
-    }
-
-    this._editors.delete(filePath)
-    editor.destroy()
+    this._tabsController.close(filePath)
   }
 
   /**
    * Set editor preferences
    *
    * @param {Object} options - options to set
-   * @param {boolean}  [options.isDarkTheme] - `true` to set dark theme, `false` to set light theme
+   * @param {string} options.backgroundColor - theme color (background)
+   * @param {string} options.highlightColor - theme color (text highlight)
+   * @param {string} options.textColor - theme color (text)
+   * @param {boolean} [options.isDarkTheme] - `true` to set dark theme, `false` to set light theme
+   * @param {boolean} [options.isSailfishToolbarOpened]
    * @returns {undefined}
    */
   _apiOnSetPreferences (options: SeabassPreferenes): void {
     if (options.isSailfishToolbarOpened !== undefined) {
-      window.localStorage.setItem('sailfish__isToolbarOpened', options.isSailfishToolbarOpened.toString())
+      window.localStorage.setItem('sailfish__isToolbarOpened',
+        options.isSailfishToolbarOpened.toString())
     }
 
-    const styleElem = getThemeStyleElem()
-    if (styleElem == null) {
-      return console.warn('Theme colors are ignored as corresponding <style> tag is not found')
-    }
-
-    const colors = {
+    setWelcomeScreenColors({
       backgroundColor: options.backgroundColor,
       textColor: options.textColor,
       highlightColor: options.highlightColor
+    })
+    this._editorPreferences = {
+      isDarkTheme: options.isDarkTheme
     }
-
-    setMainWindowColors(colors)
-    // this._tabsController.setPreferences(options)
+    for (const editor of this._editors.values()) {
+      editor.setPreferences(this._editorPreferences)
+    }
   }
 
   _getSavedPreferences (): SavedSeabassPreferences {
@@ -161,7 +148,6 @@ class SeabassApi {
   }
 
   _handleStateChanged = (state: SeabassEditorState): void => {
-    console.log(state)
     this._sendApiMessage({
       action: 'stateChanged',
       data: state
@@ -169,12 +155,13 @@ class SeabassApi {
   }
 
   _onMessage = <T>({ action, data }: IncomingMessage<T>): unknown => {
+    type ApiActionHandler = (options: T) => void
+
     try {
       const apiMethod = `_apiOn${action.charAt(0).toUpperCase()}${action.slice(1)}`
       const methodName = apiMethod as keyof SeabassApi
       if (this[methodName] !== undefined) {
-        const handler = this[methodName] as (options: T) => void
-        return handler.call(this, data)
+        return (this[methodName] as ApiActionHandler)(data)
       }
 
       if (data.filePath === undefined) {
@@ -186,8 +173,7 @@ class SeabassApi {
         throw new NotFoundError(`${data.filePath} is not opened`)
       }
 
-      type ActionHandler = (data: T) => void
-      return (editor[action] as ActionHandler)(data)
+      return (editor[action] as ApiActionHandler)(data)
     } catch (err) {
       if (err instanceof NotFoundError) {
         return console.warn(err)

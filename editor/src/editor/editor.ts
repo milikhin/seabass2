@@ -1,21 +1,22 @@
 import md5 from 'blueimp-md5'
 import { EditorState, EditorView, basicSetup } from '@codemirror/basic-setup'
-import { html } from '@codemirror/lang-html'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { indentWithTab } from '@codemirror/commands'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/history'
 import { keymap, runScopeHandlers } from '@codemirror/view'
-import { SeabassEditorConfig, SeabassEditorState } from '../types'
-import { Compartment, Extension } from '@codemirror/state'
+import { Compartment, Extension, Facet } from '@codemirror/state'
 import { getLanguageMode } from './language'
 
 import './editor.css'
+import { SeabassEditorPreferences } from '../types'
+import { SeabassEditorConfig, SeabassEditorState } from './types'
 
 interface EditorOptions {
   content: string
   editorConfig: SeabassEditorConfig
   elem: HTMLElement
   filePath: string
+  isDarkTheme?: boolean
   isReadOnly?: boolean
   isTerminal?: boolean
   onChange: (state: SeabassEditorState) => void
@@ -37,6 +38,7 @@ export default class Editor {
   _isReadOnly: boolean
   _langCompartment: Compartment
   _readOnlyCompartment: Compartment
+  _themeCompartment: Compartment
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
@@ -47,6 +49,9 @@ export default class Editor {
     this._isTerminal = options.isTerminal ?? false
     this._readOnlyCompartment = new Compartment()
     this._langCompartment = new Compartment()
+    this._themeCompartment = new Compartment()
+    this._savedContentHash = undefined
+    this._isReadOnly = options.isReadOnly ?? false
     this._editor = new EditorView({
       state: EditorState.create({
         extensions: this._getExtensions(options),
@@ -55,12 +60,16 @@ export default class Editor {
       parent: this._editorElem
     })
 
-    this._savedContentHash = undefined
-    this._isReadOnly = options.isReadOnly ?? false
     this._editorElem.classList.add('editor')
 
     void this._initLanguageSupport(options.filePath)
-    // window.addEventListener('resize', this._onResize)
+    this._editorElem.addEventListener('keypress', evt => {
+      /* `Enter` is handled twice on SfOS 4.3, disable redundant keypress handler */
+      if (evt.keyCode === 13) {
+        evt.preventDefault()
+      }
+    }, true)
+    window.addEventListener('resize', () => this._resize())
   }
 
   destroy (): void {
@@ -91,8 +100,12 @@ export default class Editor {
     // this._onChange()
   }
 
-  setPreferences ({ fontSize, isDarkTheme, useWrapMode }): void {
-
+  setPreferences ({ isDarkTheme }: SeabassEditorPreferences): void {
+    this._editor.dispatch({
+      effects: this._themeCompartment.reconfigure(isDarkTheme
+        ? oneDark
+        : EditorView.baseTheme({}))
+    })
   }
 
   redo (): void {
@@ -106,7 +119,14 @@ export default class Editor {
   toggleReadOnly (): void {
     this._isReadOnly = !this._isReadOnly
     this._editor.dispatch({
-      effects: this._readOnlyCompartment.reconfigure(EditorView.editable.of(!this._isReadOnly))
+      effects: this._readOnlyCompartment.reconfigure(
+        EditorView.editable.of(!this._isReadOnly))
+    })
+  }
+
+  _resize (): void {
+    this._editor.dispatch({
+      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
     })
   }
 
@@ -115,9 +135,11 @@ export default class Editor {
     const extensions: Extension[] = [
       basicSetup,
       keymap.of([indentWithTab]),
-      oneDark,
+      this._themeCompartment.of(options.isDarkTheme === true
+        ? oneDark
+        : EditorView.baseTheme({})),
       this._readOnlyCompartment.of(EditorView.editable.of(!isReadOnly)),
-      this._langCompartment.of(html()),
+      this._langCompartment.of(Facet.define().of(null)),
       EditorView.updateListener.of(update => {
         if (!update.docChanged) {
           return

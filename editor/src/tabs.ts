@@ -66,6 +66,13 @@ export default class TabsModel {
   }
 
   close (id: string): void {
+    const tab = this._tabs.get(id)
+    if (tab === undefined) {
+      return
+    }
+
+    tab.onClose(tab)
+    tab.elem.parentElement?.removeChild(tab.elem)
     this._tabs.delete(id)
     if (this._currentTabId === id) {
       this._currentTabId = undefined
