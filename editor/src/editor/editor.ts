@@ -107,7 +107,7 @@ export default class Editor {
     runScopeHandlers(this._editor, evt, 'editor')
   }
 
-  setSavedContent (content: string): void {
+  fileSaved ({ content }: { content: string }): void {
     this._savedContentHash = md5(content)
     this._onChange()
   }
