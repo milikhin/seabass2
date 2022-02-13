@@ -175,7 +175,8 @@ export default class Editor {
             window.scrollTo(0, 1)
           }
         }
-      })
+      }),
+      EditorView.lineWrapping
     ]
 
     return extensions
