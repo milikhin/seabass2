@@ -186,6 +186,7 @@ export default class Editor {
     this._editor.dispatch({
       effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
     })
+    this._resizeScrollableArea()
   }
 
   _resizeScrollableArea (): void {
