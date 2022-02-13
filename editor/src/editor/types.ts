@@ -9,5 +9,4 @@ export interface SeabassEditorState extends Record<string, unknown>{
   hasRedo: boolean
   hasUndo: boolean
   isReadOnly: boolean
-  selectedText: string
 }

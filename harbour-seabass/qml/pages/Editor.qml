@@ -14,10 +14,6 @@ WebViewPage {
     property string seabassFilePath
     allowedOrientations: Orientation.All
 
-    Component.onCompleted: {
-        console.log(Theme.backgroundImage)
-    }
-
     GenericComponents.EditorApi {
         id: api
 
@@ -143,10 +139,10 @@ WebViewPage {
                 onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
                 onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
                 onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
-                onNavigateLineStart: api.postMessage('navigate', { where: 'LineStart' })
-                onNavigateLineEnd: api.postMessage('navigate', { where: 'LineEnd' })
-                onNavigateFileStart: api.postMessage('navigate', { where: 'DocStart' })
-                onNavigateFileEnd: api.postMessage('navigate', { where: 'DocEnd' })
+                onNavigateLineStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */ })
+                onNavigateLineEnd: api.postMessage('keyDown', { keyCode: 35 /* END */ })
+                onNavigateFileStart: api.postMessage('keyDown', { keyCode: 33 /* Page UP */ })
+                onNavigateFileEnd: api.postMessage('keyDown', { keyCode: 34 /* Page DOWN */ })
             }
         }
     }

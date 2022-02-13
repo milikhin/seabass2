@@ -1,4 +1,5 @@
-import { RawEditorConfig, SeabassEditorConfig } from './types'
+import { RawEditorConfig } from '../types'
+import { SeabassEditorConfig } from './types'
 
 const DEFAULT_INDENT_SIZE = 2
 

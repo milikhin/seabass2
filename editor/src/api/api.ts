@@ -9,7 +9,6 @@ import {
   SeabassPreferenes,
   TabActionPayload
 } from '../types'
-import { parseEditorConfig } from '../utils'
 import { setWelcomeScreenColors } from './theme'
 import {
   API_BACKEND,
@@ -68,7 +67,7 @@ class SeabassApi {
     const tab = this._tabsController.create({ id: data.filePath })
     const editor = new Editor({
       content: data.content,
-      editorConfig: parseEditorConfig(data.editorConfig),
+      editorConfig: data.editorConfig,
       elem: tab.elem,
       filePath: data.filePath,
       isReadOnly: data.isReadOnly,

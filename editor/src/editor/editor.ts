@@ -5,15 +5,16 @@ import { indentWithTab } from '@codemirror/commands'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/history'
 import { keymap, runScopeHandlers } from '@codemirror/view'
 import { Compartment, Extension, Facet } from '@codemirror/state'
+import { RawEditorConfig, SeabassEditorPreferences } from '../types'
 import { getLanguageMode } from './language'
+import { SeabassEditorConfig, SeabassEditorState } from './types'
 
 import './editor.css'
-import { SeabassEditorPreferences } from '../types'
-import { SeabassEditorConfig, SeabassEditorState } from './types'
+import { parseEditorConfig } from './utils'
 
 interface EditorOptions {
   content: string
-  editorConfig: SeabassEditorConfig
+  editorConfig: RawEditorConfig
   elem: HTMLElement
   filePath: string
   isDarkTheme?: boolean
@@ -39,13 +40,15 @@ export default class Editor {
   _langCompartment: Compartment
   _readOnlyCompartment: Compartment
   _themeCompartment: Compartment
+  _onChange: (content?: string) => void
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
 
   constructor (options: EditorOptions) {
     this._editorElem = options.elem
-    this._editorConfig = options.editorConfig
+    this._editorElem.classList.add('editor')
+    this._editorConfig = parseEditorConfig(options.editorConfig)
     this._isTerminal = options.isTerminal ?? false
     this._readOnlyCompartment = new Compartment()
     this._langCompartment = new Compartment()
@@ -59,22 +62,31 @@ export default class Editor {
       }),
       parent: this._editorElem
     })
-
-    this._editorElem.classList.add('editor')
-
     void this._initLanguageSupport(options.filePath)
+
+    this._onChange = (content?: string) => {
+      const text = content ?? this.getContent(this._editor.state)
+      options.onChange({
+        filePath: options.filePath,
+        hasChanges: this._savedContentHash !== md5(text),
+        hasUndo: undoDepth(this._editor.state) > 0,
+        hasRedo: redoDepth(this._editor.state) > 0,
+        isReadOnly: this._isReadOnly
+      })
+    }
     this._editorElem.addEventListener('keypress', evt => {
       /* `Enter` is handled twice on SfOS 4.3, disable redundant keypress handler */
       if (evt.keyCode === 13) {
         evt.preventDefault()
       }
     }, true)
-    window.addEventListener('resize', () => this._resize())
+    window.addEventListener('resize', this._onResize)
+    this._resizeScrollableArea()
   }
 
   destroy (): void {
     (this._editorElem.parentElement as HTMLElement).removeChild(this._editorElem)
-    // window.removeEventListener('resize', this._onResize)
+    window.removeEventListener('resize', this._onResize)
   }
 
   /**
@@ -97,7 +109,7 @@ export default class Editor {
 
   setSavedContent (content: string): void {
     this._savedContentHash = md5(content)
-    // this._onChange()
+    this._onChange()
   }
 
   setPreferences ({ isDarkTheme }: SeabassEditorPreferences): void {
@@ -122,12 +134,7 @@ export default class Editor {
       effects: this._readOnlyCompartment.reconfigure(
         EditorView.editable.of(!this._isReadOnly))
     })
-  }
-
-  _resize (): void {
-    this._editor.dispatch({
-      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
-    })
+    this._onChange()
   }
 
   _getExtensions (options: EditorOptions): Extension[] {
@@ -145,19 +152,46 @@ export default class Editor {
           return
         }
 
+        this._resizeScrollableArea()
         const text = this.getContent(update.state)
-        options.onChange({
-          filePath: options.filePath,
-          hasChanges: this._savedContentHash !== md5(text),
-          hasUndo: undoDepth(this._editor.state) > 0,
-          hasRedo: redoDepth(this._editor.state) > 0,
-          isReadOnly: this._isReadOnly,
-          selectedText: ''
-        })
+        this._onChange(text)
+      }),
+      EditorView.domEventHandlers({
+        scroll: evt => {
+          if (evt.target === null || !('classList' in evt.target)) {
+            return
+          }
+
+          const target = evt.target as HTMLElement
+          if (!target.classList.contains('cm-scroller')) {
+            return
+          }
+
+          if (target.scrollTop === 0) {
+            window.scrollTo(0, 0)
+          } else if (target.scrollTop === target.scrollHeight - target.offsetHeight) {
+            window.scrollTo(0, 2)
+          } else {
+            window.scrollTo(0, 1)
+          }
+        }
       })
     ]
 
     return extensions
+  }
+
+  _onResize = (): void => {
+    this._editor.dispatch({
+      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+    })
+  }
+
+  _resizeScrollableArea (): void {
+    const scrollerElem = this._editorElem.querySelector('.cm-scroller') as HTMLElement
+    document.body.style.bottom = scrollerElem.scrollHeight > scrollerElem.offsetHeight
+      ? '-2px'
+      : '0'
   }
 
   async _initLanguageSupport (filePath: string): Promise<void> {
