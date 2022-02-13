@@ -17,7 +17,7 @@ Page {
                 url: "github.com/milikhin/seabass2"
             }
             ListElement {
-                text: "Ace editor, copyright (c) 2010, Ajax.org B.V., BSD license:"
+                text: "Codemirror, Copyright (C) 2018 by Marijn Haverbeke <marijnh@gmail.com>, Adrian Heine <mail@adrianheine.de>, and others, MIT license:"
                 url: "github.com/ajaxorg/ace"
             }
             ListElement {
