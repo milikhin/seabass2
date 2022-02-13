@@ -167,9 +167,12 @@ export default class Editor {
             return
           }
 
+          const maxScrollTop = target.scrollHeight - target.offsetHeight
+          const scrollAccuracy = 1
+          const isScrolledToBottom = Math.abs(maxScrollTop - target.scrollTop) <= scrollAccuracy
           if (target.scrollTop === 0) {
             window.scrollTo(0, 0)
-          } else if (target.scrollTop === target.scrollHeight - target.offsetHeight) {
+          } else if (isScrolledToBottom) {
             window.scrollTo(0, 2)
           } else {
             window.scrollTo(0, 1)
