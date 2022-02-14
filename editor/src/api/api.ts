@@ -133,6 +133,11 @@ class SeabassApi {
       textColor: options.textColor,
       highlightColor: options.highlightColor
     })
+
+    if (options.isDarkTheme === undefined) {
+      return
+    }
+
     this._editorPreferences = {
       isDarkTheme: options.isDarkTheme
     }
