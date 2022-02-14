@@ -36,6 +36,7 @@ export default class Editor {
   _isTerminal: boolean
   _editor: EditorView
   _savedContentHash?: string
+  _isOskVisible: boolean
   _isReadOnly: boolean
   _langCompartment: Compartment
   _readOnlyCompartment: Compartment
@@ -54,6 +55,7 @@ export default class Editor {
     this._langCompartment = new Compartment()
     this._themeCompartment = new Compartment()
     this._savedContentHash = undefined
+    this._isOskVisible = false
     this._isReadOnly = options.isReadOnly ?? false
     this._editor = new EditorView({
       state: EditorState.create({
@@ -128,6 +130,11 @@ export default class Editor {
     undo({ state: this._editor.state, dispatch: this._editor.dispatch })
   }
 
+  oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
+    this._isOskVisible = isVisible
+    this._resizeScrollableArea()
+  }
+
   toggleReadOnly (): void {
     this._isReadOnly = !this._isReadOnly
     this._editor.dispatch({
@@ -194,6 +201,11 @@ export default class Editor {
 
   _resizeScrollableArea (): void {
     const scrollerElem = this._editorElem.querySelector('.cm-scroller') as HTMLElement
+    if (this._isOskVisible) {
+      document.body.style.bottom = '0'
+      return
+    }
+
     document.body.style.bottom = scrollerElem.scrollHeight > scrollerElem.offsetHeight
       ? '-2px'
       : '0'

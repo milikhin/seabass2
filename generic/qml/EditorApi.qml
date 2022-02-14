@@ -119,6 +119,12 @@ QtObject {
       })
     }
 
+    function oskVisibilityChanged(isVisible) {
+      postMessage('oskVisibilityChanged', {
+        isVisible: isVisible
+      })
+    }
+
     /**
      * Request editor to save file at the `filePath` (editor will reply with a message containing file content)
      * @returns {undefined}

@@ -37,11 +37,11 @@
         Sailfish WebView is used to render editor instead of QtWebKit
       </li>
       <li>
-        Codemirror v6 replaces Ace as text editor component
+        Codemirror replaces Ace as text editor component
       </li>
     </ul>
     <p>
-      The changes result in much better application performance, but also have a few side effects:
+      The changes result in much better application performance overall, but have a few side effects:
     </p>
     <ul>
       <li>
@@ -49,10 +49,17 @@
         the list of supported languages has changed (see Codemirror docs for details)
       </li>
       <li>
-        autocompletion options and code snippets has changed
+        pulley menus don't work with on-screen keyboard opened
       </li>
       <li>
-        the release introduces support for text selection
+        autocompletion options and code snippets have changed
+      </li>
+      <li>
+        better support for text selection
+      </li>
+      <li>
+        there might be issues with editor rendering and cursor positioning in SFOS 4.3,
+        but I expect significant improvements in future WebView versions
       </li>
     </ul>
     <p>

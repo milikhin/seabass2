@@ -52,6 +52,7 @@ WebViewPage {
     WebViewFlickable {
         id: viewFlickable
         anchors.fill: parent
+        interactive: !Qt.inputMethod.visible
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
         webView.opacity: api.filePath ? 1 : 0.75
@@ -69,10 +70,14 @@ WebViewPage {
         webView.onLinkClicked: function(url) {
             Qt.openUrlExternally(url)
         }
+        Component.onCompleted: {
+            Qt.inputMethod.visibleChanged.connect(function() {
+                api.oskVisibilityChanged(Qt.inputMethod.visible)
+            })
+        }
 
         PullDownMenu {
             busy: api.isSaveInProgress
-            enabled: !Qt.inputMethod.visible
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
@@ -94,7 +99,6 @@ WebViewPage {
         }
 
         PushUpMenu {
-            enabled: !Qt.inputMethod.visible
             MenuItem {
                 text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
                 onClicked: toolbar.open = !toolbar.open
@@ -181,9 +185,6 @@ WebViewPage {
         const windowHeight = page.orientation & Orientation.PortraitMask
             ? Screen.height
             : Screen.width
-        const keyboardHeight = Qt.inputMethod.visible
-            ? Qt.inputMethod.keyboardRectangle.height
-            : 0
         return windowHeight - dockHeight
     }
 }
