@@ -54,7 +54,7 @@ export default class Editor {
     this._readOnlyCompartment = new Compartment()
     this._langCompartment = new Compartment()
     this._themeCompartment = new Compartment()
-    this._savedContentHash = undefined
+    this._savedContentHash = md5(options.content)
     this._isOskVisible = false
     this._isReadOnly = options.isReadOnly ?? false
     this._editor = new EditorView({
@@ -83,7 +83,9 @@ export default class Editor {
       }
     }, true)
     window.addEventListener('resize', this._onResize)
+
     this._resizeScrollableArea()
+    this._onChange()
   }
 
   destroy (): void {
@@ -174,21 +176,25 @@ export default class Editor {
             return
           }
 
-          const maxScrollTop = target.scrollHeight - target.offsetHeight
-          const scrollAccuracy = 1
-          const isScrolledToBottom = Math.abs(maxScrollTop - target.scrollTop) <= scrollAccuracy
-          if (target.scrollTop === 0) {
-            window.scrollTo(0, 0)
-          } else if (isScrolledToBottom) {
-            window.scrollTo(0, 2)
-          } else {
-            window.scrollTo(0, 1)
-          }
+          this._sfosMenuWorkaround(target)
         }
       })
     ]
 
     return extensions
+  }
+
+  _sfosMenuWorkaround (scrollerElem: HTMLElement): void {
+    const maxScrollTop = scrollerElem.scrollHeight - scrollerElem.offsetHeight
+    const scrollAccuracy = 1
+    const isScrolledToBottom = Math.abs(maxScrollTop - scrollerElem.scrollTop) <= scrollAccuracy
+    if (scrollerElem.scrollTop === 0) {
+      window.scrollTo(0, 0)
+    } else if (isScrolledToBottom) {
+      window.scrollTo(0, 2)
+    } else {
+      window.scrollTo(0, 1)
+    }
   }
 
   _onResize = (): void => {
@@ -208,6 +214,8 @@ export default class Editor {
     document.body.style.bottom = scrollerElem.scrollHeight > scrollerElem.offsetHeight
       ? '-2px'
       : '0'
+
+    this._sfosMenuWorkaround(scrollerElem)
   }
 
   async _initLanguageSupport (filePath: string): Promise<void> {

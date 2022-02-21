@@ -3,7 +3,6 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
-import Sailfish.Silica.Background 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
@@ -116,12 +115,11 @@ WebViewPage {
             height: Theme.itemSizeMedium
             focus: false
             open: false
-            background: ThemeBackground {
-                backgroundMaterial: 'glass'
+            background: Rectangle {
                 // use oneDark/white color depending on the theme
-                color: api.isDarkTheme ? '#282C34' : '#EFEFEF'
+                color: api.isDarkTheme ? '#21252B' : '#E0E0E0'
                 // default background doesn't have background when virtual keyboard is opened
-                // hence the workaround with ThemeBackground
+                // hence the workaround with Rectangle
             }
 
             onOpenChanged: {
