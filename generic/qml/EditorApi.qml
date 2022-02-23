@@ -6,8 +6,6 @@ import io.thp.pyotherside 1.4
 QtObject {
     id: api
 
-    // /path/to/file on the device
-    property string filePath
     // operate in readonly mode if true, in readwrite mode otherwise
     property bool forceReadOnly: false
     property bool hasChanges: false
@@ -47,7 +45,6 @@ QtObject {
         });
       }
     }
-
 
     signal appLoaded(var preferences)
     signal messageSent(string jsonPayload)
@@ -107,7 +104,6 @@ QtObject {
     }
 
     function openFile(filePath) {
-      api.filePath = filePath
       postMessage('openFile', {
         filePath: filePath
       })

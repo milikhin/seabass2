@@ -10,7 +10,7 @@ import '../generic' as GenericComponents
 
 WebViewPage {
     id: page
-    property string seabassFilePath
+    property string filePath
     property int headerHeight: 0
     allowedOrientations: Orientation.All
 
@@ -44,9 +44,6 @@ WebViewPage {
         onMessageSent: function(jsonPayload) {
             viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
-        onFilePathChanged: {
-            seabassFilePath = filePath
-        }
     }
 
     WebViewFlickable {
@@ -57,9 +54,9 @@ WebViewPage {
             color: api.backgroundColor
             height: childrenRect.height
             PageHeader {
-                title: api.filePath ? QmlJs.getFileName(api.filePath) : 'Seabass v0.7.2'
-                description: api.filePath
-                    ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(api.filePath), api.homeDir)
+                title: filePath ? QmlJs.getFileName(filePath) : 'Seabass v0.7.2'
+                description: filePath
+                    ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                     : 'Release notes'
             }
             Rectangle {
@@ -67,7 +64,7 @@ WebViewPage {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
-                height: api.filePath ? Theme.dp(1) : 0
+                height: filePath ? Theme.dp(1) : 0
             }
 
             Component.onCompleted: {
@@ -105,7 +102,7 @@ WebViewPage {
                 onClicked: {
                     api.hasChanges
                         ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
-                                filePath: api.filePath,
+                                filePath: filePath,
                                 acceptDestination: filePickerPage,
                                 acceptDestinationAction: PageStackAction.Replace
                             })
@@ -114,7 +111,7 @@ WebViewPage {
             }
             MenuItem {
                 enabled: !api.isSaveInProgress
-                visible: api.filePath && !api.isReadOnly
+                visible: filePath && !api.isReadOnly
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
                 onClicked: api.requestSaveFile()
             }
@@ -139,11 +136,11 @@ WebViewPage {
             focus: false
             open: false
             background: Rectangle {
+                // default background doesn't look good when virtual keyboard is opened
+                // hence the workaround with Rectangle
                 color: api.isDarkTheme
                        ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
                        : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
-                // default background doesn't look good when virtual keyboard is opened
-                // hence the workaround with Rectangle
             }
 
             onOpenChanged: {
@@ -181,11 +178,12 @@ WebViewPage {
                     return
                 }
 
-                if (api.filePath) {
-                    api.closeFile(api.filePath)
+                if (page.filePath) {
+                    api.closeFile(page.filePath)
                 }
                 api.loadFile(selectedContentProperties.filePath, false, true, false, Function.prototype)
                 api.openFile(selectedContentProperties.filePath)
+                page.filePath = selectedContentProperties.filePath
             }
         }
     }
