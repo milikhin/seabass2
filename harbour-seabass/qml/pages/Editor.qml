@@ -11,18 +11,19 @@ import '../generic' as GenericComponents
 WebViewPage {
     id: page
     property string seabassFilePath
+    property int headerHeight: 0
     allowedOrientations: Orientation.All
 
     GenericComponents.EditorApi {
         id: api
+        homeDir: StandardPaths.home
 
         // UI theme
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        backgroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 1)'
-            : 'rgba(255, 255, 255, 1)'
-        textColor: Theme.highlightColor
-        linkColor: Theme.primaryColor
+        backgroundColor: isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
+        // default text color from Codemirror
+        textColor: isDarkTheme ? QmlJs.colors.DARK_TEXT : QmlJs.colors.LIGHT_TEXT
+        linkColor: textColor
 
         // platform-specific i18n implementation for Generic API
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
@@ -51,10 +52,32 @@ WebViewPage {
     WebViewFlickable {
         id: viewFlickable
         anchors.fill: parent
+        header: Rectangle {
+            id: editorHeader
+            color: api.backgroundColor
+            height: childrenRect.height
+            PageHeader {
+                title: api.filePath ? QmlJs.getFileName(api.filePath) : 'Seabass v0.7.2'
+                description: api.filePath
+                    ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(api.filePath), api.homeDir)
+                    : 'Release notes'
+            }
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
+                height: api.filePath ? Theme.dp(1) : 0
+            }
+
+            Component.onCompleted: {
+                headerHeight = height
+            }
+        }
         interactive: !Qt.inputMethod.visible
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
-        webView.opacity: api.filePath ? 1 : 0.75
+        webView.opacity: 1
         webView.onViewInitialized: {
             webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
             webView.addMessageListener("webview:action")
@@ -116,9 +139,10 @@ WebViewPage {
             focus: false
             open: false
             background: Rectangle {
-                // use oneDark/white color depending on the theme
-                color: api.isDarkTheme ? '#21252B' : '#E0E0E0'
-                // default background doesn't have background when virtual keyboard is opened
+                color: api.isDarkTheme
+                       ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
+                       : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
+                // default background doesn't look good when virtual keyboard is opened
                 // hence the workaround with Rectangle
             }
 
@@ -183,6 +207,6 @@ WebViewPage {
         const windowHeight = page.orientation & Orientation.PortraitMask
             ? Screen.height
             : Screen.width
-        return windowHeight - dockHeight
+        return windowHeight - dockHeight - headerHeight
     }
 }

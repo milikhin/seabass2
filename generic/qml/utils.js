@@ -1,5 +1,23 @@
 .pragma library
 
+var colors = {
+  // oneDark theme's background color
+  DARK_BACKGROUND: '#282C34',
+  // default codemirror theme's background color
+  LIGHT_BACKGROUND: '#FFFFFF',
+  // oneDark theme's default text color
+  DARK_TEXT: '#ABB2BF',
+  // default codemirror theme's text color
+  LIGHT_TEXT: '#000000',
+  // slightly darker than onDark background
+  DARK_TOOLBAR_BACKGROUND: '#21252B',
+  // slightly darker than default background
+  LIGHT_TOOLBAR_BACKGROUND: '#E0E0E0',
+  DARK_DIVIDER: '#21252B',
+  // gutter's color from default theme
+  LIGHT_DIVIDER: '#DDDDDD',
+}
+
 function getDefaultFilePath() {
   return Qt.application.arguments[2] || ''
 }
