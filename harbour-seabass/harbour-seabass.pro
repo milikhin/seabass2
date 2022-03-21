@@ -15,6 +15,7 @@ TARGET = harbour-seabass
 CONFIG += sailfishapp_qml
 
 DISTFILES += qml/harbour-seabass.qml \
+    qml/components/TabsButton.qml \
     qml/components/Toolbar.qml \
     qml/generic/EditorApi.qml \
     qml/generic/TabsModel.qml \
@@ -44,3 +45,4 @@ CONFIG += sailfishapp_i18n
 # following TRANSLATIONS line. And also do not forget to
 # modify the localized app name in the the .desktop file.
 TRANSLATIONS += translations/harbour-seabass-de.ts
+TRANSLATIONS += translations/harbour-seabass-nl.ts

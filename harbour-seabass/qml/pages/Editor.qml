@@ -12,6 +12,8 @@ WebViewPage {
     id: page
     property string filePath
     property int headerHeight: 0
+    property bool isBottomMenuEnabled: true
+    property bool isTopMenuEnabled: true
     allowedOrientations: Orientation.All
 
     GenericComponents.EditorApi {
@@ -21,7 +23,6 @@ WebViewPage {
         // UI theme
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
         backgroundColor: isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
-        // default text color from Codemirror
         textColor: isDarkTheme ? QmlJs.colors.DARK_TEXT : QmlJs.colors.LIGHT_TEXT
         linkColor: textColor
 
@@ -44,6 +45,10 @@ WebViewPage {
         onMessageSent: function(jsonPayload) {
             viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
+        onScroll: function(state) {
+            isBottomMenuEnabled = state.isBottom
+            isTopMenuEnabled = state.isTop
+        }
     }
 
     WebViewFlickable {
@@ -54,10 +59,25 @@ WebViewPage {
             color: api.backgroundColor
             height: childrenRect.height
             PageHeader {
-                title: filePath ? QmlJs.getFileName(filePath) : 'Seabass v0.7.2'
+                page: page
+                title: filePath ? QmlJs.getFileName(filePath) : qsTr('Seabass v%1').arg('0.7.3')
                 description: filePath
                     ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                     : 'Release notes'
+                // TODO: Part of multiple tabs support implementation
+                // Component.onCompleted: {
+                //     const TabsButton = Qt.createComponent("../components/TabsButton.qml");
+                //     const btn = TabsButton.createObject(extraContent, {
+                //         text: '1',
+                //         visible: filePath !== '',
+                //         'anchors.verticalCenter': extraContent.verticalCenter,
+                //     })
+                //     page.filePathChanged.connect(function() {
+                //         btn.visible = filePath !== ''
+                //     })
+                //     leftMargin = btn.width + Theme.horizontalPageMargin * 2
+                //     extraContent.anchors.leftMargin = Theme.horizontalPageMargin
+                // }
             }
             Rectangle {
                 anchors.bottom: parent.bottom
@@ -71,7 +91,6 @@ WebViewPage {
                 headerHeight = height
             }
         }
-        interactive: !Qt.inputMethod.visible
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
         webView.opacity: 1
@@ -89,6 +108,7 @@ WebViewPage {
         webView.onLinkClicked: function(url) {
             Qt.openUrlExternally(url)
         }
+
         Component.onCompleted: {
             Qt.inputMethod.visibleChanged.connect(function() {
                 api.oskVisibilityChanged(Qt.inputMethod.visible)
@@ -97,6 +117,7 @@ WebViewPage {
 
         PullDownMenu {
             busy: api.isSaveInProgress
+            enabled: isTopMenuEnabled
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
@@ -118,6 +139,7 @@ WebViewPage {
         }
 
         PushUpMenu {
+            enabled: isBottomMenuEnabled
             MenuItem {
                 text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
                 onClicked: toolbar.open = !toolbar.open

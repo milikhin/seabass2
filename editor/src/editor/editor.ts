@@ -20,6 +20,7 @@ interface EditorOptions {
   isDarkTheme?: boolean
   isReadOnly?: boolean
   isTerminal?: boolean
+  log: (message: unknown) => void
   onChange: (state: SeabassEditorState) => void
 }
 
@@ -41,6 +42,7 @@ export default class Editor {
   _langCompartment: Compartment
   _readOnlyCompartment: Compartment
   _themeCompartment: Compartment
+  _log: (message: unknown) => void
   _onChange: (content?: string) => void
 
   /** Content-change event timeout (ms) */
@@ -64,6 +66,7 @@ export default class Editor {
       }),
       parent: this._editorElem
     })
+    this._log = options.log
     void this._initLanguageSupport(options.filePath)
 
     this._onChange = (content?: string) => {
@@ -73,18 +76,18 @@ export default class Editor {
         hasChanges: this._savedContentHash !== md5(text),
         hasUndo: undoDepth(this._editor.state) > 0,
         hasRedo: redoDepth(this._editor.state) > 0,
-        isReadOnly: this._isReadOnly
+        isReadOnly: this._isReadOnly,
+        ...this._getSfosMenuState()
       })
     }
     this._editorElem.addEventListener('keypress', evt => {
-      /* `Enter` is handled twice on SfOS 4.3, disable redundant keypress handler */
-      if (evt.keyCode === 13) {
+      /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
+      if (evt.keyCode === 8 || evt.keyCode === 13) {
         evt.preventDefault()
       }
     }, true)
     window.addEventListener('resize', this._onResize)
 
-    this._resizeScrollableArea()
     this._onChange()
   }
 
@@ -134,7 +137,7 @@ export default class Editor {
 
   oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
     this._isOskVisible = isVisible
-    this._resizeScrollableArea()
+    this._onChange()
   }
 
   toggleReadOnly (): void {
@@ -161,7 +164,6 @@ export default class Editor {
           return
         }
 
-        this._resizeScrollableArea()
         const text = this.getContent(update.state)
         this._onChange(text)
       }),
@@ -176,7 +178,7 @@ export default class Editor {
             return
           }
 
-          this._sfosMenuWorkaround(target)
+          this._onChange()
         }
       })
     ]
@@ -184,38 +186,25 @@ export default class Editor {
     return extensions
   }
 
-  _sfosMenuWorkaround (scrollerElem: HTMLElement): void {
+  _getSfosMenuState (): { isTop: boolean, isBottom: boolean } {
+    const scrollerElem = this._editorElem.querySelector('.cm-scroller') as HTMLElement
     const maxScrollTop = scrollerElem.scrollHeight - scrollerElem.offsetHeight
     const scrollAccuracy = 1
     const isScrolledToBottom = Math.abs(maxScrollTop - scrollerElem.scrollTop) <= scrollAccuracy
-    if (scrollerElem.scrollTop === 0) {
-      window.scrollTo(0, 0)
-    } else if (isScrolledToBottom) {
-      window.scrollTo(0, 2)
-    } else {
-      window.scrollTo(0, 1)
+    const isScrolledToTop = scrollerElem.scrollTop === 0
+    return {
+      isTop: isScrolledToTop,
+      isBottom: isScrolledToBottom
     }
   }
 
   _onResize = (): void => {
-    this._editor.dispatch({
-      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
-    })
-    this._resizeScrollableArea()
-  }
-
-  _resizeScrollableArea (): void {
-    const scrollerElem = this._editorElem.querySelector('.cm-scroller') as HTMLElement
     if (this._isOskVisible) {
-      document.body.style.bottom = '0'
-      return
+      this._editor.dispatch({
+        effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+      })
     }
-
-    document.body.style.bottom = scrollerElem.scrollHeight > scrollerElem.offsetHeight
-      ? '-2px'
-      : '0'
-
-    this._sfosMenuWorkaround(scrollerElem)
+    this._onChange()
   }
 
   async _initLanguageSupport (filePath: string): Promise<void> {

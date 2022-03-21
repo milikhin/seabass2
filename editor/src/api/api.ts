@@ -73,6 +73,7 @@ class SeabassApi {
       isReadOnly: data.isReadOnly,
       isTerminal: data.isTerminal,
       isDarkTheme: this._editorPreferences.isDarkTheme,
+      log: this._sendApiLogs,
       onChange: this._handleStateChanged
     })
     this._editors.set(data.filePath, editor)
@@ -192,6 +193,10 @@ class SeabassApi {
 
   _sendApiError (message: string): void {
     this._sendApiMessage({ action: 'error', data: { message } })
+  }
+
+  _sendApiLogs = (message: unknown): void => {
+    this._sendApiMessage({ action: 'log', data: { message } })
   }
 
   _sendApiMessage ({ action, data }: OutgoingMessage): void {
