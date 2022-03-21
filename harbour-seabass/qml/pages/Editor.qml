@@ -54,43 +54,43 @@ WebViewPage {
     WebViewFlickable {
         id: viewFlickable
         anchors.fill: parent
-        header: Rectangle {
-            id: editorHeader
-            color: api.backgroundColor
-            height: childrenRect.height
-            PageHeader {
-                page: page
-                title: filePath ? QmlJs.getFileName(filePath) : qsTr('Seabass v%1').arg('0.7.3')
-                description: filePath
-                    ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
-                    : 'Release notes'
-                // TODO: Part of multiple tabs support implementation
-                // Component.onCompleted: {
-                //     const TabsButton = Qt.createComponent("../components/TabsButton.qml");
-                //     const btn = TabsButton.createObject(extraContent, {
-                //         text: '1',
-                //         visible: filePath !== '',
-                //         'anchors.verticalCenter': extraContent.verticalCenter,
-                //     })
-                //     page.filePathChanged.connect(function() {
-                //         btn.visible = filePath !== ''
-                //     })
-                //     leftMargin = btn.width + Theme.horizontalPageMargin * 2
-                //     extraContent.anchors.leftMargin = Theme.horizontalPageMargin
-                // }
-            }
-            Rectangle {
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
-                height: filePath ? Theme.dp(1) : 0
-            }
+//        header: Rectangle {
+//            id: editorHeader
+//            color: api.backgroundColor
+//            height: childrenRect.height
+//            PageHeader {
+//                page: page
+//                title: filePath ? QmlJs.getFileName(filePath) : qsTr('Seabass v%1').arg('0.7.4')
+//                description: filePath
+//                    ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
+//                    : 'Release notes'
+//                // TODO: Part of multiple tabs support implementation
+//                // Component.onCompleted: {
+//                //     const TabsButton = Qt.createComponent("../components/TabsButton.qml");
+//                //     const btn = TabsButton.createObject(extraContent, {
+//                //         text: '1',
+//                //         visible: filePath !== '',
+//                //         'anchors.verticalCenter': extraContent.verticalCenter,
+//                //     })
+//                //     page.filePathChanged.connect(function() {
+//                //         btn.visible = filePath !== ''
+//                //     })
+//                //     leftMargin = btn.width + Theme.horizontalPageMargin * 2
+//                //     extraContent.anchors.leftMargin = Theme.horizontalPageMargin
+//                // }
+//            }
+//            Rectangle {
+//                anchors.bottom: parent.bottom
+//                anchors.left: parent.left
+//                anchors.right: parent.right
+//                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
+//                height: filePath ? Theme.dp(1) : 0
+//            }
 
-            Component.onCompleted: {
-                headerHeight = height
-            }
-        }
+//            Component.onCompleted: {
+//                headerHeight = height
+//            }
+//        }
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
         webView.opacity: 1
@@ -186,8 +186,8 @@ WebViewPage {
                 onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
                 onNavigateLineStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */ })
                 onNavigateLineEnd: api.postMessage('keyDown', { keyCode: 35 /* END */ })
-                onNavigateFileStart: api.postMessage('keyDown', { keyCode: 33 /* Page UP */ })
-                onNavigateFileEnd: api.postMessage('keyDown', { keyCode: 34 /* Page DOWN */ })
+                onNavigateFileStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */, ctrlKey: true })
+                onNavigateFileEnd: api.postMessage('keyDown', { keyCode: 35 /* END */, ctrlKey: true })
             }
         }
     }

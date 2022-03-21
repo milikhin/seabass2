@@ -1,16 +1,14 @@
 import md5 from 'blueimp-md5'
-import { EditorState, EditorView, basicSetup } from '@codemirror/basic-setup'
+import { EditorState, EditorView } from '@codemirror/basic-setup'
 import { oneDark } from '@codemirror/theme-one-dark'
-import { indentWithTab } from '@codemirror/commands'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/history'
-import { keymap, runScopeHandlers } from '@codemirror/view'
-import { Compartment, Extension, Facet } from '@codemirror/state'
+import { runScopeHandlers } from '@codemirror/view'
 import { RawEditorConfig, SeabassEditorPreferences } from '../types'
-import { getLanguageMode } from './language'
+import EditorSetup from './setup'
 import { SeabassEditorConfig, SeabassEditorState } from './types'
+import { parseEditorConfig } from './utils'
 
 import './editor.css'
-import { parseEditorConfig } from './utils'
 
 interface EditorOptions {
   content: string
@@ -26,6 +24,7 @@ interface EditorOptions {
 
 interface KeyDownOptions {
   keyCode: number
+  ctrlKey?: boolean
 }
 
 /**
@@ -36,64 +35,56 @@ export default class Editor {
   _editorConfig: SeabassEditorConfig
   _isTerminal: boolean
   _editor: EditorView
+  _editorSetup: EditorSetup
   _savedContentHash?: string
   _isOskVisible: boolean
   _isReadOnly: boolean
-  _langCompartment: Compartment
-  _readOnlyCompartment: Compartment
-  _themeCompartment: Compartment
   _log: (message: unknown) => void
-  _onChange: (content?: string) => void
+  _onStateChange: (content?: string) => void
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
 
   constructor (options: EditorOptions) {
+    this._log = options.log
+    this._onStateChange = this._getStateChangeHandler(options)
+    this._editorSetup = new EditorSetup({
+      isReadOnly: options.isReadOnly ?? false,
+      isDarkTheme: options.isDarkTheme ?? false,
+      onStateChange: this._onStateChange
+    })
+
+    // set initial editor state
+    this._editorConfig = parseEditorConfig(options.editorConfig)
+    this._isOskVisible = false
+    this._isTerminal = options.isTerminal ?? false
+    this._isReadOnly = options.isReadOnly ?? false
+    this._savedContentHash = md5(options.content)
+
+    // init editor
     this._editorElem = options.elem
     this._editorElem.classList.add('editor')
-    this._editorConfig = parseEditorConfig(options.editorConfig)
-    this._isTerminal = options.isTerminal ?? false
-    this._readOnlyCompartment = new Compartment()
-    this._langCompartment = new Compartment()
-    this._themeCompartment = new Compartment()
-    this._savedContentHash = md5(options.content)
-    this._isOskVisible = false
-    this._isReadOnly = options.isReadOnly ?? false
     this._editor = new EditorView({
       state: EditorState.create({
-        extensions: this._getExtensions(options),
+        extensions: this._editorSetup.extensions,
         doc: options.content
       }),
       parent: this._editorElem
     })
-    this._log = options.log
+    this._onStateChange()
     void this._initLanguageSupport(options.filePath)
 
-    this._onChange = (content?: string) => {
-      const text = content ?? this.getContent(this._editor.state)
-      options.onChange({
-        filePath: options.filePath,
-        hasChanges: this._savedContentHash !== md5(text),
-        hasUndo: undoDepth(this._editor.state) > 0,
-        hasRedo: redoDepth(this._editor.state) > 0,
-        isReadOnly: this._isReadOnly,
-        ...this._getSfosMenuState()
-      })
-    }
-    this._editorElem.addEventListener('keypress', evt => {
-      /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
-      if (evt.keyCode === 8 || evt.keyCode === 13) {
-        evt.preventDefault()
-      }
-    }, true)
-    window.addEventListener('resize', this._onResize)
-
-    this._onChange()
+    // init DOM event handlers (resize, scroll)
+    this._initDomEventHandlers()
   }
 
+  /**
+   * Destroys editor
+   */
   destroy (): void {
-    (this._editorElem.parentElement as HTMLElement).removeChild(this._editorElem)
-    window.removeEventListener('resize', this._onResize)
+    const editorParentElem = this._editorElem.parentElement as HTMLElement
+    editorParentElem.removeChild(this._editorElem)
+    this._removeDomEventHandlers()
   }
 
   /**
@@ -109,19 +100,23 @@ export default class Editor {
     return lines.join('\r\n')
   }
 
-  keyDown ({ keyCode }: KeyDownOptions): void {
-    const evt = new KeyboardEvent('', { keyCode })
+  /**
+   * Generates key down event
+   * @param {number} param0.keyCode - key code
+   */
+  keyDown ({ keyCode, ctrlKey }: KeyDownOptions): void {
+    const evt = new KeyboardEvent('', { keyCode, ctrlKey })
     runScopeHandlers(this._editor, evt, 'editor')
   }
 
   fileSaved ({ content }: { content: string }): void {
     this._savedContentHash = md5(content)
-    this._onChange()
+    this._onStateChange()
   }
 
   setPreferences ({ isDarkTheme }: SeabassEditorPreferences): void {
     this._editor.dispatch({
-      effects: this._themeCompartment.reconfigure(isDarkTheme
+      effects: this._editorSetup.themeCompartment.reconfigure(isDarkTheme
         ? oneDark
         : EditorView.baseTheme({}))
     })
@@ -137,53 +132,15 @@ export default class Editor {
 
   oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
     this._isOskVisible = isVisible
-    this._onChange()
   }
 
   toggleReadOnly (): void {
     this._isReadOnly = !this._isReadOnly
     this._editor.dispatch({
-      effects: this._readOnlyCompartment.reconfigure(
+      effects: this._editorSetup.readOnlyCompartment.reconfigure(
         EditorView.editable.of(!this._isReadOnly))
     })
-    this._onChange()
-  }
-
-  _getExtensions (options: EditorOptions): Extension[] {
-    const isReadOnly = options.isReadOnly ?? false
-    const extensions: Extension[] = [
-      basicSetup,
-      keymap.of([indentWithTab]),
-      this._themeCompartment.of(options.isDarkTheme === true
-        ? oneDark
-        : EditorView.baseTheme({})),
-      this._readOnlyCompartment.of(EditorView.editable.of(!isReadOnly)),
-      this._langCompartment.of(Facet.define().of(null)),
-      EditorView.updateListener.of(update => {
-        if (!update.docChanged) {
-          return
-        }
-
-        const text = this.getContent(update.state)
-        this._onChange(text)
-      }),
-      EditorView.domEventHandlers({
-        scroll: evt => {
-          if (evt.target === null || !('classList' in evt.target)) {
-            return
-          }
-
-          const target = evt.target as HTMLElement
-          if (!target.classList.contains('cm-scroller')) {
-            return
-          }
-
-          this._onChange()
-        }
-      })
-    ]
-
-    return extensions
+    this._onStateChange()
   }
 
   _getSfosMenuState (): { isTop: boolean, isBottom: boolean } {
@@ -198,23 +155,46 @@ export default class Editor {
     }
   }
 
+  _getStateChangeHandler (options: EditorOptions): (content?: string) => void {
+    return (content?: string) => {
+      const text = content ?? this.getContent(this._editor.state)
+      const menuState = this._getSfosMenuState()
+      options.onChange({
+        ...menuState,
+        filePath: options.filePath,
+        hasChanges: this._savedContentHash !== md5(text),
+        hasUndo: undoDepth(this._editor.state) > 0,
+        hasRedo: redoDepth(this._editor.state) > 0,
+        isReadOnly: this._isReadOnly
+      })
+    }
+  }
+
+  async _initLanguageSupport (filePath: string): Promise<void> {
+    const effects = await this._editorSetup.setupLanguageSupport(filePath)
+    this._editor.dispatch({ effects })
+  }
+
+  _initDomEventHandlers (): void {
+    this._editorElem.addEventListener('keypress', evt => {
+      /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
+      if (evt.keyCode === 8 || evt.keyCode === 13) {
+        evt.preventDefault()
+      }
+    }, true)
+    window.addEventListener('resize', this._onResize)
+  }
+
   _onResize = (): void => {
     if (this._isOskVisible) {
       this._editor.dispatch({
         effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
       })
     }
-    this._onChange()
+    this._onStateChange()
   }
 
-  async _initLanguageSupport (filePath: string): Promise<void> {
-    const langSupport = await getLanguageMode(filePath)
-    if (langSupport === undefined) {
-      return
-    }
-
-    this._editor.dispatch({
-      effects: this._langCompartment.reconfigure(langSupport)
-    })
+  _removeDomEventHandlers (): void {
+    window.removeEventListener('resize', this._onResize)
   }
 }

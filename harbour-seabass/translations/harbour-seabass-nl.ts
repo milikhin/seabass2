@@ -34,10 +34,6 @@
         <source>Unable to write the file. Please ensure that you have write access to %1</source>
         <translation>Het bestand kan niet worden weggeschreven. Zorg dat je schrijfrechten hebt op de %1</translation>
     </message>
-    <message>
-        <source>Seabass v%1</source>
-        <translation>Seabass v%1</translation>
-    </message>
 </context>
 <context>
     <name>ErrorDialog</name>
