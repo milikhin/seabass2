@@ -34,6 +34,10 @@
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Seabass v%1</source>
+        <translation type="unfinished">Seabass v%1</translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>

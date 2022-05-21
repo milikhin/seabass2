@@ -12,9 +12,26 @@ WebViewPage {
     id: page
     property string filePath
     property int headerHeight: 0
-    property bool isBottomMenuEnabled: true
-    property bool isTopMenuEnabled: true
+    property bool isMenuEnabled: true
     allowedOrientations: Orientation.All
+
+    onFilePathChanged: {
+        isMenuEnabled = false
+    }
+
+    onIsMenuEnabledChanged: {
+        if (isMenuEnabled) {
+            hint.start()
+        } else {
+            hint.stop()
+        }
+    }
+
+    background: Rectangle {
+        color: api.backgroundColor
+        height: page.height
+        width: page.width
+    }
 
     GenericComponents.EditorApi {
         id: api
@@ -45,54 +62,45 @@ WebViewPage {
         onMessageSent: function(jsonPayload) {
             viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
-        onScroll: function(state) {
-            isBottomMenuEnabled = state.isBottom
-            isTopMenuEnabled = state.isTop
-        }
     }
 
     WebViewFlickable {
         id: viewFlickable
         anchors.fill: parent
-//        header: Rectangle {
-//            id: editorHeader
-//            color: api.backgroundColor
-//            height: childrenRect.height
-//            PageHeader {
-//                page: page
-//                title: filePath ? QmlJs.getFileName(filePath) : qsTr('Seabass v%1').arg('0.7.4')
-//                description: filePath
-//                    ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
-//                    : 'Release notes'
-//                // TODO: Part of multiple tabs support implementation
-//                // Component.onCompleted: {
-//                //     const TabsButton = Qt.createComponent("../components/TabsButton.qml");
-//                //     const btn = TabsButton.createObject(extraContent, {
-//                //         text: '1',
-//                //         visible: filePath !== '',
-//                //         'anchors.verticalCenter': extraContent.verticalCenter,
-//                //     })
-//                //     page.filePathChanged.connect(function() {
-//                //         btn.visible = filePath !== ''
-//                //     })
-//                //     leftMargin = btn.width + Theme.horizontalPageMargin * 2
-//                //     extraContent.anchors.leftMargin = Theme.horizontalPageMargin
-//                // }
-//            }
-//            Rectangle {
-//                anchors.bottom: parent.bottom
-//                anchors.left: parent.left
-//                anchors.right: parent.right
-//                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
-//                height: filePath ? Theme.dp(1) : 0
-//            }
+        header: PageHeader {
+            page: page
+            title: filePath ? QmlJs.getFileName(filePath) : qsTr('Seabass v%1').arg('0.8.0')
+            description: filePath
+                ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
+                : 'Release notes'
 
-//            Component.onCompleted: {
-//                headerHeight = height
-//            }
-//        }
+            Component.onCompleted: {
+                headerHeight = height
+                // TODO: Part of multiple tabs support experiments
+                // const TabsButton = Qt.createComponent("../components/TabsButton.qml");
+                // const btn = TabsButton.createObject(extraContent, {
+                //     text: '1',
+                //     visible: filePath !== '',
+                //     'anchors.verticalCenter': extraContent.verticalCenter,
+                // })
+                // page.filePathChanged.connect(function() {
+                //     btn.visible = filePath !== ''
+                // })
+                // leftMargin = btn.width + Theme.paddingMedium * 2
+                // extraContent.anchors.leftMargin = Theme.paddingMedium
+            }
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
+                height: filePath ? Theme.dp(1) : 0
+            }
+        }
+
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
+
         webView.opacity: 1
         webView.onViewInitialized: {
             webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
@@ -117,7 +125,7 @@ WebViewPage {
 
         PullDownMenu {
             busy: api.isSaveInProgress
-            enabled: isTopMenuEnabled
+            visible: isMenuEnabled
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
@@ -134,19 +142,25 @@ WebViewPage {
                 enabled: !api.isSaveInProgress
                 visible: filePath && !api.isReadOnly
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
-                onClicked: api.requestSaveFile()
+                onClicked: {
+                    api.requestSaveFile()
+                }
             }
         }
 
         PushUpMenu {
-            enabled: isBottomMenuEnabled
+            visible: isMenuEnabled
             MenuItem {
                 text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
-                onClicked: toolbar.open = !toolbar.open
+                onClicked: {
+                    toolbar.open = !toolbar.open
+                }
             }
             MenuItem {
                 text: qsTr('About')
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("About.qml"))
+                }
             }
         }
 
@@ -189,6 +203,40 @@ WebViewPage {
                 onNavigateFileStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */, ctrlKey: true })
                 onNavigateFileEnd: api.postMessage('keyDown', { keyCode: 35 /* END */, ctrlKey: true })
             }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            visible: isMenuEnabled
+        }
+
+
+        Rectangle {
+            visible: filePath !== ''
+            anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: Theme.paddingMedium
+            anchors.rightMargin: Theme.paddingMedium
+            width: childrenRect.width
+            height: childrenRect.height
+            color: api.isDarkTheme
+                ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
+                : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
+            radius: Theme.dp(2)
+
+            Button {
+                icon.source: "image://theme/icon-m-gesture"
+                onClicked: isMenuEnabled = !isMenuEnabled
+                icon.color: isMenuEnabled ? Theme.highlightColor : Theme.primaryColor
+                backgroundColor: Theme.rgba(Theme.highlightBackgroundColor,
+                    isMenuEnabled ? Theme.highlightBackgroundOpacity : 0)
+                border.color: Theme.highlightBackgroundColor
+            }
+        }
+
+        TouchInteractionHint {
+            id: hint
+            direction: TouchInteraction.Down
         }
     }
 

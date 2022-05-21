@@ -59,7 +59,6 @@ export default class Editor {
     this._isOskVisible = false
     this._isTerminal = options.isTerminal ?? false
     this._isReadOnly = options.isReadOnly ?? false
-    this._savedContentHash = md5(options.content)
 
     // init editor
     this._editorElem = options.elem
@@ -71,10 +70,11 @@ export default class Editor {
       }),
       parent: this._editorElem
     })
+    this._savedContentHash = md5(this.getContent())
     this._onStateChange()
     void this._initLanguageSupport(options.filePath)
 
-    // init DOM event handlers (resize, scroll)
+    // init DOM event handlers (resize, keypress)
     this._initDomEventHandlers()
   }
 
@@ -91,8 +91,8 @@ export default class Editor {
    * Returns editor content for the given file
    * @returns {string|undefined} - file content
    */
-  getContent (state: EditorState = this._editor.state): string {
-    const lines = state.doc.toJSON()
+  getContent (): string {
+    const lines = this._editor.state.doc.toJSON()
     if (lines[lines.length - 1] !== '') {
       lines.push('')
     }
@@ -143,24 +143,10 @@ export default class Editor {
     this._onStateChange()
   }
 
-  _getSfosMenuState (): { isTop: boolean, isBottom: boolean } {
-    const scrollerElem = this._editorElem.querySelector('.cm-scroller') as HTMLElement
-    const maxScrollTop = scrollerElem.scrollHeight - scrollerElem.offsetHeight
-    const scrollAccuracy = 1
-    const isScrolledToBottom = Math.abs(maxScrollTop - scrollerElem.scrollTop) <= scrollAccuracy
-    const isScrolledToTop = scrollerElem.scrollTop === 0
-    return {
-      isTop: isScrolledToTop,
-      isBottom: isScrolledToBottom
-    }
-  }
-
   _getStateChangeHandler (options: EditorOptions): (content?: string) => void {
     return (content?: string) => {
-      const text = content ?? this.getContent(this._editor.state)
-      const menuState = this._getSfosMenuState()
+      const text = content ?? this.getContent()
       options.onChange({
-        ...menuState,
         filePath: options.filePath,
         hasChanges: this._savedContentHash !== md5(text),
         hasUndo: undoDepth(this._editor.state) > 0,

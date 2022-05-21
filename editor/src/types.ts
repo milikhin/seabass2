@@ -1,3 +1,4 @@
+/** EditorConfig options (parsed by python lib) */
 export interface RawEditorConfig {
   indent_size?: number
   tab_width?: number
