@@ -3,6 +3,7 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
+import Sailfish.WebEngine 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
@@ -42,6 +43,7 @@ WebViewPage {
         backgroundColor: isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
         textColor: isDarkTheme ? QmlJs.colors.DARK_TEXT : QmlJs.colors.LIGHT_TEXT
         linkColor: textColor
+        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
 
         // platform-specific i18n implementation for Generic API
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
@@ -208,6 +210,11 @@ WebViewPage {
         MouseArea {
             anchors.fill: parent
             visible: isMenuEnabled
+            onClicked: {
+                if (filePath !== '') {
+                    isMenuEnabled = false
+                }
+            }
         }
 
 
@@ -275,6 +282,6 @@ WebViewPage {
         const windowHeight = page.orientation & Orientation.PortraitMask
             ? Screen.height
             : Screen.width
-        return windowHeight - dockHeight - headerHeight
+        return windowHeight - dockHeight
     }
 }

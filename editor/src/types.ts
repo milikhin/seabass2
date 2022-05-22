@@ -14,10 +14,14 @@ export interface SeabassEditorPreferences {
   // useWrapMode: boolean
 }
 
-export interface SeabassPreferenes extends SeabassEditorPreferences {
+export interface SeabassThemePreferences extends SeabassEditorPreferences {
   backgroundColor: string
   highlightColor: string
   textColor: string
+  verticalHtmlOffset: number
+}
+
+export interface SeabassPreferences {
   isSailfishToolbarOpened?: boolean
 }
 

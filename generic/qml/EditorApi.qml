@@ -26,6 +26,7 @@ QtObject {
     property string foregroundTextColor: textColor
     property string homeDir
     property int fontSize: 12
+    property int verticalHtmlOffset: 0
     property bool useWrapMode: true
 
     readonly property var py: Python {
@@ -58,6 +59,7 @@ QtObject {
         textColorChanged.connect(loadTheme)
         fontSizeChanged.connect(loadTheme)
         useWrapModeChanged.connect(loadTheme)
+        verticalHtmlOffsetChanged.connect(loadTheme)
     }
 
     /**
@@ -155,7 +157,7 @@ QtObject {
     }
 
     function loadTheme() {
-        postMessage('setPreferences', {
+        postMessage('setTheme', {
             isDarkTheme: isDarkTheme,
             backgroundColor: backgroundColor,
             borderColor: borderColor,
@@ -165,6 +167,7 @@ QtObject {
             textColor: textColor,
             fontSize: fontSize,
             useWrapMode: useWrapMode,
+            verticalHtmlOffset: verticalHtmlOffset
         })
     }
 

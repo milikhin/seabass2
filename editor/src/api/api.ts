@@ -6,7 +6,8 @@ import { InvalidArgError, NotFoundError } from '../errors'
 import TabsController from '../tabs'
 import {
   SavedSeabassPreferences,
-  SeabassPreferenes,
+  SeabassPreferences,
+  SeabassThemePreferences,
   TabActionPayload
 } from '../types'
 import { setWelcomeScreenColors } from './theme'
@@ -116,28 +117,34 @@ class SeabassApi {
    * Set editor preferences
    *
    * @param {Object} options - options to set
-   * @param {string} options.backgroundColor - theme color (background)
-   * @param {string} options.highlightColor - theme color (text highlight)
-   * @param {string} options.textColor - theme color (text)
-   * @param {boolean} [options.isDarkTheme] - `true` to set dark theme, `false` to set light theme
    * @param {boolean} [options.isSailfishToolbarOpened]
    * @returns {undefined}
    */
-  _apiOnSetPreferences (options: SeabassPreferenes): void {
+  _apiOnSetPreferences (options: SeabassPreferences): void {
     if (options.isSailfishToolbarOpened !== undefined) {
       window.localStorage.setItem('sailfish__isToolbarOpened',
         options.isSailfishToolbarOpened.toString())
     }
+  }
 
+  /**
+   * Set editor theme
+   *
+   * @param {Object} options - options to set
+   * @param {string} options.backgroundColor - theme color (background)
+   * @param {string} options.highlightColor - theme color (text highlight)
+   * @param {string} options.textColor - theme color (text)
+   * @param {boolean} [options.isDarkTheme] - `true` to set dark theme, `false` to set light theme
+   * @param {int} [options.verticalHtmlOffset] - webview top offset
+   * @returns {undefined}
+   */
+  _apiOnSetTheme (options: SeabassThemePreferences): void {
     setWelcomeScreenColors({
       backgroundColor: options.backgroundColor,
       textColor: options.textColor,
       highlightColor: options.highlightColor
     })
-
-    if (options.isDarkTheme === undefined) {
-      return
-    }
+    document.documentElement.style.bottom = `${options.verticalHtmlOffset}px`
 
     this._editorPreferences = {
       isDarkTheme: options.isDarkTheme
