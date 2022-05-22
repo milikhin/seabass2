@@ -1,7 +1,7 @@
 import md5 from 'blueimp-md5'
 import { EditorState, EditorView } from '@codemirror/basic-setup'
 import { oneDark } from '@codemirror/theme-one-dark'
-import { undoDepth, redoDepth, undo, redo } from '@codemirror/history'
+import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
 import { runScopeHandlers } from '@codemirror/view'
 import { RawEditorConfig, SeabassEditorPreferences } from '../types'
 import EditorSetup from './setup'

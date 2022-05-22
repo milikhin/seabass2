@@ -1,7 +1,7 @@
 import { EditorView, EditorState, basicSetup } from '@codemirror/basic-setup'
 import { Compartment, Extension, Facet, StateEffect } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
-import { indentWithTab } from '@codemirror/commands'
+import { history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { getLanguageMode } from './language'
 
@@ -25,7 +25,8 @@ export default class EditorSetup {
 
     this.extensions = [
       basicSetup,
-      keymap.of([indentWithTab]),
+      history(),
+      keymap.of([indentWithTab, ...historyKeymap]),
       this._getDefaultLangExtension(options),
       this._getDocChangeHandlerExtension(options),
       this._getDomEventHandlerExtension(options),
