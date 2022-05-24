@@ -10,7 +10,7 @@ Seabass is a code editor for mobile devices.
 Supported platforms:
 
 * Ubuntu Touch
-* Sailfish OS (proof of concept version, not actively developed)
+* Sailfish OS (proof of concept version)
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 

@@ -15,10 +15,11 @@ Item {
 
   readonly property var model: ListModel {
     Component.onCompleted: {
-      prevDirectory = directory
       directoryChanged.connect(reload)
       showDotDotChanged.connect(reload)
-      py.readyChanged.connect(load)
+      py.readyChanged.connect(function() {
+        load(true)
+      })
     }
   }
 
@@ -70,7 +71,7 @@ Item {
   function getPrintableDirPath() {
     return QmlJs.getPrintableDirPath(directory.toString(), homeDir)
   }
-  function load() {
+  function load(ignoreError) {
     if (!py.ready) {
       return
     }
@@ -80,6 +81,9 @@ Item {
         directory = prevDirectory
         // copy prevExpanded values
         expanded = [].concat(prevExpanded)
+        if (ignoreError) {
+          return;
+        }
         return errorOccured(error)
       }
       const hasDotDot = showDotDot && directory !== rootDirectory

@@ -52,29 +52,18 @@ Page {
         }
     }
 
-    Component.onCompleted: {
-        const tmpHtmlFile = StandardPaths.temporary + '/harbour-seabas__cached-index.html'
-        QmlJs.readFile(Qt.resolvedUrl('../html/index.html'), function(err, html) {
-            QmlJs.writeFile(tmpHtmlFile, html.replace(/\$\{DEVICE_SCALE\}/g, getDeviceScale()), function(err) {
-                if (err) {
-                    return displayError(err.message)
-                }
-
-                webView.url = tmpHtmlFile
-            })
-        })
-    }
-
     onOrientationChanged: fixResize()
 
     SilicaWebView {
         id: webView
+        url: '../html/index.html'
 
         anchors.top: page.top
         anchors.bottom: toolbar.open ? toolbar.top : page.bottom
         width: page.width
 
         experimental.transparentBackground: true
+        experimental.deviceWidth: getDeviceWidth()
         experimental.preferences.navigatorQtObjectEnabled: true
         experimental.onMessageReceived: {
             var msg = JSON.parse(message.data)
@@ -182,6 +171,17 @@ Page {
     }
 
     /**
+     * Returns HTML device-width scaled correctly for the current device
+     * @returns {int} - device width in CSS pixels
+     */
+    function getDeviceWidth() {
+        const deviceWidth = page.orientation === Orientation.Portrait
+            ? Screen.width
+            : Screen.height
+        return deviceWidth / Theme.pixelRatio / (540 / 320)
+    }
+
+    /**
      * Displays error message
      * @param {string} [errorMessage] - error message to display
      * @returns {undefined}
@@ -202,6 +202,7 @@ Page {
      * @returns {undefined}
      */
     function fixResize() {
+        webView.experimental.deviceWidth = getDeviceWidth()
         page.x = 1
         page.x = 0
     }

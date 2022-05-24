@@ -11,7 +11,11 @@
 <context>
     <name>Editor</name>
     <message>
-        <source>Save</source>
+        <source>Unable to read file. Please ensure that you have read access to the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to write the file. Please ensure that you have write access to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -23,15 +27,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to read file. Please ensure that you have read access to the %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to write the file. Please ensure that you have write access to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

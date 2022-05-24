@@ -44,6 +44,13 @@ const sailfishConfig = {
         {
           from: './generic/py-backend',
           to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
+        },
+        {
+          from: './generic/py-libs',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-libs'),
+          globOptions: {
+            ignore: '**/.git'
+          }
         }
       ]
     })

@@ -57,7 +57,7 @@ CustomComponents.ToolBar {
     onClicked: openTerminalApp()
   }
   CustomComponents.ToolButton {
-    iconName: "search"
+    iconName: "toolkit_input-search"
     enabled: searchEnabled
     onClicked: search()
   }
