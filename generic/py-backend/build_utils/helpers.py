@@ -45,6 +45,12 @@ def get_launch_cmd(app_name, developer_name):
     return 'bash -c "ubuntu-app-launch {0}.{1}_{0} &"'\
         .format(app_name, developer_name)
 
+def get_install_python_cmd():
+    """Returns cmd string to install python 3.6"""
+    return 'libertine-launch -i {}\
+            bash -c "PYENV_GIT_TAG=v3.6.15 curl https://pyenv.run | bash"'\
+        .format(CONTAINER_ID)
+
 def get_update_pip_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
     return 'libertine-launch -i {} \
@@ -58,7 +64,7 @@ def get_install_clickable_cmd():
     commit hash is updated manually
     """
     return 'libertine-launch -i {} \
-            python3.6 -m pip install --user --upgrade git+https://gitlab.com/clickable/clickable.git@312b644c485844691258505dd6fd2b837639b2d7'\
+            python3.6 -m pip install --user --upgrade clickable-ut==7'\
         .format(CONTAINER_ID)
 
 def get_run_clickable_cmd(config_file):
