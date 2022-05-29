@@ -73,7 +73,7 @@ WebViewPage {
             page: page
             title: filePath
                 ? ((api.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                : qsTr('Seabass v%1').arg('0.8.0')
+                : qsTr('Seabass v%1').arg('0.9.0')
             description: filePath
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : 'Release notes'
