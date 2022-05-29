@@ -1,8 +1,7 @@
 /* globals addEventListener, sendAsyncMessage */
 // register `QT` <--> `Web page` interaction
-addEventListener('DOMContentLoaded', function (aEvent) {
-  aEvent.originalTarget.addEventListener('framescript:action',
-    function (aEvent) {
-      sendAsyncMessage('webview:action', aEvent.detail)
-    })
+addEventListener('DOMContentLoaded', function (loadEvt) {
+  loadEvt.originalTarget.addEventListener('framescript:action', function (evt) {
+    sendAsyncMessage('webview:action', evt.detail)
+  })
 })

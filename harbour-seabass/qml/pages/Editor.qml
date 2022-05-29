@@ -51,7 +51,7 @@ WebViewPage {
 
         // API methods
         onAppLoaded: function (data) {
-            toolbar.open = data.isSailfishToolbarOpened || false
+            toolbar.open = data.isToolbarOpened || false
         }
         onErrorOccured: function (message) {
             displayError(message)
@@ -71,7 +71,9 @@ WebViewPage {
         anchors.fill: parent
         header: PageHeader {
             page: page
-            title: filePath ? QmlJs.getFileName(filePath) : qsTr('Seabass v%1').arg('0.8.0')
+            title: filePath
+                ? ((api.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
+                : qsTr('Seabass v%1').arg('0.8.0')
             description: filePath
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : 'Release notes'
@@ -145,7 +147,7 @@ WebViewPage {
                 visible: filePath && !api.isReadOnly
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
                 onClicked: {
-                    api.requestSaveFile()
+                    api.requestFileSave(filePath)
                 }
             }
         }
@@ -182,8 +184,8 @@ WebViewPage {
             }
 
             onOpenChanged: {
-                api.postMessage('setPreferences', {
-                    isSailfishToolbarOpened: open
+                api.postMessage('setSailfishPreferences', {
+                    isToolbarOpened: open
                 })
             }
 

@@ -3,7 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const commonConfig = {
-  entry: './editor/src/index.js',
+  entry: './editor/src/index.ts',
   module: {
     rules: [
       {

@@ -13,6 +13,7 @@ interface ExtensionsOptions {
 }
 
 export default class EditorSetup {
+  hasChanges: boolean
   readOnlyCompartment: Compartment
   langCompartment: Compartment
   themeCompartment: Compartment
@@ -22,6 +23,7 @@ export default class EditorSetup {
     this.readOnlyCompartment = new Compartment()
     this.langCompartment = new Compartment()
     this.themeCompartment = new Compartment()
+    this.hasChanges = false
 
     this.extensions = [
       basicSetup,
@@ -50,8 +52,8 @@ export default class EditorSetup {
         return
       }
 
-      const text = this._getContent(update.state)
-      options.onStateChange(text)
+      this.hasChanges = true
+      options.onStateChange()
     })
   }
 

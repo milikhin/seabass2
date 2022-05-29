@@ -1,238 +1,106 @@
-/* globals localStorage */
-
-import Editor from '../editor/editor'
-import { SeabassEditorState } from '../editor/types'
-import { InvalidArgError, NotFoundError } from '../errors'
-import TabsController from '../tabs'
+import { InputPreferences, SeabassSailfishPreferences } from '../app/model'
+import { KeyDownOptions } from '../editor/editor'
 import {
-  SavedSeabassPreferences,
-  SeabassPreferences,
-  SeabassThemePreferences,
-  TabActionPayload
-} from '../types'
-import { setWelcomeScreenColors } from './theme'
-import {
-  API_BACKEND,
-  ApiOptions,
-  LoadFileOptions,
-  IncomingMessage,
-  OutgoingMessage
-} from './types'
+  API_TRANSPORT,
+  FileActionOptions,
+  FileLoadOptions
+} from './api-interface'
 
-/** `postSeabassApiMessage` global function is used to communicate with UI */
-declare global {
-  interface Window {
-    postSeabassApiMessage: <T>(msg: IncomingMessage<T>) => void
-  }
+export interface IncomingMessageData {
+  closeFile: FileActionOptions
+  fileSaved: undefined
+  keyDown: KeyDownOptions
+  loadFile: FileLoadOptions
+  openFile: FileActionOptions
+  oskVisibilityChanged: undefined
+  redo: undefined
+  requestFileSave: FileActionOptions
+  setPreferences: InputPreferences
+  setSailfishPreferences: SeabassSailfishPreferences
+  undo: undefined
+  toggleReadOnly: undefined
 }
 
-class SeabassApi {
-  /** Wecome notes root elem */
-  _welcomeElem: HTMLElement
-  /** Tabs container elem */
-  _tabsRootElem: HTMLElement
+export interface IncomingMessage<T extends keyof IncomingMessageData> {
+  action: T
+  data: IncomingMessageData[T]
+}
+
+interface OutgoingMessage {
+  action: string
+  data: unknown
+}
+
+interface ApiOptions {
+  /** Platform-specific API backend */
+  transport: API_TRANSPORT
+}
+
+type SeabassApiEvent<T extends keyof IncomingMessageData> = CustomEvent<IncomingMessageData[T]>
+type SeabassApiEventListener <T extends keyof IncomingMessageData> = ((evt: SeabassApiEvent<T>) => void) |
+({ handleEvent: (evt: SeabassApiEvent<T>) => void }) | null
+
+export default class SeabassApi extends EventTarget {
   /** Platform-specific API backend name */
-  _apiBackend: API_BACKEND
-  /** Tabs controller instance */
-  _tabsController: TabsController
-  /** Opened editors */
-  _editors: Map<string, Editor>
-  _editorPreferences: {
-    isDarkTheme: boolean
+  _transport: API_TRANSPORT
+
+  EVENTS = new Set([
+    'closeFile',
+    'fileSaved',
+    'keyDown',
+    'loadFile',
+    'oskVisibilityChanged',
+    'openFile',
+    'redo',
+    'requestFileSave',
+    'setPreferences',
+    'setSailfishPreferences',
+    'toggleReadOnly',
+    'undo'
+  ])
+
+  constructor ({ transport }: ApiOptions) {
+    super()
+    this._transport = transport
+
+    window.postSeabassApiMessage = this._onMessage.bind(this)
   }
 
-  constructor ({ apiBackend, rootElem, welcomeElem }: ApiOptions) {
-    this._apiBackend = apiBackend
-    this._editors = new Map()
-    this._tabsController = new TabsController({ rootElem })
-    this._tabsRootElem = rootElem
-    this._welcomeElem = welcomeElem
-    this._editorPreferences = { isDarkTheme: false }
-
-    this._registerApiHandler()
-    this._sendApiMessage({ action: 'appLoaded', data: this._getSavedPreferences() })
-  }
-
-  /**
-   * 'loadFile' command handler: intended to load given content to the editor
-   * @param {string} data.filePath - /path/to/file - used as file ID
-   * @param {string} data.content - editor content
-   * @param {boolean} [data.readOnly=false] - read only flag
-   * @param {boolean} [data.isTerminal=false] - terminal mode flag
-   * @param {Object} [data.editorConfig={}] - .editorConfig values
-   * @returns {undefined}
-   */
-  _apiOnLoadFile (data: LoadFileOptions): void {
-    this._showTabs()
-
-    const tab = this._tabsController.create({ id: data.filePath })
-    const editor = new Editor({
-      content: data.content,
-      editorConfig: data.editorConfig,
-      elem: tab.elem,
-      filePath: data.filePath,
-      isReadOnly: data.isReadOnly,
-      isTerminal: data.isTerminal,
-      isDarkTheme: this._editorPreferences.isDarkTheme,
-      log: this._sendApiLogs,
-      onChange: this._handleStateChanged
-    })
-    this._editors.set(data.filePath, editor)
-    tab.onClose = () => {
-      this._editors.delete(data.filePath)
-      editor.destroy()
-    }
-  }
-
-  /**
-   * 'requestFileSave' command handler: request file saving operation
-   * @param {string} filePath - /path/to/file - full path, used as file ID
-   * @returns {undefined}
-   */
-  _apiOnRequestSaveFile ({ filePath }: TabActionPayload): void {
-    const editor = this._editors.get(filePath)
-    if (editor === undefined) {
-      throw new InvalidArgError(`File ${filePath} is not opened`)
+  _onMessage ({ action, data }: IncomingMessage<keyof IncomingMessageData>): void {
+    if (!this.EVENTS.has(action)) {
+      return this.sendLogs(`Event ${action} is not supported`)
     }
 
-    this._sendApiMessage({
-      action: 'saveFile',
-      data: {
-        content: editor.getContent(),
-        filePath
-      }
-    })
+    const evt = new CustomEvent(action, { detail: data })
+    this.dispatchEvent(evt)
   }
 
-  /**
-   * 'requestFileSave' command handler: intended to request and save file content
-   * @param {string} filePath - /path/to/file - used as file ID
-   * @returns {undefined}
-   */
-  _apiOnCloseFile ({ filePath }: TabActionPayload): void {
-    this._tabsController.close(filePath)
+  addEventListener<T extends keyof IncomingMessageData> (type: T,
+    callback: SeabassApiEventListener<T>, options?: EventListenerOptions): void {
+    super.addEventListener(type, callback as EventListenerOrEventListenerObject | null, options)
   }
 
-  /**
-   * Set editor preferences
-   *
-   * @param {Object} options - options to set
-   * @param {boolean} [options.isSailfishToolbarOpened]
-   * @returns {undefined}
-   */
-  _apiOnSetPreferences (options: SeabassPreferences): void {
-    if (options.isSailfishToolbarOpened !== undefined) {
-      window.localStorage.setItem('sailfish__isToolbarOpened',
-        options.isSailfishToolbarOpened.toString())
-    }
+  sendError (message: string): void {
+    this.send({ action: 'error', data: { message } })
   }
 
-  /**
-   * Set editor theme
-   *
-   * @param {Object} options - options to set
-   * @param {string} options.backgroundColor - theme color (background)
-   * @param {string} options.highlightColor - theme color (text highlight)
-   * @param {string} options.textColor - theme color (text)
-   * @param {boolean} [options.isDarkTheme] - `true` to set dark theme, `false` to set light theme
-   * @param {int} [options.verticalHtmlOffset] - webview top offset
-   * @returns {undefined}
-   */
-  _apiOnSetTheme (options: SeabassThemePreferences): void {
-    setWelcomeScreenColors({
-      backgroundColor: options.backgroundColor,
-      textColor: options.textColor,
-      highlightColor: options.highlightColor
-    })
-    document.documentElement.style.bottom = `${options.verticalHtmlOffset}px`
-
-    this._editorPreferences = {
-      isDarkTheme: options.isDarkTheme
-    }
-    for (const editor of this._editors.values()) {
-      editor.setPreferences(this._editorPreferences)
-    }
+  sendLogs = (message: unknown): void => {
+    this.send({ action: 'log', data: { message } })
   }
 
-  _getSavedPreferences (): SavedSeabassPreferences {
-    const isSailfishToolbarOpened = localStorage.getItem('sailfish__isToolbarOpened') === 'true'
-    return { isSailfishToolbarOpened }
-  }
-
-  _handleStateChanged = (state: SeabassEditorState): void => {
-    this._sendApiMessage({
-      action: 'stateChanged',
-      data: state
-    })
-  }
-
-  _onMessage = <T>({ action, data }: IncomingMessage<T>): unknown => {
-    type ApiActionHandler = (options: T) => void
-
-    try {
-      const apiMethod = `_apiOn${action.charAt(0).toUpperCase()}${action.slice(1)}`
-      const methodName = apiMethod as keyof SeabassApi
-      if (this[methodName] !== undefined) {
-        return (this[methodName] as ApiActionHandler)(data)
-      }
-
-      if (data.filePath === undefined) {
-        throw new Error(`'${action}' action is not supported`)
-      }
-
-      const editor = this._editors.get(data.filePath)
-      if (editor === undefined || typeof editor[action] !== 'function') {
-        throw new NotFoundError(`${data.filePath} is not opened`)
-      }
-
-      return (editor[action] as ApiActionHandler)(data)
-    } catch (err) {
-      if (err instanceof NotFoundError) {
-        return console.warn(err)
-      }
-      this._sendApiError((err as Error).message)
-    }
-  }
-
-  _registerApiHandler (): void {
-    window.postSeabassApiMessage = this._onMessage
-  }
-
-  _sendApiError (message: string): void {
-    this._sendApiMessage({ action: 'error', data: { message } })
-  }
-
-  _sendApiLogs = (message: unknown): void => {
-    this._sendApiMessage({ action: 'log', data: { message } })
-  }
-
-  _sendApiMessage ({ action, data }: OutgoingMessage): void {
+  send ({ action, data }: OutgoingMessage): void {
     const payload = JSON.stringify({ action, data })
-    switch (this._apiBackend) {
-      case API_BACKEND.SAILFISH_WEBVIEW: {
+    switch (this._transport) {
+      case API_TRANSPORT.SAILFISH_WEBVIEW: {
         const evt = new CustomEvent('framescript:action', {
           detail: { action, data }
         })
         document.dispatchEvent(evt)
         return
       }
-      case API_BACKEND.URL_HANDLER: {
+      case API_TRANSPORT.URL_HANDLER: {
         return window.location.assign(`http://seabass/${encodeURIComponent(payload)}`)
       }
     }
   }
-
-  _showWelcomeNote (): void {
-    this._welcomeElem.style.display = 'block'
-    this._tabsRootElem.style.display = 'none'
-  }
-
-  _showTabs (): void {
-    this._welcomeElem.style.display = 'none'
-    this._tabsRootElem.style.display = 'block'
-  }
-}
-
-export default function registerApi (options: ApiOptions): SeabassApi {
-  return new SeabassApi(options)
 }

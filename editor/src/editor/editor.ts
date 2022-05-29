@@ -1,9 +1,9 @@
-import md5 from 'blueimp-md5'
 import { EditorState, EditorView } from '@codemirror/basic-setup'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
 import { runScopeHandlers } from '@codemirror/view'
-import { RawEditorConfig, SeabassEditorPreferences } from '../types'
+import { RawEditorConfig } from '../api/api-interface'
+import { SeabassCommonPreferences } from '../app/model'
 import EditorSetup from './setup'
 import { SeabassEditorConfig, SeabassEditorState } from './types'
 import { parseEditorConfig } from './utils'
@@ -22,7 +22,7 @@ interface EditorOptions {
   onChange: (state: SeabassEditorState) => void
 }
 
-interface KeyDownOptions {
+export interface KeyDownOptions {
   keyCode: number
   ctrlKey?: boolean
 }
@@ -33,10 +33,8 @@ interface KeyDownOptions {
 export default class Editor {
   _editorElem: HTMLElement
   _editorConfig: SeabassEditorConfig
-  _isTerminal: boolean
   _editor: EditorView
   _editorSetup: EditorSetup
-  _savedContentHash?: string
   _isOskVisible: boolean
   _isReadOnly: boolean
   _log: (message: unknown) => void
@@ -57,7 +55,6 @@ export default class Editor {
     // set initial editor state
     this._editorConfig = parseEditorConfig(options.editorConfig)
     this._isOskVisible = false
-    this._isTerminal = options.isTerminal ?? false
     this._isReadOnly = options.isReadOnly ?? false
 
     // init editor
@@ -70,7 +67,6 @@ export default class Editor {
       }),
       parent: this._editorElem
     })
-    this._savedContentHash = md5(this.getContent())
     this._onStateChange()
     void this._initLanguageSupport(options.filePath)
 
@@ -110,11 +106,11 @@ export default class Editor {
   }
 
   fileSaved ({ content }: { content: string }): void {
-    this._savedContentHash = md5(content)
+    this._editorSetup.hasChanges = false
     this._onStateChange()
   }
 
-  setPreferences ({ isDarkTheme }: SeabassEditorPreferences): void {
+  setPreferences ({ isDarkTheme }: SeabassCommonPreferences): void {
     this._editor.dispatch({
       effects: this._editorSetup.themeCompartment.reconfigure(isDarkTheme
         ? oneDark
@@ -143,12 +139,11 @@ export default class Editor {
     this._onStateChange()
   }
 
-  _getStateChangeHandler (options: EditorOptions): (content?: string) => void {
-    return (content?: string) => {
-      const text = content ?? this.getContent()
+  _getStateChangeHandler (options: EditorOptions): () => void {
+    return () => {
       options.onChange({
         filePath: options.filePath,
-        hasChanges: this._savedContentHash !== md5(text),
+        hasChanges: this._editorSetup.hasChanges,
         hasUndo: undoDepth(this._editor.state) > 0,
         hasRedo: redoDepth(this._editor.state) > 0,
         isReadOnly: this._isReadOnly

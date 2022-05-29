@@ -128,9 +128,11 @@ QtObject {
      * Request editor to save file at the `filePath` (editor will reply with a message containing file content)
      * @returns {undefined}
      */
-    function requestSaveFile() {
+    function requestFileSave(filePath) {
         isSaveInProgress = true
-        postMessage('requestSaveFile')
+        postMessage('requestFileSave', {
+            filePath: filePath
+        })
     }
 
     /**
@@ -157,7 +159,7 @@ QtObject {
     }
 
     function loadTheme() {
-        postMessage('setTheme', {
+        postMessage('setPreferences', {
             isDarkTheme: isDarkTheme,
             backgroundColor: backgroundColor,
             borderColor: borderColor,
