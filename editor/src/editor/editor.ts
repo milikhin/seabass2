@@ -5,10 +5,17 @@ import { runScopeHandlers } from '@codemirror/view'
 import { RawEditorConfig } from '../api/api-interface'
 import { SeabassCommonPreferences } from '../app/model'
 import EditorSetup from './setup'
-import { SeabassEditorConfig, SeabassEditorState } from './types'
+import { SeabassEditorConfig } from './types'
 import { parseEditorConfig } from './utils'
 
 import './editor.css'
+
+export interface SeabassEditorState {
+  hasChanges: boolean
+  hasRedo: boolean
+  hasUndo: boolean
+  isReadOnly: boolean
+}
 
 interface EditorOptions {
   content: string
@@ -17,10 +24,13 @@ interface EditorOptions {
   filePath: string
   isDarkTheme?: boolean
   isReadOnly?: boolean
-  isTerminal?: boolean
-  log: (message: unknown) => void
-  onChange: (state: SeabassEditorState) => void
 }
+
+interface Events {
+  stateChange: CustomEvent<SeabassEditorState>
+}
+type EventListener <T extends keyof Events> = ((evt: Events[T]) => void) |
+({ handleEvent: (evt: Events[T]) => void }) | null
 
 export interface KeyDownOptions {
   keyCode: number
@@ -30,48 +40,51 @@ export interface KeyDownOptions {
 /**
  * Editor window
  */
-export default class Editor {
+export default class Editor extends EventTarget {
   _editorElem: HTMLElement
   _editorConfig: SeabassEditorConfig
   _editor: EditorView
-  _editorSetup: EditorSetup
+  _setup: EditorSetup
+  _initialState: EditorState
   _isOskVisible: boolean
-  _isReadOnly: boolean
-  _log: (message: unknown) => void
-  _onStateChange: (content?: string) => void
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
 
   constructor (options: EditorOptions) {
-    this._log = options.log
-    this._onStateChange = this._getStateChangeHandler(options)
-    this._editorSetup = new EditorSetup({
+    super()
+    // setup extensions
+    this._setup = new EditorSetup({
       isReadOnly: options.isReadOnly ?? false,
       isDarkTheme: options.isDarkTheme ?? false,
-      onStateChange: this._onStateChange
+      onChange: this._onChange.bind(this)
     })
 
     // set initial editor state
     this._editorConfig = parseEditorConfig(options.editorConfig)
+    this._initialState = EditorState.create({
+      extensions: this._setup.extensions,
+      doc: options.content
+    })
     this._isOskVisible = false
-    this._isReadOnly = options.isReadOnly ?? false
 
     // init editor
     this._editorElem = options.elem
     this._editorElem.classList.add('editor')
     this._editor = new EditorView({
-      state: EditorState.create({
-        extensions: this._editorSetup.extensions,
-        doc: options.content
-      }),
+      state: this._initialState,
       parent: this._editorElem
     })
-    this._onStateChange()
+    this._onChange()
     void this._initLanguageSupport(options.filePath)
 
     // init DOM event handlers (resize, keypress)
     this._initDomEventHandlers()
+  }
+
+  addEventListener<T extends keyof Events> (type: T,
+    callback: EventListener<T>, options?: EventListenerOptions): void {
+    super.addEventListener(type, callback as EventListenerOrEventListenerObject | null, options)
   }
 
   /**
@@ -81,6 +94,10 @@ export default class Editor {
     const editorParentElem = this._editorElem.parentElement as HTMLElement
     editorParentElem.removeChild(this._editorElem)
     this._removeDomEventHandlers()
+  }
+
+  dispatchEvent<T extends keyof Events> (event: Events[T]): boolean {
+    return super.dispatchEvent(event)
   }
 
   /**
@@ -105,14 +122,14 @@ export default class Editor {
     runScopeHandlers(this._editor, evt, 'editor')
   }
 
-  fileSaved ({ content }: { content: string }): void {
-    this._editorSetup.hasChanges = false
-    this._onStateChange()
+  fileSaved (): void {
+    this._initialState = this._editor.state
+    this._onChange()
   }
 
   setPreferences ({ isDarkTheme }: SeabassCommonPreferences): void {
     this._editor.dispatch({
-      effects: this._editorSetup.themeCompartment.reconfigure(isDarkTheme
+      effects: this._setup.themeCompartment.reconfigure(isDarkTheme
         ? oneDark
         : EditorView.baseTheme({}))
     })
@@ -131,28 +148,27 @@ export default class Editor {
   }
 
   toggleReadOnly (): void {
-    this._isReadOnly = !this._isReadOnly
+    const isReadOnly = this._editor.state.readOnly
     this._editor.dispatch({
-      effects: this._editorSetup.readOnlyCompartment.reconfigure(
-        EditorView.editable.of(!this._isReadOnly))
+      effects: this._setup.readOnlyCompartment.reconfigure(
+        EditorView.editable.of(!isReadOnly))
     })
-    this._onStateChange()
+    this._onChange()
   }
 
-  _getStateChangeHandler (options: EditorOptions): () => void {
-    return () => {
-      options.onChange({
-        filePath: options.filePath,
-        hasChanges: this._editorSetup.hasChanges,
+  _onChange (): void {
+    this.dispatchEvent(new CustomEvent('stateChange', {
+      detail: {
+        hasChanges: !this._editor.state.doc.eq(this._initialState.doc),
         hasUndo: undoDepth(this._editor.state) > 0,
         hasRedo: redoDepth(this._editor.state) > 0,
-        isReadOnly: this._isReadOnly
-      })
-    }
+        isReadOnly: this._editor.state.readOnly
+      }
+    }))
   }
 
   async _initLanguageSupport (filePath: string): Promise<void> {
-    const effects = await this._editorSetup.setupLanguageSupport(filePath)
+    const effects = await this._setup.setupLanguageSupport(filePath)
     this._editor.dispatch({ effects })
   }
 
@@ -172,7 +188,6 @@ export default class Editor {
         effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
       })
     }
-    this._onStateChange()
   }
 
   _removeDomEventHandlers (): void {

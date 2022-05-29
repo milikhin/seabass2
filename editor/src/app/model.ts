@@ -1,7 +1,10 @@
 import { FileActionOptions } from '../api/api-interface'
-import Editor from '../editor/editor'
-import { SeabassEditorState } from '../editor/types'
+import Editor, { SeabassEditorState } from '../editor/editor'
 import { LoadFileOptions } from './types'
+
+export interface EditorStateChangeOptions extends SeabassEditorState {
+  filePath: string
+}
 
 export interface SeabassHtmlTheme {
   backgroundColor: string
@@ -27,7 +30,7 @@ interface Events {
   log: CustomEvent<unknown>
   preferencesChange: CustomEvent<SeabassCommonPreferences>
   sfosPreferencesChange: CustomEvent<SeabassSailfishPreferences>
-  stateChange: CustomEvent<SeabassEditorState>
+  stateChange: CustomEvent<EditorStateChangeOptions>
 }
 
 type AppEventListener <T extends keyof Events> = ((evt: Events[T]) => void) | ({ handleEvent: (evt: Events[T]) => void }) | null
@@ -71,7 +74,8 @@ export default class SeabassAppModel extends EventTarget {
     return this._sailfish
   }
 
-  addEventListener<T extends keyof Events> (type: T, callback: AppEventListener<T>, options?: EventListenerOptions): void {
+  addEventListener<T extends keyof Events> (type: T,
+    callback: AppEventListener<T>, options?: EventListenerOptions): void {
     super.addEventListener(type, callback as EventListenerOrEventListenerObject | null, options)
   }
 
@@ -111,17 +115,20 @@ export default class SeabassAppModel extends EventTarget {
 
   loadFile (options: LoadFileOptions, editorElem: HTMLElement): void {
     const filePath = options.filePath
-    this._editors.set(filePath, new Editor({
+    const editor = new Editor({
       content: options.content,
       editorConfig: options.editorConfig,
       elem: editorElem,
       filePath,
       isReadOnly: options.isReadOnly,
-      isTerminal: options.isTerminal,
-      isDarkTheme: this._preferences.isDarkTheme,
-      log: this._onLog.bind(this),
-      onChange: this._onChange.bind(this)
-    }))
+      isDarkTheme: this._preferences.isDarkTheme
+    })
+    editor.addEventListener('stateChange', evt => {
+      this.dispatchEvent(new CustomEvent('stateChange', {
+        detail: { ...evt.detail, filePath }
+      }))
+    })
+    this._editors.set(filePath, editor)
     this.dispatchEvent(new CustomEvent('loadFile', { detail: options }))
   }
 
@@ -147,13 +154,5 @@ export default class SeabassAppModel extends EventTarget {
     }
     localStorage.setItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY, options.isToolbarOpened.toString())
     this.dispatchEvent(new CustomEvent('sfosPreferencesChange', { detail: this._sailfish }))
-  }
-
-  _onChange (state: SeabassEditorState): void {
-    this.dispatchEvent(new CustomEvent('stateChange', { detail: state }))
-  }
-
-  _onLog (data: unknown): void {
-    this.dispatchEvent(new CustomEvent('log', { detail: data }))
   }
 }

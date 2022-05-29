@@ -1,10 +1,13 @@
+import SeabassApi from '../api/api'
+import { FileActionOptions, FileLoadOptions } from '../api/api-interface'
 import Tabs from '../tabs/tabs'
 import { SeabassOptions } from './types'
 import SeabassView from './view'
-import SeabassAppModel, { InputPreferences, SeabassSailfishPreferences } from './model'
-import SeabassApi from '../api/api'
-import { FileActionOptions, FileLoadOptions } from '../api/api-interface'
-import { SeabassEditorState } from '../editor/types'
+import SeabassAppModel, {
+  EditorStateChangeOptions,
+  InputPreferences,
+  SeabassSailfishPreferences
+} from './model'
 
 import './app.css'
 
@@ -38,6 +41,7 @@ class SeabassApp {
     this._api.addEventListener('toggleReadOnly', this._forwardEvent.bind(this))
     this._api.addEventListener('undo', this._forwardEvent.bind(this))
     this._model.addEventListener('stateChange', this._onStateChange.bind(this))
+    this._model.addEventListener('log', this._onLog.bind(this))
   }
 
   _forwardEvent (evt: CustomEvent): void {
@@ -112,8 +116,12 @@ class SeabassApp {
     this._model.setSailfishPreferences(evt.detail)
   }
 
-  _onStateChange (evt: CustomEvent<SeabassEditorState>): void {
+  _onStateChange (evt: CustomEvent<EditorStateChangeOptions>): void {
     this._api.send({ action: 'stateChanged', data: evt.detail })
+  }
+
+  _onLog (evt: CustomEvent<unknown>): void {
+    this._api.sendLogs(evt.detail)
   }
 }
 

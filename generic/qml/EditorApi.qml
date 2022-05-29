@@ -153,7 +153,7 @@ QtObject {
                 return callback(err)
             }
 
-            postMessage('fileSaved', { filePath: filePath, content: content })
+            postMessage('fileSaved', { filePath: filePath })
             return callback(null)
         })
     }

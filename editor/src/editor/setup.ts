@@ -9,11 +9,10 @@ interface ExtensionsOptions {
   isReadOnly?: boolean
   isDarkTheme?: boolean
 
-  onStateChange: (content?: string) => void
+  onChange: (content?: string) => void
 }
 
 export default class EditorSetup {
-  hasChanges: boolean
   readOnlyCompartment: Compartment
   langCompartment: Compartment
   themeCompartment: Compartment
@@ -23,7 +22,6 @@ export default class EditorSetup {
     this.readOnlyCompartment = new Compartment()
     this.langCompartment = new Compartment()
     this.themeCompartment = new Compartment()
-    this.hasChanges = false
 
     this.extensions = [
       basicSetup,
@@ -52,8 +50,7 @@ export default class EditorSetup {
         return
       }
 
-      this.hasChanges = true
-      options.onStateChange()
+      options.onChange()
     })
   }
 
@@ -69,7 +66,7 @@ export default class EditorSetup {
           return
         }
 
-        options.onStateChange()
+        options.onChange()
       }
     })
   }
