@@ -23,6 +23,14 @@
         <translation>Bezig met opslaan...</translation>
     </message>
     <message>
+        <source>Hide toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>About</source>
         <translation>Over</translation>
     </message>
@@ -58,6 +66,13 @@
     <message>
         <source>Welcome</source>
         <translation>Welkom</translation>
+    </message>
+</context>
+<context>
+    <name>Toolbar</name>
+    <message>
+        <source>Read only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
