@@ -18,7 +18,7 @@ Page {
             }
             ListElement {
                 text: "Codemirror, Copyright (C) 2018 by Marijn Haverbeke <marijnh@gmail.com>, Adrian Heine <mail@adrianheine.de>, and others, MIT license:"
-                url: "github.com/ajaxorg/ace"
+                url: "github.com/codemirror/codemirror.next"
             }
             ListElement {
                 text: "Babel, Copyright (c) 2014-present Sebastian McKenzie and other contributors, MIT license:"
