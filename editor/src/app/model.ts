@@ -129,7 +129,9 @@ export default class SeabassAppModel extends EventTarget {
       }))
     })
     this._editors.set(filePath, editor)
+
     this.dispatchEvent(new CustomEvent('loadFile', { detail: options }))
+    this.dispatchEvent(new CustomEvent('stateChange', { detail: editor.getUiState() }))
   }
 
   setPreferences (options: InputPreferences): void {

@@ -47,6 +47,7 @@ export default class Editor extends EventTarget {
   _setup: EditorSetup
   _initialState: EditorState
   _isOskVisible: boolean
+  _isReadOnly: boolean
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
@@ -67,6 +68,7 @@ export default class Editor extends EventTarget {
       doc: options.content
     })
     this._isOskVisible = false
+    this._isReadOnly = options.isReadOnly ?? false
 
     // init editor
     this._editorElem = options.elem
@@ -75,7 +77,6 @@ export default class Editor extends EventTarget {
       state: this._initialState,
       parent: this._editorElem
     })
-    this._onChange()
     void this._initLanguageSupport(options.filePath)
 
     // init DOM event handlers (resize, keypress)
@@ -148,22 +149,26 @@ export default class Editor extends EventTarget {
   }
 
   toggleReadOnly (): void {
-    const isReadOnly = this._editor.state.readOnly
+    this._isReadOnly = !this._isReadOnly
     this._editor.dispatch({
       effects: this._setup.readOnlyCompartment.reconfigure(
-        EditorView.editable.of(!isReadOnly))
+        EditorView.editable.of(!this._isReadOnly))
     })
     this._onChange()
   }
 
+  getUiState (): SeabassEditorState {
+    return {
+      hasChanges: !this._editor.state.doc.eq(this._initialState.doc),
+      hasUndo: undoDepth(this._editor.state) > 0,
+      hasRedo: redoDepth(this._editor.state) > 0,
+      isReadOnly: this._isReadOnly
+    }
+  }
+
   _onChange (): void {
     this.dispatchEvent(new CustomEvent('stateChange', {
-      detail: {
-        hasChanges: !this._editor.state.doc.eq(this._initialState.doc),
-        hasUndo: undoDepth(this._editor.state) > 0,
-        hasRedo: redoDepth(this._editor.state) > 0,
-        isReadOnly: this._editor.state.readOnly
-      }
+      detail: this.getUiState()
     }))
   }
 

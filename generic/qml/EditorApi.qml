@@ -193,10 +193,6 @@ QtObject {
                 api.isLoaded = true
                 return appLoaded(data)
             case 'stateChanged':
-                if (data.filePath !== filePath) {
-                    return
-                }
-
                 hasChanges = !data.isReadOnly && data.hasChanges
                 hasUndo = !data.isReadOnly && data.hasUndo
                 hasRedo = !data.isReadOnly && data.hasRedo
