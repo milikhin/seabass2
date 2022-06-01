@@ -11,32 +11,36 @@
 <context>
     <name>Editor</name>
     <message>
-        <source>Unable to read file. Please ensure that you have read access to the %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to write the file. Please ensure that you have write access to %1</source>
-        <translation type="unfinished"></translation>
+        <source>Save</source>
+        <translation>Opslaan</translation>
     </message>
     <message>
         <source>Open file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand openen...</translation>
     </message>
     <message>
         <source>Saving...</source>
+        <translation>Bezig met opslaan...</translation>
+    </message>
+    <message>
+        <source>Hide toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save</source>
+        <source>Show toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Over</translation>
     </message>
     <message>
-        <source>Seabass v%1</source>
-        <translation type="unfinished">Seabass v%1</translation>
+        <source>Unable to read file. Please ensure that you have read access to the %1</source>
+        <translation>Het bestand kan niet worden uitgelezen. Zorg dat je schrijfrechten hebt op de %1</translation>
+    </message>
+    <message>
+        <source>Unable to write the file. Please ensure that you have write access to %1</source>
+        <translation>Het bestand kan niet worden weggeschreven. Zorg dat je schrijfrechten hebt op de %1</translation>
     </message>
 </context>
 <context>
@@ -62,6 +66,13 @@
     <message>
         <source>Welcome</source>
         <translation>Welkom</translation>
+    </message>
+</context>
+<context>
+    <name>Toolbar</name>
+    <message>
+        <source>Read only</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

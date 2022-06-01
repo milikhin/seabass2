@@ -73,7 +73,7 @@ Item {
             }
 
             TextSwitch {
-                text: "Read only"
+                text: qsTr("Read only")
                 width: childrenRect.width + Theme.paddingLarge
                 enabled: root.readOnlyEnabled
                 checked: root.readOnly
