@@ -155,7 +155,7 @@ WebViewPage {
         PushUpMenu {
             visible: isMenuEnabled
             MenuItem {
-                text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
+                text: toolbar.open ? qsTr("Hide toolbar") : qsTr("Show toolbar")
                 onClicked: {
                     toolbar.open = !toolbar.open
                 }

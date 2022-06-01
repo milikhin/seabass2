@@ -42,6 +42,10 @@
         <source>About</source>
         <translation>Über</translation>
     </message>
+    <message>
+        <source>Seabass v%1</source>
+        <translation type="unfinished">Seabass v%1</translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>
@@ -62,17 +66,17 @@
     </message>
 </context>
 <context>
-    <name>harbour-seabass</name>
-    <message>
-        <source>Welcome</source>
-        <translation>Willkommen</translation>
-    </message>
-</context>
-<context>
     <name>Toolbar</name>
     <message>
         <source>Read only</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>harbour-seabass</name>
+    <message>
+        <source>Welcome</source>
+        <translation>Willkommen</translation>
     </message>
 </context>
 </TS>
