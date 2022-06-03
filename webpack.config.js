@@ -49,8 +49,15 @@ const sailfishConfig = {
           to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
         },
         {
-          from: './generic/py-libs',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/py-libs'),
+          from: './generic/py-libs/inotify_simple',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/inotify_simple'),
+          globOptions: {
+            ignore: '**/.git'
+          }
+        },
+        {
+          from: './generic/py-libs/editorconfig-core-py/editorconfig',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/editorconfig'),
           globOptions: {
             ignore: '**/.git'
           }
