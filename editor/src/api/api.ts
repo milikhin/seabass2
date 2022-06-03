@@ -6,7 +6,8 @@ import {
   FileLoadOptions
 } from './api-interface'
 
-export interface IncomingMessageData {
+/** possible payload of API messages */
+export interface IncomingMessagePayload {
   closeFile: FileActionOptions
   fileSaved: undefined
   keyDown: KeyDownOptions
@@ -21,29 +22,32 @@ export interface IncomingMessageData {
   toggleReadOnly: undefined
 }
 
-export interface IncomingMessage<T extends keyof IncomingMessageData> {
+/** Incoming API message from a platform-specific app */
+export interface IncomingApiMessage<T extends keyof IncomingMessagePayload> {
   action: T
-  data: IncomingMessageData[T]
+  data: IncomingMessagePayload[T]
 }
 
-interface OutgoingMessage {
+/** Outgoing API message to a platform-specific app */
+interface OutgoingApiMessage {
   action: string
   data: unknown
 }
 
 interface ApiOptions {
-  /** Platform-specific API backend */
+  /** Platform-specific API transport name */
   transport: API_TRANSPORT
 }
 
-type SeabassApiEvent<T extends keyof IncomingMessageData> = CustomEvent<IncomingMessageData[T]>
-type SeabassApiEventListener <T extends keyof IncomingMessageData> = ((evt: SeabassApiEvent<T>) => void) |
+type SeabassApiEvent<T extends keyof IncomingMessagePayload> = CustomEvent<IncomingMessagePayload[T]>
+type SeabassApiEventListener <T extends keyof IncomingMessagePayload> = ((evt: SeabassApiEvent<T>) => void) |
 ({ handleEvent: (evt: SeabassApiEvent<T>) => void }) | null
 
 export default class SeabassApi extends EventTarget {
-  /** Platform-specific API backend name */
+  /** Platform-specific API transport name */
   _transport: API_TRANSPORT
 
+  /** supported incoming API messages */
   EVENTS = new Set([
     'closeFile',
     'fileSaved',
@@ -66,29 +70,29 @@ export default class SeabassApi extends EventTarget {
     window.postSeabassApiMessage = this._onMessage.bind(this)
   }
 
-  _onMessage ({ action, data }: IncomingMessage<keyof IncomingMessageData>): void {
-    if (!this.EVENTS.has(action)) {
-      return this.sendLogs(`Event ${action} is not supported`)
-    }
-
-    const evt = new CustomEvent(action, { detail: data })
-    this.dispatchEvent(evt)
-  }
-
-  addEventListener<T extends keyof IncomingMessageData> (type: T,
+  addEventListener<T extends keyof IncomingMessagePayload> (type: T,
     callback: SeabassApiEventListener<T>, options?: EventListenerOptions): void {
     super.addEventListener(type, callback as EventListenerOrEventListenerObject | null, options)
   }
 
+  /**
+   * Sends error message to the platform-specific app
+   * @param message error message to send
+   */
   sendError (message: string): void {
     this.send({ action: 'error', data: { message } })
   }
 
+  /**
+   * Sends logs to the platform-specific app
+   * @param message logs to send
+   */
   sendLogs = (message: unknown): void => {
     this.send({ action: 'log', data: { message } })
   }
 
-  send ({ action, data }: OutgoingMessage): void {
+  /** Sends API message */
+  send ({ action, data }: OutgoingApiMessage): void {
     const payload = JSON.stringify({ action, data })
     switch (this._transport) {
       case API_TRANSPORT.SAILFISH_WEBVIEW: {
@@ -102,5 +106,14 @@ export default class SeabassApi extends EventTarget {
         return window.location.assign(`http://seabass/${encodeURIComponent(payload)}`)
       }
     }
+  }
+
+  _onMessage ({ action, data }: IncomingApiMessage<keyof IncomingMessagePayload>): void {
+    if (!this.EVENTS.has(action)) {
+      return this.sendLogs(`Event ${action} is not supported`)
+    }
+
+    const evt = new CustomEvent(action, { detail: data })
+    this.dispatchEvent(evt)
   }
 }

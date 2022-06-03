@@ -21,28 +21,17 @@ export default class SeabassView {
     this._registerEventListeners()
   }
 
-  _registerEventListeners (): void {
-    this._model.addEventListener('htmlThemeChange', evt => {
-      this._onHtmlThemeChange(evt.detail)
-    })
-    this._model.addEventListener('preferencesChange', evt => {
-      this._onPreferencesChange(evt.detail)
-    })
-    this._model.addEventListener('loadFile', () => {
-      this.showTabs()
-    })
-    this._model.addEventListener('closeFile', () => {
-      if (this._model._editors.size === 0) {
-        this.showWelcomeScreen()
-      }
-    })
-  }
-
+  /**
+   * Shows welcome note, hides tabs interface
+   */
   showWelcomeScreen (): void {
     this._welcomeElem.style.display = 'block'
     this._rootElem.style.display = 'none'
   }
 
+  /**
+   * Shows tabs interface, hides welcome note
+   */
   showTabs (): void {
     this._welcomeElem.style.display = 'none'
     this._rootElem.style.display = 'block'
@@ -62,5 +51,22 @@ export default class SeabassView {
 
   _onPreferencesChange (options: SeabassCommonPreferences): void {
     document.documentElement.style.bottom = `${options.verticalHtmlOffset}px`
+  }
+
+  _registerEventListeners (): void {
+    this._model.addEventListener('htmlThemeChange', evt => {
+      this._onHtmlThemeChange(evt.detail)
+    })
+    this._model.addEventListener('preferencesChange', evt => {
+      this._onPreferencesChange(evt.detail)
+    })
+    this._model.addEventListener('loadFile', () => {
+      this.showTabs()
+    })
+    this._model.addEventListener('closeFile', () => {
+      if (this._model._editors.size === 0) {
+        this.showWelcomeScreen()
+      }
+    })
   }
 }

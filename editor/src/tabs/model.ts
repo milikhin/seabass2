@@ -13,7 +13,9 @@ type TabEventListener = ((evt: TabEvent) => void) | ({ handleEvent: (evt: TabEve
 type EventListenerOptions = boolean | AddEventListenerOptions
 
 export default class TabsModel extends EventTarget {
+  /** currenty active tab's ID */
   _currentTabId?: string
+  /** existing tabs */
   _tabs: Map<string, Tab>
 
   constructor () {
@@ -41,6 +43,11 @@ export default class TabsModel extends EventTarget {
     return super.dispatchEvent(event)
   }
 
+  /**
+   * Creates new tab with given ID
+   * @param id unique tab id
+   * @returns created tab
+   */
   create (id: string): Tab {
     const tab = { id, elem: document.createElement('div') }
     this._tabs.set(id, tab)
@@ -48,19 +55,35 @@ export default class TabsModel extends EventTarget {
     return tab
   }
 
+  /**
+   * Closes tab with given ID
+   * @param id unique tab id
+   */
   close (id: string): void {
     const tab = this._tabs.get(id)
-    this._tabs.delete(id)
-
-    if (tab !== undefined) {
-      this.dispatchEvent(new TabEvent('close', tab))
+    if (tab === undefined) {
+      return
     }
+    this._tabs.delete(id)
+    if (this._currentTabId === id) {
+      this._currentTabId = undefined
+    }
+    this.dispatchEvent(new TabEvent('close', tab))
   }
 
+  /**
+   * Returns tab by ID
+   * @param id unique tab id
+   * @returns tab
+   */
   get (id: string): Tab|undefined {
     return this._tabs.get(id)
   }
 
+  /**
+   * Activates tab with given ID
+   * @param id unique tab id
+   */
   show (id: string): void {
     if (!this._tabs.has(id)) {
       return

@@ -5,8 +5,7 @@ import { runScopeHandlers } from '@codemirror/view'
 import { RawEditorConfig } from '../api/api-interface'
 import { SeabassCommonPreferences } from '../app/model'
 import EditorSetup from './setup'
-import { SeabassEditorConfig } from './types'
-import { parseEditorConfig } from './utils'
+import { parseEditorConfig, SeabassEditorConfig } from './utils'
 
 import './editor.css'
 
@@ -103,7 +102,7 @@ export default class Editor extends EventTarget {
 
   /**
    * Returns editor content for the given file
-   * @returns {string|undefined} - file content
+   * @returns file content
    */
   getContent (): string {
     const lines = this._editor.state.doc.toJSON()
@@ -116,18 +115,27 @@ export default class Editor extends EventTarget {
 
   /**
    * Generates key down event
-   * @param {number} param0.keyCode - key code
+   * @param param0 event details
+   * @param param0.keyCode - key code
+   * @param param0.ctrlKey - 'ctrl key pressed' flag
    */
   keyDown ({ keyCode, ctrlKey }: KeyDownOptions): void {
     const evt = new KeyboardEvent('', { keyCode, ctrlKey })
     runScopeHandlers(this._editor, evt, 'editor')
   }
 
+  /**
+   * Handles 'file has been saved' event
+   */
   fileSaved (): void {
     this._initialState = this._editor.state
     this._onChange()
   }
 
+  /**
+   * Set editor preferences
+   * @param param0 editor preferences
+   */
   setPreferences ({ isDarkTheme }: SeabassCommonPreferences): void {
     this._editor.dispatch({
       effects: this._setup.themeCompartment.reconfigure(isDarkTheme
@@ -136,18 +144,31 @@ export default class Editor extends EventTarget {
     })
   }
 
+  /**
+   * Redo next change from editor history
+   */
   redo (): void {
     redo({ state: this._editor.state, dispatch: this._editor.dispatch })
   }
 
+  /**
+   * Undo last change from editor history
+   */
   undo (): void {
     undo({ state: this._editor.state, dispatch: this._editor.dispatch })
   }
 
+  /**
+   * Handles on-screen keyboard visibility change event
+   * @param param0 OSK state
+   */
   oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
     this._isOskVisible = isVisible
   }
 
+  /**
+   * Toggles readonly mode
+   */
   toggleReadOnly (): void {
     this._isReadOnly = !this._isReadOnly
     this._editor.dispatch({
@@ -157,6 +178,10 @@ export default class Editor extends EventTarget {
     this._onChange()
   }
 
+  /**
+   * Returns editor state required to render app UI
+   * @returns editor state
+   */
   getUiState (): SeabassEditorState {
     return {
       hasChanges: !this._editor.state.doc.eq(this._initialState.doc),
@@ -164,12 +189,6 @@ export default class Editor extends EventTarget {
       hasRedo: redoDepth(this._editor.state) > 0,
       isReadOnly: this._isReadOnly
     }
-  }
-
-  _onChange (): void {
-    this.dispatchEvent(new CustomEvent('stateChange', {
-      detail: this.getUiState()
-    }))
   }
 
   async _initLanguageSupport (filePath: string): Promise<void> {
@@ -185,6 +204,12 @@ export default class Editor extends EventTarget {
       }
     }, true)
     window.addEventListener('resize', this._onResize)
+  }
+
+  _onChange (): void {
+    this.dispatchEvent(new CustomEvent('stateChange', {
+      detail: this.getUiState()
+    }))
   }
 
   _onResize = (): void => {

@@ -1,7 +1,11 @@
 import { RawEditorConfig } from '../api/api-interface'
-import { SeabassEditorConfig } from './types'
 
 const DEFAULT_INDENT_SIZE = 2
+
+export interface SeabassEditorConfig {
+  tabWidth: number
+  indentSize: number
+}
 
 export function parseEditorConfig (config?: RawEditorConfig): SeabassEditorConfig {
   return {

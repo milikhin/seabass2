@@ -5,6 +5,10 @@ interface TabsViewOptions {
   rootElem: HTMLElement
 }
 
+/**
+ * Tabs view.
+ * Displays currently active tab of a used model
+ */
 export default class TabsView {
   _rootElem: HTMLElement
   _contentElems: Map<string, HTMLDivElement>

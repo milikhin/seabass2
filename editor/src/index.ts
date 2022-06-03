@@ -1,14 +1,14 @@
-import { IncomingMessage, IncomingMessageData } from './api/api'
+import { IncomingApiMessage, IncomingMessagePayload } from './api/api'
 import { API_TRANSPORT } from './api/api-interface'
 import createApp from './app/app'
 
 declare global {
   interface Window {
     /** `postSeabassApiMessage` global function is used to communicate with UI */
-    postSeabassApiMessage: <T extends keyof IncomingMessageData>(msg: IncomingMessage<T>) => void
+    postSeabassApiMessage: <T extends keyof IncomingMessagePayload>(msg: IncomingApiMessage<T>) => void
     /** app configuration */
     seabassOptions: {
-      /** API backend name */
+      /** API transport name */
       apiBackend: API_TRANSPORT
     }
   }
@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', () => {
     return console.error('App can\'t be initialized as required HTML elements are not found')
   }
 
-  // use timeout to allow platform-specific API backend to be initialized first
+  // use timeout to ensure that platform-specific API transport has been initialized first
   setTimeout(() => {
     createApp({
       apiBackend: window.seabassOptions.apiBackend,

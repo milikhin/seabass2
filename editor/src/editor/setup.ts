@@ -12,10 +12,17 @@ interface ExtensionsOptions {
   onChange: (content?: string) => void
 }
 
+/**
+ * Codemirror's setup
+ */
 export default class EditorSetup {
+  /** extension to manage readonly state */
   readOnlyCompartment: Compartment
+  /** extension to manage language support */
   langCompartment: Compartment
+  /** extension to manage theme */
   themeCompartment: Compartment
+  /** list of enabled extensions */
   extensions: Extension[]
 
   constructor (options: ExtensionsOptions) {
@@ -33,6 +40,16 @@ export default class EditorSetup {
       this._getReadOnlyExtension(options),
       this._getThemeExtension(options)
     ]
+  }
+
+  /**
+   * Init language support for a given file
+   * @param filePath full path to file
+   * @returns language support extension
+   */
+  async setupLanguageSupport (filePath: string): Promise<StateEffect<unknown>> {
+    const langSupport = await getLanguageMode(filePath)
+    return this.langCompartment.reconfigure(langSupport ?? Facet.define().of(null))
   }
 
   _getContent (state: EditorState): string {
@@ -84,10 +101,5 @@ export default class EditorSetup {
     return this.themeCompartment.of(options.isDarkTheme === true
       ? oneDark
       : EditorView.baseTheme({}))
-  }
-
-  async setupLanguageSupport (filePath: string): Promise<StateEffect<unknown>> {
-    const langSupport = await getLanguageMode(filePath)
-    return this.langCompartment.reconfigure(langSupport ?? Facet.define().of(null))
   }
 }

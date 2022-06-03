@@ -1,7 +1,10 @@
 import SeabassApi from '../api/api'
-import { FileActionOptions, FileLoadOptions } from '../api/api-interface'
+import {
+  API_TRANSPORT,
+  FileActionOptions,
+  FileLoadOptions
+} from '../api/api-interface'
 import Tabs from '../tabs/tabs'
-import { SeabassOptions } from './types'
 import SeabassView from './view'
 import SeabassAppModel, {
   EditorStateChangeOptions,
@@ -11,10 +14,28 @@ import SeabassAppModel, {
 
 import './app.css'
 
+/** App initialization options */
+interface SeabassOptions {
+  /** Welcome notes elem */
+  welcomeElem: HTMLElement
+  /** App root elem */
+  rootElem: HTMLElement
+  /** Platform-specific API transport method */
+  apiBackend: API_TRANSPORT
+}
+
+/**
+ * Main class for the crossplatform HTML5 part of app.
+ * Handles API events.
+ */
 class SeabassApp {
+  /** API to interact between platform-specific app and crossplatform editor */
   _api: SeabassApi
+  /** app model: preferences and list of opened editors */
   _model: SeabassAppModel
+  /** app view */
   _view: SeabassView
+  /** opened tabs */
   _tabs: Tabs
 
   constructor ({ apiBackend, rootElem, welcomeElem }: SeabassOptions) {
@@ -27,6 +48,9 @@ class SeabassApp {
     this._api.send({ action: 'appLoaded', data: this._model.sailfishPreferences })
   }
 
+  /**
+   * Registers event listeners for API/model events
+   */
   _registerApiEventListeners (): void {
     this._api.addEventListener('closeFile', this._onCloseFile.bind(this))
     this._api.addEventListener('fileSaved', this._forwardEvent.bind(this))
@@ -40,10 +64,15 @@ class SeabassApp {
     this._api.addEventListener('setSailfishPreferences', this._onSetSailfishPreferences.bind(this))
     this._api.addEventListener('toggleReadOnly', this._forwardEvent.bind(this))
     this._api.addEventListener('undo', this._forwardEvent.bind(this))
+
     this._model.addEventListener('stateChange', this._onStateChange.bind(this))
     this._model.addEventListener('log', this._onLog.bind(this))
   }
 
+  /**
+   * Forwards API event to the corresponding Editor
+   * @param evt event to forward
+   */
   _forwardEvent (evt: CustomEvent): void {
     const tab = this._tabs.currentTab
     if (tab === undefined) {
@@ -54,9 +83,8 @@ class SeabassApp {
   }
 
   /**
-   * Loads given content to the editor
-   * @param {CustomEvent<FileLoadOptions>} evt loadFile event
-   * @returns {undefined}
+   * Loads new file to the editor
+   * @param evt loadFile event
    */
   _onLoadFile (evt: CustomEvent<FileLoadOptions>): void {
     const tab = this._tabs.create(evt.detail.filePath)
@@ -66,8 +94,7 @@ class SeabassApp {
 
   /**
    * Opens tab with given file
-   * @param {CustomEvent<FileActionOptions>} evt openFile event
-   * @returns {undefined}
+   * @param evt openFile event
    */
   _onOpenFile (evt: CustomEvent<FileActionOptions>): void {
     const tab = this._tabs.create(evt.detail.filePath)
@@ -76,8 +103,7 @@ class SeabassApp {
 
   /**
    * Closes opened file
-   * @param {CustomEvent<FileActionOptions>} evt closeFile event
-   * @returns {undefined}
+   * @param evt closeFile event
    */
   _onCloseFile (evt: CustomEvent<FileActionOptions>): void {
     this._tabs.close(evt.detail.filePath)
@@ -86,8 +112,7 @@ class SeabassApp {
 
   /**
    * Requests file saving
-   * @param {CustomEvent<FileActionOptions>} evt requestFileSave event
-   * @returns {undefined}
+   * @param evt requestFileSave event
    */
   _onRequestFileSave (evt: CustomEvent<FileActionOptions>): void {
     const filePath = evt.detail.filePath
@@ -100,8 +125,7 @@ class SeabassApp {
 
   /**
    * Loads saved preferences
-   * @param {CustomEvent<InputPreferences>} evt setTheme event
-   * @returns {undefined}
+   * @param evt setTheme event
    */
   _onSetPreferences (evt: CustomEvent<InputPreferences>): void {
     this._model.setPreferences(evt.detail)
@@ -109,22 +133,34 @@ class SeabassApp {
 
   /**
    * Loads saved SailfishOS-specific preferences
-   * @param {CustomEvent<InputPreferences>} evt setTheme event
-   * @returns {undefined}
+   * @param evt setTheme event
    */
   _onSetSailfishPreferences (evt: CustomEvent<SeabassSailfishPreferences>): void {
     this._model.setSailfishPreferences(evt.detail)
   }
 
+  /**
+   * Forwards UI state changes to the platform-specific app
+   * @param evt state change event
+   */
   _onStateChange (evt: CustomEvent<EditorStateChangeOptions>): void {
     this._api.send({ action: 'stateChanged', data: evt.detail })
   }
 
+  /**
+   * Sends logs to the platform-specific app
+   * @param evt custom event containing data to log
+   */
   _onLog (evt: CustomEvent<unknown>): void {
     this._api.sendLogs(evt.detail)
   }
 }
 
+/**
+ * Initializes app
+ * @param options app options
+ * @returns app instance
+ */
 export default function createApp (options: SeabassOptions): SeabassApp {
   return new SeabassApp(options)
 }

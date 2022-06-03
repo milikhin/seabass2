@@ -9,6 +9,10 @@ export interface TabsOptions {
   rootElem: HTMLElement
 }
 
+/**
+ * Tabs content. Controls should be implemented within the platform-specific part of the app.
+ * There could be multiple tabs. Only one of them is visible at a time
+ */
 export default class Tabs {
   _model: TabsModel
   _view: TabsView
@@ -28,15 +32,28 @@ export default class Tabs {
     return this._model.currentTab
   }
 
+  /**
+   * Creates new tab
+   * @param id unique tab ID
+   * @returns tab
+   */
   create (id: string): Tab {
     return this._model.create(id)
   }
 
+  /**
+   * Coses tab with given ID
+   * @param id unique tab ID
+   */
   close (id: string): void {
-    return this._model.close(id)
+    this._model.close(id)
   }
 
+  /**
+   * Shows tab with given ID, hides currently active tab
+   * @param id unique tab ID
+   */
   show (id: string): void {
-    return this._model.show(id)
+    this._model.show(id)
   }
 }
