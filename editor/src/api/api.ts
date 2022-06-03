@@ -46,6 +46,7 @@ type SeabassApiEventListener <T extends keyof IncomingMessagePayload> = ((evt: S
 export default class SeabassApi extends EventTarget {
   /** Platform-specific API transport name */
   _transport: API_TRANSPORT
+  _onMessageHandler: (msg: IncomingApiMessage<keyof IncomingMessagePayload>) => void
 
   /** supported incoming API messages */
   EVENTS = new Set([
@@ -65,9 +66,14 @@ export default class SeabassApi extends EventTarget {
 
   constructor ({ transport }: ApiOptions) {
     super()
-    this._transport = transport
 
-    window.postSeabassApiMessage = this._onMessage.bind(this)
+    if (!Object.values(API_TRANSPORT).includes(transport)) {
+      throw new Error(`Given API transport '${transport}' is not supported`)
+    }
+
+    this._transport = transport
+    this._onMessageHandler = this._onMessage.bind(this)
+    window.postSeabassApiMessage = this._onMessageHandler
   }
 
   addEventListener<T extends keyof IncomingMessagePayload> (type: T,

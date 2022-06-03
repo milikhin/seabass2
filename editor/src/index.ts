@@ -9,7 +9,7 @@ declare global {
     /** app configuration */
     seabassOptions: {
       /** API transport name */
-      apiBackend: API_TRANSPORT
+      apiTransport: API_TRANSPORT
     }
   }
 }
@@ -24,7 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // use timeout to ensure that platform-specific API transport has been initialized first
   setTimeout(() => {
     createApp({
-      apiBackend: window.seabassOptions.apiBackend,
+      apiTransport: window.seabassOptions.apiTransport,
       rootElem,
       welcomeElem
     })

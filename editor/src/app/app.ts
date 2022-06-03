@@ -21,7 +21,7 @@ interface SeabassOptions {
   /** App root elem */
   rootElem: HTMLElement
   /** Platform-specific API transport method */
-  apiBackend: API_TRANSPORT
+  apiTransport: API_TRANSPORT
 }
 
 /**
@@ -38,8 +38,8 @@ class SeabassApp {
   /** opened tabs */
   _tabs: Tabs
 
-  constructor ({ apiBackend, rootElem, welcomeElem }: SeabassOptions) {
-    this._api = new SeabassApi({ transport: apiBackend })
+  constructor ({ apiTransport, rootElem, welcomeElem }: SeabassOptions) {
+    this._api = new SeabassApi({ transport: apiTransport })
     this._model = new SeabassAppModel()
     this._view = new SeabassView({ model: this._model, rootElem, welcomeElem })
     this._tabs = new Tabs({ rootElem })

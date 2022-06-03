@@ -97,11 +97,12 @@ export default class SeabassAppModel extends EventTarget {
    */
   closeFile (filePath: string): void {
     const editor = this._editors.get(filePath)
-    if (editor !== undefined) {
-      editor.destroy()
-      this._editors.delete(filePath)
+    if (editor === undefined) {
+      return
     }
 
+    editor.destroy()
+    this._editors.delete(filePath)
     this.dispatchEvent(new CustomEvent('closeFile', { detail: { filePath } }))
   }
 
@@ -177,6 +178,9 @@ export default class SeabassAppModel extends EventTarget {
       verticalHtmlOffset: options.verticalHtmlOffset ?? 0
     }
 
+    for (const editor of this._editors.values()) {
+      editor.setPreferences(this._preferences)
+    }
     this.dispatchEvent(new CustomEvent('htmlThemeChange', { detail: this._htmlTheme }))
     this.dispatchEvent(new CustomEvent('preferencesChange', { detail: this._preferences }))
   }
