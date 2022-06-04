@@ -49,7 +49,7 @@ const sailfishConfig = {
           to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
         },
         {
-          from: './generic/py-libs/inotify_simple',
+          from: './generic/py-libs/inotify_simple/inotify_simple.py',
           to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/inotify_simple'),
           globOptions: {
             ignore: '**/.git'

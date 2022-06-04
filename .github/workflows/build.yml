@@ -43,7 +43,7 @@ jobs:
     - run: pip install -U pip
     - run: pip install pipenv
     - run: cp -r generic/py-libs/editorconfig-core-py/editorconfig generic/py-backend
-    - run: cp -r generic/py-libs/inotify_simple generic/py-backend
+    - run: cp -r generic/py-libs/inotify_simple/inotify_simple.py generic/py-backend/inotify_simple
     - run: cd generic/py-backend; pipenv install -d
     - run: cd generic/py-backend; pipenv run pylint build_utils/*.py fs_utils/*.py helpers/*.py tests/*.py
     - run: cd generic/py-backend; pipenv run coverage run --source=fs_utils,build_utils,helpers -m pytest
