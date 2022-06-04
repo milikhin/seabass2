@@ -9,6 +9,7 @@ export enum API_TRANSPORT {
 export interface RawEditorConfig {
   indent_size?: number
   tab_width?: number
+  indent_style?: 'space'|'tab'
 }
 
 export interface FileActionOptions {

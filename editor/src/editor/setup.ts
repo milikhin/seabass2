@@ -1,11 +1,14 @@
 import { EditorView, EditorState, basicSetup } from '@codemirror/basic-setup'
+import { indentUnit } from '@codemirror/language'
 import { Compartment, Extension, Facet, StateEffect } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { getLanguageMode } from './language'
+import { SeabassEditorConfig } from './utils'
 
 interface ExtensionsOptions {
+  editorConfig: SeabassEditorConfig
   isReadOnly?: boolean
   isDarkTheme?: boolean
 
@@ -38,7 +41,9 @@ export default class EditorSetup {
       this._getDocChangeHandlerExtension(options),
       this._getDomEventHandlerExtension(options),
       this._getReadOnlyExtension(options),
-      this._getThemeExtension(options)
+      this._getThemeExtension(options),
+      indentUnit.of(this._getIndentationString(options.editorConfig)),
+      EditorState.tabSize.of(options.editorConfig.tabWidth)
     ]
   }
 
@@ -86,6 +91,16 @@ export default class EditorSetup {
         options.onChange()
       }
     })
+  }
+
+  _getIndentationString (editorConfig: SeabassEditorConfig): string {
+    switch (editorConfig.indentStyle) {
+      case 'tab':
+        return '\u0009'
+      case 'space':
+      default:
+        return ' '.repeat(editorConfig.indentSize)
+    }
   }
 
   _getDefaultLangExtension (options: ExtensionsOptions): Extension {

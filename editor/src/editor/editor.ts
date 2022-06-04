@@ -5,7 +5,7 @@ import { runScopeHandlers } from '@codemirror/view'
 import { RawEditorConfig } from '../api/api-interface'
 import { SeabassCommonPreferences } from '../app/model'
 import EditorSetup from './setup'
-import { parseEditorConfig, SeabassEditorConfig } from './utils'
+import { parseEditorConfig } from './utils'
 
 import './editor.css'
 
@@ -41,7 +41,6 @@ export interface KeyDownOptions {
  */
 export default class Editor extends EventTarget {
   _editorElem: HTMLElement
-  _editorConfig: SeabassEditorConfig
   _editor: EditorView
   _setup: EditorSetup
   _initialState: EditorState
@@ -55,13 +54,13 @@ export default class Editor extends EventTarget {
     super()
     // setup extensions
     this._setup = new EditorSetup({
+      editorConfig: parseEditorConfig(options.editorConfig),
       isReadOnly: options.isReadOnly ?? false,
       isDarkTheme: options.isDarkTheme ?? false,
       onChange: this._onChange.bind(this)
     })
 
     // set initial editor state
-    this._editorConfig = parseEditorConfig(options.editorConfig)
     this._initialState = EditorState.create({
       extensions: this._setup.extensions,
       doc: options.content
