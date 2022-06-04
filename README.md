@@ -8,8 +8,11 @@ Seabass is a code editor for mobile devices.
 
 Supported platforms:
 
-* Ubuntu Touch (hasn't yet been migrated to the Codemirror, [current Ace-based version is here](https://github.com/milikhin/seabass2/tree/ubports-legacy))
-* Sailfish OS
+* Sailfish OS  
+   Available in the Jolla store or from the [OpenRepos](https://openrepos.net/content/mikhael/seabass).
+* Ubuntu Touch  
+   Available in the [OpenStore](https://open-store.io/app/seabass2.mikhael).  
+   *Seabass is currently undergoing a transition to a new editor engine. Ubuntu touch app hasn't yet been fully migrated to the new API. It could be built and tested, but not all features work yet. Current version from the OpenStore is available in the [ubports-legacy branch](https://github.com/milikhin/seabass2/tree/ubports-legacy).*
 
 [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
 
@@ -40,7 +43,7 @@ Ubuntu Touch:
 
 ### Ubuntu Touch
 
-Current version from the store is available in the [ubports-legacy branch](https://github.com/milikhin/seabass2/tree/ubports-legacy).
+**Current version from the OpenStore is available in the [ubports-legacy branch](https://github.com/milikhin/seabass2/tree/ubports-legacy).**
 
 Run `clickable` (in the project root directory).
 
