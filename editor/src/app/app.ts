@@ -97,8 +97,7 @@ class SeabassApp {
    * @param evt openFile event
    */
   _onOpenFile (evt: CustomEvent<FileActionOptions>): void {
-    const tab = this._tabs.create(evt.detail.filePath)
-    this._tabs.show(tab.id)
+    this._tabs.show(evt.detail.filePath)
   }
 
   /**
