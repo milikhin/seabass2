@@ -19,6 +19,8 @@ ApplicationWindow {
   width: Suru.units.gu(100)
   height: Suru.units.gu(60)
 
+  property string filePath
+
   overlay.modal: Rectangle {
     color: "transparent"
   }
@@ -116,7 +118,7 @@ ApplicationWindow {
     onHasChangesChanged: {
       const file = tabsModel.get(tabBar.currentIndex)
       file.hasChanges = hasChanges
-      tabsModel.set(fileIndex, file)
+      tabsModel.set(tabBar.currentIndex, file)
     }
 
     /**
@@ -162,11 +164,6 @@ ApplicationWindow {
       }
       var currentFile = get(tabBar.currentIndex)
       api.openFile(currentFile.filePath)
-    }
-    onCountChanged: {
-      if (!count) {
-        api.filePath = ''
-      }
     }
   }
 
@@ -342,11 +339,11 @@ ApplicationWindow {
           }
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
-              api.saveFile(api.filePath, fileContent)
+              api.saveFile(root.filePath, fileContent)
             })
           }
           onBuildRequested: {
-            const configFile = api.filePath
+            const configFile = root.filePath
             builder.build(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
@@ -356,7 +353,7 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           onLaunchRequested: {
-            const configFile = api.filePath
+            const configFile = root.filePath
             builder.launch(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
@@ -366,9 +363,10 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           navBarCanBeOpened: !isWide || !navBar.visible
-          canBeSaved: api.filePath && api.hasChanges
-          buildEnabled: api.filePath && builder.ready
-          buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
+          // TODO: fix saving files before enabling `canBeSaved`
+          canBeSaved: false // root.filePath && api.hasChanges
+          buildEnabled: root.filePath && builder.ready
+          buildable: root.filePath && root.filePath.match(/\/clickable\.json$/)
           keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
           searchEnabled: main.visible && tabsModel.count
           terminalEnabled: main.visible && tabsModel.count
@@ -378,8 +376,8 @@ ApplicationWindow {
             api.postMessage('toggleSearch')
           }
           onOpenTerminalApp: {
-              if (api.filePath) {
-                  Qt.openUrlExternally("terminal://?path=" + api.filePath.split('/').slice(0, -1).join('/'))
+              if (root.filePath) {
+                  Qt.openUrlExternally("terminal://?path=" + root.filePath.split('/').slice(0, -1).join('/'))
               }
           }
         }
@@ -394,6 +392,7 @@ ApplicationWindow {
             if (!model.count) {
               header.title = defaultTitle
               header.subtitle = defaultSubTitle
+              root.filePath = undefined
               return
             }
 
@@ -403,6 +402,7 @@ ApplicationWindow {
             }
 
             const tab = model.get(currentIndex)
+            root.filePath = tab.filePath
             header.title = tab.title
             header.subtitle = tab.subTitle
             api.openFile(tab.id)
