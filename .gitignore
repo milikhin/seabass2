@@ -20,4 +20,5 @@ ubports-seabass/.clickable
 *.qmlc
 *.pytest-cache
 **/__pycache__
+build-harbour-seabass-*/
 ubports-seabass/tests/data/test_write.txt

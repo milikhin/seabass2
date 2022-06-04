@@ -3,11 +3,11 @@ const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const commonConfig = {
-  entry: './editor/src/index.js',
+  entry: './editor/src/index.ts',
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: [/\.js$/, /\.ts$/],
         exclude: /node_modules/,
         use: ['babel-loader']
       },
@@ -20,6 +20,9 @@ const commonConfig = {
   plugins: [
     new CleanWebpackPlugin()
   ],
+  resolve: {
+    extensions: ['.ts', '.js']
+  },
   mode: 'production'
 }
 
@@ -27,7 +30,7 @@ const sailfishConfig = {
   ...commonConfig,
   output: {
     path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
-    publicPath: '/usr/share/harbour-seabass/qml/html/',
+    // publicPath: '/usr/share/harbour-seabass/qml/html/',
     filename: 'bundle.js'
   },
   plugins: [
@@ -46,8 +49,15 @@ const sailfishConfig = {
           to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
         },
         {
-          from: './generic/py-libs',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/py-libs'),
+          from: './generic/py-libs/inotify_simple/inotify_simple.py',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/inotify_simple'),
+          globOptions: {
+            ignore: '**/.git'
+          }
+        },
+        {
+          from: './generic/py-libs/editorconfig-core-py/editorconfig',
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/editorconfig'),
           globOptions: {
             ignore: '**/.git'
           }

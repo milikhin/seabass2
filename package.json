@@ -3,14 +3,11 @@
   "description": "web-editor component for Seabass app",
   "main": "index.js",
   "scripts": {
-    "lint": "(cd editor/; standard --parser=babel-eslint)",
+    "lint": "tsc && ts-standard ./editor",
     "test": "jest --config=./editor/jest.config.js",
     "test-watch": "jest --watch --config=./editor/jest.config.js",
     "build": "webpack",
     "build-watch": "webpack --watch"
-  },
-  "standard": {
-    "parser": "babel-eslint"
   },
   "keywords": [
     "seabass",
@@ -23,24 +20,28 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
-    "babel-eslint": "^10.1.0",
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/lodash": "^4.14.178",
     "babel-jest": "^25.4.0",
     "babel-loader": "^8.2.2",
-    "babel-polyfill": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.4.0",
     "core-js": "^3.8.1",
     "css-loader": "^3.6.0",
     "file-loader": "^6.2.0",
-    "jest": "^25.5.4",
-    "standard": "^14.3.4",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
     "style-loader": "^1.3.0",
+    "ts-standard": "^11.0.0",
+    "typescript": "^4.5.4",
     "uuid": "^7.0.3",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "ace-builds": "^1.4.12",
-    "blueimp-md5": "^2.18.0"
+    "@codemirror/basic-setup": "^0.20.0",
+    "@codemirror/language-data": "^0.20.0",
+    "@codemirror/theme-one-dark": "^0.20.0",
+    "lodash": "^4.17.21"
   }
 }

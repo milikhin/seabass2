@@ -1,32 +1,49 @@
 import QtQuick 2.2
 
-import QtWebKit 3.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
+import Sailfish.WebView 1.0
+import Sailfish.WebEngine 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
 import '../generic' as GenericComponents
 
-Page {
+WebViewPage {
     id: page
-    property string seabassFilePath
-
+    property string filePath
+    property int headerHeight: 0
+    property bool isMenuEnabled: true
     allowedOrientations: Orientation.All
+
+    onFilePathChanged: {
+        isMenuEnabled = false
+    }
+
+    onIsMenuEnabledChanged: {
+        if (isMenuEnabled) {
+            hint.start()
+        } else {
+            hint.stop()
+        }
+    }
+
+    background: Rectangle {
+        color: api.backgroundColor
+        height: page.height
+        width: page.width
+    }
 
     GenericComponents.EditorApi {
         id: api
+        homeDir: StandardPaths.home
 
         // UI theme
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        backgroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 0.75)'
-            : 'rgba(255, 255, 255, 0.75)'
-        foregroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 1)'
-            : 'rgba(255, 255, 255, 1)'
-        textColor: Theme.highlightColor
-        linkColor: Theme.primaryColor
+        backgroundColor: isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
+        textColor: isDarkTheme ? QmlJs.colors.DARK_TEXT : QmlJs.colors.LIGHT_TEXT
+        linkColor: textColor
+        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
 
         // platform-specific i18n implementation for Generic API
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
@@ -34,7 +51,7 @@ Page {
 
         // API methods
         onAppLoaded: function (data) {
-            toolbar.open = data.isSailfishToolbarOpened || false
+            toolbar.open = data.isToolbarOpened || false
         }
         onErrorOccured: function (message) {
             displayError(message)
@@ -44,112 +61,191 @@ Page {
                 Qt.inputMethod.hide()
             }
         }
-        onMessageSent: function(jsonMessage) {
-            webView.experimental.postMessage(jsonMessage)
-        }
-        onFilePathChanged: {
-            seabassFilePath = filePath
+        onMessageSent: function(jsonPayload) {
+            viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
     }
 
-    onOrientationChanged: fixResize()
+    WebViewFlickable {
+        id: viewFlickable
+        anchors.fill: parent
+        header: PageHeader {
+            page: page
+            title: filePath
+                ? ((api.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
+                : qsTr('Seabass v%1').arg('0.9.1')
+            description: filePath
+                ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
+                : 'Release notes'
 
-    SilicaWebView {
-        id: webView
-        url: '../html/index.html'
-
-        anchors.top: page.top
-        anchors.bottom: toolbar.open ? toolbar.top : page.bottom
-        width: page.width
-
-        experimental.transparentBackground: true
-        experimental.deviceWidth: getDeviceWidth()
-        experimental.preferences.navigatorQtObjectEnabled: true
-        experimental.onMessageReceived: {
-            var msg = JSON.parse(message.data)
-            // automatically copy selected text to the Clipboard
-            if (msg.data && msg.data.selectedText) {
-                Clipboard.text = msg.data.selectedText
+            Component.onCompleted: {
+                headerHeight = height
+                // TODO: Part of multiple tabs support experiments
+                // const TabsButton = Qt.createComponent("../components/TabsButton.qml");
+                // const btn = TabsButton.createObject(extraContent, {
+                //     text: '1',
+                //     visible: filePath !== '',
+                //     'anchors.verticalCenter': extraContent.verticalCenter,
+                // })
+                // page.filePathChanged.connect(function() {
+                //     btn.visible = filePath !== ''
+                // })
+                // leftMargin = btn.width + Theme.paddingMedium * 2
+                // extraContent.anchors.leftMargin = Theme.paddingMedium
             }
-
-            api.handleMessage(msg.action, msg.data)
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
+                height: filePath ? Theme.dp(1) : 0
+            }
         }
 
-        onNavigationRequested: function(request) {
-            const urlStr = request.url.toString()
-            const isHttpRequest = urlStr.indexOf('http') === 0
-            if (!isHttpRequest) {
-                return
-            }
+        webView.url: '../html/index.html'
+        webView.viewportHeight: getEditorHeight()
 
-            request.action = WebView.IgnoreRequest;
-            Qt.openUrlExternally(request.url)
+        webView.opacity: 1
+        webView.onViewInitialized: {
+            webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
+            webView.addMessageListener("webview:action")
+        }
+        webView.onRecvAsyncMessage: {
+            switch (message) {
+                case "webview:action": {
+                    api.handleMessage(data.action, data.data)
+                }
+            }
+        }
+        webView.onLinkClicked: function(url) {
+            Qt.openUrlExternally(url)
+        }
+
+        Component.onCompleted: {
+            Qt.inputMethod.visibleChanged.connect(function() {
+                api.oskVisibilityChanged(Qt.inputMethod.visible)
+            })
         }
 
         PullDownMenu {
             busy: api.isSaveInProgress
+            visible: isMenuEnabled
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
                     api.hasChanges
                         ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
-                              filePath: api.filePath,
-                              acceptDestination: filePickerPage,
-                              acceptDestinationAction: PageStackAction.Replace
-                          })
+                                filePath: filePath,
+                                acceptDestination: filePickerPage,
+                                acceptDestinationAction: PageStackAction.Replace
+                            })
                         : pageStack.push(filePickerPage)
                 }
             }
             MenuItem {
                 enabled: !api.isSaveInProgress
-                visible: api.filePath && !api.isReadOnly
+                visible: filePath && !api.isReadOnly
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
-                onClicked: api.requestSaveFile()
+                onClicked: {
+                    api.requestFileSave(filePath)
+                }
             }
         }
 
         PushUpMenu {
+            visible: isMenuEnabled
             MenuItem {
-                text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
-                onClicked: toolbar.open = !toolbar.open
+                text: toolbar.open ? qsTr("Hide toolbar") : qsTr("Show toolbar")
+                onClicked: {
+                    toolbar.open = !toolbar.open
+                }
             }
             MenuItem {
                 text: qsTr('About')
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("About.qml"))
+                }
             }
         }
-    }
 
-    DockedPanel {
-        id: toolbar
-        dock: Dock.Bottom
-        width: parent.width
-        height: Theme.itemSizeMedium
-        focus: false
-        open: false
-        onOpenChanged: {
-            api.postMessage('setPreferences', {
-                isSailfishToolbarOpened: open
-            })
+        DockedPanel {
+            id: toolbar
+            dock: Dock.Bottom
+            width: parent.width
+            height: Theme.itemSizeMedium
+            focus: false
+            open: false
+            background: Rectangle {
+                // default background doesn't look good when virtual keyboard is opened
+                // hence the workaround with Rectangle
+                color: api.isDarkTheme
+                       ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
+                       : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
+            }
+
+            onOpenChanged: {
+                api.postMessage('setSailfishPreferences', {
+                    isToolbarOpened: open
+                })
+            }
+
+            PlatformComponents.Toolbar {
+                hasUndo: api.hasUndo
+                hasRedo: api.hasRedo
+                readOnly: api.isReadOnly
+                readOnlyEnabled: !api.forceReadOnly
+
+                onUndo: api.postMessage('undo')
+                onRedo: api.postMessage('redo')
+                onToggleReadOnly: api.postMessage('toggleReadOnly')
+                onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
+                onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
+                onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
+                onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
+                onNavigateLineStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */ })
+                onNavigateLineEnd: api.postMessage('keyDown', { keyCode: 35 /* END */ })
+                onNavigateFileStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */, ctrlKey: true })
+                onNavigateFileEnd: api.postMessage('keyDown', { keyCode: 35 /* END */, ctrlKey: true })
+            }
         }
 
-        PlatformComponents.Toolbar {
-            hasUndo: api.hasUndo
-            hasRedo: api.hasRedo
-            readOnly: api.isReadOnly
-            readOnlyEnabled: !api.forceReadOnly
+        MouseArea {
+            anchors.fill: parent
+            visible: isMenuEnabled
+            onClicked: {
+                if (filePath !== '') {
+                    isMenuEnabled = false
+                }
+            }
+        }
 
-            onUndo: api.postMessage('undo')
-            onRedo: api.postMessage('redo')
-            onToggleReadOnly: api.postMessage('toggleReadOnly')
-            onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
-            onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
-            onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
-            onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
-            onNavigateLineStart: api.postMessage('navigate', { where: 'lineStart' })
-            onNavigateLineEnd: api.postMessage('navigate', { where: 'lineEnd' })
-            onNavigateFileStart: api.postMessage('navigate', { where: 'fileStart' })
-            onNavigateFileEnd: api.postMessage('navigate', { where: 'fileEnd' })
+
+        Rectangle {
+            visible: filePath !== ''
+            anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: Theme.paddingMedium
+            anchors.rightMargin: Theme.paddingMedium
+            width: childrenRect.width
+            height: childrenRect.height
+            color: api.isDarkTheme
+                ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
+                : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
+            radius: Theme.dp(2)
+
+            Button {
+                icon.source: "image://theme/icon-m-gesture"
+                onClicked: isMenuEnabled = !isMenuEnabled
+                icon.color: isMenuEnabled ? Theme.highlightColor : Theme.primaryColor
+                backgroundColor: Theme.rgba(Theme.highlightBackgroundColor,
+                    isMenuEnabled ? Theme.highlightBackgroundOpacity : 0)
+                border.color: Theme.highlightBackgroundColor
+            }
+        }
+
+        TouchInteractionHint {
+            id: hint
+            direction: TouchInteraction.Down
         }
     }
 
@@ -161,24 +257,14 @@ Page {
                     return
                 }
 
-                if (api.filePath) {
-                    api.closeFile(api.filePath)
+                if (page.filePath) {
+                    api.closeFile(page.filePath)
                 }
                 api.loadFile(selectedContentProperties.filePath, false, true, false, Function.prototype)
                 api.openFile(selectedContentProperties.filePath)
+                page.filePath = selectedContentProperties.filePath
             }
         }
-    }
-
-    /**
-     * Returns HTML device-width scaled correctly for the current device
-     * @returns {int} - device width in CSS pixels
-     */
-    function getDeviceWidth() {
-        const deviceWidth = page.orientation === Orientation.Portrait
-            ? Screen.width
-            : Screen.height
-        return deviceWidth / Theme.pixelRatio / (540 / 320)
     }
 
     /**
@@ -193,17 +279,11 @@ Page {
         })
     }
 
-    function getDeviceScale() {
-        return Theme.pixelRatio * (540 / 320)
-    }
-
-    /**
-     * Simple hak to fix issue with WebView not resized properly automatically when changing device orientation.
-     * @returns {undefined}
-     */
-    function fixResize() {
-        webView.experimental.deviceWidth = getDeviceWidth()
-        page.x = 1
-        page.x = 0
+    function getEditorHeight() {
+        const dockHeight = toolbar.open ? toolbar.height : 0
+        const windowHeight = page.orientation & Orientation.PortraitMask
+            ? Screen.height
+            : Screen.width
+        return windowHeight - dockHeight
     }
 }

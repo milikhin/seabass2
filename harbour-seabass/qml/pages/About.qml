@@ -9,7 +9,7 @@ Page {
         anchors.fill: parent
         header: PageHeader {
             id: header
-            title: qsTr('Seabass v%1').arg('0.6.0')
+            title: qsTr('Seabass v%1').arg('0.9.1')
         }
         model: ListModel {
             ListElement {
@@ -17,8 +17,8 @@ Page {
                 url: "github.com/milikhin/seabass2"
             }
             ListElement {
-                text: "Ace editor, copyright (c) 2010, Ajax.org B.V., BSD license:"
-                url: "github.com/ajaxorg/ace"
+                text: "Codemirror, Copyright (C) 2018 by Marijn Haverbeke <marijnh@gmail.com>, Adrian Heine <mail@adrianheine.de>, and others, MIT license:"
+                url: "github.com/codemirror/codemirror.next"
             }
             ListElement {
                 text: "Babel, Copyright (c) 2014-present Sebastian McKenzie and other contributors, MIT license:"

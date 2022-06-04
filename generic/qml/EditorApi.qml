@@ -6,8 +6,6 @@ import io.thp.pyotherside 1.4
 QtObject {
     id: api
 
-    // /path/to/file on the device
-    property string filePath
     // operate in readonly mode if true, in readwrite mode otherwise
     property bool forceReadOnly: false
     property bool hasChanges: false
@@ -28,6 +26,7 @@ QtObject {
     property string foregroundTextColor: textColor
     property string homeDir
     property int fontSize: 12
+    property int verticalHtmlOffset: 0
     property bool useWrapMode: true
 
     readonly property var py: Python {
@@ -48,10 +47,10 @@ QtObject {
       }
     }
 
-
     signal appLoaded(var preferences)
     signal messageSent(string jsonPayload)
     signal errorOccured(string message)
+    signal scroll(var state)
 
     Component.onCompleted: {
         appLoaded.connect(startup)
@@ -60,6 +59,7 @@ QtObject {
         textColorChanged.connect(loadTheme)
         fontSizeChanged.connect(loadTheme)
         useWrapModeChanged.connect(loadTheme)
+        verticalHtmlOffsetChanged.connect(loadTheme)
     }
 
     /**
@@ -107,7 +107,6 @@ QtObject {
     }
 
     function openFile(filePath) {
-      api.filePath = filePath
       postMessage('openFile', {
         filePath: filePath
       })
@@ -119,13 +118,21 @@ QtObject {
       })
     }
 
+    function oskVisibilityChanged(isVisible) {
+      postMessage('oskVisibilityChanged', {
+        isVisible: isVisible
+      })
+    }
+
     /**
      * Request editor to save file at the `filePath` (editor will reply with a message containing file content)
      * @returns {undefined}
      */
-    function requestSaveFile() {
+    function requestFileSave(filePath) {
         isSaveInProgress = true
-        postMessage('requestSaveFile')
+        postMessage('requestFileSave', {
+            filePath: filePath
+        })
     }
 
     /**
@@ -146,7 +153,7 @@ QtObject {
                 return callback(err)
             }
 
-            postMessage('fileSaved', { filePath: filePath, content: content })
+            postMessage('fileSaved', { filePath: filePath })
             return callback(null)
         })
     }
@@ -162,6 +169,7 @@ QtObject {
             textColor: textColor,
             fontSize: fontSize,
             useWrapMode: useWrapMode,
+            verticalHtmlOffset: verticalHtmlOffset
         })
     }
 
@@ -175,11 +183,9 @@ QtObject {
      * @returns {undefined}
      */
     function handleMessage(action, data) {
-        if (data && data.responseTo === 'requestSaveFile') {
-            isSaveInProgress = false
-        }
-
         switch (action) {
+            case 'log':
+                return console.log(JSON.stringify(data))
             case 'error':
                 console.error(data.message)
                 return errorOccured(data.message || 'unknown error')
@@ -187,17 +193,14 @@ QtObject {
                 api.isLoaded = true
                 return appLoaded(data)
             case 'stateChanged':
-                if (data.filePath !== filePath) {
-                    return
-                }
-
-                // disable word suggestions
-                Qt.inputMethod.commit()
-
                 hasChanges = !data.isReadOnly && data.hasChanges
                 hasUndo = !data.isReadOnly && data.hasUndo
                 hasRedo = !data.isReadOnly && data.hasRedo
                 isReadOnly = data.isReadOnly
+                scroll({
+                  isTop: data.isTop,
+                  isBottom: data.isBottom
+                })
                 return
             case 'saveFile':
                 return saveFile(data.filePath, data.content)

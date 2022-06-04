@@ -8,16 +8,12 @@ import './generic/utils.js' as QmlJs
 ApplicationWindow
 {
     id: root
-    property string defaultFilePath: QmlJs.getDefaultFilePath()
-    property string coverTitle: defaultFilePath
-        ? QmlJs.getFileName(defaultFilePath)
-        : qsTr('Welcome')
+    property string coverTitle: qsTr('Welcome')
 
     initialPage: Component {
         Editor {
-            seabassFilePath: defaultFilePath
-            onSeabassFilePathChanged: {
-                root.coverTitle = QmlJs.getFileName(seabassFilePath)
+            onFilePathChanged: {
+                root.coverTitle = filePath ? QmlJs.getFileName(filePath) : qsTr('Welcome')
             }
         }
     }
