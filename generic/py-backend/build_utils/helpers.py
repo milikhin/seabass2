@@ -48,7 +48,7 @@ def get_launch_cmd(app_name, developer_name):
 def get_install_python_cmd():
     """Returns cmd string to install python 3.6"""
     return 'libertine-launch -i {}\
-            bash -c "PYENV_GIT_TAG=v3.6.15 curl https://pyenv.run | bash"'\
+            bash -c "curl https://pyenv.run | bash"'\
         .format(CONTAINER_ID)
 
 def get_update_pip_cmd():
@@ -64,7 +64,7 @@ def get_install_clickable_cmd():
     commit hash is updated manually
     """
     return 'libertine-launch -i {} \
-            python3.6 -m pip install --user --upgrade clickable-ut==7'\
+            python3.6 -m pip install --user --upgrade clickable-ut==7.*'\
         .format(CONTAINER_ID)
 
 def get_run_clickable_cmd(config_file):
