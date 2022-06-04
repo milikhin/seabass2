@@ -104,12 +104,8 @@ export default class Editor extends EventTarget {
    * @returns file content
    */
   getContent (): string {
-    const lines = this._editor.state.doc.toJSON()
-    if (lines[lines.length - 1] !== '') {
-      lines.push('')
-    }
-
-    return lines.join('\r\n')
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
+    return this._editor.state.doc.toString()
   }
 
   /**
