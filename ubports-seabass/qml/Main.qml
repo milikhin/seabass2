@@ -114,11 +114,7 @@ ApplicationWindow {
       editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
     }
     onHasChangesChanged: {
-      if (!filePath) {
-        return
-      }
-      const fileIndex = tabsModel.getIndex(filePath)
-      const file = tabsModel.get(fileIndex)
+      const file = tabsModel.get(tabBar.currentIndex)
       file.hasChanges = hasChanges
       tabsModel.set(fileIndex, file)
     }

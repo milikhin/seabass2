@@ -50,7 +50,6 @@ QtObject {
     signal appLoaded(var preferences)
     signal messageSent(string jsonPayload)
     signal errorOccured(string message)
-    signal scroll(var state)
 
     Component.onCompleted: {
         appLoaded.connect(startup)
@@ -197,10 +196,6 @@ QtObject {
                 hasUndo = !data.isReadOnly && data.hasUndo
                 hasRedo = !data.isReadOnly && data.hasRedo
                 isReadOnly = data.isReadOnly
-                scroll({
-                  isTop: data.isTop,
-                  isBottom: data.isBottom
-                })
                 return
             case 'saveFile':
                 return saveFile(data.filePath, data.content)
@@ -214,11 +209,6 @@ QtObject {
      * @returns {undefined}
      */
     function postMessage(action, data) {
-        data = data || {}
-        if (!data.filePath) {
-            data.filePath = filePath
-        }
-
-        messageSent(JSON.stringify({ 'action': action, 'data': data }));
+        messageSent(JSON.stringify({ 'action': action, 'data': data || {}}));
     }
 }
