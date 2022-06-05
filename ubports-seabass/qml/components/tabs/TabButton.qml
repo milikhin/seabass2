@@ -123,12 +123,11 @@ TabButton {
 
         UITK.Icon {
           id: closeIcon
-          visible: !isBusy
-          name: 'close'
+          name: isBusy ? 'package-x-generic-symbolic' : 'close'
           height: tabLabel.height
-          width: isBusy ? 0 : Suru.units.gu(2)
+          width: Suru.units.gu(2)
           anchors.centerIn: parent
-          color: tabLabel.color
+          color: isBusy ? Suru.highlightColor : tabLabel.color
         }
         MouseArea {
           enabled: !isBusy
