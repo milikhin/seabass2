@@ -83,7 +83,7 @@ TabButton {
             id: tabLabel
             anchors.verticalCenter: parent.verticalCenter
             elide: Text.ElideRight
-            text: root.text
+            text: root.text + (isBusy ? " [please wait...]" : "")
             color: Suru.foregroundColor
             Component.onCompleted: {
               tabLabel.width = Math.max(
@@ -123,21 +123,12 @@ TabButton {
 
         UITK.Icon {
           id: closeIcon
-          name: isBusy ? 'package-x-generic-symbolic' : 'close'
+          visible: !isBusy
+          name: 'close'
           height: tabLabel.height
           width: Suru.units.gu(2)
           anchors.centerIn: parent
-          color: isBusy ? Suru.highlightColor : tabLabel.color
-          opacity: isBusy ? 0.25 : 1
-
-          NumberAnimation on opacity {
-            id: busyAnimation
-            running: isBusy
-            loops: Animation.Infinite
-            from: 0.25
-            to: 1
-            duration: 3000
-          }
+          color: tabLabel.color
         }
         MouseArea {
           enabled: !isBusy
