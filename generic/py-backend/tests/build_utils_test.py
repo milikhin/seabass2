@@ -10,6 +10,8 @@ sys.modules['libertine.Libertine'] = Libertine
 sys.modules['pyotherside'] = pyotherside
 from build_utils import scripts, helpers # pylint: disable=wrong-import-position
 
+DEFAULT_CWD = '/home/phablet'
+
 @patch('build_utils.build_environment.shell_exec')
 def test_create_new_container(shell_exec):
     """Should create container if not exists"""
@@ -18,7 +20,7 @@ def test_create_new_container(shell_exec):
     res = scripts.build(config_file)
 
     cmd = helpers.get_create_cmd()
-    shell_exec.assert_any_call(cmd, None, False)
+    shell_exec.assert_any_call(cmd, DEFAULT_CWD, False)
     assert not 'error' in res
 
 @patch('build_utils.build_environment.shell_exec')
@@ -42,7 +44,7 @@ def test_install_error_cleanup(shell_exec): # pylint: disable=unused-argument
         with patch.object(Libertine.ContainersConfig, 'container_exists') as container_exists:
             container_exists.side_effect = [False, True]
             scripts.build(cmd)
-            shell_exec.assert_called_with(destroy_cmd, None, False)
+            shell_exec.assert_called_with(destroy_cmd, DEFAULT_CWD, False)
 
 @patch('build_utils.build_environment.shell_exec')
 def test_install_error(shell_exec): # pylint: disable=unused-argument
@@ -97,16 +99,7 @@ def test_update_container_command(shell_exec):
     scripts.update_container()
 
     cmd = helpers.get_install_clickable_cmd()
-    shell_exec.assert_any_call(cmd, None, False)
-
-@patch('build_utils.build_environment.shell_exec')
-def test_update_pip(shell_exec):
-    """Should update pip when installing clickable"""
-
-    scripts.update_container()
-
-    cmd = helpers.get_update_pip_cmd()
-    shell_exec.assert_any_call(cmd, None, False)
+    shell_exec.assert_any_call(cmd, DEFAULT_CWD, False)
 
 def test_test_container_exists_false():
     """Should return False if container not exists"""

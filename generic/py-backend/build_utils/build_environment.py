@@ -9,8 +9,7 @@ from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: d
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd, get_update_pip_cmd, get_install_cmd, get_launch_cmd,\
-    get_install_python_cmd_array
+    get_destroy_cmd, get_install_cmd, get_launch_cmd, get_install_python_cmd_array
 
 class BuildEnv:
     """
@@ -121,11 +120,9 @@ class BuildEnv:
         self._shell_exec(cmd)
 
     def _install_clickable(self):
-        # cmd_pip = get_update_pip_cmd()
         cmd = get_install_clickable_cmd()
         # This function is available in Python but doesn't provide progress:
         #   `self._container.start_application(cmd, environ)`
-        # self._shell_exec(cmd_pip)
         self._shell_exec(cmd)
 
     def _print(self, message, margin_top=False, eol='\n'):

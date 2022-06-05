@@ -59,16 +59,13 @@ def get_install_python_cmd_array():
     lines = [
         'curl https://pyenv.run | bash',
         'echo \'export PYENV_ROOT=\\\"$HOME/.pyenv\\\"\' >> ~/.bashrc',
-        'echo \'command -v pyenv >/dev/null || export PATH=\\\"$PYENV_ROOT/bin:$PATH\\\"\' >> ~/.bashrc',
+        'echo \'command -v pyenv >/dev/null || \
+            export PATH=\\\"$PYENV_ROOT/bin:$PATH\\\"\' >> ~/.bashrc',
         'echo \'eval \\\"$(pyenv init -)\\\"\' >> ~/.bashrc',
         'pyenv install 3.6.15',
         'pyenv global 3.6.15'
     ]
     return map(get_container_cmd, lines)
-
-def get_update_pip_cmd():
-    """Returns cmd string to install clickable into a Seabass Libertine container"""
-    return get_container_cmd('python3.6 -m pip install --upgrade pip')
 
 def get_install_clickable_cmd():
     """
