@@ -28,7 +28,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.4.0"
+  readonly property string version: "1.5.0"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
@@ -363,10 +363,9 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           navBarCanBeOpened: !isWide || !navBar.visible
-          // TODO: fix saving files before enabling `canBeSaved`
-          canBeSaved: false // root.filePath && api.hasChanges
-          buildEnabled: root.filePath && builder.ready
-          buildable: root.filePath && root.filePath.match(/\/clickable\.json$/)
+          canBeSaved: api.filePath && api.hasChanges
+          buildEnabled: api.filePath && builder.ready
+          buildable: api.filePath && api.filePath.match(/\/clickable\.(json|yaml)$/)
           keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
           searchEnabled: main.visible && tabsModel.count
           terminalEnabled: main.visible && tabsModel.count

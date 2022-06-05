@@ -240,7 +240,7 @@ Item {
               Label {
                 Layout.maximumWidth: parent.parent.width - Suru.units.gu(3)
                 text: i18n.tr(
-                  "• To build a project you need to open a corresponding clickable.json file and click the 'Build' button:"
+                  "• To build a project you need to open a corresponding clickable configuration file and click the 'Build' button:"
                 )
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
               }
@@ -267,7 +267,7 @@ Item {
             Label {
               Layout.fillWidth: true
               text: i18n.tr(
-                "• clickable.json file should be named 'clickable.json'."
+                "• clickable config file should be named 'clickable.json' or 'clickable.yaml'."
               )
               wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
