@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-04 23:34+0000\n"
+"POT-Creation-Date: 2022-06-05 11:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -199,8 +199,8 @@ msgstr ""
 
 #: ../qml/Settings.qml:243
 msgid ""
-"• To build a project you need to open a corresponding clickable.json file "
-"and click the 'Build' button:"
+"• To build a project you need to open a corresponding clickable "
+"configuration file and click the 'Build' button:"
 msgstr ""
 
 #: ../qml/Settings.qml:260
@@ -211,7 +211,8 @@ msgid ""
 msgstr ""
 
 #: ../qml/Settings.qml:270
-msgid "• clickable.json file should be named 'clickable.json'."
+msgid ""
+"• clickable config file should be named 'clickable.json' or 'clickable.yaml'."
 msgstr ""
 
 #: ../qml/Settings.qml:286
