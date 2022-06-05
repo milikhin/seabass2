@@ -10,7 +10,7 @@ from .config import CONTAINER_ID, PACKAGES
 from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
     get_destroy_cmd, get_update_pip_cmd, get_install_cmd, get_launch_cmd,\
-    get_install_python_cmd
+    get_install_python_cmd_array
 
 class BuildEnv:
     """
@@ -90,7 +90,7 @@ class BuildEnv:
         cmd = get_destroy_cmd()
         self._shell_exec(cmd)
 
-    def _shell_exec(self, cmd, cwd=None, nowait=False):
+    def _shell_exec(self, cmd, cwd='/home/phablet', nowait=False):
         res = ''
         for stdout_line in shell_exec(cmd, cwd, nowait):
             self._print(stdout_line, eol='')
@@ -111,8 +111,9 @@ class BuildEnv:
                 raise Exception("Installing {} failed".format(package))
 
     def _install_python(self):
-        python_install_cmd = get_install_python_cmd()
-        self._shell_exec(python_install_cmd)
+        python_install_lines = get_install_python_cmd_array()
+        for cmd in python_install_lines:
+            self._shell_exec(cmd)
 
     def _delete_desktop_files(self):
         cmd = get_delete_desktop_files_cmd()
@@ -120,11 +121,11 @@ class BuildEnv:
         self._shell_exec(cmd)
 
     def _install_clickable(self):
-        cmd_pip = get_update_pip_cmd()
+        # cmd_pip = get_update_pip_cmd()
         cmd = get_install_clickable_cmd()
         # This function is available in Python but doesn't provide progress:
         #   `self._container.start_application(cmd, environ)`
-        self._shell_exec(cmd_pip)
+        # self._shell_exec(cmd_pip)
         self._shell_exec(cmd)
 
     def _print(self, message, margin_top=False, eol='\n'):
@@ -156,6 +157,6 @@ class BuildEnv:
             self._print(err)
             if self.test_container_exists():
                 self._print('Deleting created container. Please wait...', margin_top=True)
-                # self._destroy_container()
+                self._destroy_container()
                 self._print('Container has been deleted')
             raise Exception('Setting up a container failed') from err

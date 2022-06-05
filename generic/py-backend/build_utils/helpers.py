@@ -45,17 +45,30 @@ def get_launch_cmd(app_name, developer_name):
     return 'bash -c "ubuntu-app-launch {0}.{1}_{0} &"'\
         .format(app_name, developer_name)
 
-def get_install_python_cmd():
+def get_container_cmd(command_string):
+    """
+    Returns cmd string wrapped into a libertine-launch call
+
+    Keyword arguments:
+    command_string -- cmd string to execute
+    """
+    return 'libertine-launch -i {} bash -i -c "{}"'.format(CONTAINER_ID, command_string)
+
+def get_install_python_cmd_array():
     """Returns cmd string to install python 3.6"""
-    return 'libertine-launch -i {}\
-            bash -c "curl https://pyenv.run | bash"'\
-        .format(CONTAINER_ID)
+    lines = [
+        'curl https://pyenv.run | bash',
+        'echo \'export PYENV_ROOT=\\\"$HOME/.pyenv\\\"\' >> ~/.bashrc',
+        'echo \'command -v pyenv >/dev/null || export PATH=\\\"$PYENV_ROOT/bin:$PATH\\\"\' >> ~/.bashrc',
+        'echo \'eval \\\"$(pyenv init -)\\\"\' >> ~/.bashrc',
+        'pyenv install 3.6.15',
+        'pyenv global 3.6.15'
+    ]
+    return map(get_container_cmd, lines)
 
 def get_update_pip_cmd():
     """Returns cmd string to install clickable into a Seabass Libertine container"""
-    return 'libertine-launch -i {} \
-            python3.6 -m pip install --upgrade pip'\
-        .format(CONTAINER_ID)
+    return get_container_cmd('python3.6 -m pip install --upgrade pip')
 
 def get_install_clickable_cmd():
     """
@@ -63,15 +76,12 @@ def get_install_clickable_cmd():
     In order to avoid issues with breaking changes in the `dev` branch,
     commit hash is updated manually
     """
-    return 'libertine-launch -i {} \
-            python3.6 -m pip install --user --upgrade clickable-ut==7.*'\
-        .format(CONTAINER_ID)
+    return get_container_cmd('python3.6 -m pip install --user --upgrade clickable-ut==7.*')
 
 def get_run_clickable_cmd(config_file):
     """Returns cmd string to run clickable from a Seabass Libertine container"""
-    return 'libertine-launch -i {} clickable build --non-interactive --container-mode \
-            --skip-review --config={}'\
-        .format(CONTAINER_ID, config_file)
+    return get_container_cmd('clickable build --non-interactive --container-mode \
+            --skip-review --config={}'.format(config_file))
 
 def get_install_cmd(click_name):
     """Returns cmd string to run clickable from a Seabass Libertine container"""
@@ -86,8 +96,8 @@ def get_create_project_cmd(options):
             create_args += ' --{}'.format(key)
         elif options[key]:
             create_args += ' --{} "{}"'.format(key, options[key])
-    return 'libertine-launch -i {} clickable create --non-interactive --container-mode {}'\
-        .format(CONTAINER_ID, create_args)
+    return get_container_cmd('clickable create --non-interactive --container-mode {}'\
+        .format(create_args))
 
 def get_delete_desktop_files_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""

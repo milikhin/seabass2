@@ -3,7 +3,23 @@
 CONTAINER_ID = 'seabass2-build'
 CONTAINER_NAME = 'Seabass2 build container'
 PACKAGES = [
+    'wget',
     'curl',
+
+    # to compile python3.6
+    'libssl-dev',
+    'zlib1g-dev',
+    'libbz2-dev',
+    'libreadline-dev',
+    'libsqlite3-dev',
+    'llvm',
+    'libncursesw5-dev',
+    'xz-utils',
+    'tk-dev',
+    'libxml2-dev',
+    'libxmlsec1-dev',
+    'libffi-dev',
+    'liblzma-dev',
 
     # cause why not?
     'nano',
