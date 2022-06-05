@@ -126,7 +126,7 @@ TabButton {
           visible: !isBusy
           name: 'close'
           height: tabLabel.height
-          width: Suru.units.gu(2)
+          width: isBusy ? 0 : Suru.units.gu(2)
           anchors.centerIn: parent
           color: tabLabel.color
         }
