@@ -10,26 +10,28 @@ interface TabsViewOptions {
  * Displays currently active tab of a used model
  */
 export default class TabsView {
+  _model: TabsModel
   _rootElem: HTMLElement
   _contentElems: Map<string, HTMLDivElement>
 
   constructor ({ model, rootElem }: TabsViewOptions) {
+    this._model = model
     this._rootElem = rootElem
-    this._registerModel(model)
+    this._registerEventHandlers()
     this._contentElems = new Map()
   }
 
-  _registerModel (model: TabsModel): void {
-    model.addEventListener('create', evt => {
+  _registerEventHandlers (): void {
+    this._model.addEventListener('create', evt => {
       this._onCreate(evt.detail)
     })
-    model.addEventListener('close', evt => {
+    this._model.addEventListener('close', evt => {
       this._onClose(evt.detail)
     })
-    model.addEventListener('hide', evt => {
+    this._model.addEventListener('hide', evt => {
       this._onHide(evt.detail)
     })
-    model.addEventListener('show', evt => {
+    this._model.addEventListener('show', evt => {
       this._onShow(evt.detail)
     })
   }
