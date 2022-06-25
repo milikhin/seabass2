@@ -46,6 +46,10 @@
         <source>Seabass v%1</source>
         <translation type="unfinished">Seabass v%1</translation>
     </message>
+    <message>
+        <source>Release notes</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>

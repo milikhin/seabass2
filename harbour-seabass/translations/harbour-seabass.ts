@@ -19,6 +19,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Seabass v%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Release notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Open file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -40,10 +48,6 @@
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Seabass v%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
