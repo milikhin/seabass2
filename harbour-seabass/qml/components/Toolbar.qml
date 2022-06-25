@@ -11,7 +11,7 @@ Item {
 
     signal undo()
     signal redo()
-    signal toggleReadOnly
+    signal toggleReadOnly()
     signal navigateLeft()
     signal navigateRight()
     signal navigateUp()

@@ -190,6 +190,7 @@ WebViewPage {
                 hasUndo: editorState.hasUndo
                 hasRedo: editorState.hasRedo
                 readOnly: editorState.isReadOnly
+                readOnlyEnabled: hasOpenedFile
 
                 onUndo: api.postMessage('undo')
                 onRedo: api.postMessage('redo')
