@@ -11,14 +11,11 @@ import '../generic' as GenericComponents
 
 WebViewPage {
     id: page
-    property string filePath
     property int headerHeight: 0
     property bool isMenuEnabled: true
+    property bool hasOpenedFile: editorState.filePath !== ''
+    property alias filePath: editorState.filePath
     allowedOrientations: Orientation.All
-
-    onFilePathChanged: {
-        isMenuEnabled = false
-    }
 
     onIsMenuEnabledChanged: {
         if (isMenuEnabled) {
@@ -29,21 +26,24 @@ WebViewPage {
     }
 
     background: Rectangle {
-        color: api.backgroundColor
+        color: editorState.isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
         height: page.height
         width: page.width
+    }
+
+    GenericComponents.EditorState {
+        id: editorState
+        isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
+
+        onFilePathChanged: {
+            isMenuEnabled = false
+        }
     }
 
     GenericComponents.EditorApi {
         id: api
         homeDir: StandardPaths.home
-
-        // UI theme
-        isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        backgroundColor: isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
-        textColor: isDarkTheme ? QmlJs.colors.DARK_TEXT : QmlJs.colors.LIGHT_TEXT
-        linkColor: textColor
-        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
 
         // platform-specific i18n implementation for Generic API
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
@@ -52,17 +52,22 @@ WebViewPage {
         // API methods
         onAppLoaded: function (data) {
             toolbar.open = data.isToolbarOpened || false
+            editorState.loadTheme()
         }
+
         onErrorOccured: function (message) {
             displayError(message)
         }
-        onIsReadOnlyChanged: {
-            if (isReadOnly) {
-                Qt.inputMethod.hide()
-            }
-        }
+
         onMessageSent: function(jsonPayload) {
             viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
+        }
+
+        onStateChanged: function(data) {
+            editorState.hasChanges = !data.isReadOnly && data.hasChanges
+            editorState.hasUndo = !data.isReadOnly && data.hasUndo
+            editorState.hasRedo = !data.isReadOnly && data.hasRedo
+            editorState.isReadOnly = data.isReadOnly
         }
     }
 
@@ -71,41 +76,31 @@ WebViewPage {
         anchors.fill: parent
         header: PageHeader {
             page: page
-            title: filePath
-                ? ((api.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
+            title: hasOpenedFile
+                ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
                 : qsTr('Seabass v%1').arg('0.9.1')
-            description: filePath
+            description: hasOpenedFile
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
-                : 'Release notes'
+                : qsTr('Release notes')
 
-            Component.onCompleted: {
+            onHeightChanged: {
                 headerHeight = height
-                // TODO: Part of multiple tabs support experiments
-                // const TabsButton = Qt.createComponent("../components/TabsButton.qml");
-                // const btn = TabsButton.createObject(extraContent, {
-                //     text: '1',
-                //     visible: filePath !== '',
-                //     'anchors.verticalCenter': extraContent.verticalCenter,
-                // })
-                // page.filePathChanged.connect(function() {
-                //     btn.visible = filePath !== ''
-                // })
-                // leftMargin = btn.width + Theme.paddingMedium * 2
-                // extraContent.anchors.leftMargin = Theme.paddingMedium
             }
+            // Show divider between page header and editor when file is opened
             Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
-                color: api.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
-                height: filePath ? Theme.dp(1) : 0
+                color: editorState.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
+                height: hasOpenedFile ? Theme.dp(1) : 0
             }
         }
 
+        webView.opacity: 1
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
 
-        webView.opacity: 1
+        // Initialize API transport method for Sailfish OS
         webView.onViewInitialized: {
             webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
             webView.addMessageListener("webview:action")
@@ -117,6 +112,8 @@ WebViewPage {
                 }
             }
         }
+
+        // Open all the links externally in a browser
         webView.onLinkClicked: function(url) {
             Qt.openUrlExternally(url)
         }
@@ -133,7 +130,7 @@ WebViewPage {
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
-                    api.hasChanges
+                    editorState.hasChanges
                         ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
                                 filePath: filePath,
                                 acceptDestination: filePickerPage,
@@ -143,8 +140,8 @@ WebViewPage {
                 }
             }
             MenuItem {
-                enabled: !api.isSaveInProgress
-                visible: filePath && !api.isReadOnly
+                enabled: !api.isSaveInProgress && !editorState.isReadOnly
+                visible: hasOpenedFile
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
                 onClicked: {
                     api.requestFileSave(filePath)
@@ -178,7 +175,7 @@ WebViewPage {
             background: Rectangle {
                 // default background doesn't look good when virtual keyboard is opened
                 // hence the workaround with Rectangle
-                color: api.isDarkTheme
+                color: editorState.isDarkTheme
                        ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
                        : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
             }
@@ -190,10 +187,9 @@ WebViewPage {
             }
 
             PlatformComponents.Toolbar {
-                hasUndo: api.hasUndo
-                hasRedo: api.hasRedo
-                readOnly: api.isReadOnly
-                readOnlyEnabled: !api.forceReadOnly
+                hasUndo: editorState.hasUndo
+                hasRedo: editorState.hasRedo
+                readOnly: editorState.isReadOnly
 
                 onUndo: api.postMessage('undo')
                 onRedo: api.postMessage('redo')
@@ -211,24 +207,24 @@ WebViewPage {
 
         MouseArea {
             anchors.fill: parent
-            visible: filePath !== '' && isMenuEnabled
+            visible: hasOpenedFile && isMenuEnabled
             onClicked: {
-                if (filePath !== '') {
+                if (hasOpenedFile) {
                     isMenuEnabled = false
                 }
             }
         }
 
-
+        // Floating action button to enable pulley menus
         Rectangle {
-            visible: filePath !== ''
+            visible: hasOpenedFile
             anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
             anchors.right: parent.right
             anchors.bottomMargin: Theme.paddingMedium
             anchors.rightMargin: Theme.paddingMedium
             width: childrenRect.width
             height: childrenRect.height
-            color: api.isDarkTheme
+            color: editorState.isDarkTheme
                 ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
                 : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
             radius: Theme.dp(2)
@@ -257,12 +253,15 @@ WebViewPage {
                     return
                 }
 
-                if (page.filePath) {
-                    api.closeFile(page.filePath)
+                if (hasOpenedFile) {
+                    api.closeFile(filePath)
                 }
-                api.loadFile(selectedContentProperties.filePath, false, true, false, Function.prototype)
+                api.loadFile({
+                    filePath: selectedContentProperties.filePath,
+                    createIfNotExists: false
+                })
                 api.openFile(selectedContentProperties.filePath)
-                page.filePath = selectedContentProperties.filePath
+                editorState.filePath = selectedContentProperties.filePath
             }
         }
     }

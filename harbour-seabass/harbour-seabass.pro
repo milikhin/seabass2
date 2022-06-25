@@ -18,6 +18,7 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/components/TabsButton.qml \
     qml/components/Toolbar.qml \
     qml/generic/EditorApi.qml \
+    qml/generic/EditorState.qml \
     qml/generic/TabsModel.qml \
     qml/generic/utils.js \
     qml/html/dist \
