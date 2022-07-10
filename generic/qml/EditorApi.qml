@@ -6,6 +6,7 @@ import io.thp.pyotherside 1.4
 QtObject {
   id: api
 
+  property bool isLoaded: false
   property bool isSaveInProgress: false
   property string homeDir
   property string readErrorMsg: 'Unable to read file %1'
@@ -28,10 +29,15 @@ QtObject {
     }
   }
 
+  onAppLoaded: {
+    isLoaded = true
+  }
+
   signal appLoaded(var preferences)
   signal messageSent(string jsonPayload)
   signal errorOccured(string message)
   signal stateChanged(var state)
+  signal fileOpened(string filePath)
 
   /**
    * Loads file at `filePath` into the editor.

@@ -19,8 +19,6 @@ ApplicationWindow {
   width: Suru.units.gu(100)
   height: Suru.units.gu(60)
 
-  property string filePath
-
   overlay.modal: Rectangle {
     color: "transparent"
   }
@@ -72,23 +70,29 @@ ApplicationWindow {
     property bool useWrapMode: true
   }
 
-  GenericComponents.EditorApi {
-    id: api
+  GenericComponents.EditorState {
+    id: editorState
 
-    // UI theme
-    fontSize: settings.fontSize
-    useWrapMode: settings.useWrapMode
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background
-    borderColor: QmlJs.isDarker(theme.palette.normal.background,
-      theme.palette.normal.backgroundText) ? Suru.darkMid: Suru.lightMid
     textColor: theme.palette.normal.backgroundSecondaryText
     linkColor: theme.palette.normal.backgroundText
-    foregroundColor: theme.palette.normal.foreground
-    foregroundTextColor: theme.palette.normal.foregroundText
-    homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
 
+    fontSize: settings.fontSize
+    useWrapMode: settings.useWrapMode
+
+    onHasChangesChanged: {
+      const file = tabsModel.get(tabBar.currentIndex)
+      file.hasChanges = hasChanges
+      tabsModel.set(tabBar.currentIndex, file)
+    }
+  }
+
+  GenericComponents.EditorApi {
+    id: api
+
+    homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
     // platform-specific i18n implementation for Generic API
     readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
     writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
@@ -115,10 +119,12 @@ ApplicationWindow {
     onMessageSent: function(jsonPayload) {
       editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
     }
-    onHasChangesChanged: {
-      const file = tabsModel.get(tabBar.currentIndex)
-      file.hasChanges = hasChanges
-      tabsModel.set(tabBar.currentIndex, file)
+
+    onStateChanged: function(data) {
+      editorState.hasChanges = !data.isReadOnly && data.hasChanges
+      editorState.hasUndo = !data.isReadOnly && data.hasUndo
+      editorState.hasRedo = !data.isReadOnly && data.hasRedo
+      editorState.isReadOnly = data.isReadOnly
     }
 
     /**
@@ -149,9 +155,14 @@ ApplicationWindow {
           isTerminal: true
         })
       }
-      api.loadFile(tab.filePath, false, !tab.isInitial, tab.doNotActivate, function(err, isNewFile) {
-        if (err) {
-          tabsModel.close(tab.filePath)
+      api.loadFile({
+        filePath: tab.filePath,
+        createIfNotExists: !tab.isInitial,
+        callback: function(err, isNewFile) {
+          if (err) {
+            tabsModel.close(tab.filePath)
+          }
+          api.openFile(tab.filePath)
         }
       })
     }
@@ -339,11 +350,11 @@ ApplicationWindow {
           }
           onSaveRequested: {
             api.getFileContent(function(fileContent) {
-              api.saveFile(root.filePath, fileContent)
+              api.saveFile(editorState.filePath, fileContent)
             })
           }
           onBuildRequested: {
-            const configFile = root.filePath
+            const configFile = editorState.filePath
             builder.build(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
@@ -353,7 +364,7 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           onLaunchRequested: {
-            const configFile = root.filePath
+            const configFile = editorState.filePath
             builder.launch(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
@@ -363,9 +374,9 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           navBarCanBeOpened: !isWide || !navBar.visible
-          canBeSaved: api.filePath && api.hasChanges
-          buildEnabled: api.filePath && builder.ready
-          buildable: api.filePath && api.filePath.match(/\/clickable\.(json|yaml)$/)
+          canBeSaved: editorState.filePath && editorState.hasChanges
+          buildEnabled: editorState.filePath && builder.ready
+          buildable: editorState.filePath && editorState.filePath.match(/\/clickable\.(json|yaml)$/)
           keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
           searchEnabled: main.visible && tabsModel.count
           terminalEnabled: main.visible && tabsModel.count
@@ -375,7 +386,7 @@ ApplicationWindow {
             api.postMessage('toggleSearch')
           }
           onOpenTerminalApp: {
-              if (root.filePath) {
+              if (editorState.filePath) {
                   Qt.openUrlExternally("terminal://?path=" + root.filePath.split('/').slice(0, -1).join('/'))
               }
           }
@@ -391,7 +402,7 @@ ApplicationWindow {
             if (!model.count) {
               header.title = defaultTitle
               header.subtitle = defaultSubTitle
-              root.filePath = undefined
+              editorState.filePath = undefined
               return
             }
 
@@ -401,7 +412,7 @@ ApplicationWindow {
             }
 
             const tab = model.get(currentIndex)
-            root.filePath = tab.filePath
+            editorState.filePath = tab.filePath
             header.title = tab.title
             header.subtitle = tab.subTitle
             api.openFile(tab.id)
