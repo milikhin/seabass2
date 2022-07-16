@@ -12,7 +12,9 @@ describe('SeabassAppModel', () => {
 
       expect(model._editors).toEqual(new Map())
       expect(model._preferences).toEqual({
-        isDarkTheme: false,
+        isDarkTheme: false
+      })
+      expect(model._viewport).toEqual({
         verticalHtmlOffset: 0
       })
       expect(model.sailfishPreferences).toEqual({ isToolbarOpened: true })
@@ -158,13 +160,26 @@ describe('SeabassAppModel', () => {
       const model = new SeabassAppModel()
 
       const options = {
-        isDarkTheme: true,
-        verticalHtmlOffset: Math.random()
+        isDarkTheme: true
       }
       model.setPreferences(options)
 
       expect(model._preferences).toEqual({
-        isDarkTheme: options.isDarkTheme,
+        isDarkTheme: options.isDarkTheme
+      })
+    })
+  })
+
+  describe('#setViewportOptions', () => {
+    it('should set viewport options', () => {
+      const model = new SeabassAppModel()
+
+      const options = {
+        verticalHtmlOffset: Math.random()
+      }
+      model.setViewportOptions(options)
+
+      expect(model._viewport).toEqual({
         verticalHtmlOffset: options.verticalHtmlOffset
       })
     })

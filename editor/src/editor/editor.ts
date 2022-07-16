@@ -129,6 +129,15 @@ export default class Editor extends EventTarget {
   }
 
   /**
+   * Handles window dimensions changes in Sailfish OS
+   */
+  viewportChange (): void {
+    this._editor.dispatch({
+      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+    })
+  }
+
+  /**
    * Set editor preferences
    * @param param0 editor preferences
    */

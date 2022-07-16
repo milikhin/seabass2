@@ -11,7 +11,7 @@ import '../generic' as GenericComponents
 
 WebViewPage {
     id: page
-    property int headerHeight: 0
+    property int toolbarHeight: toolbar.open ? toolbar.height : 0
     property bool isMenuEnabled: true
     property bool hasOpenedFile: editorState.filePath !== ''
     property alias filePath: editorState.filePath
@@ -34,7 +34,7 @@ WebViewPage {
     GenericComponents.EditorState {
         id: editorState
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
+        verticalHtmlOffset: (Qt.inputMethod.keyboardRectangle.height + toolbarHeight) / WebEngineSettings.pixelRatio
 
         onFilePathChanged: {
             isMenuEnabled = false
@@ -83,9 +83,6 @@ WebViewPage {
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : qsTr('Release notes')
 
-            onHeightChanged: {
-                headerHeight = height
-            }
             // Show divider between page header and editor when file is opened
             Rectangle {
                 anchors.bottom: parent.bottom
@@ -98,7 +95,6 @@ WebViewPage {
 
         webView.opacity: 1
         webView.url: '../html/index.html'
-        webView.viewportHeight: getEditorHeight()
 
         // Initialize API transport method for Sailfish OS
         webView.onViewInitialized: {
@@ -116,12 +112,6 @@ WebViewPage {
         // Open all the links externally in a browser
         webView.onLinkClicked: function(url) {
             Qt.openUrlExternally(url)
-        }
-
-        Component.onCompleted: {
-            Qt.inputMethod.visibleChanged.connect(function() {
-                api.oskVisibilityChanged(Qt.inputMethod.visible)
-            })
         }
 
         PullDownMenu {

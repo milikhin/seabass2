@@ -1,4 +1,4 @@
-import SeabassAppModel, { SeabassHtmlTheme, SeabassCommonPreferences } from './model'
+import SeabassAppModel, { SeabassHtmlTheme, ViewportOptions } from './model'
 
 interface SeabassViewOptions {
   model: SeabassAppModel
@@ -49,7 +49,7 @@ export default class SeabassView {
     ;(rules.item(2) as CSSStyleRule).style.color = options.highlightColor
   }
 
-  _onPreferencesChange (options: SeabassCommonPreferences): void {
+  _onViewportChange (options: ViewportOptions): void {
     document.documentElement.style.bottom = `${options.verticalHtmlOffset}px`
   }
 
@@ -57,8 +57,8 @@ export default class SeabassView {
     this._model.addEventListener('htmlThemeChange', evt => {
       this._onHtmlThemeChange(evt.detail)
     })
-    this._model.addEventListener('preferencesChange', evt => {
-      this._onPreferencesChange(evt.detail)
+    this._model.addEventListener('viewportChange', evt => {
+      this._onViewportChange(evt.detail)
     })
     this._model.addEventListener('loadFile', () => {
       this.showTabs()

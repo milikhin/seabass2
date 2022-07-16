@@ -1,4 +1,4 @@
-import { InputPreferences, SeabassSailfishPreferences } from '../app/model'
+import { InputPreferences, SeabassSailfishPreferences, ViewportOptions } from '../app/model'
 import { KeyDownOptions } from '../editor/editor'
 import {
   API_TRANSPORT,
@@ -11,6 +11,7 @@ export interface IncomingMessagePayload {
   closeFile: FileActionOptions
   fileSaved: undefined
   keyDown: KeyDownOptions
+  viewportChange: ViewportOptions
   loadFile: FileLoadOptions
   openFile: FileActionOptions
   oskVisibilityChanged: undefined
@@ -61,7 +62,8 @@ export default class SeabassApi extends EventTarget {
     'setPreferences',
     'setSailfishPreferences',
     'toggleReadOnly',
-    'undo'
+    'undo',
+    'viewportChange'
   ])
 
   constructor ({ transport }: ApiOptions) {

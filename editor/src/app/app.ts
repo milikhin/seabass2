@@ -9,7 +9,8 @@ import SeabassView from './view'
 import SeabassAppModel, {
   EditorStateChangeOptions,
   InputPreferences,
-  SeabassSailfishPreferences
+  SeabassSailfishPreferences,
+  ViewportOptions
 } from './model'
 
 import './app.css'
@@ -64,6 +65,7 @@ class SeabassApp {
     this._api.addEventListener('setSailfishPreferences', this._onSetSailfishPreferences.bind(this))
     this._api.addEventListener('toggleReadOnly', this._forwardEvent.bind(this))
     this._api.addEventListener('undo', this._forwardEvent.bind(this))
+    this._api.addEventListener('viewportChange', this._onViewportChange.bind(this))
 
     this._model.addEventListener('stateChange', this._onStateChange.bind(this))
     this._model.addEventListener('log', this._onLog.bind(this))
@@ -107,6 +109,15 @@ class SeabassApp {
   _onCloseFile (evt: CustomEvent<FileActionOptions>): void {
     this._tabs.close(evt.detail.filePath)
     this._model.closeFile(evt.detail.filePath)
+  }
+
+  /**
+   * Loads saved SailfishOS-specific preferences
+   * @param evt setTheme event
+   */
+  _onViewportChange (evt: CustomEvent<ViewportOptions>): void {
+    this._model.setViewportOptions(evt.detail)
+    this._forwardEvent(evt)
   }
 
   /**
