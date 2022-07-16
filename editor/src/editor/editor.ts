@@ -1,4 +1,5 @@
-import { EditorState, EditorView } from '@codemirror/basic-setup'
+import { EditorView } from 'codemirror'
+import { EditorState } from '@codemirror/state'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
 import { runScopeHandlers } from '@codemirror/view'
