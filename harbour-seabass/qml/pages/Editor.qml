@@ -11,6 +11,7 @@ import '../generic' as GenericComponents
 
 WebViewPage {
     id: page
+    property int headerHeight: 0
     property int toolbarHeight: toolbar.open ? toolbar.height : 0
     property bool isMenuEnabled: true
     property bool hasOpenedFile: editorState.filePath !== ''
@@ -34,7 +35,8 @@ WebViewPage {
     GenericComponents.EditorState {
         id: editorState
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        verticalHtmlOffset: (Qt.inputMethod.keyboardRectangle.height + toolbarHeight) / WebEngineSettings.pixelRatio
+        verticalHtmlOffset: (Qt.inputMethod.keyboardRectangle.height + toolbarHeight + headerHeight) /
+                            WebEngineSettings.pixelRatio
 
         onFilePathChanged: {
             isMenuEnabled = false
@@ -78,10 +80,14 @@ WebViewPage {
             page: page
             title: hasOpenedFile
                 ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                : qsTr('Seabass v%1').arg('0.9.1')
+                : qsTr('Seabass v%1').arg('0.9.2')
             description: hasOpenedFile
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : qsTr('Release notes')
+
+            onHeightChanged: {
+                headerHeight = height
+            }
 
             // Show divider between page header and editor when file is opened
             Rectangle {
@@ -95,6 +101,7 @@ WebViewPage {
 
         webView.opacity: 1
         webView.url: '../html/index.html'
+        webView.viewportHeight: getEditorHeight()
 
         // Initialize API transport method for Sailfish OS
         webView.onViewInitialized: {
@@ -271,9 +278,9 @@ WebViewPage {
 
     function getEditorHeight() {
         const dockHeight = toolbar.open ? toolbar.height : 0
-        const windowHeight = page.orientation & Orientation.PortraitMask
+        return page.orientation & Orientation.PortraitMask
             ? Screen.height
             : Screen.width
-        return windowHeight - dockHeight
+        return windowHeight
     }
 }
