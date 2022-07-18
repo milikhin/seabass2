@@ -10,7 +10,7 @@ Name:       harbour-seabass
 
 Summary:    Seabass
 Version:    0.9.2
-Release:    1
+Release:    2
 Group:      Qt/Qt
 License:    LICENSE
 BuildArch:  noarch
