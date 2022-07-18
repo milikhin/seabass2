@@ -12,7 +12,6 @@ import '../generic' as GenericComponents
 WebViewPage {
     id: page
     property int headerHeight: 0
-    property int toolbarHeight: toolbar.open ? toolbar.height : 0
     property bool isMenuEnabled: true
     property bool hasOpenedFile: editorState.filePath !== ''
     property alias filePath: editorState.filePath
@@ -35,8 +34,7 @@ WebViewPage {
     GenericComponents.EditorState {
         id: editorState
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        verticalHtmlOffset: (Qt.inputMethod.keyboardRectangle.height + toolbarHeight + headerHeight) /
-                            WebEngineSettings.pixelRatio
+        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
 
         onFilePathChanged: {
             isMenuEnabled = false
@@ -102,6 +100,12 @@ WebViewPage {
         webView.opacity: 1
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
+
+        Component.onCompleted: {
+            Qt.inputMethod.visibleChanged.connect(function() {
+                api.oskVisibilityChanged(Qt.inputMethod.visible)
+            })
+        }
 
         // Initialize API transport method for Sailfish OS
         webView.onViewInitialized: {
@@ -277,10 +281,14 @@ WebViewPage {
     }
 
     function getEditorHeight() {
-        const dockHeight = toolbar.open ? toolbar.height : 0
-        return page.orientation & Orientation.PortraitMask
+        const isPortrait = page.orientation & Orientation.PortraitMask
+        const screenHeight = isPortrait
             ? Screen.height
             : Screen.width
-        return windowHeight
+        const keyboardHeight = isPortrait
+            ? Qt.inputMethod.keyboardRectangle.height
+            : Qt.inputMethod.keyboardRectangle.width
+        const toolbarHeight = toolbar.open ? toolbar.height : 0
+        return screenHeight - keyboardHeight - toolbarHeight
     }
 }
