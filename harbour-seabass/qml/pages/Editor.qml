@@ -53,6 +53,7 @@ WebViewPage {
         onAppLoaded: function (data) {
             toolbar.open = data.isToolbarOpened || false
             editorState.loadTheme()
+            editorState.updateViewport()
         }
 
         onErrorOccured: function (message) {

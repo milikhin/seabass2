@@ -117,7 +117,6 @@ class SeabassApp {
    */
   _onViewportChange (evt: CustomEvent<ViewportOptions>): void {
     this._model.setViewportOptions(evt.detail)
-    this._forwardEvent(evt)
   }
 
   /**
