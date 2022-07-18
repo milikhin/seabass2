@@ -19,8 +19,6 @@ export interface SeabassHtmlTheme {
 export interface SeabassCommonPreferences {
   /** Required to set metching editor theme */
   isDarkTheme: boolean
-  /** HTML page's offset from the bottom of webView. Used as a workaround to SfOS rendering issues */
-  verticalHtmlOffset: number
 }
 
 export interface SeabassSailfishPreferences {
@@ -28,11 +26,17 @@ export interface SeabassSailfishPreferences {
   isToolbarOpened: boolean
 }
 
+export interface ViewportOptions {
+  /** HTML page's offset from the bottom of webView. Used as a workaround to SfOS rendering issues */
+  verticalHtmlOffset: number
+}
+
 export type InputPreferences = SeabassHtmlTheme & Partial<SeabassCommonPreferences>
 
 interface AppEvents {
   htmlThemeChange: CustomEvent<SeabassHtmlTheme>
   closeFile: CustomEvent<FileActionOptions>
+  viewportChange: CustomEvent<ViewportOptions>
   loadFile: CustomEvent<FileLoadOptions>
   log: CustomEvent<unknown>
   preferencesChange: CustomEvent<SeabassCommonPreferences>
@@ -56,7 +60,6 @@ export default class SeabassAppModel extends EventTarget {
   /** App preferences */
   _preferences: {
     isDarkTheme: boolean
-    verticalHtmlOffset: number
   }
 
   /** SailfishOS-specific preferences */
@@ -64,17 +67,21 @@ export default class SeabassAppModel extends EventTarget {
     isToolbarOpened: boolean
   }
 
+  _viewport: {
+    verticalHtmlOffset: number
+  }
+
   SFOS_TOOLBAR_LOCAL_STORAGE_KEY = 'sailfish__isToolbarOpened'
 
   constructor () {
     super()
     this._editors = new Map()
-    this._preferences = {
-      isDarkTheme: false,
-      verticalHtmlOffset: 0
-    }
+    this._preferences = { isDarkTheme: false }
     this._sailfish = {
       isToolbarOpened: localStorage.getItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY) === 'true'
+    }
+    this._viewport = {
+      verticalHtmlOffset: 0
     }
   }
 
@@ -162,6 +169,13 @@ export default class SeabassAppModel extends EventTarget {
     this.dispatchEvent(new CustomEvent('stateChange', { detail: editor.getUiState() }))
   }
 
+  setViewportOptions (options: ViewportOptions): void {
+    this._viewport = {
+      verticalHtmlOffset: options.verticalHtmlOffset ?? 0
+    }
+    this.dispatchEvent(new CustomEvent('viewportChange', { detail: this._viewport }))
+  }
+
   /**
    * Sets app preferences
    * @param options app preferences
@@ -174,8 +188,7 @@ export default class SeabassAppModel extends EventTarget {
     }
 
     this._preferences = {
-      isDarkTheme: options.isDarkTheme ?? false,
-      verticalHtmlOffset: options.verticalHtmlOffset ?? 0
+      isDarkTheme: options.isDarkTheme ?? false
     }
 
     for (const editor of this._editors.values()) {

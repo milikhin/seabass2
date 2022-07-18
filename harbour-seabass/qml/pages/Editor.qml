@@ -78,7 +78,7 @@ WebViewPage {
             page: page
             title: hasOpenedFile
                 ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                : qsTr('Seabass v%1').arg('0.9.1')
+                : qsTr('Seabass v%1').arg('0.9.2')
             description: hasOpenedFile
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : qsTr('Release notes')
@@ -86,6 +86,7 @@ WebViewPage {
             onHeightChanged: {
                 headerHeight = height
             }
+
             // Show divider between page header and editor when file is opened
             Rectangle {
                 anchors.bottom: parent.bottom
@@ -99,6 +100,12 @@ WebViewPage {
         webView.opacity: 1
         webView.url: '../html/index.html'
         webView.viewportHeight: getEditorHeight()
+
+        Component.onCompleted: {
+            Qt.inputMethod.visibleChanged.connect(function() {
+                api.oskVisibilityChanged(Qt.inputMethod.visible)
+            })
+        }
 
         // Initialize API transport method for Sailfish OS
         webView.onViewInitialized: {
@@ -116,12 +123,6 @@ WebViewPage {
         // Open all the links externally in a browser
         webView.onLinkClicked: function(url) {
             Qt.openUrlExternally(url)
-        }
-
-        Component.onCompleted: {
-            Qt.inputMethod.visibleChanged.connect(function() {
-                api.oskVisibilityChanged(Qt.inputMethod.visible)
-            })
         }
 
         PullDownMenu {
@@ -280,10 +281,14 @@ WebViewPage {
     }
 
     function getEditorHeight() {
-        const dockHeight = toolbar.open ? toolbar.height : 0
-        const windowHeight = page.orientation & Orientation.PortraitMask
+        const isPortrait = page.orientation & Orientation.PortraitMask
+        const screenHeight = isPortrait
             ? Screen.height
             : Screen.width
-        return windowHeight - dockHeight
+        const keyboardHeight = isPortrait
+            ? Qt.inputMethod.keyboardRectangle.height
+            : Qt.inputMethod.keyboardRectangle.width
+        const toolbarHeight = toolbar.open ? toolbar.height : 0
+        return screenHeight - keyboardHeight - toolbarHeight
     }
 }

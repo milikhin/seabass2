@@ -1,6 +1,6 @@
-import { EditorView, EditorState, basicSetup } from '@codemirror/basic-setup'
+import { EditorView, basicSetup } from 'codemirror'
 import { indentUnit } from '@codemirror/language'
-import { Compartment, Extension, Facet, StateEffect } from '@codemirror/state'
+import { Compartment, EditorState, Extension, Facet, StateEffect } from '@codemirror/state'
 import { keymap } from '@codemirror/view'
 import { history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'

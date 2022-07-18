@@ -28,7 +28,7 @@ QtObject {
     textColorChanged.connect(loadTheme)
     fontSizeChanged.connect(loadTheme)
     useWrapModeChanged.connect(loadTheme)
-    verticalHtmlOffsetChanged.connect(loadTheme)
+    verticalHtmlOffsetChanged.connect(updateViewport)
   }
 
   onIsReadOnlyChanged: {
@@ -45,6 +45,11 @@ QtObject {
       textColor: textColor,
       fontSize: fontSize,
       useWrapMode: useWrapMode,
+    })
+  }
+
+  function updateViewport() {
+    api.postMessage('viewportChange', {
       verticalHtmlOffset: verticalHtmlOffset
     })
   }
