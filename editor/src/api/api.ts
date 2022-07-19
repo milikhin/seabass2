@@ -41,13 +41,13 @@ interface ApiOptions {
 }
 
 type SeabassApiEvent<T extends keyof IncomingMessagePayload> = CustomEvent<IncomingMessagePayload[T]>
-type SeabassApiEventListener <T extends keyof IncomingMessagePayload> = ((evt: SeabassApiEvent<T>) => void) |
+type SeabassApiEventListener<T extends keyof IncomingMessagePayload> = ((evt: SeabassApiEvent<T>) => void) |
 ({ handleEvent: (evt: SeabassApiEvent<T>) => void }) | null
 
 export default class SeabassApi extends EventTarget {
+  _socket?: WebSocket
   /** Platform-specific API transport name */
   _transport: API_TRANSPORT
-  _onMessageHandler: (msg: IncomingApiMessage<keyof IncomingMessagePayload>) => void
 
   /** supported incoming API messages */
   EVENTS = new Set([
@@ -74,11 +74,10 @@ export default class SeabassApi extends EventTarget {
     }
 
     this._transport = transport
-    this._onMessageHandler = this._onMessage.bind(this)
-    window.postSeabassApiMessage = this._onMessageHandler
+    this._initTransport()
   }
 
-  addEventListener<T extends keyof IncomingMessagePayload> (type: T,
+  addEventListener<T extends keyof IncomingMessagePayload>(type: T,
     callback: SeabassApiEventListener<T>, options?: EventListenerOptions): void {
     super.addEventListener(type, callback as EventListenerOrEventListenerObject | null, options)
   }
@@ -111,8 +110,25 @@ export default class SeabassApi extends EventTarget {
         return
       }
       case API_TRANSPORT.URL_HANDLER: {
-        return window.location.assign(`http://seabass/${encodeURIComponent(payload)}`)
+        return this._socket?.send(payload)
       }
+    }
+  }
+
+  _initTransport (): void {
+    switch (this._transport) {
+      case API_TRANSPORT.SAILFISH_WEBVIEW:
+        window.postSeabassApiMessage = this._onMessage.bind(this)
+        return
+      case API_TRANSPORT.URL_HANDLER:
+        this._socket = new WebSocket('ws://127.0.0.1:55222')
+        this._socket.onmessage = evt => {
+          const payload = JSON.parse(evt.data)
+          this._onMessage(payload)
+        }
+        this._socket.onopen = evt => {
+          console.log('OPEN!!!')
+        }
     }
   }
 

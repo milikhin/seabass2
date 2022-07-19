@@ -5,6 +5,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
 import Qt.labs.platform 1.0
 import Qt.labs.settings 1.0
+import QtWebSockets 1.0
 
 import Ubuntu.Components.Themes 1.3
 
@@ -116,9 +117,6 @@ ApplicationWindow {
         }
       }
     }
-    onMessageSent: function(jsonPayload) {
-      editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
-    }
 
     onStateChanged: function(data) {
       editorState.hasChanges = !data.isReadOnly && data.hasChanges
@@ -126,21 +124,30 @@ ApplicationWindow {
       editorState.hasRedo = !data.isReadOnly && data.hasRedo
       editorState.isReadOnly = data.isReadOnly
     }
+  }
 
-    /**
-    * Returns current content of the given file from the EditorApi
-    *  (the API backend must support returning a result from a JS call for this method to work)
-    * @param {function} - callback
-    * @returns {string} - file content
-    */
-    function getFileContent(callback) {
-      const jsonPayload = JSON.stringify({
-        action: 'getFileContent',
-        data: {
-          filePath: filePath
-        }
-      })
-      return editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")", callback);
+  WebSocketServer {
+    id: server
+    listen: true
+    port: 55222
+    onClientConnected: {
+      if (webSocket.status === WebSocket.Open) {
+        api.messageSent.connect(function(jsonPayload) {
+          webSocket.sendTextMessage(jsonPayload)
+        })
+        webSocket.onTextMessageReceived.connect(function (message) {
+          const payload = JSON.parse(message)
+          api.handleMessage(payload.action, payload.data)
+        })
+      }
+    }
+    onErrorStringChanged: {
+      console.log(qsTr("Server error: %1").arg(errorString));
+    }
+
+    // Enable for DEBUG
+    Component.onCompleted: {
+      console.log(server.url);
     }
   }
 
@@ -349,9 +356,7 @@ ApplicationWindow {
             })
           }
           onSaveRequested: {
-            api.getFileContent(function(fileContent) {
-              api.saveFile(editorState.filePath, fileContent)
-            })
+            api.requestFileSave(editorState.filePath)
           }
           onBuildRequested: {
             const configFile = editorState.filePath
@@ -402,7 +407,7 @@ ApplicationWindow {
             if (!model.count) {
               header.title = defaultTitle
               header.subtitle = defaultSubTitle
-              editorState.filePath = undefined
+              editorState.filePath = ''
               return
             }
 
@@ -449,7 +454,7 @@ ApplicationWindow {
 
             saveDialog.show(file.id, {
               onSaved: function() {
-                api.getFileContent(__saveAndClose)
+                // api.getFileContent(__saveAndClose)
               },
               onDismissed: __closeAndContinue
             })
@@ -462,14 +467,14 @@ ApplicationWindow {
               _close(files)
             }
 
-            function __saveAndClose(fileContent) {
-              api.saveFile(file.id, fileContent, function(err) {
-                if (err) {
-                  return
-                }
-                __closeAndContinue()
-              })
-            }
+            // function __saveAndClose(fileContent) {
+            //   api.saveFile(file.id, fileContent, function(err) {
+            //     if (err) {
+            //       return
+            //     }
+            //     __closeAndContinue()
+            //   })
+            // }
           }
         }
 
@@ -477,10 +482,6 @@ ApplicationWindow {
           id: editor
           Layout.fillWidth: true
           Layout.fillHeight: true
-
-          onMessageReceived: function(payload) {
-            return api.handleMessage(payload.action, payload.data)
-          }
         }
 
         CustomComponents.Divider {
