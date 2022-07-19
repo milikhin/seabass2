@@ -1,5 +1,4 @@
-import { IncomingApiMessage, IncomingMessagePayload } from './api/api'
-import { API_TRANSPORT } from './api/api-interface'
+import { API_TRANSPORT, IncomingApiMessage, IncomingMessagePayload } from './api/api-interface'
 import createApp from './app/app'
 
 declare global {

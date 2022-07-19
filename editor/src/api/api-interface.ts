@@ -1,8 +1,15 @@
+import { InputPreferences, SeabassSailfishPreferences, ViewportOptions } from '../app/model'
+import { KeyDownOptions } from '../editor/editor'
+
+export interface ApiTransport {
+  send: (message: Record<string, unknown>) => void
+}
+
 export enum API_TRANSPORT {
-  /** SailfishOS API backend */
+  /** SailfishOS-specific API backend */
   SAILFISH_WEBVIEW = 'Sailfish webView',
-  /** Common QT URL-based API backend */
-  URL_HANDLER = 'URL handler',
+  /** WebSocket-based API backend */
+  WEB_SOCKET = 'WebSocket',
 }
 
 /** EditorConfig options (parsed by python lib) */
@@ -26,4 +33,27 @@ export interface FileLoadOptions extends FileActionOptions {
   isReadOnly: boolean
   /** .editorconfig options */
   editorConfig: RawEditorConfig
+}
+
+/** possible payload of API messages */
+export interface IncomingMessagePayload {
+  closeFile: FileActionOptions
+  fileSaved: undefined
+  keyDown: KeyDownOptions
+  viewportChange: ViewportOptions
+  loadFile: FileLoadOptions
+  openFile: FileActionOptions
+  oskVisibilityChanged: undefined
+  redo: undefined
+  requestFileSave: FileActionOptions
+  setPreferences: InputPreferences
+  setSailfishPreferences: SeabassSailfishPreferences
+  undo: undefined
+  toggleReadOnly: undefined
+}
+
+/** Incoming API message from a platform-specific app */
+export interface IncomingApiMessage<T extends keyof IncomingMessagePayload> {
+  action: T
+  data: IncomingMessagePayload[T]
 }

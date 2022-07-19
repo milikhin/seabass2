@@ -5,7 +5,10 @@ import QtWebEngine 1.1
 
 WebView {
   zoomFactor: units.gu(1) / 8
-  url: "../../html/index.html"
+
+  function load(port) {
+    url = "../../html/index.html?socketPort=" + port
+  }
 
   onNavigationRequested: function(request) {
     const urlStr = request.url.toString()

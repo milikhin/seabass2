@@ -129,7 +129,6 @@ ApplicationWindow {
   WebSocketServer {
     id: server
     listen: true
-    port: 55222
     onClientConnected: {
       if (webSocket.status === WebSocket.Open) {
         api.messageSent.connect(function(jsonPayload) {
@@ -147,7 +146,7 @@ ApplicationWindow {
 
     // Enable for DEBUG
     Component.onCompleted: {
-      console.log(server.url);
+      editor.load(port)
     }
   }
 
