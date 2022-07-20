@@ -32,20 +32,11 @@ ApplicationWindow {
   property int activeTheme: parseInt(settings.theme)
 
   onClosing: {
-    var files = []
-    for (var i = 0; i < tabsModel.count; i++) {
-      var tab = tabsModel.get(i)
-      if (tab.isTerminal) {
-        continue
-      }
-
-      files.push(tab.filePath)
-      if (i === tabBar.currentIndex) {
-        settings.initialTab = files.length - 1
-      }
+    settings.initialFiles = tabsModel.list()
+    const file = tabsModel.get(tabBar.currentIndex)
+    if (file && !file.isTerminal) {
+      settings.initialTab = settings.initialFiles.findIndex(path => path === file.filePath)
     }
-
-    settings.initialFiles = files
   }
 
   function handleBuilderStarted() {
@@ -64,8 +55,8 @@ ApplicationWindow {
     property bool isKeyboardExtensionVisible: true
     property string theme: Constants.Theme.System
     property int fontSize: 12
-    property var initialFiles: []
     property string initialDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+    property var initialFiles: []
     property int initialTab: 0
     property bool restoreOpenedTabs: true
     property bool useWrapMode: true
@@ -90,63 +81,14 @@ ApplicationWindow {
     }
   }
 
-  GenericComponents.EditorApi {
+  CustomComponents.UbuntuApi {
     id: api
-
-    homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
-    // platform-specific i18n implementation for Generic API
-    readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
-    writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
-
-    // API methods
-    onErrorOccured: function(message) {
-      errorDialog.show(message)
+    onServerStarted: function(port) {
+      editor.load(port)
     }
     onAppLoaded: {
-      if (settings.restoreOpenedTabs) {
-        for (var i = 0; i < settings.initialFiles.length; i++) {
-          var filePath = settings.initialFiles[i]
-          tabsModel.open({
-            id: filePath,
-            filePath: filePath,
-            subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
-            title: QmlJs.getFileName(filePath),
-            isInitial: true,
-            doNotActivate: settings.initialTab !== i
-          })
-        }
-      }
-    }
-
-    onStateChanged: function(data) {
-      editorState.hasChanges = !data.isReadOnly && data.hasChanges
-      editorState.hasUndo = !data.isReadOnly && data.hasUndo
-      editorState.hasRedo = !data.isReadOnly && data.hasRedo
-      editorState.isReadOnly = data.isReadOnly
-    }
-  }
-
-  WebSocketServer {
-    id: server
-    listen: true
-    onClientConnected: {
-      if (webSocket.status === WebSocket.Open) {
-        api.messageSent.connect(function(jsonPayload) {
-          webSocket.sendTextMessage(jsonPayload)
-        })
-        webSocket.onTextMessageReceived.connect(function (message) {
-          const payload = JSON.parse(message)
-          api.handleMessage(payload.action, payload.data)
-        })
-      }
-    }
-    onErrorStringChanged: {
-      console.log(qsTr("Server error: %1").arg(errorString));
-    }
-
-    // Enable for DEBUG
-    Component.onCompleted: {
-      editor.load(port)
+      editorState.loadTheme()
+      editorState.updateViewport()
     }
   }
 
@@ -506,7 +448,7 @@ ApplicationWindow {
     Sets the system theme according to the theme selected
     under settings.
   */
-  function setCurrentTheme() {
+  onActiveThemeChanged: {
     switch (activeTheme) {
       case Constants.Theme.System:
         theme.name = "";
@@ -522,9 +464,7 @@ ApplicationWindow {
         break;
     }
 
-    api.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
+    editorState.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText);
   }
-
-  onActiveThemeChanged: setCurrentTheme()
 }

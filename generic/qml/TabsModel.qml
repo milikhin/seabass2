@@ -5,6 +5,19 @@ ListModel {
   signal tabAdded(var tab)
   signal tabClosed(string filePath)
 
+  function list() {
+    var files = []
+    for (var i = 0; i < count; i++) {
+      var tab = get(i)
+      if (tab.isTerminal) {
+        continue
+      }
+
+      files.push(tab.filePath)
+    }
+    return files
+  }
+
   function getIndex(id) {
     for (var i = 0; i < count; i++) {
       var item = get(i)
