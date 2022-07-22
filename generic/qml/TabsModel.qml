@@ -1,21 +1,32 @@
 import QtQml.Models 2.2
 import "./utils.js" as QmlJs
 
+/**
+ * @typedef Tab
+ * @property {string} id - unique tab ID
+ * @property {string} title - tab's title
+ * @property {string} subTitle - tab's subtitle
+ * @property {string} [filePath] - full file path
+ * @property {boolean} [isBusy] - busy state flag
+ * @property {boolean} [isTerminal] - terminal output flag
+ */
+
+// Represents opened tabs
 ListModel {
-  signal tabAdded(var tab)
+  signal tabAdded(var tab, var options)
   signal tabClosed(string filePath)
 
-  function list() {
-    var files = []
+  function listFiles() {
+    var fileTabs = []
     for (var i = 0; i < count; i++) {
       var tab = get(i)
       if (tab.isTerminal) {
         continue
       }
 
-      files.push(tab.filePath)
+      fileTabs.push(tab)
     }
-    return files
+    return fileTabs
   }
 
   function getIndex(id) {
@@ -32,10 +43,7 @@ ListModel {
       id: tabId,
       title: title,
       subTitle: subTitle,
-      readOnly: true,
       isTerminal: true,
-
-      filePath: tabId
     })
   }
 
@@ -47,20 +55,19 @@ ListModel {
 
     var currentTab = {
       id: options.id,
-      hasChanges: false,
-      isBusy: false,
-      isInitial: options.isInitial,
-      isTerminal: options.isTerminal || false,
       title: options.title,
       subTitle: options.subTitle,
       uniqueTitle: options.title,
-      readOnly: options.isTerminal || options.readOnly || false,
-      doNotActivate: options.doNotActivate,
+      isTerminal: options.isTerminal || false,
 
-      filePath: options.filePath
+      filePath: options.filePath,
+      isBusy: false,
+      hasChanges: false
     }
     append(currentTab)
-    tabAdded(currentTab)
+    tabAdded(currentTab, {
+      createIfNotExists: !options.isRestored,
+    })
     _updateTabNames()
   }
 

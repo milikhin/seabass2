@@ -58,6 +58,8 @@ GenericComponents.EditorApi {
   }
 
   onStateChanged: function(data) {
+    tabsModel.patch(data.filePath, { hasChanges: data.hasChanges })
+
     editorState.hasChanges = !data.isReadOnly && data.hasChanges
     editorState.hasUndo = !data.isReadOnly && data.hasUndo
     editorState.hasRedo = !data.isReadOnly && data.hasRedo

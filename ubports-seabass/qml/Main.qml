@@ -32,11 +32,11 @@ ApplicationWindow {
   property int activeTheme: parseInt(settings.theme)
 
   onClosing: {
-    settings.initialFiles = tabsModel.list()
-    const file = tabsModel.get(tabBar.currentIndex)
-    if (file && !file.isTerminal) {
-      settings.initialTab = settings.initialFiles.findIndex(path => path === file.filePath)
-    }
+    settings.initialFiles = tabsModel.listFiles().map(tab => tab.filePath)
+    const currentTab = tabsModel.get(tabBar.currentIndex)
+    settings.initialTab = currentTab && !currentTab.isTerminal
+      ? settings.initialFiles.indexOf(currentTab.filePath)
+      : 0
   }
 
   function handleBuilderStarted() {
@@ -73,12 +73,6 @@ ApplicationWindow {
 
     fontSize: settings.fontSize
     useWrapMode: settings.useWrapMode
-
-    onHasChangesChanged: {
-      const file = tabsModel.get(tabBar.currentIndex)
-      file.hasChanges = hasChanges
-      tabsModel.set(tabBar.currentIndex, file)
-    }
   }
 
   CustomComponents.UbuntuApi {
@@ -90,22 +84,25 @@ ApplicationWindow {
       editorState.loadTheme()
       editorState.updateViewport()
     }
+    onFileBeingClosed: function (filePath) {
+      tabsModel.close(filePath)
+    }
   }
 
   GenericComponents.TabsModel {
     id: tabsModel
-    onTabAdded: function(tab) {
+    onTabAdded: function(tab, options) {
       if (tab.isTerminal) {
         return api.postMessage('loadFile', {
           filePath: tab.id,
           content: '',
-          readOnly: true,
           isTerminal: true
         })
       }
+
       api.loadFile({
         filePath: tab.filePath,
-        createIfNotExists: !tab.isInitial,
+        createIfNotExists: options.createIfNotExists,
         callback: function(err, isNewFile) {
           if (err) {
             tabsModel.close(tab.filePath)
@@ -116,13 +113,6 @@ ApplicationWindow {
     }
     onTabClosed: function(tabId) {
       api.closeFile(tabId)
-
-      // display current tab
-      if (!count) {
-        return
-      }
-      var currentFile = get(tabBar.currentIndex)
-      api.openFile(currentFile.filePath)
     }
   }
 
@@ -172,10 +162,6 @@ ApplicationWindow {
 
   CustomComponents.ErrorDialog {
     id: errorDialog
-  }
-
-  CustomComponents.SaveDialog {
-    id: saveDialog
   }
 
   Item {
@@ -258,8 +244,8 @@ ApplicationWindow {
 
         CustomComponents.Header {
           id: header
-          title: defaultTitle
-          subtitle: root.title
+          title: tabsModel.currentTab ? tabsModel.currentTab.uniqueTitle : defaultTitle
+          subtitle: tabsModel.currentTab ? tabsModel.currentTab.subTitle : defaultSubTitle
           Layout.fillWidth: true
 
           onNavBarToggled: {
@@ -346,8 +332,6 @@ ApplicationWindow {
 
           onCurrentIndexChanged: {
             if (!model.count) {
-              header.title = defaultTitle
-              header.subtitle = defaultSubTitle
               editorState.filePath = ''
               return
             }
@@ -359,63 +343,7 @@ ApplicationWindow {
 
             const tab = model.get(currentIndex)
             editorState.filePath = tab.filePath
-            header.title = tab.title
-            header.subtitle = tab.subTitle
             api.openFile(tab.id)
-          }
-          onClose: function(index) {
-            _close([model.get(index)])
-          }
-          onCloseAll: function() {
-            const files = []
-            for (var i = 0; i < model.count; i++) {
-              const file = model.get(i)
-              files.push({ hasChanges: file.hasChanges, id: file.id })
-            }
-            _close(files)
-          }
-          onCloseToTheRight: function(startIndex) {
-            if (startIndex === model.count - 1) {
-              return
-            }
-
-            const files = []
-            for (var i = startIndex + 1; i < model.count; i++) {
-              const file = model.get(i)
-              files.push({ hasChanges: file.hasChanges, id: file.id })
-            }
-            _close(files)
-          }
-
-          function _close(files) {
-            const file = files.shift()
-            if (!file.hasChanges) {
-              return __closeAndContinue()
-            }
-
-            saveDialog.show(file.id, {
-              onSaved: function() {
-                // api.getFileContent(__saveAndClose)
-              },
-              onDismissed: __closeAndContinue
-            })
-
-            function __closeAndContinue() {
-              model.close(file.id)
-              if (!files.length) {
-                return
-              }
-              _close(files)
-            }
-
-            // function __saveAndClose(fileContent) {
-            //   api.saveFile(file.id, fileContent, function(err) {
-            //     if (err) {
-            //       return
-            //     }
-            //     __closeAndContinue()
-            //   })
-            // }
           }
         }
 

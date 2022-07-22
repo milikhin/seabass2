@@ -46,6 +46,7 @@ export interface IncomingMessagePayload {
   oskVisibilityChanged: undefined
   redo: undefined
   requestFileSave: FileActionOptions
+  requestSaveAndClose: FileActionOptions
   setPreferences: InputPreferences
   setSailfishPreferences: SeabassSailfishPreferences
   undo: undefined
