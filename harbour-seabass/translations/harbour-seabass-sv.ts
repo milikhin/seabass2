@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="su">
+<TS version="2.1" language="sv">
 <context>
     <name>About</name>
     <message>
@@ -44,11 +44,11 @@
     </message>
     <message>
         <source>Seabass v%1</source>
-        <translation type="unfinished">Seabass v%1</translation>
+        <translation>Seabass v%1</translation>
     </message>
     <message>
         <source>Release notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Versionsnotiser</translation>
     </message>
 </context>
 <context>
