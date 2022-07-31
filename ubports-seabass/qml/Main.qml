@@ -342,6 +342,10 @@ ApplicationWindow {
             }
 
             const tab = model.get(currentIndex)
+            if (!tab) {
+              return
+            }
+
             editorState.filePath = tab.filePath
             api.openFile(tab.id)
           }

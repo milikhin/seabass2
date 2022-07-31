@@ -62,6 +62,7 @@ class SeabassApp {
     this._api.addEventListener('redo', this._forwardEvent.bind(this))
     this._api.addEventListener('requestFileSave', this._onRequestFileSave.bind(this))
     this._api.addEventListener('requestSaveAndClose', this._onRequestFileSave.bind(this))
+    this._api.addEventListener('setContent', this._forwardEvent.bind(this))
     this._api.addEventListener('setPreferences', this._onSetPreferences.bind(this))
     this._api.addEventListener('setSailfishPreferences', this._onSetSailfishPreferences.bind(this))
     this._api.addEventListener('toggleReadOnly', this._forwardEvent.bind(this))

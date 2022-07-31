@@ -24,6 +24,11 @@ export interface FileActionOptions {
   filePath: string
 }
 
+export interface SetContentOptions extends FileActionOptions {
+  content: string
+  append?: boolean
+}
+
 export interface FileLoadOptions extends FileActionOptions {
   /** File content */
   content: string
@@ -47,6 +52,7 @@ export interface IncomingMessagePayload {
   redo: undefined
   requestFileSave: FileActionOptions
   requestSaveAndClose: FileActionOptions
+  setContent: SetContentOptions
   setPreferences: InputPreferences
   setSailfishPreferences: SeabassSailfishPreferences
   undo: undefined

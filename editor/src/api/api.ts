@@ -43,6 +43,7 @@ export default class SeabassApi extends EventTarget {
     'redo',
     'requestFileSave',
     'requestSaveAndClose',
+    'setContent',
     'setPreferences',
     'setSailfishPreferences',
     'toggleReadOnly',
