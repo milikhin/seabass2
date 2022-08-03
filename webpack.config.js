@@ -46,7 +46,10 @@ const sailfishConfig = {
         },
         {
           from: './generic/py-backend',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend')
+          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend'),
+          globOptions: {
+            ignore: ['**/.coverage', '**/.pytest_cache']
+          }
         },
         {
           from: './generic/py-libs/inotify_simple/inotify_simple.py',
