@@ -252,10 +252,10 @@ WebViewPage {
 
     GenericComponents.TabsModel {
         id: tabsModel
-        onTabAdded: function(tab, options) {
+        onTabAdded: function(tab) {
             api.loadFile({
                 filePath: tab.filePath,
-                createIfNotExists: options.createIfNotExists,
+                createIfNotExists: true,
                 callback: function(err) {
                     if (err) {
                         tabsModel.close(tab.filePath)

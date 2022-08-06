@@ -80,12 +80,14 @@ Page {
 //            acceptDestination: pageStack.previousPage()
 //            acceptDestinationAction: PageStackAction.Pop
             onAccepted: {
-                root.opened(directoryModel.directory + '/' + name)
-                root.statusChanged.connect(function() {
+                const callback = function() {
                     if (root.status === PageStatus.Active) {
                         pageStack.pop()
+                        root.statusChanged.disconnect(callback)
                     }
-                })
+                }
+                root.opened(directoryModel.directory + '/' + name)
+                root.statusChanged.connect(callback)
             }
         }
     }
