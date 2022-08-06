@@ -59,6 +59,28 @@
     </message>
 </context>
 <context>
+    <name>Files</name>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewFile</name>
+    <message>
+        <source>Create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create new file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
         <source>Discard changes?</source>
