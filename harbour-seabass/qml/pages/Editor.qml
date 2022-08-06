@@ -132,13 +132,15 @@ WebViewPage {
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
-                    editorState.hasChanges
-                        ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
-                                filePath: filePath,
-                                acceptDestination: filePickerPage,
-                                acceptDestinationAction: PageStackAction.Replace
-                            })
-                        : pageStack.push(filePickerPage)
+                    if (!editorState.hasChanges) {
+                        return pageStack.push(filePicker)
+                    }
+
+                    pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
+                        filePath: filePath,
+                        acceptDestination: filePicker,
+                        acceptDestinationAction: PageStackAction.Replace
+                    })
                 }
             }
             MenuItem {
@@ -248,23 +250,40 @@ WebViewPage {
         }
     }
 
-    Component {
-        id: filePickerPage
-        FilePickerPage {
-            onSelectedContentPropertiesChanged: {
-                if (!selectedContentProperties.filePath) {
-                    return
+    GenericComponents.TabsModel {
+        id: tabsModel
+        onTabAdded: function(tab, options) {
+            api.loadFile({
+                filePath: tab.filePath,
+                createIfNotExists: options.createIfNotExists,
+                callback: function(err) {
+                    if (err) {
+                        tabsModel.close(tab.filePath)
+                    }
+                    api.openFile(tab.filePath)
                 }
+            })
+        }
+        onTabClosed: function(tabId) {
+            api.closeFile(tabId)
+        }
+    }
 
+    Component {
+        id: filePicker
+        Files {
+            homeDir: api.homeDir
+            onOpened: function(filePath) {
                 if (hasOpenedFile) {
-                    api.closeFile(filePath)
+                    tabsModel.close(editorState.filePath)
                 }
-                api.loadFile({
-                    filePath: selectedContentProperties.filePath,
-                    createIfNotExists: false
+                tabsModel.open({
+                    id: filePath,
+                    filePath: filePath,
+                    subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+                    title: QmlJs.getFileName(filePath)
                 })
-                api.openFile(selectedContentProperties.filePath)
-                editorState.filePath = selectedContentProperties.filePath
+                editorState.filePath = filePath
             }
         }
     }
