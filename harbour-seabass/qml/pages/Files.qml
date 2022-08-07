@@ -1,6 +1,5 @@
 import QtQuick 2.2
 import Sailfish.Silica 1.0
-import QtQuick.Layouts 1.1
 
 import '../generic' as GenericComponents
 import '../generic/utils.js' as QmlJs
@@ -45,19 +44,22 @@ Page {
                 }
             }
 
-            RowLayout {
+            Row {
                 anchors.fill: parent
                 anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.rightMargin: Theme.horizontalPageMargin
                 spacing: Theme.paddingMedium
 
                 Icon {
+                    id: icon
                     anchors.verticalCenter: parent.verticalCenter
+
                     source: isDir ? "image://theme/icon-m-file-folder" : "image://theme/icon-m-file-document"
                 }
                 Label {
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+                    width: parent.width - icon.width - Theme.paddingMedium
+                    height: parent.height
+                    elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
                     text: name
                 }
