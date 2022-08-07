@@ -221,27 +221,17 @@ WebViewPage {
         }
 
         // Floating action button to enable pulley menus
-        Rectangle {
-            visible: hasOpenedFile
+        PlatformComponents.FloatingButton {
             anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
             anchors.right: parent.right
             anchors.bottomMargin: Theme.paddingMedium
             anchors.rightMargin: Theme.paddingMedium
-            width: childrenRect.width
-            height: childrenRect.height
-            color: editorState.isDarkTheme
-                ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
-                : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
-            radius: Theme.dp(2)
+            visible: hasOpenedFile
 
-            Button {
-                icon.source: "image://theme/icon-m-gesture"
-                onClicked: isMenuEnabled = !isMenuEnabled
-                icon.color: isMenuEnabled ? Theme.highlightColor : Theme.primaryColor
-                backgroundColor: Theme.rgba(Theme.highlightBackgroundColor,
-                    isMenuEnabled ? Theme.highlightBackgroundOpacity : 0)
-                border.color: Theme.highlightBackgroundColor
-            }
+            isDarkTheme: editorState.isDarkTheme
+            highlighed: isMenuEnabled
+            icon.source: "image://theme/icon-m-gesture"
+            onClicked: isMenuEnabled = !isMenuEnabled
         }
 
         TouchInteractionHint {
