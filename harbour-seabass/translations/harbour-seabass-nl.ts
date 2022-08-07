@@ -79,6 +79,10 @@
         <source>Create new file</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>File name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SaveDialog</name>
