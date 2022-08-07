@@ -49,14 +49,6 @@ Item {
     }
   }
 
-  function getDirPath() {
-    return directory.toString().replace('file://', '')
-  }
-
-  function getPrintableDirPath() {
-    return QmlJs.getPrintableDirPath(directory.toString(), homeDir)
-  }
-
   function load(ignoreError) {
     if (!py.ready) {
       return
@@ -77,7 +69,7 @@ Item {
       if (hasDotDot) {
         model.set(0, {
           name: '..',
-          path: QmlJs.getDirPath(QmlJs.getNormalPath(directory)) + '/',
+          path: QmlJs.getDirPath(QmlJs.getNormalPath(directory)),
           isDir: true
         })
       }

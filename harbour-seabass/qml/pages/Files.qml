@@ -7,7 +7,7 @@ import '../generic/utils.js' as QmlJs
 Page {
     id: root
     property string homeDir
-    property bool treeMode: true
+    property bool treeMode: false
     property alias directory: directoryModel.directory
     signal opened (string filePath)
 
@@ -29,7 +29,12 @@ Page {
 
         header: PageHeader {
             title: qsTr('Files')
-            description: directoryModel.getPrintableDirPath()
+            description: QmlJs.getPrintableDirPath(directoryModel.directory, homeDir)
+            Component.onCompleted: {
+                const btn = iconButton.createObject(extraContent)
+                leftMargin = btn.width + Theme.paddingLarge * 2
+                extraContent.anchors.leftMargin = Theme.paddingLarge
+            }
         }
 
         model: directoryModel.model
@@ -38,7 +43,7 @@ Page {
             height: Theme.itemSizeSmall
 
             onClicked: {
-                if (!isFile) {
+                if (isFile) {
                     opened(path)
                     return pageStack.pop()
                 }
@@ -97,6 +102,17 @@ Page {
                 root.opened(directoryModel.directory + '/' + name)
                 root.statusChanged.connect(callback)
             }
+        }
+    }
+
+    Component {
+        id: iconButton
+        IconButton {
+            y: root.orientation & Orientation.PortraitMask ? (Theme.itemSizeLarge - height) / 2 : 0
+            icon.source: 'image://theme/icon-m-home'
+            visible: !treeMode
+            enabled: directoryModel.directory !== homeDir
+            onClicked: directoryModel.directory = homeDir
         }
     }
 

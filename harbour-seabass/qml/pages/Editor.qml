@@ -41,7 +41,6 @@ WebViewPage {
         }
 
         onDirectoryChanged: {
-            console.log()
             api.postMessage('setSailfishPreferences', {
                 directory: directory
             })

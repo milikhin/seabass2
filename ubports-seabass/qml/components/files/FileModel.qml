@@ -90,7 +90,7 @@ Item {
       if (hasDotDot) {
         model.set(0, {
           name: '..',
-          path: QmlJs.getDirPath(QmlJs.getNormalPath(directory)) + '/',
+          path: QmlJs.getDirPath(QmlJs.getNormalPath(directory)),
           isDir: true
         })
       }
