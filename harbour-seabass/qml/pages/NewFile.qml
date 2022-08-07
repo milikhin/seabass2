@@ -2,8 +2,9 @@ import QtQuick 2.2
 import Sailfish.Silica 1.0
 
 Dialog {
+    id: root
     property alias name: nameField.text
-    canAccept: nameField.text !== ''
+    canAccept: name.length > 0
 
     Column {
         width: parent.width
@@ -16,9 +17,13 @@ Dialog {
         TextField {
             id: nameField
             width: parent.width
-            placeholderText: "file.txt"
-            label: "File name"
+            placeholderText: 'file.txt'
+            label: qsTr('File name')
             focus: true
+
+            EnterKey.enabled: text.length > 0
+            EnterKey.iconSource: 'image://theme/icon-m-enter-accept'
+            EnterKey.onClicked: root.accept()
         }
     }
 }
