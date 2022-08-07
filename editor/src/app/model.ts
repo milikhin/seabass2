@@ -24,6 +24,8 @@ export interface SeabassCommonPreferences {
 export interface SeabassSailfishPreferences {
   /** Bottom toolbar state */
   isToolbarOpened: boolean
+  /** Current file tree directory */
+  directory: string|null
 }
 
 export interface ViewportOptions {
@@ -65,6 +67,7 @@ export default class SeabassAppModel extends EventTarget {
   /** SailfishOS-specific preferences */
   _sailfish: {
     isToolbarOpened: boolean
+    directory: string|null
   }
 
   _viewport: {
@@ -72,13 +75,15 @@ export default class SeabassAppModel extends EventTarget {
   }
 
   SFOS_TOOLBAR_LOCAL_STORAGE_KEY = 'sailfish__isToolbarOpened'
+  SFOS_DIRECTORY_LOCAL_STORAGE_KEY = 'sailfish__directory'
 
   constructor () {
     super()
     this._editors = new Map()
     this._preferences = { isDarkTheme: false }
     this._sailfish = {
-      isToolbarOpened: localStorage.getItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY) === 'true'
+      isToolbarOpened: localStorage.getItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY) === 'true',
+      directory: localStorage.getItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY)
     }
     this._viewport = {
       verticalHtmlOffset: 0
@@ -202,11 +207,16 @@ export default class SeabassAppModel extends EventTarget {
    * Sets sailfish-specific app preferences
    * @param options app preferences
    */
-  setSailfishPreferences (options: SeabassSailfishPreferences): void {
-    this._sailfish = {
-      isToolbarOpened: options.isToolbarOpened
+  setSailfishPreferences (options: Partial<SeabassSailfishPreferences>): void {
+    if (options.isToolbarOpened !== undefined) {
+      this._sailfish.isToolbarOpened = options.isToolbarOpened
+      localStorage.setItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY, options.isToolbarOpened.toString())
     }
-    localStorage.setItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY, options.isToolbarOpened.toString())
+    if (options.directory !== undefined && options.directory !== null) {
+      this._sailfish.directory = options.directory
+      localStorage.setItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY, options.directory)
+    }
+
     this.dispatchEvent(new CustomEvent('sfosPreferencesChange', { detail: this._sailfish }))
   }
 }

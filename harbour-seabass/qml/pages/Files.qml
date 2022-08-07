@@ -7,6 +7,8 @@ import '../generic/utils.js' as QmlJs
 Page {
     id: root
     property string homeDir
+    property bool treeMode: true
+    property alias directory: directoryModel.directory
     signal opened (string filePath)
 
     allowedOrientations: Orientation.All
@@ -15,8 +17,7 @@ Page {
         id: directoryModel
         rootDirectory: '/'
         prevDirectory: QmlJs.getNormalPath(homeDir)
-        directory: homeDir
-        showDotDot: true
+        showDotDot: !treeMode
 
         onErrorOccured: function(err) {
             displayError(err)
@@ -28,6 +29,7 @@ Page {
 
         header: PageHeader {
             title: qsTr('Files')
+            description: directoryModel.getPrintableDirPath()
         }
 
         model: directoryModel.model
@@ -36,17 +38,21 @@ Page {
             height: Theme.itemSizeSmall
 
             onClicked: {
-                if (isDir) {
-                    directoryModel.directory = path
-                } else {
+                if (!isFile) {
                     opened(path)
-                    pageStack.pop()
+                    return pageStack.pop()
+                }
+
+                if (treeMode) {
+                    directoryModel.toggleExpanded(path)
+                } else {
+                    directoryModel.directory = path
                 }
             }
 
             Row {
                 anchors.fill: parent
-                anchors.leftMargin: Theme.horizontalPageMargin
+                anchors.leftMargin: Theme.horizontalPageMargin + (level * Theme.paddingLarge)
                 anchors.rightMargin: Theme.horizontalPageMargin
                 spacing: Theme.paddingMedium
 
