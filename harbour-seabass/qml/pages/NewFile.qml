@@ -5,6 +5,7 @@ Dialog {
     id: root
     property alias name: nameField.text
     canAccept: name.length > 0
+    allowedOrientations: Orientation.All
 
     Column {
         width: parent.width
