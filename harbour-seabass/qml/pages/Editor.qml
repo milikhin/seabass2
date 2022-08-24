@@ -58,7 +58,7 @@ WebViewPage {
         // API methods
         onAppLoaded: function (data) {
             toolbar.open = data.isToolbarOpened || false
-            editorState.directory = api.homeDir
+            editorState.directory = data.directory || api.homeDir
             editorState.loadTheme()
             editorState.updateViewport()
         }

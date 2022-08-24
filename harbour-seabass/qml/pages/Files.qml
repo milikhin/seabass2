@@ -30,17 +30,17 @@ Page {
         header: PageHeader {
             title: qsTr('Files')
             description: QmlJs.getPrintableDirPath(directoryModel.directory, homeDir)
-            Component.onCompleted: {
-                const btn = iconButton.createObject(extraContent)
-                leftMargin = btn.width + Theme.paddingLarge * 2
-                extraContent.anchors.leftMargin = Theme.paddingLarge
-            }
+//            Component.onCompleted: {
+//                const btn = iconButton.createObject(extraContent)
+//                leftMargin = btn.width + Theme.paddingLarge * 2 + Theme.paddingSmall
+//                extraContent.anchors.leftMargin = Theme.paddingLarge + Theme.paddingSmall
+//            }
         }
 
         model: directoryModel.model
         delegate: ListItem {
             width: ListView.view.width
-            height: Theme.itemSizeSmall
+            height: Theme.itemSizeExtraSmall
 
             onClicked: {
                 if (isFile) {
@@ -79,6 +79,12 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Go to home directory")
+                enabled: directoryModel.directory !== homeDir
+                onClicked: directoryModel.directory = homeDir
+            }
+
+            MenuItem {
                 text: qsTr("New file...")
                 onClicked: {
                     pageStack.push(newFile)
@@ -90,31 +96,24 @@ Page {
     Component {
         id: newFile
         NewFile {
-//            acceptDestination: pageStack.previousPage()
-//            acceptDestinationAction: PageStackAction.Pop
+            acceptDestination: pageStack.previousPage(root)
+            acceptDestinationAction: PageStackAction.Pop
             onAccepted: {
-                const callback = function() {
-                    if (root.status === PageStatus.Active) {
-                        pageStack.pop()
-                        root.statusChanged.disconnect(callback)
-                    }
-                }
                 root.opened(directoryModel.directory + '/' + name)
-                root.statusChanged.connect(callback)
             }
         }
     }
 
-    Component {
-        id: iconButton
-        IconButton {
-            y: root.orientation & Orientation.PortraitMask ? (Theme.itemSizeLarge - height) / 2 : 0
-            icon.source: 'image://theme/icon-m-home'
-            visible: !treeMode
-            enabled: directoryModel.directory !== homeDir
-            onClicked: directoryModel.directory = homeDir
-        }
-    }
+//    Component {
+//        id: iconButton
+//        IconButton {
+//            y: root.orientation & Orientation.PortraitMask ? (Theme.itemSizeLarge - height) / 2 : 0
+//            icon.source: 'image://theme/icon-m-home'
+//            visible: !treeMode
+//            enabled: directoryModel.directory !== homeDir
+//            onClicked: directoryModel.directory = homeDir
+//        }
+//    }
 
     function displayError(errorMessage) {
         pageStack.completeAnimation()

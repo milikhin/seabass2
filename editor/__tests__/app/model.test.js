@@ -17,7 +17,10 @@ describe('SeabassAppModel', () => {
       expect(model._viewport).toEqual({
         verticalHtmlOffset: 0
       })
-      expect(model.sailfishPreferences).toEqual({ isToolbarOpened: true })
+      expect(model.sailfishPreferences).toEqual({
+        isToolbarOpened: true,
+        directory: null
+      })
     })
   })
 
@@ -192,9 +195,7 @@ describe('SeabassAppModel', () => {
       const options = { isToolbarOpened: true }
       model.setSailfishPreferences(options)
 
-      expect(model._sailfish).toEqual({
-        isToolbarOpened: options.isToolbarOpened
-      })
+      expect(model._sailfish.isToolbarOpened).toEqual(options.isToolbarOpened)
     })
   })
 })

@@ -68,6 +68,10 @@
         <source>New file...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Go to home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewFile</name>

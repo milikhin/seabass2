@@ -63,10 +63,10 @@ function getPrintableDirPath(dirPath, homeDir) {
   var normalizedDir = getNormalPath(dirPath)
   var normalizedHome = getNormalPath(homeDir)
   if (normalizedDir.indexOf(normalizedHome) === 0) {
-    return normalizedDir.replace(normalizedHome, '~') + '/'
+    return normalizedDir.replace(normalizedHome, '~')
   }
 
-  return normalizedDir + '/'
+  return normalizedDir
 }
 
 function getPrintableFilePath(filePath, homeDir) {
