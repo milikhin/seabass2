@@ -87,7 +87,7 @@ WebViewPage {
             page: page
             title: hasOpenedFile
                 ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                : qsTr('Seabass v%1').arg('0.9.2')
+                : qsTr('Seabass v%1').arg('0.10.0')
             description: hasOpenedFile
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : qsTr('Release notes')
