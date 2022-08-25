@@ -3,7 +3,7 @@ import { EditorState } from '@codemirror/state'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
 import { runScopeHandlers } from '@codemirror/view'
-import { RawEditorConfig } from '../api/api-interface'
+import { RawEditorConfig, SetContentOptions } from '../api/api-interface'
 import { SeabassCommonPreferences } from '../app/model'
 import EditorSetup from './setup'
 import { parseEditorConfig } from './utils'
@@ -128,6 +128,21 @@ export default class Editor extends EventTarget {
     this._onChange()
   }
 
+  setContent (options: SetContentOptions): void {
+    this._editor.dispatch({
+      changes: options.append === false
+        ? {
+            from: 0,
+            to: this._editor.state.doc.length,
+            insert: options.content
+          }
+        : {
+            from: this._editor.state.doc.length,
+            insert: options.content
+          }
+    })
+  }
+
   /**
    * Set editor preferences
    * @param param0 editor preferences
@@ -180,9 +195,9 @@ export default class Editor extends EventTarget {
    */
   getUiState (): SeabassEditorState {
     return {
-      hasChanges: !this._editor.state.doc.eq(this._initialState.doc),
-      hasUndo: undoDepth(this._editor.state) > 0,
-      hasRedo: redoDepth(this._editor.state) > 0,
+      hasChanges: !this._isReadOnly && !this._editor.state.doc.eq(this._initialState.doc),
+      hasUndo: !this._isReadOnly && undoDepth(this._editor.state) > 0,
+      hasRedo: !this._isReadOnly && redoDepth(this._editor.state) > 0,
       isReadOnly: this._isReadOnly
     }
   }

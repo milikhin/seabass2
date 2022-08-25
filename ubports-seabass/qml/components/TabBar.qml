@@ -13,11 +13,9 @@ Item {
   property real minTabLabelWidth: Suru.units.gu(8)
   property real maxTabLabelWidth: Suru.units.gu(30)
   property ListModel model
+  property var currentTab: model.get(currentIndex)
 
   property alias currentIndex: tabBar.currentIndex
-  signal close(int index)
-  signal closeAll()
-  signal closeToTheRight(int index)
 
   MouseArea {
     anchors.fill: parent
@@ -71,9 +69,9 @@ Item {
         hasMoveRight: model.index < root.model.count - 1
         isBusy: model.isBusy
 
-        onClosed: root.close(model.index)
-        onCloseAll: root.closeAll()
-        onCloseToTheRight: root.closeToTheRight(model.index)
+        onClosed: _closeTabs([model])
+        onCloseAll: _closeTabs(root.model.listFiles())
+        onCloseToTheRight: _closeTabs(root.model.listFiles().slice(startIndex + 1))
         onMoveLeft: function() {
           root.model.move(model.index, model.index - 1, 1)
         }
@@ -81,6 +79,34 @@ Item {
           root.model.move(model.index, model.index + 1, 1)
         }
       }
+    }
+  }
+
+  SaveDialog {
+    id: saveDialog
+  }
+
+  function _closeTabs(tabs) {
+    if (tabs.length === 0) {
+      return
+    }
+
+    const tab = tabs.shift()
+    if (!tab.hasChanges) {
+      return __close()
+    }
+
+    saveDialog.show(tab.filePath, {
+      onSaved: function() {
+        api.requestSaveAndClose(tab.filePath)
+        _closeTabs(tabs)
+      },
+      onDismissed: __close
+    })
+
+    function __close() {
+      model.close(tab.id)
+      _closeTabs(tabs)
     }
   }
 }

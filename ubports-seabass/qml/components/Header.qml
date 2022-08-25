@@ -34,10 +34,11 @@ CustomComponents.ToolBar {
     sequence: StandardKey.Save
     onActivated: saveRequested()
   }
-  readonly property var findShortcut: Shortcut {
-    sequence: StandardKey.Find
-    onActivated: searchEnabled ? search() : Function.prototype
-  }
+  // TODO: re-introduce find/replace using native QML UI
+  // readonly property var findShortcut: Shortcut {
+  //   sequence: StandardKey.Find
+  //   onActivated: searchEnabled ? search() : Function.prototype
+  // }
 
   CustomComponents.ToolButton {
     iconName: "package-x-generic-symbolic"
@@ -60,6 +61,8 @@ CustomComponents.ToolBar {
     iconName: "toolkit_input-search"
     enabled: searchEnabled
     onClicked: search()
+    // TODO: re-introduce find/replace using native QML UI
+    visible: false
   }
   CustomComponents.ToolButton {
     iconName: "save"

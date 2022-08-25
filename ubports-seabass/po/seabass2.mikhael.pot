@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-16 13:34+0000\n"
+"POT-Creation-Date: 2022-07-31 13:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:90
+#: ../qml/About.qml:22 ../qml/components/Header.qml:93
 msgid "About"
 msgstr ""
 
@@ -27,40 +27,31 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:28
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:28 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:29 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:97
-msgid "Unable to read file. Please ensure that you have read access to the %1"
-msgstr ""
-
-#: ../qml/Main.qml:98
-msgid ""
-"Unable to write the file. Please ensure that you have write access to %1"
-msgstr ""
-
-#: ../qml/Main.qml:290
+#: ../qml/Main.qml:224
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:335
+#: ../qml/Main.qml:269
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:345
+#: ../qml/Main.qml:279
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:361
+#: ../qml/Main.qml:293
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:371
+#: ../qml/Main.qml:303
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 
@@ -143,7 +134,7 @@ msgstr ""
 msgid "not exists"
 msgstr ""
 
-#: ../qml/Settings.qml:32 ../qml/components/Header.qml:85
+#: ../qml/Settings.qml:32 ../qml/components/Header.qml:88
 msgid "Settings"
 msgstr ""
 
@@ -280,7 +271,7 @@ msgstr ""
 msgid "%1 will be deleted"
 msgstr ""
 
-#: ../qml/components/Header.qml:79
+#: ../qml/components/Header.qml:82
 msgid "Keyboard extension"
 msgstr ""
 
@@ -302,6 +293,15 @@ msgstr ""
 
 #: ../qml/components/SaveDialog.qml:26
 msgid "Save"
+msgstr ""
+
+#: ../qml/components/UbuntuApi.qml:37
+msgid "Unable to read file. Please ensure that you have read access to the %1"
+msgstr ""
+
+#: ../qml/components/UbuntuApi.qml:38
+msgid ""
+"Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
 #: ../qml/components/files/DirectoryMenu.qml:17

@@ -18,8 +18,9 @@ describe('SeabassApi', () => {
     })
 
     it('should register API message handler', () => {
-      const api = new SeabassApi({ transport: API_TRANSPORT.SAILFISH_WEBVIEW })
-      expect(window.postSeabassApiMessage).toBe(api._onMessageHandler)
+      /* eslint-disable-next-line no-new */
+      new SeabassApi({ transport: API_TRANSPORT.SAILFISH_WEBVIEW })
+      expect(window.postSeabassApiMessage).toBeTruthy()
     })
   })
 
@@ -64,18 +65,6 @@ describe('SeabassApi', () => {
       const evt = await waitForApiMessage
       expect(evt.detail.action).toEqual(action)
       expect(evt.detail.data).toEqual(data)
-    })
-
-    it('should send API messages (URL_HANDLER)', async () => {
-      const action = uuid()
-      const data = uuid()
-      const api = new SeabassApi({ transport: API_TRANSPORT.URL_HANDLER })
-      api.send({ action, data })
-
-      // check that location changed
-      const expectedUri = JSON.stringify({ action, data })
-      expect(window.location.assign).toHaveBeenCalledTimes(1)
-      expect(window.location.assign).toHaveBeenCalledWith(`http://seabass/${encodeURIComponent(expectedUri)}`)
     })
   })
 

@@ -155,7 +155,7 @@ export default class SeabassAppModel extends EventTarget {
       editorConfig: options.editorConfig,
       elem: editorElem,
       filePath,
-      isReadOnly: options.isReadOnly,
+      isReadOnly: options.isTerminal,
       isDarkTheme: this._preferences.isDarkTheme
     })
     editor.addEventListener('stateChange', evt => {
