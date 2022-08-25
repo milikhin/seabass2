@@ -38,6 +38,7 @@ QtObject {
   signal errorOccured(string message)
   signal stateChanged(var state)
   signal fileOpened(string filePath)
+  signal fileBeingClosed(string filePath)
 
   /**
    * Loads file at `filePath` into the editor.
@@ -108,6 +109,11 @@ QtObject {
     postMessage('requestFileSave', { filePath: filePath })
   }
 
+  function requestSaveAndClose(filePath) {
+    isSaveInProgress = true
+    postMessage('requestSaveAndClose', { filePath: filePath })
+  }
+
   /**
    * Writes given content to the given path
    * @param {string} filePath     /path/to/file
@@ -147,6 +153,12 @@ QtObject {
         return stateChanged(data)
       case 'saveFile':
         return saveFile(data.filePath, data.content)
+      case 'saveAndClose':
+        return saveFile(data.filePath, data.content, function(err) {
+          if (err === null) {
+            fileBeingClosed(data.filePath)
+          }
+        })
     }
   }
 

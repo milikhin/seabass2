@@ -1,33 +1,11 @@
-import { InputPreferences, SeabassSailfishPreferences, ViewportOptions } from '../app/model'
-import { KeyDownOptions } from '../editor/editor'
 import {
+  ApiTransport,
   API_TRANSPORT,
-  FileActionOptions,
-  FileLoadOptions
+  IncomingApiMessage,
+  IncomingMessagePayload
 } from './api-interface'
-
-/** possible payload of API messages */
-export interface IncomingMessagePayload {
-  closeFile: FileActionOptions
-  fileSaved: undefined
-  keyDown: KeyDownOptions
-  viewportChange: ViewportOptions
-  loadFile: FileLoadOptions
-  openFile: FileActionOptions
-  oskVisibilityChanged: undefined
-  redo: undefined
-  requestFileSave: FileActionOptions
-  setPreferences: InputPreferences
-  setSailfishPreferences: SeabassSailfishPreferences
-  undo: undefined
-  toggleReadOnly: undefined
-}
-
-/** Incoming API message from a platform-specific app */
-export interface IncomingApiMessage<T extends keyof IncomingMessagePayload> {
-  action: T
-  data: IncomingMessagePayload[T]
-}
+import SailfishApiTransport from './sailfish-transport'
+import SocketApiTransport from './socket-transport'
 
 /** Outgoing API message to a platform-specific app */
 interface OutgoingApiMessage {
@@ -41,13 +19,18 @@ interface ApiOptions {
 }
 
 type SeabassApiEvent<T extends keyof IncomingMessagePayload> = CustomEvent<IncomingMessagePayload[T]>
-type SeabassApiEventListener <T extends keyof IncomingMessagePayload> = ((evt: SeabassApiEvent<T>) => void) |
+type SeabassApiEventListener<T extends keyof IncomingMessagePayload> = ((evt: SeabassApiEvent<T>) => void) |
 ({ handleEvent: (evt: SeabassApiEvent<T>) => void }) | null
 
 export default class SeabassApi extends EventTarget {
+  _socket?: WebSocket
   /** Platform-specific API transport name */
-  _transport: API_TRANSPORT
-  _onMessageHandler: (msg: IncomingApiMessage<keyof IncomingMessagePayload>) => void
+  _transport: ApiTransport
+
+  SUPPORTED_TRANSPORTS = {
+    [API_TRANSPORT.SAILFISH_WEBVIEW]: SailfishApiTransport,
+    [API_TRANSPORT.WEB_SOCKET]: SocketApiTransport
+  }
 
   /** supported incoming API messages */
   EVENTS = new Set([
@@ -59,6 +42,8 @@ export default class SeabassApi extends EventTarget {
     'openFile',
     'redo',
     'requestFileSave',
+    'requestSaveAndClose',
+    'setContent',
     'setPreferences',
     'setSailfishPreferences',
     'toggleReadOnly',
@@ -69,16 +54,15 @@ export default class SeabassApi extends EventTarget {
   constructor ({ transport }: ApiOptions) {
     super()
 
-    if (!Object.values(API_TRANSPORT).includes(transport)) {
-      throw new Error(`Given API transport '${transport}' is not supported`)
+    if (this.SUPPORTED_TRANSPORTS[transport] === undefined) {
+      throw new Error(`API transport '${transport}' is not supported`)
     }
 
-    this._transport = transport
-    this._onMessageHandler = this._onMessage.bind(this)
-    window.postSeabassApiMessage = this._onMessageHandler
+    const Transport = this.SUPPORTED_TRANSPORTS[transport]
+    this._transport = new Transport(this._onMessage.bind(this))
   }
 
-  addEventListener<T extends keyof IncomingMessagePayload> (type: T,
+  addEventListener<T extends keyof IncomingMessagePayload>(type: T,
     callback: SeabassApiEventListener<T>, options?: EventListenerOptions): void {
     super.addEventListener(type, callback as EventListenerOrEventListenerObject | null, options)
   }
@@ -101,19 +85,7 @@ export default class SeabassApi extends EventTarget {
 
   /** Sends API message */
   send ({ action, data }: OutgoingApiMessage): void {
-    const payload = JSON.stringify({ action, data })
-    switch (this._transport) {
-      case API_TRANSPORT.SAILFISH_WEBVIEW: {
-        const evt = new CustomEvent('framescript:action', {
-          detail: { action, data }
-        })
-        document.dispatchEvent(evt)
-        return
-      }
-      case API_TRANSPORT.URL_HANDLER: {
-        return window.location.assign(`http://seabass/${encodeURIComponent(payload)}`)
-      }
-    }
+    this._transport.send({ action, data })
   }
 
   _onMessage ({ action, data }: IncomingApiMessage<keyof IncomingMessagePayload>): void {

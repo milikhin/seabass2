@@ -15,47 +15,19 @@
     #welcome a {
       /* color: #highlightColor */
     }
-    .ace_tooltip.ace_doc-tooltip {
-      /* background-color: #foregroundColor */
-      /* color: #foregroundText */
-    }
-    .ace_button,
-    .ace_searchbtn,
-    .ace_searchbtn:last-child,
-    .ace_searchbtn_close,
-    .ace_searchbtn_close:hover,
-    .ace_search_field {
-      /* background-color: #backgroungColor */
-      /* color: #textColor */
-      /* border-color: #borderColor */
-    }
-    .ace_button:hover,
-    .ace_searchbtn:hover {
-      /* background-color: #foregroundColor */
-      /* color: #foregroundText */
-    }
-    .ace_search,
-    .ace_button:hover::before {
-      /* background-color: #foregroundColor */
-      /* border-color: #borderColor */
-      /* color: #textColor */
-    }
-    .ace_button.checked[action="toggleReplace"] {
-      /* border-color: #borderColor */
-    }
   </style>
 </head>
 
 <body>
   <div id="welcome">
     <h1>
-      Seabass2 v1.5
+      Seabass2 v2.0.0-beta1
     </h1>
     <h2>
       Features:
     </h2>
     <ul>
-      <li>Syntax highlighting for over 120 programming/markup languages</li>
+      <li>Syntax highlighting for over 100 programming/markup languages</li>
       <li>Context menu to create/rename/delete files</li>
       <li>Create and Build QML, C++, Python and HTML projects using Clickable (see Settings page for details)</li>
       <li>Automatically install and launch built projects</li>
@@ -66,15 +38,18 @@
       New:
     </h2>
     <ul>
-      <li>Fix installing python3.6 in build environment</li>
-      <li>Update clickable to the latest stable version</li>
-      <li>Update editor dependencies</li>
+      <li>new editor engine: Codemirror v6</li>
+      <li>
+        changes to the list of supported programming languages
+        (notably, QML is no longer supported), autocomplete options and code snippets
+      </li>
+      <li>find/replace feature removed</li>
     </ul>
   </div>
   <div id="root"></div>
   <script>
     window.seabassOptions = {
-      apiTransport: 'URL handler'
+      apiTransport: 'WebSocket'
     }
   </script>
   <script src="./dist/bundle.js"></script>
