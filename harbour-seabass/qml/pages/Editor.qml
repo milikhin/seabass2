@@ -39,6 +39,12 @@ WebViewPage {
         onFilePathChanged: {
             isMenuEnabled = false
         }
+
+        onDirectoryChanged: {
+            api.postMessage('setSailfishPreferences', {
+                directory: directory
+            })
+        }
     }
 
     GenericComponents.EditorApi {
@@ -52,6 +58,8 @@ WebViewPage {
         // API methods
         onAppLoaded: function (data) {
             toolbar.open = data.isToolbarOpened || false
+            // use `data.directory || api.homeDir` to restore last opened directory when opening app
+            editorState.directory = api.homeDir
             editorState.loadTheme()
             editorState.updateViewport()
         }
@@ -79,7 +87,7 @@ WebViewPage {
             page: page
             title: hasOpenedFile
                 ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                : qsTr('Seabass v%1').arg('0.9.2')
+                : qsTr('Seabass v%1').arg('0.10.0')
             description: hasOpenedFile
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : qsTr('Release notes')
@@ -132,13 +140,15 @@ WebViewPage {
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
-                    editorState.hasChanges
-                        ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
-                                filePath: filePath,
-                                acceptDestination: filePickerPage,
-                                acceptDestinationAction: PageStackAction.Replace
-                            })
-                        : pageStack.push(filePickerPage)
+                    if (!editorState.hasChanges) {
+                        return pageStack.push(filePicker)
+                    }
+
+                    pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
+                        filePath: filePath,
+                        acceptDestination: filePicker,
+                        acceptDestinationAction: PageStackAction.Replace
+                    })
                 }
             }
             MenuItem {
@@ -219,27 +229,17 @@ WebViewPage {
         }
 
         // Floating action button to enable pulley menus
-        Rectangle {
-            visible: hasOpenedFile
+        PlatformComponents.FloatingButton {
             anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
             anchors.right: parent.right
             anchors.bottomMargin: Theme.paddingMedium
             anchors.rightMargin: Theme.paddingMedium
-            width: childrenRect.width
-            height: childrenRect.height
-            color: editorState.isDarkTheme
-                ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
-                : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
-            radius: Theme.dp(2)
+            visible: hasOpenedFile
 
-            Button {
-                icon.source: "image://theme/icon-m-gesture"
-                onClicked: isMenuEnabled = !isMenuEnabled
-                icon.color: isMenuEnabled ? Theme.highlightColor : Theme.primaryColor
-                backgroundColor: Theme.rgba(Theme.highlightBackgroundColor,
-                    isMenuEnabled ? Theme.highlightBackgroundOpacity : 0)
-                border.color: Theme.highlightBackgroundColor
-            }
+            isDarkTheme: editorState.isDarkTheme
+            highlighed: isMenuEnabled
+            icon.source: "image://theme/icon-m-gesture"
+            onClicked: isMenuEnabled = !isMenuEnabled
         }
 
         TouchInteractionHint {
@@ -248,23 +248,44 @@ WebViewPage {
         }
     }
 
-    Component {
-        id: filePickerPage
-        FilePickerPage {
-            onSelectedContentPropertiesChanged: {
-                if (!selectedContentProperties.filePath) {
-                    return
+    GenericComponents.TabsModel {
+        id: tabsModel
+        onTabAdded: function(tab) {
+            api.loadFile({
+                filePath: tab.filePath,
+                createIfNotExists: true,
+                callback: function(err) {
+                    if (err) {
+                        tabsModel.close(tab.filePath)
+                    }
+                    api.openFile(tab.filePath)
                 }
+            })
+        }
+        onTabClosed: function(tabId) {
+            api.closeFile(tabId)
+        }
+    }
 
+    Component {
+        id: filePicker
+        Files {
+            homeDir: api.homeDir
+            directory: editorState.directory
+            onDirectoryChanged: {
+                editorState.directory = directory
+            }
+            onOpened: function(filePath) {
                 if (hasOpenedFile) {
-                    api.closeFile(filePath)
+                    tabsModel.close(editorState.filePath)
                 }
-                api.loadFile({
-                    filePath: selectedContentProperties.filePath,
-                    createIfNotExists: false
+                tabsModel.open({
+                    id: filePath,
+                    filePath: filePath,
+                    subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+                    title: QmlJs.getFileName(filePath)
                 })
-                api.openFile(selectedContentProperties.filePath)
-                editorState.filePath = selectedContentProperties.filePath
+                editorState.filePath = filePath
             }
         }
     }

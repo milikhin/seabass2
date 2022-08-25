@@ -28,7 +28,7 @@ function getDefaultFilePath() {
  * @returns {string} - directory path
  */
 function getDirPath(filePath) {
-  return getNormalPath(filePath).split('/').slice(0, -1).join('/')
+  return getNormalPath(filePath).split('/').slice(0, -1).join('/') || '/'
 }
 
 /**
@@ -47,11 +47,10 @@ function getFileName(filePath) {
  * @returns {string} - normalized path
  */
 function getNormalPath(path) {
-  var normalizedPath = path[path.length - 1] === '/'
+  var normalPath = path.replace(/^file:\/\//, '')
+  return normalPath.length > 1 && normalPath[normalPath.length - 1] === '/'
     ? path.slice(0, -1)
     : path
-
-  return normalizedPath.replace(/^file:\/\//, '')
 }
 
 /**
@@ -64,10 +63,10 @@ function getPrintableDirPath(dirPath, homeDir) {
   var normalizedDir = getNormalPath(dirPath)
   var normalizedHome = getNormalPath(homeDir)
   if (normalizedDir.indexOf(normalizedHome) === 0) {
-    return normalizedDir.replace(normalizedHome, '~') + '/'
+    return normalizedDir.replace(normalizedHome, '~')
   }
 
-  return normalizedDir + '/'
+  return normalizedDir
 }
 
 function getPrintableFilePath(filePath, homeDir) {

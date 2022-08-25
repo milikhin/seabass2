@@ -19,6 +19,7 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/components/Toolbar.qml \
     qml/generic/EditorApi.qml \
     qml/generic/EditorState.qml \
+    qml/generic/FilesModel.qml \
     qml/generic/TabsModel.qml \
     qml/generic/utils.js \
     qml/html/dist \
@@ -26,6 +27,8 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/pages/About.qml \
     qml/pages/Editor.qml \
     qml/pages/ErrorDialog.qml \
+    qml/pages/Files.qml \
+    qml/pages/NewFile.qml \
     qml/pages/SaveDialog.qml \
     qml/py-backend \
     rpm/harbour-seabass.changes.in \

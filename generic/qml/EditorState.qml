@@ -3,7 +3,8 @@ import '../generic/utils.js' as QmlJs
 
 QtObject {
   // State
-  property string filePath: ''
+  property string filePath
+  property string directory
   property bool hasChanges: false
   property bool hasUndo: false
   property bool hasRedo: false
