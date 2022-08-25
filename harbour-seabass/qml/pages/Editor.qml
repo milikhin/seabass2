@@ -58,7 +58,8 @@ WebViewPage {
         // API methods
         onAppLoaded: function (data) {
             toolbar.open = data.isToolbarOpened || false
-            editorState.directory = data.directory || api.homeDir
+            // use `data.directory || api.homeDir` to restore last opened directory when opening app
+            editorState.directory = api.homeDir
             editorState.loadTheme()
             editorState.updateViewport()
         }
