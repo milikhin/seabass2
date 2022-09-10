@@ -62,30 +62,30 @@
     <name>Files</name>
     <message>
         <source>Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Filer</translation>
     </message>
     <message>
         <source>New file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ny fil...</translation>
     </message>
     <message>
         <source>Go to home directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå till hemkatalogen</translation>
     </message>
 </context>
 <context>
     <name>NewFile</name>
     <message>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa</translation>
     </message>
     <message>
         <source>Create new file</source>
-        <translation type="unfinished"></translation>
+        <translation>Skapa ny fil</translation>
     </message>
     <message>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation>Filnamn</translation>
     </message>
 </context>
 <context>
