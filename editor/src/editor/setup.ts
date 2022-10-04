@@ -7,10 +7,14 @@ import { oneDark } from '@codemirror/theme-one-dark'
 import { getLanguageMode } from './language'
 import { SeabassEditorConfig } from './utils'
 
-interface ExtensionsOptions {
-  editorConfig: SeabassEditorConfig
-  isReadOnly?: boolean
+interface ThemeOptions {
   isDarkTheme?: boolean
+}
+
+interface ExtensionsOptions extends ThemeOptions{
+  editorConfig: SeabassEditorConfig
+  useWrapMode: boolean
+  isReadOnly?: boolean
 
   onChange: (content?: string) => void
 }
@@ -19,6 +23,8 @@ interface ExtensionsOptions {
  * Codemirror's setup
  */
 export default class EditorSetup {
+  /** extension to manage line wrapping */
+  lineWrappingCompartment: Compartment
   /** extension to manage readonly state */
   readOnlyCompartment: Compartment
   /** extension to manage language support */
@@ -32,6 +38,7 @@ export default class EditorSetup {
     this.readOnlyCompartment = new Compartment()
     this.langCompartment = new Compartment()
     this.themeCompartment = new Compartment()
+    this.lineWrappingCompartment = new Compartment()
 
     this.extensions = [
       basicSetup,
@@ -42,6 +49,7 @@ export default class EditorSetup {
       this._getDomEventHandlerExtension(options),
       this._getReadOnlyExtension(options),
       this._getThemeExtension(options),
+      this._getLineWrappingExtension(options),
       indentUnit.of(this._getIndentationString(options.editorConfig)),
       EditorState.tabSize.of(options.editorConfig.tabWidth)
     ]
@@ -112,9 +120,20 @@ export default class EditorSetup {
     return this.readOnlyCompartment.of(EditorView.editable.of(!isReadOnly))
   }
 
+  _getLineWrappingExtension (options: ExtensionsOptions): Extension {
+    return this.lineWrappingCompartment.of(options.useWrapMode
+      ? EditorView.lineWrapping
+      : Facet.define().of(null))
+  }
+
   _getThemeExtension (options: ExtensionsOptions): Extension {
-    return this.themeCompartment.of(options.isDarkTheme === true
+    const themeExtension = this._getTheme(options)
+    return this.themeCompartment.of(themeExtension)
+  }
+
+  _getTheme (options: ThemeOptions): Extension {
+    return options.isDarkTheme === true
       ? oneDark
-      : EditorView.baseTheme({}))
+      : EditorView.theme({})
   }
 }

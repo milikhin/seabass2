@@ -27,7 +27,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "2.0.0-beta1"
+  readonly property string version: "2.0.0-rc.1"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
 
@@ -60,6 +60,13 @@ ApplicationWindow {
     property int initialTab: 0
     property bool restoreOpenedTabs: true
     property bool useWrapMode: true
+
+    onFontSizeChanged: {
+      editorState.fontSize = fontSize
+    }
+    onUseWrapModeChanged: {
+      editorState.useWrapMode = useWrapMode
+    }
   }
 
   GenericComponents.EditorState {
