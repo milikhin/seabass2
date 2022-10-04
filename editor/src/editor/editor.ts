@@ -143,6 +143,10 @@ export default class Editor extends EventTarget {
             insert: options.content
           }
     })
+    const lastLine = this._editor.state.doc.length
+    this._editor.dispatch({
+      effects: EditorView.scrollIntoView(lastLine)
+    })
   }
 
   /**
