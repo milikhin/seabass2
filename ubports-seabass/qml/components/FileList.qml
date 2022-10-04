@@ -111,9 +111,9 @@ Item {
       hasLeadingButton: root.isPage
       onLeadingAction: closed()
       title: i18n.tr("Files")
-      subtitle: directoryModel.getPrintableDirPath()
+      subtitle: QmlJs.getPrintableDirPath(directoryModel.directory, homeDir)
       onClosed: root.closed()
-      onFileCreationInitialized: root.createFile(directoryModel.getDirPath())
+      onFileCreationInitialized: root.createFile(directoryModel.directory)
       onProjectCreationInitialized: root.projectCreationInitialized(directoryModel.directory)
       onReloaded: directoryModel.load()
       onTreeModeChanged: root.treeMode = treeMode
@@ -192,8 +192,8 @@ Item {
                 Layout.preferredWidth: units.gu(2)
                 Layout.preferredHeight: units.gu(2)
                 name: model.isFile
-                  ? QmlJs.getFileIcon(model.name)
-                  : directoryModel.getDirIcon(model.path, model.isExpanded)
+                  ? getFileIcon(model.name)
+                  : getDirIcon(model.path, model.isExpanded)
               }
               Label {
                 Layout.fillWidth: true
@@ -264,5 +264,32 @@ Item {
         },
         onCancel: function() {}
       })
+  }
+
+  function getDirIcon(path, isExpanded) {
+    if (!treeMode) {
+      return 'folder-symbolic'
+    }
+
+    if (isExpanded) {
+      return 'view-collapse'
+    }
+
+    return 'view-expand'
+  }
+
+  function getFileIcon(fileName) {
+    var extMatch = fileName.match(/\.([A-Za-z]+)$/)
+    var ext = extMatch && extMatch[1]
+    switch(ext) {
+      case 'html':
+        return 'text-html-symbolic'
+      case 'css':
+        return 'text-css-symbolic'
+      case 'xml':
+        return 'text-xml-symbolic'
+      default:
+        return 'text-x-generic-symbolic'
+    }
   }
 }
