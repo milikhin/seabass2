@@ -11,8 +11,7 @@ Supported platforms:
 * Sailfish OS  
    Available in the Jolla store or from the [OpenRepos](https://openrepos.net/content/mikhael/seabass).
 * Ubuntu Touch  
-   Available in the [OpenStore](https://open-store.io/app/seabass2.mikhael).  
-   *Seabass is currently undergoing a transition to a new editor engine. Ubuntu touch app hasn't yet been fully migrated to the new API. It could be built and tested, but not all features work yet. Current version from the OpenStore is available in the [ubports-legacy branch](https://github.com/milikhin/seabass2/tree/ubports-legacy).*
+   Available in the [OpenStore](https://open-store.io/app/seabass2.mikhael).
 
 <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-sfos1.png" style="width: 200px;" alt="Seabass on Sailfish OS (dark)" /> <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-sfos3.png" style="width: 200px;" alt="Seabass on Sailfish OS (with OSK)" /> <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-xperia-u02.png" style="width: 200px;" alt="Seabass on Ubuntu Touch" /> <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/new-project.png" style="width: 200px;" alt="Seabass on Ubuntu Touch (creating new project)" />
 
