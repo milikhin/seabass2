@@ -154,12 +154,14 @@ export default class Editor extends EventTarget {
    * @param param0 editor preferences
    */
   setPreferences (options: SeabassCommonPreferences): void {
-    const theme = this._setup._getTheme({
+    const theme = this._setup.getThemeConfig({
       isDarkTheme: options.isDarkTheme
     })
+    const lineWrapping = this._setup.getLineWrappingConfig(options.useWrapMode ?? true)
 
     this._editor.dispatch({
       effects: [
+        this._setup.lineWrappingCompartment.reconfigure(lineWrapping),
         this._setup.themeCompartment.reconfigure(theme)
       ]
     })

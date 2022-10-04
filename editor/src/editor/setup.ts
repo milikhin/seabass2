@@ -65,6 +65,28 @@ export default class EditorSetup {
     return this.langCompartment.reconfigure(langSupport ?? Facet.define().of(null))
   }
 
+  /**
+   * Returns line wrapping extension
+   * @param isEnabled line wrapping flag
+   * @returns soft wrap extension
+   */
+  getLineWrappingConfig (isEnabled: boolean): Extension {
+    return isEnabled
+      ? EditorView.lineWrapping
+      : Facet.define().of(null)
+  }
+
+  /**
+   * Returns editor theme extension
+   * @param options theming options
+   * @returns theme extension
+   */
+  getThemeConfig (options: ThemeOptions): Extension {
+    return options.isDarkTheme === true
+      ? oneDark
+      : EditorView.theme({})
+  }
+
   _getContent (state: EditorState): string {
     const lines = state.doc.toJSON()
     if (lines[lines.length - 1] !== '') {
@@ -115,25 +137,17 @@ export default class EditorSetup {
     return this.langCompartment.of(Facet.define().of(null))
   }
 
+  _getLineWrappingExtension (options: ExtensionsOptions): Extension {
+    return this.lineWrappingCompartment.of(this.getLineWrappingConfig(options.useWrapMode))
+  }
+
   _getReadOnlyExtension (options: ExtensionsOptions): Extension {
     const isReadOnly = options.isReadOnly ?? false
     return this.readOnlyCompartment.of(EditorView.editable.of(!isReadOnly))
   }
 
-  _getLineWrappingExtension (options: ExtensionsOptions): Extension {
-    return this.lineWrappingCompartment.of(options.useWrapMode
-      ? EditorView.lineWrapping
-      : Facet.define().of(null))
-  }
-
   _getThemeExtension (options: ExtensionsOptions): Extension {
-    const themeExtension = this._getTheme(options)
+    const themeExtension = this.getThemeConfig(options)
     return this.themeCompartment.of(themeExtension)
-  }
-
-  _getTheme (options: ThemeOptions): Extension {
-    return options.isDarkTheme === true
-      ? oneDark
-      : EditorView.theme({})
   }
 }
