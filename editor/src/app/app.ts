@@ -92,7 +92,6 @@ class SeabassApp {
    */
   _onLoadFile (evt: CustomEvent<FileLoadOptions>): void {
     const tab = this._tabs.create(evt.detail.filePath)
-    this._tabs.show(tab.id)
     this._model.loadFile(evt.detail, tab.elem)
   }
 

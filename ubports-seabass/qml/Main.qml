@@ -30,10 +30,12 @@ ApplicationWindow {
   readonly property string version: "2.0.0-rc.1"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
+  property var currentTab: tabBar.currentIndex === -1
+    ? undefined
+    : tabsModel.get(tabBar.currentIndex)
 
   onClosing: {
     settings.initialFiles = tabsModel.listFiles().map(tab => tab.filePath)
-    const currentTab = tabsModel.get(tabBar.currentIndex)
     settings.initialTab = currentTab && !currentTab.isTerminal
       ? settings.initialFiles.indexOf(currentTab.filePath)
       : 0
@@ -114,7 +116,9 @@ ApplicationWindow {
           if (err) {
             tabsModel.close(tab.filePath)
           }
-          api.openFile(tab.filePath)
+          if (!options.doNotActivate) {
+            tabBar.currentIndex = tabsModel.getIndex(tab.id)
+          }
         }
       })
     }
@@ -251,8 +255,8 @@ ApplicationWindow {
 
         CustomComponents.Header {
           id: header
-          title: tabsModel.currentTab ? tabsModel.currentTab.uniqueTitle : defaultTitle
-          subtitle: tabsModel.currentTab ? tabsModel.currentTab.subTitle : defaultSubTitle
+          title: currentTab ? currentTab.uniqueTitle : defaultTitle
+          subtitle: currentTab ? currentTab.subTitle : defaultSubTitle
           Layout.fillWidth: true
 
           onNavBarToggled: {
@@ -326,7 +330,7 @@ ApplicationWindow {
           }
           onOpenTerminalApp: {
               if (editorState.filePath) {
-                  Qt.openUrlExternally("terminal://?path=" + root.filePath.split('/').slice(0, -1).join('/'))
+                  Qt.openUrlExternally("terminal://?path=" + editorState.filePath.split('/').slice(0, -1).join('/'))
               }
           }
         }

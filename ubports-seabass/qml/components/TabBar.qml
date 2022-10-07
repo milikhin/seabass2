@@ -53,13 +53,6 @@ Item {
       id: repeater
       model: root.model
 
-      onItemAdded: function(index) {
-        var tab = model.get(index)
-        if (!tab.doNotActivate) {
-          tabBar.currentIndex = index
-        }
-      }
-
       TabComponents.TabButton {
         maxLabelWidth: Math.min(root.width / 2, maxTabLabelWidth)
         minLabelWidth: minTabLabelWidth
