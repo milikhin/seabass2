@@ -13,9 +13,30 @@ Item {
   property real minTabLabelWidth: Suru.units.gu(8)
   property real maxTabLabelWidth: Suru.units.gu(30)
   property ListModel model
-  property var currentTab: model.get(currentIndex)
-
   property alias currentIndex: tabBar.currentIndex
+
+  signal opened(string id)
+
+  onCurrentIndexChanged: {
+    const currentTab = model.get(currentIndex)
+    if (currentTab) {
+      opened(currentTab.id)
+    }
+  }
+
+  onModelChanged: {
+    model.tabAdded.connect(function (tab, options) {
+      if (!options.doNotActivate) {
+        openTab(tab.id)
+      }
+    })
+    model.tabClosed.connect(function () {
+      const currentTab = model.get(currentIndex)
+      if (currentTab) {
+        opened(currentTab.id)
+      }
+    })
+  }
 
   MouseArea {
     anchors.fill: parent
@@ -100,6 +121,14 @@ Item {
     function __close() {
       model.close(tab.id)
       _closeTabs(tabs)
+    }
+  }
+
+  function openTab(id) {
+    const index = model.getIndex(id)
+    if (index !== undefined) {
+      currentIndex = index
+      opened(id)
     }
   }
 }

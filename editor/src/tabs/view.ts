@@ -28,9 +28,6 @@ export default class TabsView {
     this._model.addEventListener('close', evt => {
       this._onClose(evt.detail)
     })
-    this._model.addEventListener('hide', evt => {
-      this._onHide(evt.detail)
-    })
     this._model.addEventListener('show', evt => {
       this._onShow(evt.detail)
     })
@@ -38,6 +35,7 @@ export default class TabsView {
 
   _onCreate ({ id, elem }: Tab): HTMLDivElement {
     const contentElem = document.createElement('div')
+    contentElem.style.display = 'none'
     contentElem.classList.add('tab')
     contentElem.appendChild(elem)
     this._rootElem.appendChild(contentElem)
@@ -55,21 +53,10 @@ export default class TabsView {
     this._contentElems.delete(id)
   }
 
-  _onHide ({ id }: Tab): void {
-    const contentElem = this._contentElems.get(id)
-    if (contentElem === undefined) {
-      return
-    }
-
-    contentElem.style.display = 'none'
-  }
-
   _onShow ({ id }: Tab): void {
-    const contentElem = this._contentElems.get(id)
-    if (contentElem === undefined) {
-      return
+    for (const [tabId, elem] of this._contentElems.entries()) {
+      const isVisible = id === tabId
+      elem.style.display = isVisible ? '' : 'none'
     }
-
-    contentElem.style.display = ''
   }
 }

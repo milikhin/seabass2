@@ -3,7 +3,7 @@ export interface Tab {
   id: string
 }
 
-type TabEventName = 'create'|'close'|'show'|'hide'
+type TabEventName = 'create'|'close'|'show'
 class TabEvent extends CustomEvent<Tab> {
   constructor (type: TabEventName, tab: Tab) {
     super(type, { detail: tab })
@@ -87,12 +87,6 @@ export default class TabsModel extends EventTarget {
   show (id: string): void {
     if (!this._tabs.has(id)) {
       return
-    }
-
-    const prevTabId = this._currentTabId
-    if (prevTabId !== undefined && this._tabs.has(prevTabId)) {
-      const prevTab = this._tabs.get(prevTabId) as Tab
-      this.dispatchEvent(new TabEvent('hide', prevTab))
     }
 
     this._currentTabId = id

@@ -78,7 +78,9 @@ class SeabassApp {
    * @param evt event to forward
    */
   _forwardEvent (evt: CustomEvent): void {
-    const tab = this._tabs.currentTab
+    const tab = evt.detail.filePath !== undefined
+      ? this._tabs.get(evt.detail.filePath)
+      : this._tabs.currentTab
     if (tab === undefined) {
       return
     }
@@ -93,6 +95,9 @@ class SeabassApp {
   _onLoadFile (evt: CustomEvent<FileLoadOptions>): void {
     const tab = this._tabs.create(evt.detail.filePath)
     this._model.loadFile(evt.detail, tab.elem)
+    if (evt.detail.isActive) {
+      this._tabs.show(tab.id)
+    }
   }
 
   /**

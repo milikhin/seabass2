@@ -74,6 +74,8 @@ ApplicationWindow {
   GenericComponents.EditorState {
     id: editorState
 
+    filePath: currentTab ? currentTab.filePath : ''
+
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background
@@ -102,25 +104,24 @@ ApplicationWindow {
     id: tabsModel
     onTabAdded: function(tab, options) {
       if (tab.isTerminal) {
-        return api.postMessage('loadFile', {
+        api.postMessage('loadFile', {
           filePath: tab.id,
           content: '',
-          isTerminal: true
+          isTerminal: true,
+          isActive: !options.doNotActivate
+        })
+      } else {
+        api.loadFile({
+          filePath: tab.filePath,
+          createIfNotExists: options.createIfNotExists,
+          callback: function(err, isNewFile) {
+            if (err) {
+              tabsModel.close(tab.filePath)
+            }
+          },
+          isActive: !options.doNotActivate
         })
       }
-
-      api.loadFile({
-        filePath: tab.filePath,
-        createIfNotExists: options.createIfNotExists,
-        callback: function(err, isNewFile) {
-          if (err) {
-            tabsModel.close(tab.filePath)
-          }
-          if (!options.doNotActivate) {
-            tabBar.currentIndex = tabsModel.getIndex(tab.id)
-          }
-        }
-      })
     }
     onTabClosed: function(tabId) {
       api.closeFile(tabId)
@@ -341,24 +342,8 @@ ApplicationWindow {
           visible: model.count
           Layout.fillWidth: true
 
-          onCurrentIndexChanged: {
-            if (!model.count) {
-              editorState.filePath = ''
-              return
-            }
-
-            if (currentIndex === -1) {
-              currentIndex = 0
-              return
-            }
-
-            const tab = model.get(currentIndex)
-            if (!tab) {
-              return
-            }
-
-            editorState.filePath = tab.filePath
-            api.openFile(tab.id)
+          onOpened: function(tabId) {
+            api.openFile(tabId)
           }
         }
 
