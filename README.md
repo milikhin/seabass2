@@ -40,8 +40,6 @@ Ubuntu Touch:
 
 ### Ubuntu Touch
 
-**Current version from the OpenStore is available in the [ubports-legacy branch](https://github.com/milikhin/seabass2/tree/ubports-legacy).**
-
 Run `clickable` (in the project root directory).
 
 ### Sailfish OS
