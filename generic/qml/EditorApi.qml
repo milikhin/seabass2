@@ -80,7 +80,8 @@ QtObject {
       postMessage('loadFile', {
         filePath: filePath,
         editorConfig: editorConfig,
-        content: content
+        content: content,
+        isActive: options.isActive
       })
     }
   }

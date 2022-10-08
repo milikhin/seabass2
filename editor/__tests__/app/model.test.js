@@ -12,7 +12,8 @@ describe('SeabassAppModel', () => {
 
       expect(model._editors).toEqual(new Map())
       expect(model._preferences).toEqual({
-        isDarkTheme: false
+        isDarkTheme: false,
+        useWrapMode: true
       })
       expect(model._viewport).toEqual({
         verticalHtmlOffset: 0
@@ -159,7 +160,7 @@ describe('SeabassAppModel', () => {
       })
     })
 
-    it('should set app preferences', () => {
+    it('should set app preferences (enable softwrap by default)', () => {
       const model = new SeabassAppModel()
 
       const options = {
@@ -168,7 +169,23 @@ describe('SeabassAppModel', () => {
       model.setPreferences(options)
 
       expect(model._preferences).toEqual({
-        isDarkTheme: options.isDarkTheme
+        isDarkTheme: options.isDarkTheme,
+        useWrapMode: true
+      })
+    })
+
+    it('should set app preferences (optionally disable softwrap)', () => {
+      const model = new SeabassAppModel()
+
+      const options = {
+        isDarkTheme: true,
+        useWrapMode: false
+      }
+      model.setPreferences(options)
+
+      expect(model._preferences).toEqual({
+        isDarkTheme: options.isDarkTheme,
+        useWrapMode: options.useWrapMode
       })
     })
   })

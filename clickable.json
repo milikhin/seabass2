@@ -4,5 +4,6 @@
   "builder": "pure-qml-cmake",
   "kill": "qmlscene",
   "prebuild": "git submodule update --init && npm ci && npm run build -- --config-name=ubports",
-  "src_dir": "./ubports-seabass"
+  "src_dir": "./ubports-seabass",
+  "ignore_review_warnings": true
 }

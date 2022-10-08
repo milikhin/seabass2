@@ -27,13 +27,15 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "2.0.0-beta1"
+  readonly property string version: "2.0.0-rc.1"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
+  property var currentTab: tabBar.currentIndex === -1
+    ? undefined
+    : tabsModel.get(tabBar.currentIndex)
 
   onClosing: {
     settings.initialFiles = tabsModel.listFiles().map(tab => tab.filePath)
-    const currentTab = tabsModel.get(tabBar.currentIndex)
     settings.initialTab = currentTab && !currentTab.isTerminal
       ? settings.initialFiles.indexOf(currentTab.filePath)
       : 0
@@ -60,10 +62,19 @@ ApplicationWindow {
     property int initialTab: 0
     property bool restoreOpenedTabs: true
     property bool useWrapMode: true
+
+    onFontSizeChanged: {
+      editorState.fontSize = fontSize
+    }
+    onUseWrapModeChanged: {
+      editorState.useWrapMode = useWrapMode
+    }
   }
 
   GenericComponents.EditorState {
     id: editorState
+
+    filePath: currentTab ? currentTab.filePath : ''
 
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
@@ -93,23 +104,24 @@ ApplicationWindow {
     id: tabsModel
     onTabAdded: function(tab, options) {
       if (tab.isTerminal) {
-        return api.postMessage('loadFile', {
+        api.postMessage('loadFile', {
           filePath: tab.id,
           content: '',
-          isTerminal: true
+          isTerminal: true,
+          isActive: !options.doNotActivate
+        })
+      } else {
+        api.loadFile({
+          filePath: tab.filePath,
+          createIfNotExists: options.createIfNotExists,
+          callback: function(err, isNewFile) {
+            if (err) {
+              tabsModel.close(tab.filePath)
+            }
+          },
+          isActive: !options.doNotActivate
         })
       }
-
-      api.loadFile({
-        filePath: tab.filePath,
-        createIfNotExists: options.createIfNotExists,
-        callback: function(err, isNewFile) {
-          if (err) {
-            tabsModel.close(tab.filePath)
-          }
-          api.openFile(tab.filePath)
-        }
-      })
     }
     onTabClosed: function(tabId) {
       api.closeFile(tabId)
@@ -244,8 +256,8 @@ ApplicationWindow {
 
         CustomComponents.Header {
           id: header
-          title: tabsModel.currentTab ? tabsModel.currentTab.uniqueTitle : defaultTitle
-          subtitle: tabsModel.currentTab ? tabsModel.currentTab.subTitle : defaultSubTitle
+          title: currentTab ? currentTab.uniqueTitle : defaultTitle
+          subtitle: currentTab ? currentTab.subTitle : defaultSubTitle
           Layout.fillWidth: true
 
           onNavBarToggled: {
@@ -319,7 +331,7 @@ ApplicationWindow {
           }
           onOpenTerminalApp: {
               if (editorState.filePath) {
-                  Qt.openUrlExternally("terminal://?path=" + root.filePath.split('/').slice(0, -1).join('/'))
+                  Qt.openUrlExternally("terminal://?path=" + editorState.filePath.split('/').slice(0, -1).join('/'))
               }
           }
         }
@@ -330,24 +342,8 @@ ApplicationWindow {
           visible: model.count
           Layout.fillWidth: true
 
-          onCurrentIndexChanged: {
-            if (!model.count) {
-              editorState.filePath = ''
-              return
-            }
-
-            if (currentIndex === -1) {
-              currentIndex = 0
-              return
-            }
-
-            const tab = model.get(currentIndex)
-            if (!tab) {
-              return
-            }
-
-            editorState.filePath = tab.filePath
-            api.openFile(tab.id)
+          onOpened: function(tabId) {
+            api.openFile(tabId)
           }
         }
 

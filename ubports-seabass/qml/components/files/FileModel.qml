@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.0
 import io.thp.pyotherside 1.4
 
 import "../../generic/utils.js" as QmlJs
@@ -49,34 +49,12 @@ Item {
     }
   }
 
-  function guessFilePath(sourceApp, fileName, callback) {
-    py.call('fs_utils.guess_file_path', [sourceApp, fileName], function(res) {
-      callback(res.error, res.result)
-    })
-  }
-  function getDirIcon(path, isExpanded) {
-    if (!treeMode) {
-      return 'folder-symbolic'
-    }
-
-    if (isExpanded) {
-      return 'view-collapse'
-    }
-
-    return 'view-expand'
-  }
-  function getDirPath() {
-    return directory.toString().replace('file://', '')
-  }
-  function getPrintableDirPath() {
-    return QmlJs.getPrintableDirPath(directory.toString(), homeDir)
-  }
   function load(ignoreError) {
     if (!py.ready) {
       return
     }
 
-    py.listDir(directory, expanded, function(error, entries) {
+    py.listDir(QmlJs.getNormalPath(directory), expanded, function(error, entries) {
       if (error) {
         directory = prevDirectory
         // copy prevExpanded values
@@ -86,6 +64,7 @@ Item {
         }
         return errorOccured(error)
       }
+
       const hasDotDot = showDotDot && directory !== rootDirectory
       if (hasDotDot) {
         model.set(0, {
@@ -94,6 +73,7 @@ Item {
           isDir: true
         })
       }
+
       const startIndex = hasDotDot ? 1 : 0
       const totalEntriesNumber = entries.length + startIndex
       entries.forEach(function (fileEntry, i) {
@@ -107,9 +87,11 @@ Item {
           model.append(fileEntry)
         }
       })
+
       if (totalEntriesNumber < model.count) {
         model.remove(totalEntriesNumber, model.count - totalEntriesNumber)
       }
+
       prevDirectory = directory
       // copy expanded values
       prevExpanded = [].concat(expanded)

@@ -17,6 +17,7 @@ WebView {
       return
     }
 
+    request.action = WebEngineNavigationRequest.IgnoreRequest
     Qt.openUrlExternally(request.url)
   }
 }

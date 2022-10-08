@@ -47,6 +47,9 @@ export default class SeabassView {
     ;(rules.item(0) as CSSStyleRule).style.backgroundColor = options.backgroundColor
     ;(rules.item(1) as CSSStyleRule).style.color = options.textColor
     ;(rules.item(2) as CSSStyleRule).style.color = options.highlightColor
+    if (options.fontSize !== undefined) {
+      (rules.item(3) as CSSStyleRule).style.fontSize = `${options.fontSize}px`
+    }
   }
 
   _onViewportChange (options: ViewportOptions): void {

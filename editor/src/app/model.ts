@@ -14,11 +14,16 @@ export interface SeabassHtmlTheme {
   highlightColor: string
   /** Basic text color */
   textColor: string
+  /** Font size (in px) */
+  fontSize?: number
 }
 
 export interface SeabassCommonPreferences {
   /** Required to set metching editor theme */
   isDarkTheme: boolean
+
+  fontSize?: number
+  useWrapMode?: boolean
 }
 
 export interface SeabassSailfishPreferences {
@@ -57,11 +62,14 @@ export default class SeabassAppModel extends EventTarget {
     backgroundColor: string
     textColor: string
     highlightColor: string
+
+    fontSize?: number
   }
 
   /** App preferences */
   _preferences: {
     isDarkTheme: boolean
+    useWrapMode: boolean
   }
 
   /** SailfishOS-specific preferences */
@@ -80,7 +88,7 @@ export default class SeabassAppModel extends EventTarget {
   constructor () {
     super()
     this._editors = new Map()
-    this._preferences = { isDarkTheme: false }
+    this._preferences = { isDarkTheme: false, useWrapMode: true }
     this._sailfish = {
       isToolbarOpened: localStorage.getItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY) === 'true',
       directory: localStorage.getItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY)
@@ -161,7 +169,8 @@ export default class SeabassAppModel extends EventTarget {
       elem: editorElem,
       filePath,
       isReadOnly: options.isTerminal,
-      isDarkTheme: this._preferences.isDarkTheme
+      isDarkTheme: this._preferences.isDarkTheme,
+      useWrapMode: this._preferences.useWrapMode
     })
     editor.addEventListener('stateChange', evt => {
       this.dispatchEvent(new CustomEvent('stateChange', {
@@ -188,12 +197,14 @@ export default class SeabassAppModel extends EventTarget {
   setPreferences (options: InputPreferences): void {
     this._htmlTheme = {
       backgroundColor: options.backgroundColor,
+      fontSize: options.fontSize,
       textColor: options.textColor,
       highlightColor: options.highlightColor
     }
 
     this._preferences = {
-      isDarkTheme: options.isDarkTheme ?? false
+      isDarkTheme: options.isDarkTheme ?? false,
+      useWrapMode: options.useWrapMode ?? true
     }
 
     for (const editor of this._editors.values()) {

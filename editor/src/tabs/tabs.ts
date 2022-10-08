@@ -56,4 +56,8 @@ export default class Tabs {
   show (id: string): void {
     this._model.show(id)
   }
+
+  get (id: string): Tab|undefined {
+    return this._model.get(id)
+  }
 }

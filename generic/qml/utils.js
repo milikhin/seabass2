@@ -49,8 +49,8 @@ function getFileName(filePath) {
 function getNormalPath(path) {
   var normalPath = path.replace(/^file:\/\//, '')
   return normalPath.length > 1 && normalPath[normalPath.length - 1] === '/'
-    ? path.slice(0, -1)
-    : path
+    ? normalPath.slice(0, -1)
+    : normalPath
 }
 
 /**
@@ -159,19 +159,4 @@ function writeFile(filePath, content, callback) {
     }
 
     request.send(content);
-}
-
-function getFileIcon(fileName) {
-  var extMatch = fileName.match(/\.([A-Za-z]+)$/)
-  var ext = extMatch && extMatch[1]
-  switch(ext) {
-    case 'html':
-      return 'text-html-symbolic'
-    case 'css':
-      return 'text-css-symbolic'
-    case 'xml':
-      return 'text-xml-symbolic'
-    default:
-      return 'text-x-generic-symbolic'
-  }
 }

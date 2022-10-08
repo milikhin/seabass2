@@ -7,10 +7,14 @@ import { oneDark } from '@codemirror/theme-one-dark'
 import { getLanguageMode } from './language'
 import { SeabassEditorConfig } from './utils'
 
-interface ExtensionsOptions {
-  editorConfig: SeabassEditorConfig
-  isReadOnly?: boolean
+interface ThemeOptions {
   isDarkTheme?: boolean
+}
+
+interface ExtensionsOptions extends ThemeOptions{
+  editorConfig: SeabassEditorConfig
+  useWrapMode: boolean
+  isReadOnly?: boolean
 
   onChange: (content?: string) => void
 }
@@ -19,6 +23,8 @@ interface ExtensionsOptions {
  * Codemirror's setup
  */
 export default class EditorSetup {
+  /** extension to manage line wrapping */
+  lineWrappingCompartment: Compartment
   /** extension to manage readonly state */
   readOnlyCompartment: Compartment
   /** extension to manage language support */
@@ -32,6 +38,7 @@ export default class EditorSetup {
     this.readOnlyCompartment = new Compartment()
     this.langCompartment = new Compartment()
     this.themeCompartment = new Compartment()
+    this.lineWrappingCompartment = new Compartment()
 
     this.extensions = [
       basicSetup,
@@ -42,6 +49,7 @@ export default class EditorSetup {
       this._getDomEventHandlerExtension(options),
       this._getReadOnlyExtension(options),
       this._getThemeExtension(options),
+      this._getLineWrappingExtension(options),
       indentUnit.of(this._getIndentationString(options.editorConfig)),
       EditorState.tabSize.of(options.editorConfig.tabWidth)
     ]
@@ -55,6 +63,28 @@ export default class EditorSetup {
   async setupLanguageSupport (filePath: string): Promise<StateEffect<unknown>> {
     const langSupport = await getLanguageMode(filePath)
     return this.langCompartment.reconfigure(langSupport ?? Facet.define().of(null))
+  }
+
+  /**
+   * Returns line wrapping extension
+   * @param isEnabled line wrapping flag
+   * @returns soft wrap extension
+   */
+  getLineWrappingConfig (isEnabled: boolean): Extension {
+    return isEnabled
+      ? EditorView.lineWrapping
+      : Facet.define().of(null)
+  }
+
+  /**
+   * Returns editor theme extension
+   * @param options theming options
+   * @returns theme extension
+   */
+  getThemeConfig (options: ThemeOptions): Extension {
+    return options.isDarkTheme === true
+      ? oneDark
+      : EditorView.theme({})
   }
 
   _getContent (state: EditorState): string {
@@ -107,14 +137,17 @@ export default class EditorSetup {
     return this.langCompartment.of(Facet.define().of(null))
   }
 
+  _getLineWrappingExtension (options: ExtensionsOptions): Extension {
+    return this.lineWrappingCompartment.of(this.getLineWrappingConfig(options.useWrapMode))
+  }
+
   _getReadOnlyExtension (options: ExtensionsOptions): Extension {
     const isReadOnly = options.isReadOnly ?? false
     return this.readOnlyCompartment.of(EditorView.editable.of(!isReadOnly))
   }
 
   _getThemeExtension (options: ExtensionsOptions): Extension {
-    return this.themeCompartment.of(options.isDarkTheme === true
-      ? oneDark
-      : EditorView.baseTheme({}))
+    const themeExtension = this.getThemeConfig(options)
+    return this.themeCompartment.of(themeExtension)
   }
 }

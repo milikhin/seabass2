@@ -32,6 +32,8 @@ export interface SetContentOptions extends FileActionOptions {
 export interface FileLoadOptions extends FileActionOptions {
   /** File content */
   content: string
+  /** active tab flag */
+  isActive: boolean
   /** Terminal tab flag */
   isTerminal: boolean
   /** Readonly tab flag */

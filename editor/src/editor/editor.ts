@@ -1,6 +1,5 @@
 import { EditorView } from 'codemirror'
 import { EditorState } from '@codemirror/state'
-import { oneDark } from '@codemirror/theme-one-dark'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
 import { runScopeHandlers } from '@codemirror/view'
 import { RawEditorConfig, SetContentOptions } from '../api/api-interface'
@@ -24,6 +23,8 @@ interface EditorOptions {
   filePath: string
   isDarkTheme?: boolean
   isReadOnly?: boolean
+  fontSize?: number
+  useWrapMode: boolean
 }
 
 interface Events {
@@ -58,7 +59,8 @@ export default class Editor extends EventTarget {
       editorConfig: parseEditorConfig(options.editorConfig),
       isReadOnly: options.isReadOnly ?? false,
       isDarkTheme: options.isDarkTheme ?? false,
-      onChange: this._onChange.bind(this)
+      onChange: this._onChange.bind(this),
+      useWrapMode: options.useWrapMode
     })
 
     // set initial editor state
@@ -141,17 +143,27 @@ export default class Editor extends EventTarget {
             insert: options.content
           }
     })
+    const lastLine = this._editor.state.doc.length
+    this._editor.dispatch({
+      effects: EditorView.scrollIntoView(lastLine)
+    })
   }
 
   /**
    * Set editor preferences
    * @param param0 editor preferences
    */
-  setPreferences ({ isDarkTheme }: SeabassCommonPreferences): void {
+  setPreferences (options: SeabassCommonPreferences): void {
+    const theme = this._setup.getThemeConfig({
+      isDarkTheme: options.isDarkTheme
+    })
+    const lineWrapping = this._setup.getLineWrappingConfig(options.useWrapMode ?? true)
+
     this._editor.dispatch({
-      effects: this._setup.themeCompartment.reconfigure(isDarkTheme
-        ? oneDark
-        : EditorView.baseTheme({}))
+      effects: [
+        this._setup.lineWrappingCompartment.reconfigure(lineWrapping),
+        this._setup.themeCompartment.reconfigure(theme)
+      ]
     })
   }
 
