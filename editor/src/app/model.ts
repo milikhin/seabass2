@@ -31,6 +31,10 @@ export interface SeabassSailfishPreferences {
   isToolbarOpened: boolean
   /** Current file tree directory */
   directory: string|null
+  /** font size, CSS px */
+  fontSize: number
+  /** wrap long lines */
+  useWrapMode: boolean
 }
 
 export interface ViewportOptions {
@@ -73,10 +77,7 @@ export default class SeabassAppModel extends EventTarget {
   }
 
   /** SailfishOS-specific preferences */
-  _sailfish: {
-    isToolbarOpened: boolean
-    directory: string|null
-  }
+  _sailfish: SeabassSailfishPreferences
 
   _viewport: {
     verticalHtmlOffset: number
@@ -84,6 +85,9 @@ export default class SeabassAppModel extends EventTarget {
 
   SFOS_TOOLBAR_LOCAL_STORAGE_KEY = 'sailfish__isToolbarOpened'
   SFOS_DIRECTORY_LOCAL_STORAGE_KEY = 'sailfish__directory'
+  SFOS_FONTSIZE_LOCAL_STORAGE_KEY = 'sailfish__fontSize'
+  SFOS_SOFTWRAP_LOCAL_STORAGE_KEY = 'sailfish__useWrapMode'
+  DEFAULT_FONTSIZE = 12
 
   constructor () {
     super()
@@ -91,7 +95,11 @@ export default class SeabassAppModel extends EventTarget {
     this._preferences = { isDarkTheme: false, useWrapMode: true }
     this._sailfish = {
       isToolbarOpened: localStorage.getItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY) === 'true',
-      directory: localStorage.getItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY)
+      directory: localStorage.getItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY),
+      fontSize: localStorage.getItem(this.SFOS_FONTSIZE_LOCAL_STORAGE_KEY) !== null
+        ? Number(localStorage.getItem(this.SFOS_FONTSIZE_LOCAL_STORAGE_KEY))
+        : this.DEFAULT_FONTSIZE,
+      useWrapMode: localStorage.getItem(this.SFOS_SOFTWRAP_LOCAL_STORAGE_KEY) !== 'false'
     }
     this._viewport = {
       verticalHtmlOffset: 0

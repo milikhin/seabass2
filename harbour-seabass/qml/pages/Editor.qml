@@ -58,6 +58,8 @@ WebViewPage {
         // API methods
         onAppLoaded: function (data) {
             toolbar.open = data.isToolbarOpened || false
+            editorState.fontSize = data.fontSize
+            editorState.useWrapMode = data.useWrapMode
             // use `data.directory || api.homeDir` to restore last opened directory when opening app
             editorState.directory = api.homeDir
             editorState.loadTheme()
@@ -167,6 +169,12 @@ WebViewPage {
                 text: toolbar.open ? qsTr("Hide toolbar") : qsTr("Show toolbar")
                 onClicked: {
                     toolbar.open = !toolbar.open
+                }
+            }
+            MenuItem {
+                text: qsTr('Settings')
+                onClicked: {
+                    pageStack.push(settings)
                 }
             }
             MenuItem {
@@ -286,6 +294,21 @@ WebViewPage {
                     title: QmlJs.getFileName(filePath)
                 })
                 editorState.filePath = filePath
+            }
+        }
+    }
+
+    Component {
+        id: settings
+        Settings {
+            fontSize: editorState.fontSize
+            useWrapMode: editorState.useWrapMode
+
+            onFontSizeChanged: {
+                editorState.fontSize = fontSize
+            }
+            onUseWrapModeChanged: {
+                editorState.useWrapMode = useWrapMode
             }
         }
     }

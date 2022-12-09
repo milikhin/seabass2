@@ -93,9 +93,10 @@ export default class Editor extends EventTarget {
    * Destroys editor
    */
   destroy (): void {
+    this._removeDomEventHandlers()
+    this._editor.destroy()
     const editorParentElem = this._editorElem.parentElement as HTMLElement
     editorParentElem.removeChild(this._editorElem)
-    this._removeDomEventHandlers()
   }
 
   dispatchEvent<T extends keyof Events> (event: Events[T]): boolean {

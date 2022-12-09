@@ -50,6 +50,10 @@
         <source>Release notes</source>
         <translation>Versionsnotiser</translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>
