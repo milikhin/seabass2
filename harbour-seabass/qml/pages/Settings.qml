@@ -41,7 +41,6 @@ Page {
                 description: "Automatically wrap long lines"
                 checked: useWrapMode
                 onCheckedChanged: {
-                    console.log(checked)
                     root.useWrapMode = checked
                 }
             }
