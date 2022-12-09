@@ -20,7 +20,9 @@ describe('SeabassAppModel', () => {
       })
       expect(model.sailfishPreferences).toEqual({
         isToolbarOpened: true,
-        directory: null
+        directory: null,
+        fontSize: 12,
+        useWrapMode: true
       })
     })
   })

@@ -21,7 +21,9 @@ describe('SeabassApp', () => {
     expect(evt.detail.action).toEqual('appLoaded')
     expect(evt.detail.data).toEqual({
       isToolbarOpened: true,
-      directory: null
+      directory: null,
+      fontSize: 12,
+      useWrapMode: true
     })
   })
 })
