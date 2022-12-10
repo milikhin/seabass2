@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
 import Sailfish.WebEngine 1.0
-import org.nemomobile.configuration 1.0
+import Nemo.Configuration 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
