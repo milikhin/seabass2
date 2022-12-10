@@ -9,7 +9,7 @@ Name:       harbour-seabass
 # << macros
 
 Summary:    Seabass
-Version:    0.10.0
+Version:    0.11.0
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
