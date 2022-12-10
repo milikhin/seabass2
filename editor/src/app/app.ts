@@ -9,7 +9,6 @@ import SeabassView from './view'
 import SeabassAppModel, {
   EditorStateChangeOptions,
   InputPreferences,
-  SeabassSailfishPreferences,
   ViewportOptions
 } from './model'
 
@@ -46,7 +45,7 @@ class SeabassApp {
     this._tabs = new Tabs({ rootElem })
 
     this._registerApiEventListeners()
-    this._api.send({ action: 'appLoaded', data: this._model.sailfishPreferences })
+    this._api.send({ action: 'appLoaded' })
   }
 
   /**
@@ -64,7 +63,6 @@ class SeabassApp {
     this._api.addEventListener('requestSaveAndClose', this._onRequestFileSave.bind(this))
     this._api.addEventListener('setContent', this._forwardEvent.bind(this))
     this._api.addEventListener('setPreferences', this._onSetPreferences.bind(this))
-    this._api.addEventListener('setSailfishPreferences', this._onSetSailfishPreferences.bind(this))
     this._api.addEventListener('toggleReadOnly', this._forwardEvent.bind(this))
     this._api.addEventListener('undo', this._forwardEvent.bind(this))
     this._api.addEventListener('viewportChange', this._onViewportChange.bind(this))
@@ -118,8 +116,8 @@ class SeabassApp {
   }
 
   /**
-   * Loads saved SailfishOS-specific preferences
-   * @param evt setTheme event
+   * Handles viewport changes
+   * @param evt viewportChange event
    */
   _onViewportChange (evt: CustomEvent<ViewportOptions>): void {
     this._model.setViewportOptions(evt.detail)
@@ -144,14 +142,6 @@ class SeabassApp {
    */
   _onSetPreferences (evt: CustomEvent<InputPreferences>): void {
     this._model.setPreferences(evt.detail)
-  }
-
-  /**
-   * Loads saved SailfishOS-specific preferences
-   * @param evt setTheme event
-   */
-  _onSetSailfishPreferences (evt: CustomEvent<SeabassSailfishPreferences>): void {
-    this._model.setSailfishPreferences(evt.detail)
   }
 
   /**

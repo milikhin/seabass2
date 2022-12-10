@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
 import Sailfish.WebEngine 1.0
+import org.nemomobile.configuration 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
@@ -31,19 +32,34 @@ WebViewPage {
         width: page.width
     }
 
+    ConfigurationValue {
+        id: configToolbarVisibility
+        key: "/apps/harbour-seabass/settings/is_toolbar_visible"
+        defaultValue: false
+    }
+
+    ConfigurationValue {
+        id: configFontSize
+        key: "/apps/harbour-seabass/settings/font_size"
+        defaultValue: 12
+    }
+
+    ConfigurationValue {
+        id: configUseWrapMode
+        key: "/apps/harbour-seabass/settings/soft_wrap_enabled"
+        defaultValue: true
+    }
+
     GenericComponents.EditorState {
         id: editorState
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+        directory: api.homeDir
+        fontSize: configFontSize.value
+        useWrapMode: configUseWrapMode.value
         verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
 
         onFilePathChanged: {
             isMenuEnabled = false
-        }
-
-        onDirectoryChanged: {
-            api.postMessage('setSailfishPreferences', {
-                directory: directory
-            })
         }
     }
 
@@ -57,11 +73,6 @@ WebViewPage {
 
         // API methods
         onAppLoaded: function (data) {
-            toolbar.open = data.isToolbarOpened || false
-            editorState.fontSize = data.fontSize
-            editorState.useWrapMode = data.useWrapMode
-            // use `data.directory || api.homeDir` to restore last opened directory when opening app
-            editorState.directory = api.homeDir
             editorState.loadTheme()
             editorState.updateViewport()
         }
@@ -191,7 +202,7 @@ WebViewPage {
             width: parent.width
             height: Theme.itemSizeMedium
             focus: false
-            open: false
+            open: configToolbarVisibility.value
             background: Rectangle {
                 // default background doesn't look good when virtual keyboard is opened
                 // hence the workaround with Rectangle
@@ -201,9 +212,7 @@ WebViewPage {
             }
 
             onOpenChanged: {
-                api.postMessage('setSailfishPreferences', {
-                    isToolbarOpened: open
-                })
+                configToolbarVisibility.value = open
             }
 
             PlatformComponents.Toolbar {
@@ -301,14 +310,15 @@ WebViewPage {
     Component {
         id: settings
         Settings {
-            fontSize: editorState.fontSize
-            useWrapMode: editorState.useWrapMode
+            fontSize: configFontSize.value
+            useWrapMode: configUseWrapMode.value
 
             onFontSizeChanged: {
-                editorState.fontSize = fontSize
+                configFontSize.value = fontSize
             }
             onUseWrapModeChanged: {
-                editorState.useWrapMode = useWrapMode
+                configUseWrapMode.value = useWrapMode
+                console.log(useWrapMode, configUseWrapMode.value)
             }
         }
     }

@@ -1,4 +1,4 @@
-import { InputPreferences, SeabassSailfishPreferences, ViewportOptions } from '../app/model'
+import { InputPreferences, ViewportOptions } from '../app/model'
 import { KeyDownOptions } from '../editor/editor'
 
 export interface ApiTransport {
@@ -56,7 +56,6 @@ export interface IncomingMessagePayload {
   requestSaveAndClose: FileActionOptions
   setContent: SetContentOptions
   setPreferences: InputPreferences
-  setSailfishPreferences: SeabassSailfishPreferences
   undo: undefined
   toggleReadOnly: undefined
 }

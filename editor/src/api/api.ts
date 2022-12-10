@@ -10,7 +10,7 @@ import SocketApiTransport from './socket-transport'
 /** Outgoing API message to a platform-specific app */
 interface OutgoingApiMessage {
   action: string
-  data: unknown
+  data?: unknown
 }
 
 interface ApiOptions {
