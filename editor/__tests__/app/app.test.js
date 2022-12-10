@@ -19,11 +19,5 @@ describe('SeabassApp', () => {
     // Check for 'appLoaded' action
     const evt = await waitForApiMessage
     expect(evt.detail.action).toEqual('appLoaded')
-    expect(evt.detail.data).toEqual({
-      isToolbarOpened: true,
-      directory: null,
-      fontSize: 12,
-      useWrapMode: true
-    })
   })
 })
