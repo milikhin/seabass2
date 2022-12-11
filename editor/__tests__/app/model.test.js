@@ -18,10 +18,6 @@ describe('SeabassAppModel', () => {
       expect(model._viewport).toEqual({
         verticalHtmlOffset: 0
       })
-      expect(model.sailfishPreferences).toEqual({
-        isToolbarOpened: true,
-        directory: null
-      })
     })
   })
 
@@ -202,17 +198,6 @@ describe('SeabassAppModel', () => {
       expect(model._viewport).toEqual({
         verticalHtmlOffset: options.verticalHtmlOffset
       })
-    })
-  })
-
-  describe('#setSailfishPreferences', () => {
-    it('should set toolbar visibility', () => {
-      const model = new SeabassAppModel()
-
-      const options = { isToolbarOpened: true }
-      model.setSailfishPreferences(options)
-
-      expect(model._sailfish.isToolbarOpened).toEqual(options.isToolbarOpened)
     })
   })
 })

@@ -26,13 +26,6 @@ export interface SeabassCommonPreferences {
   useWrapMode?: boolean
 }
 
-export interface SeabassSailfishPreferences {
-  /** Bottom toolbar state */
-  isToolbarOpened: boolean
-  /** Current file tree directory */
-  directory: string|null
-}
-
 export interface ViewportOptions {
   /** HTML page's offset from the bottom of webView. Used as a workaround to SfOS rendering issues */
   verticalHtmlOffset: number
@@ -47,7 +40,6 @@ interface AppEvents {
   loadFile: CustomEvent<FileLoadOptions>
   log: CustomEvent<unknown>
   preferencesChange: CustomEvent<SeabassCommonPreferences>
-  sfosPreferencesChange: CustomEvent<SeabassSailfishPreferences>
   stateChange: CustomEvent<EditorStateChangeOptions>
 }
 
@@ -72,34 +64,17 @@ export default class SeabassAppModel extends EventTarget {
     useWrapMode: boolean
   }
 
-  /** SailfishOS-specific preferences */
-  _sailfish: {
-    isToolbarOpened: boolean
-    directory: string|null
-  }
-
   _viewport: {
     verticalHtmlOffset: number
   }
-
-  SFOS_TOOLBAR_LOCAL_STORAGE_KEY = 'sailfish__isToolbarOpened'
-  SFOS_DIRECTORY_LOCAL_STORAGE_KEY = 'sailfish__directory'
 
   constructor () {
     super()
     this._editors = new Map()
     this._preferences = { isDarkTheme: false, useWrapMode: true }
-    this._sailfish = {
-      isToolbarOpened: localStorage.getItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY) === 'true',
-      directory: localStorage.getItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY)
-    }
     this._viewport = {
       verticalHtmlOffset: 0
     }
-  }
-
-  get sailfishPreferences (): SeabassSailfishPreferences {
-    return this._sailfish
   }
 
   addEventListener<T extends keyof AppEvents>(type: T,
@@ -212,22 +187,5 @@ export default class SeabassAppModel extends EventTarget {
     }
     this.dispatchEvent(new CustomEvent('htmlThemeChange', { detail: this._htmlTheme }))
     this.dispatchEvent(new CustomEvent('preferencesChange', { detail: this._preferences }))
-  }
-
-  /**
-   * Sets sailfish-specific app preferences
-   * @param options app preferences
-   */
-  setSailfishPreferences (options: Partial<SeabassSailfishPreferences>): void {
-    if (options.isToolbarOpened !== undefined) {
-      this._sailfish.isToolbarOpened = options.isToolbarOpened
-      localStorage.setItem(this.SFOS_TOOLBAR_LOCAL_STORAGE_KEY, options.isToolbarOpened.toString())
-    }
-    if (options.directory !== undefined && options.directory !== null) {
-      this._sailfish.directory = options.directory
-      localStorage.setItem(this.SFOS_DIRECTORY_LOCAL_STORAGE_KEY, options.directory)
-    }
-
-    this.dispatchEvent(new CustomEvent('sfosPreferencesChange', { detail: this._sailfish }))
   }
 }

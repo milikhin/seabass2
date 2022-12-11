@@ -10,7 +10,7 @@ import SocketApiTransport from './socket-transport'
 /** Outgoing API message to a platform-specific app */
 interface OutgoingApiMessage {
   action: string
-  data: unknown
+  data?: unknown
 }
 
 interface ApiOptions {
@@ -45,7 +45,6 @@ export default class SeabassApi extends EventTarget {
     'requestSaveAndClose',
     'setContent',
     'setPreferences',
-    'setSailfishPreferences',
     'toggleReadOnly',
     'undo',
     'viewportChange'

@@ -30,6 +30,7 @@ DISTFILES += qml/harbour-seabass.qml \
     qml/pages/Files.qml \
     qml/pages/NewFile.qml \
     qml/pages/SaveDialog.qml \
+    qml/pages/Settings.qml \
     qml/py-backend \
     rpm/harbour-seabass.changes.in \
     rpm/harbour-seabass.changes.run.in \

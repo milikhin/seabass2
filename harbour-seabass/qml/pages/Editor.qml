@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
 import Sailfish.WebEngine 1.0
+import Nemo.Configuration 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
@@ -31,20 +32,43 @@ WebViewPage {
         width: page.width
     }
 
+    Component.onCompleted: {
+        pageStack.busyChanged.connect(function() {
+            if (!hasOpenedFile) {
+                return
+            }
+
+            if (!pageStack.busy) {
+                page.isMenuEnabled = false
+            }
+        })
+    }
+
+    ConfigurationValue {
+        id: configToolbarVisibility
+        key: "/apps/harbour-seabass/settings/is_toolbar_visible"
+        defaultValue: false
+    }
+
+    ConfigurationValue {
+        id: configFontSize
+        key: "/apps/harbour-seabass/settings/font_size"
+        defaultValue: 12
+    }
+
+    ConfigurationValue {
+        id: configUseWrapMode
+        key: "/apps/harbour-seabass/settings/soft_wrap_enabled"
+        defaultValue: true
+    }
+
     GenericComponents.EditorState {
         id: editorState
         isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+        directory: api.homeDir
+        fontSize: configFontSize.value
+        useWrapMode: configUseWrapMode.value
         verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
-
-        onFilePathChanged: {
-            isMenuEnabled = false
-        }
-
-        onDirectoryChanged: {
-            api.postMessage('setSailfishPreferences', {
-                directory: directory
-            })
-        }
     }
 
     GenericComponents.EditorApi {
@@ -57,9 +81,6 @@ WebViewPage {
 
         // API methods
         onAppLoaded: function (data) {
-            toolbar.open = data.isToolbarOpened || false
-            // use `data.directory || api.homeDir` to restore last opened directory when opening app
-            editorState.directory = api.homeDir
             editorState.loadTheme()
             editorState.updateViewport()
         }
@@ -87,7 +108,7 @@ WebViewPage {
             page: page
             title: hasOpenedFile
                 ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                : qsTr('Seabass v%1').arg('0.10.0')
+                : qsTr('Seabass v%1').arg('0.11.0')
             description: hasOpenedFile
                 ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                 : qsTr('Release notes')
@@ -170,6 +191,12 @@ WebViewPage {
                 }
             }
             MenuItem {
+                text: qsTr('Settings')
+                onClicked: {
+                    pageStack.push(settings)
+                }
+            }
+            MenuItem {
                 text: qsTr('About')
                 onClicked: {
                     pageStack.push(Qt.resolvedUrl("About.qml"))
@@ -183,7 +210,7 @@ WebViewPage {
             width: parent.width
             height: Theme.itemSizeMedium
             focus: false
-            open: false
+            open: configToolbarVisibility.value
             background: Rectangle {
                 // default background doesn't look good when virtual keyboard is opened
                 // hence the workaround with Rectangle
@@ -193,9 +220,7 @@ WebViewPage {
             }
 
             onOpenChanged: {
-                api.postMessage('setSailfishPreferences', {
-                    isToolbarOpened: open
-                })
+                configToolbarVisibility.value = open
             }
 
             PlatformComponents.Toolbar {
@@ -286,6 +311,21 @@ WebViewPage {
                     title: QmlJs.getFileName(filePath)
                 })
                 editorState.filePath = filePath
+            }
+        }
+    }
+
+    Component {
+        id: settings
+        Settings {
+            fontSize: configFontSize.value
+            useWrapMode: configUseWrapMode.value
+
+            onFontSizeChanged: {
+                configFontSize.value = fontSize
+            }
+            onUseWrapModeChanged: {
+                configUseWrapMode.value = useWrapMode
             }
         }
     }

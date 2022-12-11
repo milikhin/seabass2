@@ -7,7 +7,7 @@
     
   </style>
   <style id="theme-css">
-    /* CSS Custom Properties are not supported in Sailfish */
+    /* CSS Custom Properties were not supported in Sailfish prior to v4.2 */
     /* these values are going to be replaces within JS: */
     body {
       /*background-color: #backgroungColor */
@@ -18,15 +18,17 @@
     #welcome a {
       /* color: #highlightColor */
     }
+    .cm-editor {
+      /* font-size: #fontSize */
+    }
   </style>
 </head>
 
 <body>
   <div id="welcome">
     <p>
-      v0.10 introduces new file picker component.
-      It has compact design, remembers last opened directory and provides possiblity
-      to create new files.
+      v0.11 introduces Settings page.
+      It is possible to change font size and text wrapping.
     </p>
     <p>
       Please let me know if you have any issues:

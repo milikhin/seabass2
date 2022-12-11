@@ -9,7 +9,7 @@ Page {
         anchors.fill: parent
         header: PageHeader {
             id: header
-            title: qsTr('Seabass v%1').arg('0.10.0')
+            title: qsTr('Seabass v%1').arg('0.11.0')
         }
         model: ListModel {
             ListElement {
