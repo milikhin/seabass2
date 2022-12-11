@@ -32,6 +32,18 @@ WebViewPage {
         width: page.width
     }
 
+    Component.onCompleted: {
+        pageStack.busyChanged.connect(function() {
+            if (!hasOpenedFile) {
+                return
+            }
+
+            if (!pageStack.busy) {
+                page.isMenuEnabled = false
+            }
+        })
+    }
+
     ConfigurationValue {
         id: configToolbarVisibility
         key: "/apps/harbour-seabass/settings/is_toolbar_visible"
@@ -57,10 +69,6 @@ WebViewPage {
         fontSize: configFontSize.value
         useWrapMode: configUseWrapMode.value
         verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
-
-        onFilePathChanged: {
-            isMenuEnabled = false
-        }
     }
 
     GenericComponents.EditorApi {
@@ -318,7 +326,6 @@ WebViewPage {
             }
             onUseWrapModeChanged: {
                 configUseWrapMode.value = useWrapMode
-                console.log(useWrapMode, configUseWrapMode.value)
             }
         }
     }
