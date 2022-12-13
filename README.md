@@ -1,6 +1,5 @@
 ![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
 [![Test coverage](https://api.codeclimate.com/v1/badges/83fe45078487708c6061/test_coverage)](https://codeclimate.com/github/milikhin/seabass2/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/83fe45078487708c6061/maintainability)](https://codeclimate.com/github/milikhin/seabass2/maintainability)
 
 # Seabass
 ## About
@@ -9,33 +8,32 @@ Seabass is a code editor for mobile devices.
 
 Supported platforms:
 
-* Ubuntu Touch
-* Sailfish OS (proof of concept version)
+* Sailfish OS  
+   Available in the Jolla store or from the [OpenRepos](https://openrepos.net/content/mikhael/seabass).
+* Ubuntu Touch  
+   Available in the [OpenStore](https://open-store.io/app/seabass2.mikhael).
 
-[![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/seabass2.mikhael)
-
-![Seabass on Ubuntu Touch](https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-desktop.png)
+<img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-sfos1.png" style="width: 200px;" alt="Seabass on Sailfish OS (dark)" /> <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-sfos3.png" style="width: 200px;" alt="Seabass on Sailfish OS (with OSK)" /> <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/seabass-xperia-u02.png" style="width: 200px;" alt="Seabass on Ubuntu Touch" /> <img src="https://github.com/milikhin/milikhin.github.io/raw/master/img/seabass/new-project.png" style="width: 200px;" alt="Seabass on Ubuntu Touch (creating new project)" />
 
 ## Features
 
 Core features:
-* Syntax highlighting for over 120 programming/markup languages
+* Syntax highlighting for over 100 programming/markup languages
 * Navigation buttons
 * Light and dark themes
-* Code autocompletion and snippets
-* Setting indentation preferences using .editorconfig files
+* Reading indentation preferences from .editorconfig files
 
 Ubuntu Touch:
 * Adaptive layout and multiple tabs
 * Create/Rename/Delete files
-* Tree mode for the file list
+* File tree
 * Create and build QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
 
 ## Build instructions
 
 ### Requirements:
 
-* Node.js (tested using v12)
+* Node.js (any recent version should work)
 * pipenv (optional, to run tests for python modules)
 * Sailfish SDK (for Sailfish OS)
 * clickable (for Ubuntu Touch)
@@ -65,10 +63,7 @@ Run `clickable` (in the project root directory).
 
 ## Contribution
 
-Your reviews, bug reports and feature requests are very appreciated, as so pull requests.
-Feel free to submit PRs for any non-assigned issues!
+Bug reports and feature requests are very appreciated, as so pull requests!
 Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
 [python modules](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
 [ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
-
-Thanks to the [contributors](https://github.com/milikhin/seabass2/graphs/contributors)!

@@ -1,1 +1,0 @@
-../../py-libs/inotify_simple/inotify_simple.py

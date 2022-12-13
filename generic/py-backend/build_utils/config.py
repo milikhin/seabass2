@@ -3,15 +3,29 @@
 CONTAINER_ID = 'seabass2-build'
 CONTAINER_NAME = 'Seabass2 build container'
 PACKAGES = [
-    # 1. required to install clickable
-    'python3.6',
-    'python3-pip',
+    'wget',
+    'curl',
 
-    # 2. cause why not?
+    # to compile python3.6
+    'libssl-dev',
+    'zlib1g-dev',
+    'libbz2-dev',
+    'libreadline-dev',
+    'libsqlite3-dev',
+    'llvm',
+    'libncursesw5-dev',
+    'xz-utils',
+    'tk-dev',
+    'libxml2-dev',
+    'libxmlsec1-dev',
+    'libffi-dev',
+    'liblzma-dev',
+
+    # cause why not?
     'nano',
     'git',
 
-    # 3. list of packages inspired by the clickable Docker image
+    # list of packages inspired by the clickable Docker image
     'build-essential',
     'cmake',
     'git',

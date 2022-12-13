@@ -19,6 +19,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Seabass v%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Release notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Open file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -31,7 +39,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Hide toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -43,6 +63,36 @@
     </message>
 </context>
 <context>
+    <name>Files</name>
+    <message>
+        <source>Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to home directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewFile</name>
+    <message>
+        <source>Create</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create new file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File name</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
         <source>Discard changes?</source>
@@ -50,6 +100,13 @@
     </message>
     <message>
         <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Toolbar</name>
+    <message>
+        <source>Read only</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

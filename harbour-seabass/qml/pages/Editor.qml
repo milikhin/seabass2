@@ -1,32 +1,79 @@
 import QtQuick 2.2
 
-import QtWebKit 3.0
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
+import Sailfish.WebView 1.0
+import Sailfish.WebEngine 1.0
+import Nemo.Configuration 1.0
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
 import '../generic' as GenericComponents
 
-Page {
+WebViewPage {
     id: page
-    property string seabassFilePath
-
+    property int headerHeight: 0
+    property bool isMenuEnabled: true
+    property bool hasOpenedFile: editorState.filePath !== ''
+    property alias filePath: editorState.filePath
     allowedOrientations: Orientation.All
+
+    onIsMenuEnabledChanged: {
+        if (isMenuEnabled) {
+            hint.start()
+        } else {
+            hint.stop()
+        }
+    }
+
+    background: Rectangle {
+        color: editorState.isDarkTheme ? QmlJs.colors.DARK_BACKGROUND : QmlJs.colors.LIGHT_BACKGROUND
+        height: page.height
+        width: page.width
+    }
+
+    Component.onCompleted: {
+        pageStack.busyChanged.connect(function() {
+            if (!hasOpenedFile) {
+                return
+            }
+
+            if (!pageStack.busy) {
+                page.isMenuEnabled = false
+            }
+        })
+    }
+
+    ConfigurationValue {
+        id: configToolbarVisibility
+        key: "/apps/harbour-seabass/settings/is_toolbar_visible"
+        defaultValue: false
+    }
+
+    ConfigurationValue {
+        id: configFontSize
+        key: "/apps/harbour-seabass/settings/font_size"
+        defaultValue: 12
+    }
+
+    ConfigurationValue {
+        id: configUseWrapMode
+        key: "/apps/harbour-seabass/settings/soft_wrap_enabled"
+        defaultValue: true
+    }
+
+    GenericComponents.EditorState {
+        id: editorState
+        isDarkTheme: Theme.colorScheme === Theme.LightOnDark
+        directory: api.homeDir
+        fontSize: configFontSize.value
+        useWrapMode: configUseWrapMode.value
+        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
+    }
 
     GenericComponents.EditorApi {
         id: api
-
-        // UI theme
-        isDarkTheme: Theme.colorScheme === Theme.LightOnDark
-        backgroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 0.75)'
-            : 'rgba(255, 255, 255, 0.75)'
-        foregroundColor: isDarkTheme
-            ? 'rgba(0, 0, 0, 1)'
-            : 'rgba(255, 255, 255, 1)'
-        textColor: Theme.highlightColor
-        linkColor: Theme.primaryColor
+        homeDir: StandardPaths.home
 
         // platform-specific i18n implementation for Generic API
         readErrorMsg: qsTr('Unable to read file. Please ensure that you have read access to the %1')
@@ -34,151 +81,253 @@ Page {
 
         // API methods
         onAppLoaded: function (data) {
-            toolbar.open = data.isSailfishToolbarOpened || false
+            editorState.loadTheme()
+            editorState.updateViewport()
         }
+
         onErrorOccured: function (message) {
             displayError(message)
         }
-        onIsReadOnlyChanged: {
-            if (isReadOnly) {
-                Qt.inputMethod.hide()
-            }
+
+        onMessageSent: function(jsonPayload) {
+            viewFlickable.webView.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
         }
-        onMessageSent: function(jsonMessage) {
-            webView.experimental.postMessage(jsonMessage)
-        }
-        onFilePathChanged: {
-            seabassFilePath = filePath
+
+        onStateChanged: function(data) {
+            editorState.hasChanges = !data.isReadOnly && data.hasChanges
+            editorState.hasUndo = !data.isReadOnly && data.hasUndo
+            editorState.hasRedo = !data.isReadOnly && data.hasRedo
+            editorState.isReadOnly = data.isReadOnly
         }
     }
 
-    onOrientationChanged: fixResize()
+    WebViewFlickable {
+        id: viewFlickable
+        anchors.fill: parent
+        header: PageHeader {
+            page: page
+            title: hasOpenedFile
+                ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
+                : qsTr('Seabass v%1').arg('0.11.0')
+            description: hasOpenedFile
+                ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
+                : qsTr('Release notes')
 
-    SilicaWebView {
-        id: webView
-        url: '../html/index.html'
-
-        anchors.top: page.top
-        anchors.bottom: toolbar.open ? toolbar.top : page.bottom
-        width: page.width
-
-        experimental.transparentBackground: true
-        experimental.deviceWidth: getDeviceWidth()
-        experimental.preferences.navigatorQtObjectEnabled: true
-        experimental.onMessageReceived: {
-            var msg = JSON.parse(message.data)
-            // automatically copy selected text to the Clipboard
-            if (msg.data && msg.data.selectedText) {
-                Clipboard.text = msg.data.selectedText
+            onHeightChanged: {
+                headerHeight = height
             }
 
-            api.handleMessage(msg.action, msg.data)
+            // Show divider between page header and editor when file is opened
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                color: editorState.isDarkTheme ? QmlJs.colors.DARK_DIVIDER : QmlJs.colors.LIGHT_DIVIDER
+                height: hasOpenedFile ? Theme.dp(1) : 0
+            }
         }
 
-        onNavigationRequested: function(request) {
-            const urlStr = request.url.toString()
-            const isHttpRequest = urlStr.indexOf('http') === 0
-            if (!isHttpRequest) {
-                return
-            }
+        webView.opacity: 1
+        webView.url: '../html/index.html'
+        webView.viewportHeight: getEditorHeight()
 
-            request.action = WebView.IgnoreRequest;
-            Qt.openUrlExternally(request.url)
+        Component.onCompleted: {
+            Qt.inputMethod.visibleChanged.connect(function() {
+                api.oskVisibilityChanged(Qt.inputMethod.visible)
+            })
+        }
+
+        // Initialize API transport method for Sailfish OS
+        webView.onViewInitialized: {
+            webView.loadFrameScript(Qt.resolvedUrl("../html/framescript.js"));
+            webView.addMessageListener("webview:action")
+        }
+        webView.onRecvAsyncMessage: {
+            switch (message) {
+                case "webview:action": {
+                    api.handleMessage(data.action, data.data)
+                }
+            }
+        }
+
+        // Open all the links externally in a browser
+        webView.onLinkClicked: function(url) {
+            Qt.openUrlExternally(url)
         }
 
         PullDownMenu {
             busy: api.isSaveInProgress
+            visible: isMenuEnabled
             MenuItem {
                 text: qsTr("Open file...")
                 onClicked: {
-                    api.hasChanges
-                        ? pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
-                              filePath: api.filePath,
-                              acceptDestination: filePickerPage,
-                              acceptDestinationAction: PageStackAction.Replace
-                          })
-                        : pageStack.push(filePickerPage)
+                    if (!editorState.hasChanges) {
+                        return pageStack.push(filePicker)
+                    }
+
+                    pageStack.push(Qt.resolvedUrl('SaveDialog.qml'), {
+                        filePath: filePath,
+                        acceptDestination: filePicker,
+                        acceptDestinationAction: PageStackAction.Replace
+                    })
                 }
             }
             MenuItem {
-                enabled: !api.isSaveInProgress
-                visible: api.filePath && !api.isReadOnly
+                enabled: !api.isSaveInProgress && !editorState.isReadOnly
+                visible: hasOpenedFile
                 text: api.isSaveInProgress ? qsTr("Saving...") : qsTr("Save")
-                onClicked: api.requestSaveFile()
+                onClicked: {
+                    api.requestFileSave(filePath)
+                }
             }
         }
 
         PushUpMenu {
+            visible: isMenuEnabled
             MenuItem {
-                text: qsTr(toolbar.open ? "Hide toolbar" : "Show toolbar")
-                onClicked: toolbar.open = !toolbar.open
+                text: toolbar.open ? qsTr("Hide toolbar") : qsTr("Show toolbar")
+                onClicked: {
+                    toolbar.open = !toolbar.open
+                }
+            }
+            MenuItem {
+                text: qsTr('Settings')
+                onClicked: {
+                    pageStack.push(settings)
+                }
             }
             MenuItem {
                 text: qsTr('About')
-                onClicked: pageStack.push(Qt.resolvedUrl("About.qml"))
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("About.qml"))
+                }
             }
+        }
+
+        DockedPanel {
+            id: toolbar
+            dock: Dock.Bottom
+            width: parent.width
+            height: Theme.itemSizeMedium
+            focus: false
+            open: configToolbarVisibility.value
+            background: Rectangle {
+                // default background doesn't look good when virtual keyboard is opened
+                // hence the workaround with Rectangle
+                color: editorState.isDarkTheme
+                       ? QmlJs.colors.DARK_TOOLBAR_BACKGROUND
+                       : QmlJs.colors.LIGHT_TOOLBAR_BACKGROUND
+            }
+
+            onOpenChanged: {
+                configToolbarVisibility.value = open
+            }
+
+            PlatformComponents.Toolbar {
+                hasUndo: editorState.hasUndo
+                hasRedo: editorState.hasRedo
+                readOnly: editorState.isReadOnly
+                readOnlyEnabled: hasOpenedFile
+
+                onUndo: api.postMessage('undo')
+                onRedo: api.postMessage('redo')
+                onToggleReadOnly: api.postMessage('toggleReadOnly')
+                onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
+                onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
+                onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
+                onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
+                onNavigateLineStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */ })
+                onNavigateLineEnd: api.postMessage('keyDown', { keyCode: 35 /* END */ })
+                onNavigateFileStart: api.postMessage('keyDown', { keyCode: 36 /* HOME */, ctrlKey: true })
+                onNavigateFileEnd: api.postMessage('keyDown', { keyCode: 35 /* END */, ctrlKey: true })
+            }
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            visible: hasOpenedFile && isMenuEnabled
+            onClicked: {
+                if (hasOpenedFile) {
+                    isMenuEnabled = false
+                }
+            }
+        }
+
+        // Floating action button to enable pulley menus
+        PlatformComponents.FloatingButton {
+            anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
+            anchors.right: parent.right
+            anchors.bottomMargin: Theme.paddingMedium
+            anchors.rightMargin: Theme.paddingMedium
+            visible: hasOpenedFile
+
+            isDarkTheme: editorState.isDarkTheme
+            highlighed: isMenuEnabled
+            icon.source: "image://theme/icon-m-gesture"
+            onClicked: isMenuEnabled = !isMenuEnabled
+        }
+
+        TouchInteractionHint {
+            id: hint
+            direction: TouchInteraction.Down
         }
     }
 
-    DockedPanel {
-        id: toolbar
-        dock: Dock.Bottom
-        width: parent.width
-        height: Theme.itemSizeMedium
-        focus: false
-        open: false
-        onOpenChanged: {
-            api.postMessage('setPreferences', {
-                isSailfishToolbarOpened: open
+    GenericComponents.TabsModel {
+        id: tabsModel
+        onTabAdded: function(tab) {
+            api.loadFile({
+                filePath: tab.filePath,
+                createIfNotExists: true,
+                callback: function(err) {
+                    if (err) {
+                        tabsModel.close(tab.filePath)
+                    }
+                    api.openFile(tab.filePath)
+                }
             })
         }
-
-        PlatformComponents.Toolbar {
-            hasUndo: api.hasUndo
-            hasRedo: api.hasRedo
-            readOnly: api.isReadOnly
-            readOnlyEnabled: !api.forceReadOnly
-
-            onUndo: api.postMessage('undo')
-            onRedo: api.postMessage('redo')
-            onToggleReadOnly: api.postMessage('toggleReadOnly')
-            onNavigateDown: api.postMessage('keyDown', { keyCode: 40 /* DOWN */ })
-            onNavigateUp: api.postMessage('keyDown', { keyCode: 38 /* UP */ })
-            onNavigateLeft: api.postMessage('keyDown', { keyCode: 37 /* LEFT */ })
-            onNavigateRight: api.postMessage('keyDown', { keyCode: 39 /* RIGHT */ })
-            onNavigateLineStart: api.postMessage('navigate', { where: 'lineStart' })
-            onNavigateLineEnd: api.postMessage('navigate', { where: 'lineEnd' })
-            onNavigateFileStart: api.postMessage('navigate', { where: 'fileStart' })
-            onNavigateFileEnd: api.postMessage('navigate', { where: 'fileEnd' })
+        onTabClosed: function(tabId) {
+            api.closeFile(tabId)
         }
     }
 
     Component {
-        id: filePickerPage
-        FilePickerPage {
-            onSelectedContentPropertiesChanged: {
-                if (!selectedContentProperties.filePath) {
-                    return
+        id: filePicker
+        Files {
+            homeDir: api.homeDir
+            directory: editorState.directory
+            onDirectoryChanged: {
+                editorState.directory = directory
+            }
+            onOpened: function(filePath) {
+                if (hasOpenedFile) {
+                    tabsModel.close(editorState.filePath)
                 }
-
-                if (api.filePath) {
-                    api.closeFile(api.filePath)
-                }
-                api.loadFile(selectedContentProperties.filePath, false, true, false, Function.prototype)
-                api.openFile(selectedContentProperties.filePath)
+                tabsModel.open({
+                    id: filePath,
+                    filePath: filePath,
+                    subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
+                    title: QmlJs.getFileName(filePath)
+                })
+                editorState.filePath = filePath
             }
         }
     }
 
-    /**
-     * Returns HTML device-width scaled correctly for the current device
-     * @returns {int} - device width in CSS pixels
-     */
-    function getDeviceWidth() {
-        const deviceWidth = page.orientation === Orientation.Portrait
-            ? Screen.width
-            : Screen.height
-        return deviceWidth / Theme.pixelRatio / (540 / 320)
+    Component {
+        id: settings
+        Settings {
+            fontSize: configFontSize.value
+            useWrapMode: configUseWrapMode.value
+
+            onFontSizeChanged: {
+                configFontSize.value = fontSize
+            }
+            onUseWrapModeChanged: {
+                configUseWrapMode.value = useWrapMode
+            }
+        }
     }
 
     /**
@@ -193,17 +342,15 @@ Page {
         })
     }
 
-    function getDeviceScale() {
-        return Theme.pixelRatio * (540 / 320)
-    }
-
-    /**
-     * Simple hak to fix issue with WebView not resized properly automatically when changing device orientation.
-     * @returns {undefined}
-     */
-    function fixResize() {
-        webView.experimental.deviceWidth = getDeviceWidth()
-        page.x = 1
-        page.x = 0
+    function getEditorHeight() {
+        const isPortrait = page.orientation & Orientation.PortraitMask
+        const screenHeight = isPortrait
+            ? Screen.height
+            : Screen.width
+        const keyboardHeight = isPortrait
+            ? Qt.inputMethod.keyboardRectangle.height
+            : Qt.inputMethod.keyboardRectangle.width
+        const toolbarHeight = toolbar.open ? toolbar.height : 0
+        return screenHeight - keyboardHeight - toolbarHeight
     }
 }

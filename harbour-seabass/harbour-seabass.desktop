@@ -10,3 +10,8 @@ Name=Seabass
 # Remember to comment out the following line, if you do not want to use
 # a different app name in German locale (de).
 Name[de]=Seabass
+
+[X-Sailjail]
+Permissions=UserDirs;RemovableMedia
+OrganizationName=name.milikhin
+ApplicationName=Seabass

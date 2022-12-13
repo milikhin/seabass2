@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "target": "es5",
+
+    // Use tsc only for typechecks
+    "noEmit": true,
+    "strict": true,
+    // Ensure that Babel can safely transpile files in the TypeScript project
+    "isolatedModules": true,
+    "downlevelIteration": true
+  },
+  "include": [
+    "editor/src"
+  ]
+}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-30 21:24+0000\n"
+"POT-Creation-Date: 2022-10-10 06:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:90
+#: ../qml/About.qml:22 ../qml/components/Header.qml:93
 msgid "About"
 msgstr ""
 
@@ -27,40 +27,31 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:27
+#: ../qml/Main.qml:28
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:28 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:29 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:91
-msgid "Unable to read file. Please ensure that you have read access to the %1"
-msgstr ""
-
-#: ../qml/Main.qml:92
-msgid ""
-"Unable to write the file. Please ensure that you have write access to %1"
-msgstr ""
-
-#: ../qml/Main.qml:286
+#: ../qml/Main.qml:236
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:331
+#: ../qml/Main.qml:281
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:341
+#: ../qml/Main.qml:291
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:357
+#: ../qml/Main.qml:305
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:367
+#: ../qml/Main.qml:315
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 
@@ -143,7 +134,7 @@ msgstr ""
 msgid "not exists"
 msgstr ""
 
-#: ../qml/Settings.qml:32 ../qml/components/Header.qml:85
+#: ../qml/Settings.qml:32 ../qml/components/Header.qml:88
 msgid "Settings"
 msgstr ""
 
@@ -199,8 +190,8 @@ msgstr ""
 
 #: ../qml/Settings.qml:243
 msgid ""
-"• To build a project you need to open a corresponding clickable.json file "
-"and click the 'Build' button:"
+"• To build a project you need to open a corresponding clickable "
+"configuration file and click the 'Build' button:"
 msgstr ""
 
 #: ../qml/Settings.qml:260
@@ -211,7 +202,8 @@ msgid ""
 msgstr ""
 
 #: ../qml/Settings.qml:270
-msgid "• clickable.json file should be named 'clickable.json'."
+msgid ""
+"• clickable config file should be named 'clickable.json' or 'clickable.yaml'."
 msgstr ""
 
 #: ../qml/Settings.qml:286
@@ -279,7 +271,7 @@ msgstr ""
 msgid "%1 will be deleted"
 msgstr ""
 
-#: ../qml/components/Header.qml:79
+#: ../qml/components/Header.qml:82
 msgid "Keyboard extension"
 msgstr ""
 
@@ -301,6 +293,15 @@ msgstr ""
 
 #: ../qml/components/SaveDialog.qml:26
 msgid "Save"
+msgstr ""
+
+#: ../qml/components/UbuntuApi.qml:37
+msgid "Unable to read file. Please ensure that you have read access to the %1"
+msgstr ""
+
+#: ../qml/components/UbuntuApi.qml:38
+msgid ""
+"Unable to write the file. Please ensure that you have write access to %1"
 msgstr ""
 
 #: ../qml/components/files/DirectoryMenu.qml:17

@@ -11,7 +11,7 @@ Item {
 
     signal undo()
     signal redo()
-    signal toggleReadOnly
+    signal toggleReadOnly()
     signal navigateLeft()
     signal navigateRight()
     signal navigateUp()
@@ -73,7 +73,7 @@ Item {
             }
 
             TextSwitch {
-                text: "Read only"
+                text: qsTr("Read only")
                 width: childrenRect.width + Theme.paddingLarge
                 enabled: root.readOnlyEnabled
                 checked: root.readOnly

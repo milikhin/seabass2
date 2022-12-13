@@ -5,6 +5,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
 import Qt.labs.platform 1.0
 import Qt.labs.settings 1.0
+import QtWebSockets 1.0
 
 import Ubuntu.Components.Themes 1.3
 
@@ -26,25 +27,18 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "1.4.0"
+  readonly property string version: "2.0.0-rc.1"
   property bool hasBuildContainer: false
   property int activeTheme: parseInt(settings.theme)
+  property var currentTab: tabBar.currentIndex === -1
+    ? undefined
+    : tabsModel.get(tabBar.currentIndex)
 
   onClosing: {
-    var files = []
-    for (var i = 0; i < tabsModel.count; i++) {
-      var tab = tabsModel.get(i)
-      if (tab.isTerminal) {
-        continue
-      }
-
-      files.push(tab.filePath)
-      if (i === tabBar.currentIndex) {
-        settings.initialTab = files.length - 1
-      }
-    }
-
-    settings.initialFiles = files
+    settings.initialFiles = tabsModel.listFiles().map(tab => tab.filePath)
+    settings.initialTab = currentTab && !currentTab.isTerminal
+      ? settings.initialFiles.indexOf(currentTab.filePath)
+      : 0
   }
 
   function handleBuilderStarted() {
@@ -63,114 +57,74 @@ ApplicationWindow {
     property bool isKeyboardExtensionVisible: true
     property string theme: Constants.Theme.System
     property int fontSize: 12
-    property var initialFiles: []
     property string initialDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
+    property var initialFiles: []
     property int initialTab: 0
     property bool restoreOpenedTabs: true
     property bool useWrapMode: true
+
+    onFontSizeChanged: {
+      editorState.fontSize = fontSize
+    }
+    onUseWrapModeChanged: {
+      editorState.useWrapMode = useWrapMode
+    }
   }
 
-  GenericComponents.EditorApi {
-    id: api
+  GenericComponents.EditorState {
+    id: editorState
 
-    // UI theme
-    fontSize: settings.fontSize
-    useWrapMode: settings.useWrapMode
+    filePath: currentTab ? currentTab.filePath : ''
+
     isDarkTheme: QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText)
     backgroundColor: theme.palette.normal.background
-    borderColor: QmlJs.isDarker(theme.palette.normal.background,
-      theme.palette.normal.backgroundText) ? Suru.darkMid: Suru.lightMid
     textColor: theme.palette.normal.backgroundSecondaryText
     linkColor: theme.palette.normal.backgroundText
-    foregroundColor: theme.palette.normal.foreground
-    foregroundTextColor: theme.palette.normal.foregroundText
-    homeDir: StandardPaths.writableLocation(StandardPaths.HomeLocation)
 
-    // platform-specific i18n implementation for Generic API
-    readErrorMsg: i18n.tr('Unable to read file. Please ensure that you have read access to the %1')
-    writeErrorMsg: i18n.tr('Unable to write the file. Please ensure that you have write access to %1')
+    fontSize: settings.fontSize
+    useWrapMode: settings.useWrapMode
+  }
 
-    // API methods
-    onErrorOccured: function(message) {
-      errorDialog.show(message)
+  CustomComponents.UbuntuApi {
+    id: api
+    onServerStarted: function(port) {
+      editor.load(port)
     }
     onAppLoaded: {
-      if (settings.restoreOpenedTabs) {
-        for (var i = 0; i < settings.initialFiles.length; i++) {
-          var filePath = settings.initialFiles[i]
-          tabsModel.open({
-            id: filePath,
-            filePath: filePath,
-            subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
-            title: QmlJs.getFileName(filePath),
-            isInitial: true,
-            doNotActivate: settings.initialTab !== i
-          })
-        }
-      }
+      editorState.loadTheme()
+      editorState.updateViewport()
     }
-    onMessageSent: function(jsonPayload) {
-      editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")");
-    }
-    onHasChangesChanged: {
-      if (!filePath) {
-        return
-      }
-      const fileIndex = tabsModel.getIndex(filePath)
-      const file = tabsModel.get(fileIndex)
-      file.hasChanges = hasChanges
-      tabsModel.set(fileIndex, file)
-    }
-
-    /**
-    * Returns current content of the given file from the EditorApi
-    *  (the API backend must support returning a result from a JS call for this method to work)
-    * @param {function} - callback
-    * @returns {string} - file content
-    */
-    function getFileContent(callback) {
-      const jsonPayload = JSON.stringify({
-        action: 'getFileContent',
-        data: {
-          filePath: filePath
-        }
-      })
-      return editor.runJavaScript("window.postSeabassApiMessage(" + jsonPayload + ")", callback);
+    onFileBeingClosed: function (filePath) {
+      tabsModel.close(filePath)
     }
   }
 
   GenericComponents.TabsModel {
     id: tabsModel
-    onTabAdded: function(tab) {
+    onTabAdded: function(tab, options) {
       if (tab.isTerminal) {
-        return api.postMessage('loadFile', {
+        api.postMessage('loadFile', {
           filePath: tab.id,
           content: '',
-          readOnly: true,
-          isTerminal: true
+          isTerminal: true,
+          isActive: !options.doNotActivate
+        })
+      } else {
+        api.loadFile({
+          filePath: tab.filePath,
+          createIfNotExists: options.createIfNotExists,
+          callback: function(err, isNewFile) {
+            if (err) {
+              tabsModel.close(tab.filePath)
+            }
+          },
+          isActive: !options.doNotActivate
         })
       }
-      api.loadFile(tab.filePath, false, !tab.isInitial, tab.doNotActivate, function(err, isNewFile) {
-        if (err) {
-          tabsModel.close(tab.filePath)
-        }
-      })
     }
     onTabClosed: function(tabId) {
       api.closeFile(tabId)
-
-      // display current tab
-      if (!count) {
-        return
-      }
-      var currentFile = get(tabBar.currentIndex)
-      api.openFile(currentFile.filePath)
-    }
-    onCountChanged: {
-      if (!count) {
-        api.filePath = ''
-      }
     }
   }
 
@@ -220,10 +174,6 @@ ApplicationWindow {
 
   CustomComponents.ErrorDialog {
     id: errorDialog
-  }
-
-  CustomComponents.SaveDialog {
-    id: saveDialog
   }
 
   Item {
@@ -306,8 +256,8 @@ ApplicationWindow {
 
         CustomComponents.Header {
           id: header
-          title: defaultTitle
-          subtitle: root.title
+          title: currentTab ? currentTab.uniqueTitle : defaultTitle
+          subtitle: currentTab ? currentTab.subTitle : defaultSubTitle
           Layout.fillWidth: true
 
           onNavBarToggled: {
@@ -345,12 +295,10 @@ ApplicationWindow {
             })
           }
           onSaveRequested: {
-            api.getFileContent(function(fileContent) {
-              api.saveFile(api.filePath, fileContent)
-            })
+            api.requestFileSave(editorState.filePath)
           }
           onBuildRequested: {
-            const configFile = api.filePath
+            const configFile = editorState.filePath
             builder.build(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
@@ -360,7 +308,7 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           onLaunchRequested: {
-            const configFile = api.filePath
+            const configFile = editorState.filePath
             builder.launch(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
@@ -370,9 +318,9 @@ ApplicationWindow {
             }, handleBuilderStarted)
           }
           navBarCanBeOpened: !isWide || !navBar.visible
-          canBeSaved: api.filePath && api.hasChanges
-          buildEnabled: api.filePath && builder.ready
-          buildable: api.filePath && api.filePath.match(/\/clickable\.json$/)
+          canBeSaved: editorState.filePath && editorState.hasChanges
+          buildEnabled: editorState.filePath && builder.ready
+          buildable: editorState.filePath && editorState.filePath.match(/\/clickable\.(json|yaml)$/)
           keyboardExtensionEnabled: settings.isKeyboardExtensionVisible && main.visible && tabsModel.count
           searchEnabled: main.visible && tabsModel.count
           terminalEnabled: main.visible && tabsModel.count
@@ -382,8 +330,8 @@ ApplicationWindow {
             api.postMessage('toggleSearch')
           }
           onOpenTerminalApp: {
-              if (api.filePath) {
-                  Qt.openUrlExternally("terminal://?path=" + api.filePath.split('/').slice(0, -1).join('/'))
+              if (editorState.filePath) {
+                  Qt.openUrlExternally("terminal://?path=" + editorState.filePath.split('/').slice(0, -1).join('/'))
               }
           }
         }
@@ -394,76 +342,8 @@ ApplicationWindow {
           visible: model.count
           Layout.fillWidth: true
 
-          onCurrentIndexChanged: {
-            if (!model.count) {
-              header.title = defaultTitle
-              header.subtitle = defaultSubTitle
-              return
-            }
-
-            if (currentIndex === -1) {
-              currentIndex = 0
-              return
-            }
-
-            const tab = model.get(currentIndex)
-            header.title = tab.title
-            header.subtitle = tab.subTitle
-            api.openFile(tab.id)
-          }
-          onClose: function(index) {
-            _close([model.get(index)])
-          }
-          onCloseAll: function() {
-            const files = []
-            for (var i = 0; i < model.count; i++) {
-              const file = model.get(i)
-              files.push({ hasChanges: file.hasChanges, id: file.id })
-            }
-            _close(files)
-          }
-          onCloseToTheRight: function(startIndex) {
-            if (startIndex === model.count - 1) {
-              return
-            }
-
-            const files = []
-            for (var i = startIndex + 1; i < model.count; i++) {
-              const file = model.get(i)
-              files.push({ hasChanges: file.hasChanges, id: file.id })
-            }
-            _close(files)
-          }
-
-          function _close(files) {
-            const file = files.shift()
-            if (!file.hasChanges) {
-              return __closeAndContinue()
-            }
-
-            saveDialog.show(file.id, {
-              onSaved: function() {
-                api.getFileContent(__saveAndClose)
-              },
-              onDismissed: __closeAndContinue
-            })
-
-            function __closeAndContinue() {
-              model.close(file.id)
-              if (!files.length) {
-                return
-              }
-              _close(files)
-            }
-
-            function __saveAndClose(fileContent) {
-              api.saveFile(file.id, fileContent, function(err) {
-                if (err) {
-                  return
-                }
-                __closeAndContinue()
-              })
-            }
+          onOpened: function(tabId) {
+            api.openFile(tabId)
           }
         }
 
@@ -471,10 +351,6 @@ ApplicationWindow {
           id: editor
           Layout.fillWidth: true
           Layout.fillHeight: true
-
-          onMessageReceived: function(payload) {
-            return api.handleMessage(payload.action, payload.data)
-          }
         }
 
         CustomComponents.Divider {
@@ -500,7 +376,7 @@ ApplicationWindow {
     Sets the system theme according to the theme selected
     under settings.
   */
-  function setCurrentTheme() {
+  onActiveThemeChanged: {
     switch (activeTheme) {
       case Constants.Theme.System:
         theme.name = "";
@@ -516,9 +392,7 @@ ApplicationWindow {
         break;
     }
 
-    api.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
+    editorState.isDarkTheme = QmlJs.isDarker(theme.palette.normal.background,
       theme.palette.normal.backgroundText);
   }
-
-  onActiveThemeChanged: setCurrentTheme()
 }

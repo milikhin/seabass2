@@ -13,11 +13,30 @@ Item {
   property real minTabLabelWidth: Suru.units.gu(8)
   property real maxTabLabelWidth: Suru.units.gu(30)
   property ListModel model
-
   property alias currentIndex: tabBar.currentIndex
-  signal close(int index)
-  signal closeAll()
-  signal closeToTheRight(int index)
+
+  signal opened(string id)
+
+  onCurrentIndexChanged: {
+    const currentTab = model.get(currentIndex)
+    if (currentTab) {
+      opened(currentTab.id)
+    }
+  }
+
+  onModelChanged: {
+    model.tabAdded.connect(function (tab, options) {
+      if (!options.doNotActivate) {
+        openTab(tab.id)
+      }
+    })
+    model.tabClosed.connect(function () {
+      const currentTab = model.get(currentIndex)
+      if (currentTab) {
+        opened(currentTab.id)
+      }
+    })
+  }
 
   MouseArea {
     anchors.fill: parent
@@ -55,13 +74,6 @@ Item {
       id: repeater
       model: root.model
 
-      onItemAdded: function(index) {
-        var tab = model.get(index)
-        if (!tab.doNotActivate) {
-          tabBar.currentIndex = index
-        }
-      }
-
       TabComponents.TabButton {
         maxLabelWidth: Math.min(root.width / 2, maxTabLabelWidth)
         minLabelWidth: minTabLabelWidth
@@ -71,9 +83,9 @@ Item {
         hasMoveRight: model.index < root.model.count - 1
         isBusy: model.isBusy
 
-        onClosed: root.close(model.index)
-        onCloseAll: root.closeAll()
-        onCloseToTheRight: root.closeToTheRight(model.index)
+        onClosed: _closeTabs([model])
+        onCloseAll: _closeTabs(root.model.listFiles())
+        onCloseToTheRight: _closeTabs(root.model.listFiles().slice(startIndex + 1))
         onMoveLeft: function() {
           root.model.move(model.index, model.index - 1, 1)
         }
@@ -81,6 +93,42 @@ Item {
           root.model.move(model.index, model.index + 1, 1)
         }
       }
+    }
+  }
+
+  SaveDialog {
+    id: saveDialog
+  }
+
+  function _closeTabs(tabs) {
+    if (tabs.length === 0) {
+      return
+    }
+
+    const tab = tabs.shift()
+    if (!tab.hasChanges) {
+      return __close()
+    }
+
+    saveDialog.show(tab.filePath, {
+      onSaved: function() {
+        api.requestSaveAndClose(tab.filePath)
+        _closeTabs(tabs)
+      },
+      onDismissed: __close
+    })
+
+    function __close() {
+      model.close(tab.id)
+      _closeTabs(tabs)
+    }
+  }
+
+  function openTab(id) {
+    const index = model.getIndex(id)
+    if (index !== undefined) {
+      currentIndex = index
+      opened(id)
     }
   }
 }

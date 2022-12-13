@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 Dialog {
     id: root
     property string filePath: ''
+    allowedOrientations: Orientation.All
 
     canAccept: true
 

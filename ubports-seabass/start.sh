@@ -1,4 +1,0 @@
-QT_QUICK_CONTROLS_CONF=qml/qtquickcontrols2.conf \
-QT_AUTO_SCREEN_SCALE_FACTOR=1 \
-QTWEBENGINE_CHROMIUM_FLAGS="$QTWEBENGINE_CHROMIUM_FLAGS --disable-pinch" \
-exec qmlscene qml/Main.qml

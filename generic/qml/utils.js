@@ -1,5 +1,23 @@
 .pragma library
 
+var colors = {
+  // oneDark theme's background color
+  DARK_BACKGROUND: '#282C34',
+  // default codemirror theme's background color
+  LIGHT_BACKGROUND: '#FFFFFF',
+  // oneDark theme's default text color
+  DARK_TEXT: '#ABB2BF',
+  // default codemirror theme's text color
+  LIGHT_TEXT: '#000000',
+  // slightly darker than onDark background
+  DARK_TOOLBAR_BACKGROUND: '#21252B',
+  // slightly darker than default background
+  LIGHT_TOOLBAR_BACKGROUND: '#E0E0E0',
+  DARK_DIVIDER: '#21252B',
+  // gutter's color from default theme
+  LIGHT_DIVIDER: '#DDDDDD',
+}
+
 function getDefaultFilePath() {
   return Qt.application.arguments[2] || ''
 }
@@ -10,7 +28,7 @@ function getDefaultFilePath() {
  * @returns {string} - directory path
  */
 function getDirPath(filePath) {
-  return getNormalPath(filePath).split('/').slice(0, -1).join('/')
+  return getNormalPath(filePath).split('/').slice(0, -1).join('/') || '/'
 }
 
 /**
@@ -29,11 +47,10 @@ function getFileName(filePath) {
  * @returns {string} - normalized path
  */
 function getNormalPath(path) {
-  var normalizedPath = path[path.length - 1] === '/'
-    ? path.slice(0, -1)
-    : path
-
-  return normalizedPath.replace(/^file:\/\//, '')
+  var normalPath = path.replace(/^file:\/\//, '')
+  return normalPath.length > 1 && normalPath[normalPath.length - 1] === '/'
+    ? normalPath.slice(0, -1)
+    : normalPath
 }
 
 /**
@@ -46,10 +63,10 @@ function getPrintableDirPath(dirPath, homeDir) {
   var normalizedDir = getNormalPath(dirPath)
   var normalizedHome = getNormalPath(homeDir)
   if (normalizedDir.indexOf(normalizedHome) === 0) {
-    return normalizedDir.replace(normalizedHome, '~') + '/'
+    return normalizedDir.replace(normalizedHome, '~')
   }
 
-  return normalizedDir + '/'
+  return normalizedDir
 }
 
 function getPrintableFilePath(filePath, homeDir) {
@@ -142,19 +159,4 @@ function writeFile(filePath, content, callback) {
     }
 
     request.send(content);
-}
-
-function getFileIcon(fileName) {
-  var extMatch = fileName.match(/\.([A-Za-z]+)$/)
-  var ext = extMatch && extMatch[1]
-  switch(ext) {
-    case 'html':
-      return 'text-html-symbolic'
-    case 'css':
-      return 'text-css-symbolic'
-    case 'xml':
-      return 'text-xml-symbolic'
-    default:
-      return 'text-x-generic-symbolic'
-  }
 }
