@@ -54,6 +54,18 @@
         <source>Settings</source>
         <translation>Inställningar</translation>
     </message>
+    <message>
+        <source>Opened files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Return to editor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>
@@ -99,8 +111,27 @@
         <translation>Vill du kassera ändringar?</translation>
     </message>
     <message>
-        <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
-        <translation>Osparade ändringar på %1 kommer att förloras om du öppnar en annan fil. Fortsätta?</translation>
+        <source>Unsaved changes at %1 will be lost. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Font size, CSS px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically wrap long lines</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

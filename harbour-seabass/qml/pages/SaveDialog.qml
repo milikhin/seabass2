@@ -26,7 +26,7 @@ Dialog {
                 anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.rightMargin: Theme.horizontalPageMargin
 
-                text: qsTr('Unsaved changes at %1 will be lost if you open another file. Continue?').arg(filePath)
+                text: qsTr('Unsaved changes at %1 will be lost. Continue?').arg(filePath)
                 font.pixelSize: Theme.fontSizeMedium
                 color: Theme.highlightColor
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

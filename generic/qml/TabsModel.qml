@@ -13,6 +13,8 @@ import "./utils.js" as QmlJs
 
 // Represents opened tabs
 ListModel {
+  property int currentIndex: -1
+  property var currentTab: currentIndex === -1 ? undefined : get(currentIndex)
   signal tabAdded(var tab, var options)
   signal tabClosed(string filePath)
 
@@ -38,6 +40,11 @@ ListModel {
     }
   }
 
+  function getTab(id) {
+    const tabIndex = getIndex(id)
+    return get(tabIndex)
+  }
+
   function openTerminal(tabId, title, subTitle) {
     return open({
       id: tabId,
@@ -50,6 +57,7 @@ ListModel {
   function open(options) {
     var existingTabIndex = getIndex(options.id)
     if (existingTabIndex !== undefined) {
+      currentIndex = existingTabIndex
       return existingTabIndex
     }
 
@@ -62,7 +70,8 @@ ListModel {
 
       filePath: options.filePath,
       isBusy: false,
-      hasChanges: false
+      hasChanges: false,
+      lastOpened: options.doNotActivate ? undefined : Date.now()
     }
     append(currentTab)
     tabAdded(currentTab, {
@@ -70,6 +79,10 @@ ListModel {
       doNotActivate: options.doNotActivate
     })
     _updateTabNames()
+
+    if (!options.doNotActivate) {
+      currentIndex = count - 1
+    }
   }
 
   function close(filePath) {
@@ -77,6 +90,10 @@ ListModel {
     remove(index, 1)
     tabClosed(filePath)
     _updateTabNames()
+
+    if (index === currentIndex) {
+      _updateCurrentIndex()
+    }
   }
 
   function patch(filePath, attributes) {
@@ -153,6 +170,20 @@ ListModel {
       })
     }
     return nameGroups
+  }
+
+  function _updateCurrentIndex() {
+    currentIndex = -1
+
+    const files = listFiles();
+    if (files.length === 0) {
+      return
+    }
+
+    const currentTab = files.sort(function (a, b) {
+      return a.lastOpened - b.lastOpened
+    })[0];
+    currentIndex = getIndex(currentTab.id)
   }
 
   /**
