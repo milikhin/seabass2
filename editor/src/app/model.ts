@@ -155,7 +155,12 @@ export default class SeabassAppModel extends EventTarget {
     this._editors.set(filePath, editor)
 
     this.dispatchEvent(new CustomEvent('loadFile', { detail: options }))
-    this.dispatchEvent(new CustomEvent('stateChange', { detail: editor.getUiState() }))
+    this.dispatchEvent(new CustomEvent('stateChange', {
+      detail: {
+        ...editor.getUiState(),
+        filePath
+      }
+    }))
   }
 
   setViewportOptions (options: ViewportOptions): void {
