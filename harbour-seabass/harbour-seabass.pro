@@ -16,7 +16,7 @@ CONFIG += sailfishapp_qml
 
 copyQml.commands = $(COPY_DIR) $$PWD/../generic/qml $$PWD/qml/generic
 copyPyCode.commands = $(COPY_DIR) $$PWD/../generic/py-backend $$PWD/qml
-copyPyLibs1.commands = $(COPY_DIR) $$PWD/../generic/py-libs/inotify_simple $$PWD/qml/py-backend
+copyPyLibs1.commands = $(COPY_DIR) $$PWD/../generic/py-libs/inotify_simple $$PWD/qml/py-backend && rm $$PWD/qml/py-backend/inotify_simple/.git
 copyPyLibs2.commands = $(COPY_DIR) $$PWD/../generic/py-libs/editorconfig-core-py/editorconfig $$PWD/qml/py-backend
 
 first.depends = $(first) copyQml copyPyCode copyPyLibs1 copyPyLibs2
