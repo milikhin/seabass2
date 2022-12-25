@@ -251,13 +251,13 @@ WebViewPage {
                 MenuItem {
                     text: qsTr('Settings')
                     onClicked: {
-                        Stack.push(settings)
+                        pageStack.push(settings)
                     }
                 }
                 MenuItem {
                     text: qsTr('About')
                     onClicked: {
-                        Stack.push(Qt.resolvedUrl("About.qml"))
+                        pageStack.push(Qt.resolvedUrl("About.qml"))
                     }
                 }
             }
