@@ -56,6 +56,7 @@ describe('SeabassAppModel', () => {
         hasChanges: false,
         hasUndo: false,
         hasRedo: false,
+        filePath: options.filePath,
         isReadOnly: options.isReadOnly
       })
     })
