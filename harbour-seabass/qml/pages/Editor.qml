@@ -299,7 +299,7 @@ WebViewPage {
 
             MouseArea {
                 anchors.fill: parent
-                visible: hasOpenedFile && isMenuEnabled
+                visible: isMenuEnabled
                 onClicked: {
                     if (hasOpenedFile) {
                         isMenuEnabled = false
