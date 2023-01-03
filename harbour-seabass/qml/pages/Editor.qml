@@ -121,7 +121,8 @@ WebViewPage {
 
         onSelected: function(tabId) {
             drawer.open = false
-            const tab = tabsModel.getTab(tabId)
+            const newIndex = tabsModel.getIndex(tabId)
+            tabsModel.currentIndex = newIndex !== undefined ? newIndex : -1
         }
         onClosedAll: {
             const tabs = tabsModel.listFiles()
@@ -151,7 +152,7 @@ WebViewPage {
                 page: root
                 title: hasOpenedFile
                     ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                    : qsTr('Seabass v%1').arg('1.0')
+                    : qsTr('Seabass v%1').arg('1.0.0')
                 description: hasOpenedFile
                     ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                     : qsTr('Release notes')
