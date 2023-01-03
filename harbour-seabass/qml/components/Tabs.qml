@@ -7,6 +7,7 @@ Drawer {
     property string title: 'Tabs'
     property alias model: list.model
 
+    signal newTabRequested()
     signal selected(string id)
     signal closed(string id)
     signal closedAll()
@@ -20,7 +21,13 @@ Drawer {
 
         PullDownMenu {
             MenuItem {
-                text: "Close all"
+                text: qsTr("Open file...")
+                onClicked: {
+                    root.newTabRequested()
+                }
+            }
+            MenuItem {
+                text: qsTr("Close all")
                 onClicked: {
                     root.closedAll()
                 }
@@ -46,7 +53,7 @@ Drawer {
 
             Label {
                 x: Theme.horizontalPageMargin
-                text: model.hasChanges ? ('* ' + model.title) : model.title
+                text: model.hasChanges ? ('* ' + model.uniqueTitle) : model.uniqueTitle
                 anchors.verticalCenter: parent.verticalCenter
                 highlighted: listItem.highlighted
             }

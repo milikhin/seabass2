@@ -140,6 +140,9 @@ WebViewPage {
                 returnToEditorHintLabel.opacity = 0.0
             }
         }
+        onNewTabRequested: {
+            pageStack.push(filePicker)
+        }
 
         WebViewFlickable {
             id: viewFlickable

@@ -135,6 +135,17 @@
     </message>
 </context>
 <context>
+    <name>Tabs</name>
+    <message>
+        <source>Open file...</source>
+        <translation type="unfinished">Bestand openen...</translation>
+    </message>
+    <message>
+        <source>Close all</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Toolbar</name>
     <message>
         <source>Read only</source>
