@@ -14,7 +14,7 @@ TARGET = harbour-seabass
 
 CONFIG += sailfishapp_qml
 
-copyQml.commands = $(COPY_DIR) $$PWD/../generic/qml $$PWD/qml/generic
+copyQml.commands = $(COPY_DIR) $$PWD/../generic/qml/* $$PWD/qml/generic
 copyPyCode.commands = $(COPY_DIR) $$PWD/../generic/py-backend $$PWD/qml
 copyPyLibs1.commands = $(COPY_DIR) $$PWD/../generic/py-libs/inotify_simple $$PWD/qml/py-backend && rm $$PWD/qml/py-backend/inotify_simple/.git
 copyPyLibs2.commands = $(COPY_DIR) $$PWD/../generic/py-libs/editorconfig-core-py/editorconfig $$PWD/qml/py-backend

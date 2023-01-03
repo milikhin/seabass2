@@ -163,11 +163,14 @@ export default class SeabassAppModel extends EventTarget {
     }))
   }
 
-  setViewportOptions (options: ViewportOptions): void {
+  setViewportOptions (options: ViewportOptions, editorId?: string): void {
     this._viewport = {
       verticalHtmlOffset: options.verticalHtmlOffset ?? 0
     }
     this.dispatchEvent(new CustomEvent('viewportChange', { detail: this._viewport }))
+    if (editorId !== undefined) {
+      this._editors.get(editorId)?.resize()
+    }
   }
 
   /**

@@ -13,6 +13,7 @@ import '../generic' as GenericComponents
 WebViewPage {
     id: root
     property int headerHeight: 0
+    property int editorControlsHeight: getEditorControlsHeight()
     property bool isMenuEnabled: true
     property bool hasOpenedFile: editorState.filePath !== ''
     property alias filePath: editorState.filePath
@@ -61,7 +62,7 @@ WebViewPage {
         directory: api.homeDir
         fontSize: configuration.fontSize
         useWrapMode: configuration.useWrapMode
-        verticalHtmlOffset: headerHeight / WebEngineSettings.pixelRatio
+        verticalHtmlOffset: (headerHeight + editorControlsHeight) / WebEngineSettings.pixelRatio
         filePath: tabsModel.currentTab ? tabsModel.currentTab.filePath : ''
 
         onFilePathChanged: {
@@ -191,12 +192,6 @@ WebViewPage {
             webView.opacity: 1
             webView.url: '../html/index.html'
             webView.viewportHeight: getEditorHeight()
-
-            Component.onCompleted: {
-                Qt.inputMethod.visibleChanged.connect(function() {
-                    api.oskVisibilityChanged(Qt.inputMethod.visible)
-                })
-            }
 
             // Initialize API transport method for Sailfish OS
             webView.onViewInitialized: {
@@ -417,16 +412,19 @@ WebViewPage {
         })
     }
 
-    function getEditorHeight() {
+    function getEditorControlsHeight() {
         const isPortrait = root.orientation & Orientation.PortraitMask
-        const screenHeight = isPortrait
-            ? Screen.height
-            : Screen.width
         const keyboardHeight = isPortrait
             ? Qt.inputMethod.keyboardRectangle.height
             : Qt.inputMethod.keyboardRectangle.width
         const toolbarHeight = toolbar.open ? toolbar.height : 0
-        return screenHeight - keyboardHeight - toolbarHeight
+        return keyboardHeight + toolbarHeight
+    }
+
+    function getEditorHeight() {
+        return root.orientation & Orientation.PortraitMask
+            ? Screen.height
+            : Screen.width
     }
 
     function closeTabs(tabIds) {
