@@ -98,7 +98,10 @@ WebViewPage {
         }
 
         onStateChanged: function(data) {
-            tabsModel.patch(data.filePath, { hasChanges: data.hasChanges })
+            const tab = tabsModel.getTab(data.filePath)
+            if (tab && tab.hasChanges !== data.hasChanges) {
+                tabsModel.patch(data.filePath, { hasChanges: data.hasChanges })
+            }
 
             editorState.hasChanges = data.hasChanges
             editorState.hasUndo = !data.isReadOnly && data.hasUndo

@@ -119,7 +119,7 @@
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inställningar</translation>
     </message>
     <message>
         <source>Font size, CSS px</source>
