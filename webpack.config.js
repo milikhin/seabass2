@@ -1,5 +1,4 @@
 const path = require('path')
-const CopyPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const commonConfig = {
@@ -29,45 +28,9 @@ const commonConfig = {
 const sailfishConfig = {
   ...commonConfig,
   output: {
-    path: path.resolve(__dirname, 'harbour-seabass/qml/html'),
-    // publicPath: '/usr/share/harbour-seabass/qml/html/',
+    path: path.resolve(__dirname, 'harbour-seabass/qml/html/dist'),
     filename: 'bundle.js'
   },
-  plugins: [
-    ...commonConfig.plugins,
-    new CopyPlugin({
-      patterns: [
-        {
-          from: './harbour-seabass/html'
-        },
-        {
-          from: './generic/qml',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/generic')
-        },
-        {
-          from: './generic/py-backend',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend'),
-          globOptions: {
-            ignore: ['**/.coverage', '**/.pytest_cache']
-          }
-        },
-        {
-          from: './generic/py-libs/inotify_simple/inotify_simple.py',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/inotify_simple'),
-          globOptions: {
-            ignore: '**/.git'
-          }
-        },
-        {
-          from: './generic/py-libs/editorconfig-core-py/editorconfig',
-          to: path.resolve(__dirname, 'harbour-seabass/qml/py-backend/editorconfig'),
-          globOptions: {
-            ignore: '**/.git'
-          }
-        }
-      ]
-    })
-  ],
   name: 'sfos'
 }
 

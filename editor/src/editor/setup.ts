@@ -46,7 +46,6 @@ export default class EditorSetup {
       keymap.of([indentWithTab, ...historyKeymap]),
       this._getDefaultLangExtension(options),
       this._getDocChangeHandlerExtension(options),
-      this._getDomEventHandlerExtension(options),
       this._getReadOnlyExtension(options),
       this._getThemeExtension(options),
       this._getLineWrappingExtension(options),
@@ -103,23 +102,6 @@ export default class EditorSetup {
       }
 
       options.onChange()
-    })
-  }
-
-  _getDomEventHandlerExtension (options: ExtensionsOptions): Extension {
-    return EditorView.domEventHandlers({
-      scroll: evt => {
-        if (evt.target === null || !('classList' in evt.target)) {
-          return
-        }
-
-        const target = evt.target as HTMLElement
-        if (!target.classList.contains('cm-scroller')) {
-          return
-        }
-
-        options.onChange()
-      }
     })
   }
 

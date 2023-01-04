@@ -215,19 +215,26 @@ export default class Editor extends EventTarget {
     }
   }
 
+  /** Called when editor becomes visible */
+  openFile (): void {
+    this._onChange()
+  }
+
+  /** Handles viewport resizing */
+  resize = (): void => {
+    this._editor.dispatch({
+      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+    })
+  }
+
   async _initLanguageSupport (filePath: string): Promise<void> {
     const effects = await this._setup.setupLanguageSupport(filePath)
     this._editor.dispatch({ effects })
   }
 
   _initDomEventHandlers (): void {
-    this._editorElem.addEventListener('keypress', evt => {
-      /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
-      if (evt.keyCode === 8 || evt.keyCode === 13) {
-        evt.preventDefault()
-      }
-    }, true)
-    window.addEventListener('resize', this._onResize)
+    this._editorElem.addEventListener('keypress', this._onKeyPress, true)
+    window.addEventListener('resize', this.resize)
   }
 
   _onChange (): void {
@@ -236,15 +243,15 @@ export default class Editor extends EventTarget {
     }))
   }
 
-  _onResize = (): void => {
-    if (this._isOskVisible) {
-      this._editor.dispatch({
-        effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
-      })
+  _onKeyPress = (evt: KeyboardEvent): void => {
+    /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
+    if (evt.keyCode === 8 || evt.keyCode === 13) {
+      evt.preventDefault()
     }
   }
 
   _removeDomEventHandlers (): void {
-    window.removeEventListener('resize', this._onResize)
+    this._editorElem.removeEventListener('keypress', this._onKeyPress, true)
+    window.removeEventListener('resize', this.resize)
   }
 }

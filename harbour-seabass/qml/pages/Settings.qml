@@ -19,12 +19,12 @@ Page {
             width: parent.width
 
             PageHeader {
-                title: "Settings"
+                title: qsTr('Settings')
             }
 
             TextField {
                 inputMethodHints: Qt.ImhFormattedNumbersOnly
-                label: "Font size, CSS px"
+                label: qsTr('Font size, CSS px')
                 text: fontSize
                 onTextChanged: {
                     const newValue = parseInt(text)
@@ -37,8 +37,8 @@ Page {
             }
 
             TextSwitch {
-                text: "Soft wrap"
-                description: "Automatically wrap long lines"
+                text: qsTr('Soft wrap')
+                description: qsTr('Automatically wrap long lines')
                 checked: useWrapMode
                 onCheckedChanged: {
                     root.useWrapMode = checked

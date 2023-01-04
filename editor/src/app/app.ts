@@ -104,6 +104,7 @@ class SeabassApp {
    */
   _onOpenFile (evt: CustomEvent<FileActionOptions>): void {
     this._tabs.show(evt.detail.filePath)
+    this._model.forwardEvent(evt.detail.filePath, evt)
   }
 
   /**
@@ -120,7 +121,7 @@ class SeabassApp {
    * @param evt viewportChange event
    */
   _onViewportChange (evt: CustomEvent<ViewportOptions>): void {
-    this._model.setViewportOptions(evt.detail)
+    this._model.setViewportOptions(evt.detail, this._tabs.currentTab?.id)
   }
 
   /**

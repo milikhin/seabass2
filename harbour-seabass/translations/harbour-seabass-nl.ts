@@ -54,6 +54,18 @@
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Opened files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Return to editor</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>
@@ -99,8 +111,38 @@
         <translation>Wil je de wijzigingen verwerpen?</translation>
     </message>
     <message>
-        <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
-        <translation>Als je een ander bestand opent, gaan niet-opgeslagen wijzigingen in %1 verloren. Wil je doorgaan?</translation>
+        <source>Unsaved changes at %1 will be lost. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Font size, CSS px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Soft wrap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatically wrap long lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Tabs</name>
+    <message>
+        <source>Open file...</source>
+        <translation type="unfinished">Bestand openen...</translation>
+    </message>
+    <message>
+        <source>Close all</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

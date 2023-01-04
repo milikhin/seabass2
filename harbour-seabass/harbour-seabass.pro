@@ -14,7 +14,20 @@ TARGET = harbour-seabass
 
 CONFIG += sailfishapp_qml
 
+copyQml.commands = $(COPY_DIR) $$PWD/../generic/qml/* $$PWD/qml/generic
+copyPyCode.commands = $(COPY_DIR) $$PWD/../generic/py-backend $$PWD/qml
+copyPyLibs1.commands = $(COPY_DIR) $$PWD/../generic/py-libs/inotify_simple $$PWD/qml/py-backend && rm $$PWD/qml/py-backend/inotify_simple/.git
+copyPyLibs2.commands = $(COPY_DIR) $$PWD/../generic/py-libs/editorconfig-core-py/editorconfig $$PWD/qml/py-backend
+
+first.depends = $(first) copyQml copyPyCode copyPyLibs1 copyPyLibs2
+copyPyLibs1.depends = copyPyCode
+copyPyLibs2.depends = copyPyCode
+export(first.depends)
+QMAKE_EXTRA_TARGETS += first copyQml copyPyCode copyPyLibs1 copyPyLibs2
+
 DISTFILES += qml/harbour-seabass.qml \
+    qml/components/Configuration.qml \
+    qml/components/Tabs.qml \
     qml/components/TabsButton.qml \
     qml/components/Toolbar.qml \
     qml/generic/EditorApi.qml \

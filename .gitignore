@@ -4,7 +4,7 @@ editor/coverage
 generic/py-backend/.coverage
 generic/py-backend/coverage.xml
 
-harbour-seabass/qml/html/
+harbour-seabass/qml/html/dist
 harbour-seabass/qml/generic/
 harbour-seabass/qml/py-backend/
 harbour-seabass/qml/py-libs/

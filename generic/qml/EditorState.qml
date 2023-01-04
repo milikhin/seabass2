@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import '../generic/utils.js' as QmlJs
+import './utils.js' as QmlJs
 
 QtObject {
   // State
