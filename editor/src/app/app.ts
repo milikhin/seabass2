@@ -104,6 +104,7 @@ class SeabassApp {
    */
   _onOpenFile (evt: CustomEvent<FileActionOptions>): void {
     this._tabs.show(evt.detail.filePath)
+    this._model.forwardEvent(evt.detail.filePath, evt)
   }
 
   /**

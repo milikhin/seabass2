@@ -215,6 +215,12 @@ export default class Editor extends EventTarget {
     }
   }
 
+  /** Called when editor becomes visible */
+  openFile (): void {
+    this._onChange()
+  }
+
+  /** Handles viewport resizing */
   resize = (): void => {
     this._editor.dispatch({
       effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
