@@ -36,9 +36,9 @@ Item {
           url: 'https://github.com/milikhin/seabass2'
         },
         {
-          title: 'Ace editor',
-          text: 'Copyright (c) 2010, Ajax.org B.V., BSD license',
-          url: 'https://github.com/ajaxorg/ace'
+          title: 'Codemirror',
+          text: 'Copyright (C) 2018 by Marijn Haverbeke <marijnh@gmail.com>, Adrian Heine <mail@adrianheine.de>, and others, MIT license',
+          url: 'https://github.com/codemirror/dev'
         },
         {
           title: 'Babel',
@@ -59,11 +59,6 @@ Item {
           title: 'inotify-simple',
           text: 'Copyright (c) 2016, Chris Billington, BSD license',
           url: 'https://github.com/chrisjbillington/inotify_simple'
-        },
-        {
-          title: 'JavaScript-MD5',
-          text: 'Copyright (c) 2011 Sebastian Tschan, https://blueimp.net, MIT license',
-          url: 'https://github.com/blueimp/JavaScript-MD5'
         },
         {
           title: 'Jest',
