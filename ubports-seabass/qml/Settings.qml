@@ -171,6 +171,7 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+          visible: isLibertineEnabled
 
           Label {
             anchors.verticalCenter: parent.verticalCenter

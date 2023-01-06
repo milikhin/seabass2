@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-06 06:49+0000\n"
+"POT-Creation-Date: 2023-01-06 07:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,15 +162,15 @@ msgstr ""
 msgid "Restore previous session at startup:"
 msgstr ""
 
-#: ../qml/Settings.qml:178
+#: ../qml/Settings.qml:179
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:196
+#: ../qml/Settings.qml:197
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:204
+#: ../qml/Settings.qml:205
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can update "
@@ -178,43 +178,43 @@ msgid ""
 "(container ID is `seabass2-build`) or via the System Settings."
 msgstr ""
 
-#: ../qml/Settings.qml:214
+#: ../qml/Settings.qml:215
 msgid ""
 "Should anything goes wrong with the container you can delete and recreate it "
 "once again."
 msgstr ""
 
-#: ../qml/Settings.qml:236
+#: ../qml/Settings.qml:237
 msgid "Notes:"
 msgstr ""
 
-#: ../qml/Settings.qml:246
+#: ../qml/Settings.qml:247
 msgid ""
 "• To build a project you need to open a corresponding clickable "
 "configuration file and click the 'Build' button:"
 msgstr ""
 
-#: ../qml/Settings.qml:263
+#: ../qml/Settings.qml:264
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. These directories are automatically mounted into Libertine "
 "containers. Alternatively you can create additional bind mounts manually."
 msgstr ""
 
-#: ../qml/Settings.qml:273
+#: ../qml/Settings.qml:274
 msgid ""
 "• clickable config file should be named 'clickable.json' or 'clickable.yaml'."
 msgstr ""
 
-#: ../qml/Settings.qml:290
+#: ../qml/Settings.qml:291
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:313
+#: ../qml/Settings.qml:314
 msgid "Create build container"
 msgstr ""
 
-#: ../qml/Settings.qml:322
+#: ../qml/Settings.qml:323
 msgid "Update build container"
 msgstr ""
 
