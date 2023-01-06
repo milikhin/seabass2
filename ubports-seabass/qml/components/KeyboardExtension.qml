@@ -1,6 +1,6 @@
 import QtQuick 2.9
-import Ubuntu.Components 1.3
-import Ubuntu.Components.Themes 1.3
+import Lomiri.Components 1.3
+import Lomiri.Components.Themes 1.3
 import QtQuick.Layouts 1.3
 
 Toolbar {
@@ -61,8 +61,8 @@ Toolbar {
       Behavior on color {
         enabled: toolbarButton.pressed
         ColorAnimation {
-          easing: UbuntuAnimation.StandardEasing
-          duration: UbuntuAnimation.BriskDuration
+          easing: LomiriAnimation.StandardEasing
+          duration: LomiriAnimation.BriskDuration
         }
       }
     }

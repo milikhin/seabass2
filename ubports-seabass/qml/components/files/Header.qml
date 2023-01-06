@@ -7,6 +7,7 @@ import '../common' as CustomComponents
 
 CustomComponents.ToolBar {
   property bool treeMode: false
+  property bool isLibertineEnabled: false
 
   signal closed()
   signal fileCreationInitialized()
@@ -30,6 +31,7 @@ CustomComponents.ToolBar {
         iconName: "add"
         text: i18n.tr("New project...")
         onTriggered: projectCreationInitialized()
+        visible: isLibertineEnabled
       }
       CustomComponents.MenuItem {
         iconName: treeMode ? "select" : "select-none"

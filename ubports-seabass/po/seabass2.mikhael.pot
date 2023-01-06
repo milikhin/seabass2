@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-10 06:46+0000\n"
+"POT-Creation-Date: 2023-01-06 07:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/About.qml:22 ../qml/components/Header.qml:93
+#: ../qml/About.qml:22 ../qml/components/Header.qml:94
 msgid "About"
 msgstr ""
 
@@ -35,23 +35,23 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:236
+#: ../qml/Main.qml:241
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:281
+#: ../qml/Main.qml:288
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:291
+#: ../qml/Main.qml:298
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:305
+#: ../qml/Main.qml:312
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:315
+#: ../qml/Main.qml:322
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 
@@ -122,55 +122,55 @@ msgstr ""
 msgid "Create project"
 msgstr ""
 
-#: ../qml/Settings.qml:19
+#: ../qml/Settings.qml:20
 msgid "ready"
 msgstr ""
 
-#: ../qml/Settings.qml:20
+#: ../qml/Settings.qml:21
 msgid "busy..."
 msgstr ""
 
-#: ../qml/Settings.qml:21
+#: ../qml/Settings.qml:22
 msgid "not exists"
 msgstr ""
 
-#: ../qml/Settings.qml:32 ../qml/components/Header.qml:88
+#: ../qml/Settings.qml:33 ../qml/components/Header.qml:89
 msgid "Settings"
 msgstr ""
 
-#: ../qml/Settings.qml:54
+#: ../qml/Settings.qml:55
 msgid "User interface"
 msgstr ""
 
-#: ../qml/Settings.qml:67
+#: ../qml/Settings.qml:68
 msgid "Theme:"
 msgstr ""
 
-#: ../qml/Settings.qml:75
+#: ../qml/Settings.qml:76
 msgid "System"
 msgstr ""
 
-#: ../qml/Settings.qml:102
+#: ../qml/Settings.qml:103
 msgid "Font size, CSS px:"
 msgstr ""
 
-#: ../qml/Settings.qml:131
+#: ../qml/Settings.qml:132
 msgid "Soft wrap:"
 msgstr ""
 
-#: ../qml/Settings.qml:151
+#: ../qml/Settings.qml:152
 msgid "Restore previous session at startup:"
 msgstr ""
 
-#: ../qml/Settings.qml:177
+#: ../qml/Settings.qml:179
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:194
+#: ../qml/Settings.qml:197
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:202
+#: ../qml/Settings.qml:205
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can update "
@@ -178,51 +178,51 @@ msgid ""
 "(container ID is `seabass2-build`) or via the System Settings."
 msgstr ""
 
-#: ../qml/Settings.qml:212
+#: ../qml/Settings.qml:215
 msgid ""
 "Should anything goes wrong with the container you can delete and recreate it "
 "once again."
 msgstr ""
 
-#: ../qml/Settings.qml:233
+#: ../qml/Settings.qml:237
 msgid "Notes:"
 msgstr ""
 
-#: ../qml/Settings.qml:243
+#: ../qml/Settings.qml:247
 msgid ""
 "• To build a project you need to open a corresponding clickable "
 "configuration file and click the 'Build' button:"
 msgstr ""
 
-#: ../qml/Settings.qml:260
+#: ../qml/Settings.qml:264
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. These directories are automatically mounted into Libertine "
 "containers. Alternatively you can create additional bind mounts manually."
 msgstr ""
 
-#: ../qml/Settings.qml:270
+#: ../qml/Settings.qml:274
 msgid ""
 "• clickable config file should be named 'clickable.json' or 'clickable.yaml'."
 msgstr ""
 
-#: ../qml/Settings.qml:286
+#: ../qml/Settings.qml:291
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:308
+#: ../qml/Settings.qml:314
 msgid "Create build container"
 msgstr ""
 
-#: ../qml/Settings.qml:317
+#: ../qml/Settings.qml:323
 msgid "Update build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:28
+#: ../qml/components/Builder.qml:29
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:94
+#: ../qml/components/Builder.qml:99
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "
@@ -249,29 +249,29 @@ msgid "Error occured"
 msgstr ""
 
 #: ../qml/components/ErrorDialog.qml:22 ../qml/components/SaveDialog.qml:34
-#: ../qml/components/files/Header.qml:46
+#: ../qml/components/files/Header.qml:48
 msgid "Close"
 msgstr ""
 
-#: ../qml/components/FileList.qml:75
+#: ../qml/components/FileList.qml:76
 msgid "Delete file?"
 msgstr ""
 
-#: ../qml/components/FileList.qml:77
+#: ../qml/components/FileList.qml:78
 #: ../qml/components/files/DirectoryMenu.qml:27
 #: ../qml/components/files/FileMenu.qml:21
 msgid "Delete"
 msgstr ""
 
-#: ../qml/components/FileList.qml:113
+#: ../qml/components/FileList.qml:115
 msgid "Files"
 msgstr ""
 
-#: ../qml/components/FileList.qml:256
+#: ../qml/components/FileList.qml:258
 msgid "%1 will be deleted"
 msgstr ""
 
-#: ../qml/components/Header.qml:82
+#: ../qml/components/Header.qml:83
 msgid "Keyboard extension"
 msgstr ""
 
@@ -306,7 +306,7 @@ msgstr ""
 
 #: ../qml/components/files/DirectoryMenu.qml:17
 #: ../qml/components/files/DotDotMenu.qml:15
-#: ../qml/components/files/Header.qml:26
+#: ../qml/components/files/Header.qml:27
 msgid "New file..."
 msgstr ""
 
@@ -315,15 +315,15 @@ msgstr ""
 msgid "Rename..."
 msgstr ""
 
-#: ../qml/components/files/Header.qml:31
+#: ../qml/components/files/Header.qml:32
 msgid "New project..."
 msgstr ""
 
-#: ../qml/components/files/Header.qml:36
+#: ../qml/components/files/Header.qml:38
 msgid "Tree mode"
 msgstr ""
 
-#: ../qml/components/files/Header.qml:41
+#: ../qml/components/files/Header.qml:43
 msgid "Reload"
 msgstr ""
 

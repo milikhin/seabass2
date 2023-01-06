@@ -13,6 +13,7 @@ Item {
   property string version
   property bool buildContainerReady: false
   property bool hasBuildContainer: false
+  property bool isLibertineEnabled: false
   signal containerCreationStarted()
   signal containerUpdateStarted()
 
@@ -170,6 +171,7 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+          visible: isLibertineEnabled
 
           Label {
             anchors.verticalCenter: parent.verticalCenter
@@ -183,6 +185,7 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+          visible: isLibertineEnabled
 
           ColumnLayout {
             width: parent.width
@@ -221,6 +224,7 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+          visible: isLibertineEnabled
 
           ColumnLayout {
             width: parent.width
@@ -280,6 +284,7 @@ Item {
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
           spacing: Suru.units.gu(1)
+          visible: isLibertineEnabled
 
           Label {
             anchors.verticalCenter: parent.verticalCenter
@@ -302,6 +307,7 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+          visible: isLibertineEnabled
 
           Button {
             visible: !hasBuildContainer
