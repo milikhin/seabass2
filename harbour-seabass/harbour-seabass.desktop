@@ -12,6 +12,7 @@ Name=Seabass
 Name[de]=Seabass
 
 [X-Sailjail]
+#Sandboxing=Disabled
 Permissions=UserDirs;RemovableMedia
 OrganizationName=name.milikhin
 ApplicationName=Seabass

@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
 
-import Ubuntu.Components 1.3 as UITK
+import Lomiri.Components 1.3 as UITK
 
 TabButton {
   id: root

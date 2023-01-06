@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Controls.Suru 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.platform 1.0
-import Ubuntu.Content 1.3
+import Lomiri.Content 1.3
 
 import "./common" as CustomComponents
 import "../generic/utils.js" as QmlJs
@@ -15,6 +15,7 @@ Item {
   property bool isPage: false
   property bool showHidden: false
   property bool treeMode: false
+  property bool isLibertineEnabled: false
 
   property string homeDir
   property real rowHeight: units.gu(4.5)
@@ -108,6 +109,7 @@ Item {
       Layout.fillWidth: true
 
       id: header
+      isLibertineEnabled: root.isLibertineEnabled
       hasLeadingButton: root.isPage
       onLeadingAction: closed()
       title: i18n.tr("Files")

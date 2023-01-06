@@ -7,6 +7,7 @@ import "../generic/utils.js" as QmlJs
 Item {
   id: root
   property bool ready: false
+  property bool disabled: false
   property string tabId: '__seabass2_build_output'
   property string title: 'Build output'
   property string subTitle: 'Terminal'
@@ -31,6 +32,10 @@ Item {
   Python {
     id: py
     Component.onCompleted: {
+      if (disabled) {
+        return
+      }
+
       addImportPath(Qt.resolvedUrl('../../py-backend'))
       importModule('build_utils', function() {
         ready = true
@@ -80,7 +85,7 @@ Item {
 
   function ensureContainer(callback, onStarted) {
     onStarted = onStarted || Function.prototype
-    builder._testContainer(function(err, containerExists) {
+    _testContainer(function(err, containerExists) {
       if (err) {
         return callback(err)
       }

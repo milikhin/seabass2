@@ -1,9 +1,11 @@
 {
-  "clickable_minimum_required": "6.12.2",
   "build_dir": "./build_ubports",
   "builder": "pure-qml-cmake",
+  "clickable_minimum_required": "7.9.0",
+  "framework": "ubuntu-sdk-20.04",
+  "ignore_review_warnings": true,
   "kill": "qmlscene",
   "prebuild": "git submodule update --init && npm ci && npm run build -- --config-name=ubports",
-  "src_dir": "./ubports-seabass",
-  "ignore_review_warnings": true
+  "skip_review": true,
+  "src_dir": "./ubports-seabass"
 }
