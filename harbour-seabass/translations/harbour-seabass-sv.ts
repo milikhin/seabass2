@@ -56,15 +56,15 @@
     </message>
     <message>
         <source>Opened files</source>
-        <translation type="unfinished"></translation>
+        <translation>Öppnade filer</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Stäng</translation>
     </message>
     <message>
         <source>Return to editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Återgå till redigeraren</translation>
     </message>
 </context>
 <context>
@@ -112,37 +112,37 @@
     </message>
     <message>
         <source>Unsaved changes at %1 will be lost. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Osparade ändringar på %1 kommer att förloras. Vill du fortsätta?</translation>
     </message>
 </context>
 <context>
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Inställningar</translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <source>Font size, CSS px</source>
-        <translation type="unfinished"></translation>
+        <translation>Teckenstorlek, CSS px</translation>
     </message>
     <message>
         <source>Soft wrap</source>
-        <translation type="unfinished"></translation>
+        <translation>Följsam radbrytning</translation>
     </message>
     <message>
         <source>Automatically wrap long lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Radbryt långa rader automatiskt</translation>
     </message>
 </context>
 <context>
     <name>Tabs</name>
     <message>
         <source>Open file...</source>
-        <translation type="unfinished">Öppna fil...</translation>
+        <translation>Öppna fil...</translation>
     </message>
     <message>
         <source>Close all</source>
-        <translation type="unfinished"></translation>
+        <translation>Stäng alla</translation>
     </message>
 </context>
 <context>
