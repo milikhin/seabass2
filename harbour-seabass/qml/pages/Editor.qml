@@ -50,6 +50,10 @@ WebViewPage {
                 root.isMenuEnabled = false
             }
         })
+
+        Qt.inputMethod.visibleChanged.connect(function() {
+            api.oskVisibilityChanged(Qt.inputMethod.visible)
+        })
     }
 
     PlatformComponents.Configuration {

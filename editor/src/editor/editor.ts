@@ -188,6 +188,12 @@ export default class Editor extends EventTarget {
    */
   oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
     this._isOskVisible = isVisible
+    if (this._isOskVisible || document.activeElement === null ||
+        document.activeElement === document.body) {
+      return
+    }
+
+    ;(document.activeElement as HTMLElement).blur()
   }
 
   /**
@@ -222,9 +228,11 @@ export default class Editor extends EventTarget {
 
   /** Handles viewport resizing */
   resize = (): void => {
-    this._editor.dispatch({
-      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
-    })
+    if (this._isOskVisible) {
+      this._editor.dispatch({
+        effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+      })
+    }
   }
 
   async _initLanguageSupport (filePath: string): Promise<void> {
