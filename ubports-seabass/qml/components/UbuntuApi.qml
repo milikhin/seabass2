@@ -65,4 +65,10 @@ GenericComponents.EditorApi {
     editorState.hasRedo = !data.isReadOnly && data.hasRedo
     editorState.isReadOnly = data.isReadOnly
   }
+
+  Component.onCompleted: {
+    Qt.inputMethod.visibleChanged.connect(function() {
+      api.oskVisibilityChanged(Qt.inputMethod.visible)
+    })
+  }
 }

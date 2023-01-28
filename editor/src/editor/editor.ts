@@ -48,9 +48,12 @@ export default class Editor extends EventTarget {
   _initialState: EditorState
   _isOskVisible: boolean
   _isReadOnly: boolean
+  _oskDebounceTimer: NodeJS.Timeout|null = null
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
+  SCROLL_INTO_VIEW_TIMEOUT = 250
+  OSK_SCROLL_DELAY = 100
 
   constructor (options: EditorOptions) {
     super()
@@ -188,6 +191,13 @@ export default class Editor extends EventTarget {
    */
   oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
     this._isOskVisible = isVisible
+
+    if (this._isOskVisible) {
+      // scroll into view when opening virtual keyboard
+      setTimeout(() => this._editor.dispatch({
+        effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+      }), this.SCROLL_INTO_VIEW_TIMEOUT)
+    }
   }
 
   /**
@@ -221,11 +231,7 @@ export default class Editor extends EventTarget {
   }
 
   /** Handles viewport resizing */
-  resize = (): void => {
-    this._editor.dispatch({
-      effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
-    })
-  }
+  resize = (): void => {}
 
   async _initLanguageSupport (filePath: string): Promise<void> {
     const effects = await this._setup.setupLanguageSupport(filePath)
@@ -234,6 +240,8 @@ export default class Editor extends EventTarget {
 
   _initDomEventHandlers (): void {
     this._editorElem.addEventListener('keypress', this._onKeyPress, true)
+    ;(this._editorElem.querySelector('.cm-scroller') as HTMLElement)
+      .addEventListener('scroll', this._tmpDisableScrollIntoView)
     window.addEventListener('resize', this.resize)
   }
 
@@ -250,8 +258,33 @@ export default class Editor extends EventTarget {
     }
   }
 
+  _tmpDisableScrollIntoView = (): void => {
+    if (this._isReadOnly || this._isOskVisible) {
+      return
+    }
+
+    if (this._oskDebounceTimer === null) {
+      this._editor.dispatch({
+        effects: this._setup.readOnlyCompartment.reconfigure(
+          EditorView.editable.of(false))
+      })
+    } else {
+      clearTimeout(this._oskDebounceTimer)
+    }
+
+    this._oskDebounceTimer = setTimeout(() => {
+      this._editor.dispatch({
+        effects: this._setup.readOnlyCompartment.reconfigure(
+          EditorView.editable.of(true))
+      })
+      this._oskDebounceTimer = null
+    }, this.OSK_SCROLL_DELAY)
+  }
+
   _removeDomEventHandlers (): void {
     this._editorElem.removeEventListener('keypress', this._onKeyPress, true)
+    ;(this._editorElem.querySelector('.cm-scroller') as HTMLElement)
+      .removeEventListener('scroll', this._tmpDisableScrollIntoView)
     window.removeEventListener('resize', this.resize)
   }
 }

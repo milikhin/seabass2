@@ -27,7 +27,7 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "2.0.0"
+  readonly property string version: "2.0.1"
   readonly property bool isLibertineEnabled: false
 
   property bool hasBuildContainer: false
