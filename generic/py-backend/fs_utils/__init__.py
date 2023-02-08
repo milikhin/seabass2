@@ -12,10 +12,12 @@
                                          using app name and file name as input data
 """
 
-__all__ = ["list_dir", "get_editor_config", "watch_changes", "rm", "rename", "guess_file_path"]
+__all__ = ["list_dir", "get_editor_config", "watch_changes", "rm", "rename",
+           "guess_file_path", "test_exec"]
 
 from .list_dir import list_files, watch_changes
 from .rm import rm
 from .rename import rename
 from .editor_config import get_editor_config
 from .content_hub import guess_file_path
+from .which import test_exec

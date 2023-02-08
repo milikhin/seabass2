@@ -3,6 +3,8 @@ build_ubports
 editor/coverage
 generic/py-backend/.coverage
 generic/py-backend/coverage.xml
+generic/py-backend/editorconfig
+generic/py-backend/inotify_simple
 
 harbour-seabass/qml/html/dist
 harbour-seabass/qml/generic/
