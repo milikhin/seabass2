@@ -6,6 +6,7 @@ import QtQuick.Controls.Suru 2.2
 import Qt.labs.platform 1.0
 import Qt.labs.settings 1.0
 import QtWebSockets 1.0
+import io.thp.pyotherside 1.4
 
 import Lomiri.Components.Themes 1.3
 
@@ -28,9 +29,9 @@ ApplicationWindow {
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
   readonly property string version: "2.0.1"
-  readonly property bool isLibertineEnabled: false
 
   property bool hasBuildContainer: false
+  property bool isLibertineEnabled: false
   property int activeTheme: parseInt(settings.theme)
   property var currentTab: tabBar.currentIndex === -1
     ? undefined
@@ -52,6 +53,17 @@ ApplicationWindow {
 
   Component.onCompleted: {
     i18n.domain = "seabass2.mikhael"
+  }
+
+  readonly property var py: Python {
+    Component.onCompleted: {
+      addImportPath(Qt.resolvedUrl('../py-backend'))
+      importModule('fs_utils', function() {
+        py.call('fs_utils.test_exec', ['libertine-container-manager'], function(hasLibertine) {
+          root.isLibertineEnabled = hasLibertine
+        })
+      })
+    }
   }
 
   Settings {

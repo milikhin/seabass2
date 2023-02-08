@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-28 16:39+0000\n"
+"POT-Creation-Date: 2023-02-08 06:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,31 +27,31 @@ msgid ""
 "list of contributors!"
 msgstr ""
 
-#: ../qml/Main.qml:28
+#: ../qml/Main.qml:29
 msgid "Welcome"
 msgstr ""
 
-#: ../qml/Main.qml:29 seabass2.desktop.in.h:1
+#: ../qml/Main.qml:30 seabass2.desktop.in.h:1
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:241
+#: ../qml/Main.qml:253
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:288
+#: ../qml/Main.qml:300
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:298
+#: ../qml/Main.qml:310
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:312
+#: ../qml/Main.qml:324
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:322
+#: ../qml/Main.qml:334
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 
@@ -218,11 +218,11 @@ msgstr ""
 msgid "Update build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:29
+#: ../qml/components/Builder.qml:32
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:99
+#: ../qml/components/Builder.qml:106
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "

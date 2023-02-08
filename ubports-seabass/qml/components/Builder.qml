@@ -23,6 +23,9 @@ Item {
   onCompleted: {
     ready = true
   }
+  onDisabledChanged: {
+    py.init()
+  }
 
   ConfirmDialog {
     id: confirmDialog
@@ -32,14 +35,7 @@ Item {
   Python {
     id: py
     Component.onCompleted: {
-      if (disabled) {
-        return
-      }
-
-      addImportPath(Qt.resolvedUrl('../../py-backend'))
-      importModule('build_utils', function() {
-        ready = true
-      })
+      init()
     }
     onReceived: function(evtArgs) {
       if (evtArgs[0] !== 'stdout') {
@@ -50,6 +46,17 @@ Item {
     }
     onError: function(pyErrorMessage) {
       unhandledError(pyErrorMessage)
+    }
+
+    function init() {
+      if (root.disabled || root.ready) {
+        return
+      }
+
+      addImportPath(Qt.resolvedUrl('../../py-backend'))
+      importModule('build_utils', function() {
+        root.ready = true
+      })
     }
   }
 

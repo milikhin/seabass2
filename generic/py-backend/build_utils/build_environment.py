@@ -6,10 +6,11 @@ from os.path import dirname
 
 from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: disable=import-error
 
+from helpers import exec_cmd
 from .config import CONTAINER_ID, PACKAGES
-from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
+from .helpers import get_create_cmd, get_install_clickable_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd, get_install_cmd, get_launch_cmd, get_install_python_cmd_array
+    get_destroy_cmd, get_install_cmd, get_launch_cmd
 
 class BuildEnv:
     """
@@ -91,7 +92,7 @@ class BuildEnv:
 
     def _shell_exec(self, cmd, cwd='/home/phablet', nowait=False):
         res = ''
-        for stdout_line in shell_exec(cmd, cwd, nowait):
+        for stdout_line in exec_cmd(cmd, cwd, nowait):
             self._print(stdout_line, eol='')
             res = stdout_line
         return res
@@ -108,11 +109,6 @@ class BuildEnv:
                                                                 update_cache=False, no_dialog=True)
             if not install_succeeded:
                 raise Exception("Installing {} failed".format(package))
-
-    def _install_python(self):
-        python_install_lines = get_install_python_cmd_array()
-        for cmd in python_install_lines:
-            self._shell_exec(cmd)
 
     def _delete_desktop_files(self):
         cmd = get_delete_desktop_files_cmd()
@@ -138,10 +134,7 @@ class BuildEnv:
             self._print('Step 2/4. Installing required packages.', margin_top=True)
             self._install_packages()
 
-            self._print('Step 3/4. Install python.')
-            self._install_python()
-
-            self._print('Step 4/4. Installing Clickable.', margin_top=True)
+            self._print('Step 3/4. Installing Clickable.', margin_top=True)
             self._install_clickable()
             self._delete_desktop_files()
             self._print("\r\nDONE: Build container has been successfully created")
