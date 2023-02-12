@@ -16,7 +16,6 @@ def _guess(app_name, file_name):
     """
     cmd = "journalctl -r --user --no-pager -u \
           lomiri-app-launch--application-click--{}--".format(app_name)
-    print(cmd)
 
     for line in exec_cmd(cmd):
         line = line.rstrip()
