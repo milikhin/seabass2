@@ -1,3 +1,6 @@
+"""
+Provides function to run executables
+"""
 import subprocess
 import shlex
 import re

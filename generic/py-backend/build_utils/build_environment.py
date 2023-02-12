@@ -10,7 +10,8 @@ from helpers import exec_cmd
 from .config import CONTAINER_ID, PACKAGES
 from .helpers import get_create_cmd, get_install_clickable_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd, get_install_cmd, get_launch_cmd
+    get_destroy_cmd, get_install_cmd, get_launch_cmd, get_clickable_ppa_cmd,\
+    get_node_ppa_cmd
 
 class BuildEnv:
     """
@@ -49,7 +50,7 @@ class BuildEnv:
 
         click_names = re.findall(r'^Successfully built package in \'\.\/(.*)\'', last_line)
         if len(click_names) == 1:
-            self._print('Installing click package.')
+            self._print('Installing {} package.'.format(click_names[0]))
             install_cmd = get_install_cmd(click_names[0])
             self._shell_exec(install_cmd, cwd)
             app_namings = re.findall(r'^(.*?)\.(.*?)_', click_names[0])
@@ -121,6 +122,12 @@ class BuildEnv:
         #   `self._container.start_application(cmd, environ)`
         self._shell_exec(cmd)
 
+    def _add_ppas(self):
+        node_ppa_cmd = get_node_ppa_cmd()
+        clickable_ppa_cmd = get_clickable_ppa_cmd()
+        self._shell_exec(node_ppa_cmd)
+        self._shell_exec(clickable_ppa_cmd)
+
     def _print(self, message, margin_top=False, eol='\n'):
         delimeter_top = '\n\n' if margin_top else ''
         self._print_renderer('{}{}{}'.format(delimeter_top, message, eol))
@@ -132,6 +139,7 @@ class BuildEnv:
             self._container = self._create_container()
 
             self._print('Step 2/4. Installing required packages.', margin_top=True)
+            self._add_ppas()
             self._install_packages()
 
             self._print('Step 3/4. Installing Clickable.', margin_top=True)

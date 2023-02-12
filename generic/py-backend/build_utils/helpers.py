@@ -56,6 +56,18 @@ def get_create_project_cmd(options):
     return get_container_cmd('clickable create --non-interactive --container-mode {}'\
         .format(create_args))
 
+def get_node_ppa_cmd():
+    """Returns cmd to add Node.js PPA"""
+    return 'libertine-container-manager exec -i {} -c \
+            "curl -fsSL https://deb.nodesource.com/setup_18.x | bash"'\
+            .format(CONTAINER_ID)
+
+def get_clickable_ppa_cmd():
+    """Returns cmd to add Clickable PPA containing 'click' tools"""
+    return 'libertine-container-manager configure -i {} -a add -c \
+            -n ppa:bhdouglass/clickable'\
+            .format(CONTAINER_ID)
+
 def get_delete_desktop_files_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""
     return 'libertine-container-manager exec -i {} -c \
