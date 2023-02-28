@@ -27,14 +27,6 @@ def get_container_cmd(command_string):
     """
     return 'libertine-launch -i {} bash -i -c "{}"'.format(CONTAINER_ID, command_string)
 
-def get_install_clickable_cmd():
-    """
-    Returns cmd string to install clickable into a Seabass Libertine container.
-    In order to avoid issues with breaking changes in the `dev` branch,
-    commit hash is updated manually
-    """
-    return get_container_cmd('python3 -m pip install --user --upgrade clickable-ut==7.*')
-
 def get_run_clickable_cmd(config_file):
     """Returns cmd string to run clickable from a Seabass Libertine container"""
     return get_container_cmd('clickable build --non-interactive --container-mode \
@@ -59,19 +51,28 @@ def get_create_project_cmd(options):
 def get_node_ppa_cmd():
     """Returns cmd to add Node.js PPA"""
     return 'libertine-container-manager exec -i {} -c \
-            "curl -fsSL https://deb.nodesource.com/setup_18.x | bash"'\
+            "bash -c \'wget -qO- https://deb.nodesource.com/setup_18.x | bash\'"'\
             .format(CONTAINER_ID)
 
-def get_clickable_ppa_cmd():
+def get_clickable_ppa_cmd(scripts_dir):
     """Returns cmd to add Clickable PPA containing 'click' tools"""
-    return 'libertine-container-manager configure -i {} -a add -c \
-            -n ppa:bhdouglass/clickable'\
-            .format(CONTAINER_ID)
+    return 'libertine-container-manager exec -i {} -c \
+            "bash {}/01-setup-ppas.sh"'\
+            .format(CONTAINER_ID, scripts_dir)
 
-def get_delete_desktop_files_cmd():
+def get_install_lsp_proxy_cmd():
+    """Returns cmd to install language server proxy"""
+    return get_container_cmd("npm i -g jsonrpc-ws-proxy@0.0.5")
+
+def get_run_lsp_proxy_cmd(data_dir):
+    """Starts websocket language server proxy"""
+    return get_container_cmd("npx jsonrpc-ws-proxy --languageServers={}/shell_scripts.servers.yml"\
+        .format(data_dir))
+
+def get_hide_apps_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""
     return 'libertine-container-manager exec -i {} -c \
-        "bash -c \'rm /usr/share/applications/*.desktop\'"'\
+        "bash -c \'for app in /usr/share/applications/*.desktop; do grep -q NoDisplay $app || echo NoDisplay=true >> $app; done\'"'\
         .format(CONTAINER_ID)
 
 def patch_env():

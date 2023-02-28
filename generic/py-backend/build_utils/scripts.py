@@ -39,7 +39,7 @@ def update_container():
     return exec_fn(_update_container)
 
 def test_container_exists():
-    """Returns Trues if Libertine container exists, False otherwise"""
+    """Returns True if Libertine container exists, False otherwise"""
     return exec_fn(_test_container_exists)
 
 def _init_container():

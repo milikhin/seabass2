@@ -92,15 +92,6 @@ def test_create_command(shell_exec):
     cmd = helpers.get_create_project_cmd(options)
     shell_exec.assert_called_with(cmd, dir_name, False)
 
-@patch('build_utils.build_environment.exec_cmd')
-def test_update_container_command(shell_exec):
-    """Should install latest clickable"""
-
-    scripts.update_container()
-
-    cmd = helpers.get_install_clickable_cmd()
-    shell_exec.assert_any_call(cmd, DEFAULT_CWD, False)
-
 def test_test_container_exists_false():
     """Should return False if container not exists"""
 
