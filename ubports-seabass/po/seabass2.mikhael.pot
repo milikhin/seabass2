@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-28 09:21+0000\n"
+"POT-Creation-Date: 2023-03-18 12:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,23 +35,23 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:253
+#: ../qml/Main.qml:258
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:300
+#: ../qml/Main.qml:305
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:310
+#: ../qml/Main.qml:315
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:324
+#: ../qml/Main.qml:329
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:334
+#: ../qml/Main.qml:339
 msgid "Build and run (%1) failed. See build output for details"
 msgstr ""
 

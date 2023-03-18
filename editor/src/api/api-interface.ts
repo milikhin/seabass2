@@ -40,6 +40,8 @@ export interface FileLoadOptions extends FileActionOptions {
   isReadOnly: boolean
   /** .editorconfig options */
   editorConfig: RawEditorConfig
+  /** language server's availability */
+  isLsEnabled: boolean
 }
 
 /** possible payload of API messages */

@@ -42,6 +42,9 @@ def test_container_exists():
     """Returns True if Libertine container exists, False otherwise"""
     return exec_fn(_test_container_exists)
 
+def start_ls():
+    return exec_fn(_start_language_server)
+
 def _init_container():
     patch_env()
     build_env = BuildEnv(container_id=CONTAINER_ID,
@@ -60,6 +63,10 @@ def _create(dir_name, options):
 def _test_container_exists():
     build_env = BuildEnv(container_id=CONTAINER_ID, print_renderer=pyotherside.send)
     return build_env.test_container_exists()
+
+def _start_language_server():
+    build_env = _init_container()
+    return build_env.start_ls()
 
 def _update_container():
     build_env = _init_container()

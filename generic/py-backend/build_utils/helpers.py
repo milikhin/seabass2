@@ -3,6 +3,9 @@
 from os import environ
 from .config import CONTAINER_ID, CONTAINER_NAME
 
+# TODO: make it configurable?
+LSP_PROXY_PORT = 8399
+
 def get_create_cmd():
     """Returns cmd string to create Seabass Libertine container"""
     return 'libertine-container-manager create -i {} -n "{}" -t chroot'\
@@ -64,10 +67,17 @@ def get_install_lsp_proxy_cmd():
     """Returns cmd to install language server proxy"""
     return get_container_cmd("npm i -g jsonrpc-ws-proxy@0.0.5")
 
+def get_install_typescript_ls_cmd():
+    """Returns cmd to install TypeScript language server"""
+    return get_container_cmd("npm install -g typescript-language-server typescript")
+
+def get_install_python_ls_cmd():
+    return f'libertine-container-manager exec -i {CONTAINER_ID} -c \
+        "pip install python-lsp-server --prefix=/usr/local"'
+
 def get_run_lsp_proxy_cmd(data_dir):
     """Starts websocket language server proxy"""
-    return get_container_cmd("npx jsonrpc-ws-proxy --languageServers={}/shell_scripts.servers.yml"\
-        .format(data_dir))
+    return get_container_cmd(f"npx jsonrpc-ws-proxy --port={LSP_PROXY_PORT} --languageServers={data_dir}/shell_scripts/servers.yml")
 
 def get_hide_apps_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""

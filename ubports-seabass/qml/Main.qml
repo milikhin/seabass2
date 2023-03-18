@@ -122,7 +122,8 @@ ApplicationWindow {
           filePath: tab.id,
           content: '',
           isTerminal: true,
-          isActive: !options.doNotActivate
+          isActive: !options.doNotActivate,
+          isLsEnabled: false
         })
       } else {
         api.loadFile({
@@ -133,7 +134,8 @@ ApplicationWindow {
               tabsModel.close(tab.filePath)
             }
           },
-          isActive: !options.doNotActivate
+          isActive: !options.doNotActivate,
+          isLsEnabled: root.hasBuildContainer
         })
       }
     }
@@ -172,6 +174,9 @@ ApplicationWindow {
       builder._testContainer(function(err, containerExists) {
         if (err) {
           return
+        }
+        if (containerExists) {
+          builder.startLanguageServer()
         }
         root.hasBuildContainer = containerExists
       })

@@ -125,6 +125,14 @@ Item {
       callback(res.error, res.result)
     })
   }
+
+  function startLanguageServer(callback) {
+    py.call('build_utils.start_ls', [], function(res) {
+      if (callback) {
+        callback(res.error, res.result)
+      }
+    })
+  }
 }
 
 

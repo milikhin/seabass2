@@ -2,9 +2,11 @@
 
 import subprocess
 import re
-from os.path import dirname, join
+from os import remove
+from os.path import dirname, join, exists
 from shutil import copytree
 from textwrap import dedent
+from psutil import Process
 
 from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: disable=import-error
 
@@ -13,7 +15,8 @@ from .config import PACKAGES
 from .helpers import get_create_cmd,\
     get_create_project_cmd, get_run_clickable_cmd, get_hide_apps_cmd,\
     get_destroy_cmd, get_install_cmd, get_launch_cmd, get_clickable_ppa_cmd,\
-    get_node_ppa_cmd, get_install_lsp_proxy_cmd
+    get_node_ppa_cmd, get_install_lsp_proxy_cmd, get_run_lsp_proxy_cmd,\
+    get_install_typescript_ls_cmd, get_install_python_ls_cmd
 
 # This function is available in Python but doesn't provide any status updates:
 #   `self._container.start_application(cmd, environ)`
@@ -81,6 +84,10 @@ class BuildEnv:
         cmd = get_create_project_cmd(options)
         self._shell_exec(cmd, dir_name)
 
+    def start_ls(self):
+        cmd = get_run_lsp_proxy_cmd(self._data_dir)
+        self._shell_exec(cmd)
+
     def test_container_exists(self):
         """Returns True if Seabass Libertine container exists, False otherwise"""
         self._libertine_config.refresh_database()
@@ -129,6 +136,14 @@ class BuildEnv:
         cmd = get_install_lsp_proxy_cmd()
         self._shell_exec(cmd)
 
+    def _install_typescript_ls(self):
+        cmd = get_install_typescript_ls_cmd()
+        self._shell_exec(cmd)
+
+    def _install_python_ls(self):
+        cmd = get_install_python_ls_cmd()
+        self._shell_exec(cmd)
+
     def _hide_apps_from_grid(self):
         cmd = get_hide_apps_cmd()
         self._shell_exec(cmd)
@@ -161,6 +176,8 @@ class BuildEnv:
 
             self._print('Step 3/4. Initializing language server protocol support.', margin_top=True)
             self._install_lsp_proxy()
+            self._install_typescript_ls()
+            self._install_python_ls()
 
             self._print("Step 4/4. Hiding GUI applications from the App Grid.", margin_top=True)
             self._hide_apps_from_grid()

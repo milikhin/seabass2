@@ -3,21 +3,25 @@ import { languages } from '@codemirror/language-data'
 import { languageServer } from 'codemirror-languageserver'
 import { Extension } from '@codemirror/state'
 
+const PORT = 8399
+
 const LSP_LANGUAGES = new Map([
-  ['TypeScript', 'typescript'],
-  ['C++', 'cpp']
+  ['C++', 'cpp'],
+  ['Python', 'python'],
+  ['TypeScript', 'typescript']
 ])
 
-function getLSPName (langName: string) {
+function getLSPName (langName: string): string|undefined {
   return LSP_LANGUAGES.get(langName)
 }
 
 /**
  * Guess language support extension by file name
  * @param filePath full path to file
+ * @param isLsEnabled language server's availability
  * @returns language support extension if found
  */
-export async function getLanguageMode (filePath: string):
+export async function getLanguageMode (filePath: string, isLsEnabled: boolean):
 Promise<Extension[]|undefined> {
   const lang = LanguageDescription.matchFilename(languages, filePath)
   if (lang === null) {
@@ -26,8 +30,8 @@ Promise<Extension[]|undefined> {
 
   const langSupport: Extension[] = [await lang.load()]
   const lspName = getLSPName(lang.name)
-  if (lspName !== undefined) {
-    const serverUri = `ws://localhost:3000/${lspName}` as `ws://${string}`
+  if (isLsEnabled && lspName !== undefined) {
+    const serverUri = `ws://localhost:${PORT}/${lspName}` as `ws://${string}`
     const ls = languageServer({
       // WebSocket server uri and other client options.
       serverUri,

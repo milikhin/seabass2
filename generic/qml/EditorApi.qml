@@ -56,7 +56,7 @@ QtObject {
 
       QmlJs.readFile(options.filePath, function(err, fileContent) {
         if (!err) {
-            __load(options.filePath, editorConfig, fileContent)
+            __load(options.filePath, editorConfig, fileContent, options.isLsEnabled)
             return callback(null)
         }
 
@@ -70,18 +70,19 @@ QtObject {
             return callback(err)
             }
 
-            __load(options.filePath, editorConfig, '')
+            __load(options.filePath, editorConfig, '', options.isLsEnabled)
             return callback(null)
         })
       })
     })
 
-    function __load(filePath, editorConfig, content) {
+    function __load(filePath, editorConfig, content, isLsEnabled) {
       postMessage('loadFile', {
         filePath: filePath,
         editorConfig: editorConfig,
         content: content,
-        isActive: options.isActive
+        isActive: options.isActive,
+        isLsEnabled: isLsEnabled
       })
     }
   }

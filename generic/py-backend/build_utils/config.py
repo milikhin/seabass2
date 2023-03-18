@@ -7,17 +7,22 @@ PACKAGES = [
     'curl',
     'nano',
     'git',
+    'python3-pip',
 
-    # inspired by the clickable Docker images
+    # clickable & build tools
     'build-essential',
-    'clangd',
     'cmake',
     'pkg-config',
     'intltool',
     'nodejs',
     'click',
     'click-reviewers-tools',
-    'clickable'
+    'clickable',
 
-    # 'ubuntu-sdk-libs-dev'
+    # lsp tools
+    'clangd',
+
+    # platform SDK
+    'qtquickcontrols2-5-dev',
+    'ubuntu-sdk-libs-dev'
 ]
