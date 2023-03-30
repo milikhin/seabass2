@@ -1,6 +1,6 @@
 [Desktop Entry]
 _Name=Seabass2
-Exec=qmlscene qml/Main.qml
+Exec=sh start.sh
 Icon=assets/logo.png
 Terminal=false
 Type=Application
