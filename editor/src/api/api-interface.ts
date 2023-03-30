@@ -59,6 +59,7 @@ export interface IncomingMessagePayload {
   setContent: SetContentOptions
   setPreferences: InputPreferences
   undo: undefined
+  toggleLsp: { isEnabled: boolean }
   toggleReadOnly: undefined
 }
 

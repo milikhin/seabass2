@@ -46,7 +46,7 @@ GenericComponents.EditorApi {
           filePath: filePath,
           subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
           title: QmlJs.getFileName(filePath),
-          isInitial: true,
+          isRestored: true,
           doNotActivate: settings.initialTab !== i
         })
       }

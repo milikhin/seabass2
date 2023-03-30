@@ -44,6 +44,10 @@ ApplicationWindow {
       : 0
   }
 
+  onHasBuildContainerChanged: {
+    api.postMessage('toggleLsp', { isEnabled: hasBuildContainer })
+  }
+
   function handleBuilderStarted() {
     if (!isWide) {
       navBar.visible = false
@@ -108,6 +112,7 @@ ApplicationWindow {
     onAppLoaded: {
       editorState.loadTheme()
       editorState.updateViewport()
+      api.postMessage('toggleLsp', { isEnabled: hasBuildContainer })
     }
     onFileBeingClosed: function (filePath) {
       tabsModel.close(filePath)
@@ -135,7 +140,7 @@ ApplicationWindow {
             }
           },
           isActive: !options.doNotActivate,
-          isLsEnabled: root.hasBuildContainer
+          isLsEnabled: !options.isRestored
         })
       }
     }
@@ -176,7 +181,7 @@ ApplicationWindow {
           return
         }
         if (containerExists) {
-          builder.startLanguageServer()
+          // builder.startLanguageServer()
         }
         root.hasBuildContainer = containerExists
       })
@@ -333,10 +338,11 @@ ApplicationWindow {
           }
           onLaunchRequested: {
             const configFile = editorState.filePath
+            console.log(editorState.filePath)
             builder.launch(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
-                  i18n.tr('Build and run (%1) failed. See build output for details').arg(configFile)
+                  i18n.tr('Building (%1) failed. See build output for details').arg(configFile)
                 )
               }
             }, handleBuilderStarted)

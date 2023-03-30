@@ -74,7 +74,7 @@ msgstr ""
 "informatie."
 
 #: ../qml/Main.qml:366
-msgid "Build and run (%1) failed. See build output for details"
+msgid "Building (%1) failed. See build output for details"
 msgstr ""
 "Het compileren en uitvoeren (%1) is mislukt. Bekijk de compilatie-uitvoer "
 "voor meer informatie."
