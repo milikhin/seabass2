@@ -171,6 +171,67 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+
+          Label {
+            anchors.verticalCenter: parent.verticalCenter
+            font.bold: true
+            text: i18n.tr("Features")
+          }
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+          spacing: Suru.units.gu(1)
+
+          Label {
+            anchors.verticalCenter: parent.verticalCenter
+            text: i18n.tr("Intellisense:")
+          }
+
+          Switch {
+            checked: hasBuildContainer && settings.isLspEnabled
+            enabled: hasBuildContainer
+            onCheckedChanged: {
+              settings.isLspEnabled = checked
+            }
+          }
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+
+          ColumnLayout {
+            width: parent.width
+            spacing: Suru.units.gu(1)
+
+            Label {
+              Layout.fillWidth: true
+              text: i18n.tr(
+                "Intellisense support is experimental and requires functional build container. " +
+                "Supported languages: C++, JavaScript, Python, TypeScript"
+              )
+              wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            }
+          }
+        }
+
+        Rectangle {
+          width: parent.width
+          height: Suru.units.dp(1)
+          color: Suru.neutralColor
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
           visible: isLibertineEnabled
 
           Label {

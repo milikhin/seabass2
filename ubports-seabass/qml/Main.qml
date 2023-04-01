@@ -80,6 +80,7 @@ ApplicationWindow {
     property int initialTab: 0
     property bool restoreOpenedTabs: true
     property bool useWrapMode: true
+    property bool isLspEnabled: true
 
     onFontSizeChanged: {
       editorState.fontSize = fontSize
@@ -140,7 +141,7 @@ ApplicationWindow {
             }
           },
           isActive: !options.doNotActivate,
-          isLsEnabled: !options.isRestored
+          isLsEnabled: settings.isLspEnabled && !options.isRestored
         })
       }
     }
@@ -180,7 +181,7 @@ ApplicationWindow {
         if (err) {
           return
         }
-        if (containerExists) {
+        if (containerExists && settings.isLspEnabled) {
           builder.startLanguageServer()
         }
         root.hasBuildContainer = containerExists

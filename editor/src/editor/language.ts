@@ -7,6 +7,7 @@ const PORT = 8399
 
 const LSP_LANGUAGES = new Map([
   ['C++', 'cpp'],
+  ['JavaScript', 'javascript'],
   ['Python', 'python'],
   ['TypeScript', 'typescript']
 ])

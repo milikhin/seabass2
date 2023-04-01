@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 06:45+0000\n"
+"POT-Creation-Date: 2023-04-01 07:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,23 +35,23 @@ msgstr ""
 msgid "Seabass2"
 msgstr ""
 
-#: ../qml/Main.qml:263
+#: ../qml/Main.qml:264
 msgid "Creating a project failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:310
+#: ../qml/Main.qml:311
 msgid "Creating a Libertine container failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:320
+#: ../qml/Main.qml:321
 msgid "Update failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:334
+#: ../qml/Main.qml:335
 msgid "Build (%1) failed. See build output for details"
 msgstr ""
 
-#: ../qml/Main.qml:345
+#: ../qml/Main.qml:346
 msgid "Building (%1) failed. See build output for details"
 msgstr ""
 
@@ -162,15 +162,29 @@ msgstr ""
 msgid "Restore previous session at startup:"
 msgstr ""
 
-#: ../qml/Settings.qml:179
+#: ../qml/Settings.qml:178
+msgid "Features"
+msgstr ""
+
+#: ../qml/Settings.qml:191
+msgid "Intellisense:"
+msgstr ""
+
+#: ../qml/Settings.qml:216
+msgid ""
+"Intellisense support is experimental and requires functional build "
+"container. Supported languages: C++, JavaScript, Python, TypeScript"
+msgstr ""
+
+#: ../qml/Settings.qml:240
 msgid "Build container"
 msgstr ""
 
-#: ../qml/Settings.qml:197
+#: ../qml/Settings.qml:258
 msgid "You can use the Seabass to build projects with Clickable."
 msgstr ""
 
-#: ../qml/Settings.qml:205
+#: ../qml/Settings.qml:266
 msgid ""
 "In order to execute Clickable, Seabass requires a special Libertine "
 "container to be created first. Once the container is created you can update "
@@ -178,43 +192,43 @@ msgid ""
 "(container ID is `seabass2`) or via the System Settings."
 msgstr ""
 
-#: ../qml/Settings.qml:215
+#: ../qml/Settings.qml:276
 msgid ""
 "If something goes wrong with the container you can delete and recreate it "
 "once again."
 msgstr ""
 
-#: ../qml/Settings.qml:237
+#: ../qml/Settings.qml:298
 msgid "Notes:"
 msgstr ""
 
-#: ../qml/Settings.qml:247
+#: ../qml/Settings.qml:308
 msgid ""
 "• To build a project you need to open a corresponding clickable "
 "configuration file and click the 'Build' button:"
 msgstr ""
 
-#: ../qml/Settings.qml:264
+#: ../qml/Settings.qml:325
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
 "directories. This directories are automatically mounted into Libertine "
 "containers. Alternatively you can create additional bind mounts manually."
 msgstr ""
 
-#: ../qml/Settings.qml:274
+#: ../qml/Settings.qml:335
 msgid ""
 "• clickable config file should be named 'clickable.json' or 'clickable.yaml'."
 msgstr ""
 
-#: ../qml/Settings.qml:291
+#: ../qml/Settings.qml:352
 msgid "Container status:"
 msgstr ""
 
-#: ../qml/Settings.qml:314
+#: ../qml/Settings.qml:375
 msgid "Create build container"
 msgstr ""
 
-#: ../qml/Settings.qml:323
+#: ../qml/Settings.qml:384
 msgid "Update build container"
 msgstr ""
 

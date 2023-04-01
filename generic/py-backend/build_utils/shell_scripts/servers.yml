@@ -2,6 +2,9 @@
 langservers:
   cpp:
     - clangd
+  javascript:
+    - typescript-language-server
+    - --stdio
   typescript:
     - typescript-language-server
     - --stdio
