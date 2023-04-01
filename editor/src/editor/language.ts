@@ -1,6 +1,6 @@
 import { LanguageDescription } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
-import { languageServer } from 'codemirror-languageserver'
+import { languageServer } from './codemirror-ls'
 import { Extension } from '@codemirror/state'
 
 const PORT = 8399
@@ -39,7 +39,8 @@ Promise<Extension[]|undefined> {
       workspaceFolders: [],
 
       documentUri: `file://${filePath}`,
-      languageId: lspName // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
+      // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem
+      languageId: lspName
     })
     langSupport.push(...ls)
   }

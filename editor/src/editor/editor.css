@@ -6,3 +6,27 @@
 .cm-editor {
   height: 100%;
 }
+
+/* LSP tooltips */
+.documentation {
+  max-width: 100vw;
+  max-height: 25vh;
+  overflow-y: auto;
+  font-family: monospace;
+  padding: 0.25rem;
+}
+
+.documentation p {
+  line-height: 1.1;
+  margin: 0;
+}
+
+.documentation pre {
+  margin: 0;
+  padding: 0;
+  white-space: normal;
+}
+
+.documentation pre + p {
+  margin-top: 0.25rem;
+}

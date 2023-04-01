@@ -163,7 +163,7 @@ class SeabassApp {
   }
 
   _onToggleLsp (evt: CustomEvent<{ isEnabled: boolean }>): void {
-    const LS_INIT_TIMEOUT = 5000
+    const LS_INIT_TIMEOUT = 2500
 
     void (async () => {
       await new Promise(resolve => setTimeout(resolve, LS_INIT_TIMEOUT))
