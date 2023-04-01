@@ -27,7 +27,7 @@ class BuildEnv:
     """
     def __init__(self, container_id, print_renderer=print):
         self._data_dir = '/home/phablet/.local/share/seabass2.mikhael/'
-        self._src_scripts_dir = '/opt/click.ubuntu.com/seabass2.mikhael/current/py-backend/build_utils/shell_scripts'
+        self._src_scripts_dir = './shell_scripts'
         self._scripts_dir = join(self._data_dir, 'shell_scripts')
         self._container_id = container_id
         self._print_renderer = print_renderer
