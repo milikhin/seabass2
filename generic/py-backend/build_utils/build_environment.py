@@ -3,7 +3,7 @@
 import subprocess
 import re
 from os import remove
-from os.path import dirname, join, exists
+from os.path import dirname, join, dirname, realpath
 from shutil import copytree
 from textwrap import dedent
 from psutil import Process
@@ -27,7 +27,7 @@ class BuildEnv:
     """
     def __init__(self, container_id, print_renderer=print):
         self._data_dir = '/home/phablet/.local/share/seabass2.mikhael/'
-        self._src_scripts_dir = './shell_scripts'
+        self._src_scripts_dir = join(dirname(realpath(__file__)), 'shell_scripts')
         self._scripts_dir = join(self._data_dir, 'shell_scripts')
         self._container_id = container_id
         self._print_renderer = print_renderer
