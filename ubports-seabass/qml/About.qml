@@ -41,6 +41,11 @@ Item {
           url: 'https://github.com/codemirror/dev'
         },
         {
+          title: 'Language Server Plugin for CodeMirror 6',
+          text: 'Copyright (c) 2021, Mahmud Ridwan, BSD license',
+          url: 'https://github.com/FurqanSoftware/codemirror-languageserver'
+        },
+        {
           title: 'Babel',
           text: 'Copyright (c) 2014-present Sebastian McKenzie and other contributors, MIT license',
           url: 'https://github.com/babel/babel'
