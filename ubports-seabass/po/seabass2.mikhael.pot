@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seabass2.mikhael\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-30 06:39+0000\n"
+"POT-Creation-Date: 2023-04-01 06:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,11 +218,11 @@ msgstr ""
 msgid "Update build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:32
+#: ../qml/components/Builder.qml:33
 msgid "Creating build container"
 msgstr ""
 
-#: ../qml/components/Builder.qml:106
+#: ../qml/components/Builder.qml:125
 msgid ""
 "A Libertine container is going to be created in order to execute build "
 "commands. The process might take a while, but you can continue using the "

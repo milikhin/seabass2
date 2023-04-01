@@ -181,7 +181,7 @@ ApplicationWindow {
           return
         }
         if (containerExists) {
-          // builder.startLanguageServer()
+          builder.startLanguageServer()
         }
         root.hasBuildContainer = containerExists
       })

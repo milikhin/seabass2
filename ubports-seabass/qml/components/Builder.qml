@@ -25,6 +25,7 @@ Item {
   }
   onDisabledChanged: {
     py.init()
+    lsp.init()
   }
 
   ConfirmDialog {
@@ -46,6 +47,24 @@ Item {
     }
     onError: function(pyErrorMessage) {
       unhandledError(pyErrorMessage)
+    }
+
+    function init() {
+      if (root.disabled || root.ready) {
+        return
+      }
+
+      addImportPath(Qt.resolvedUrl('../../py-backend'))
+      importModule('build_utils', function() {
+        root.ready = true
+      })
+    }
+  }
+
+  Python {
+    id: lsp
+    Component.onCompleted: {
+      init()
     }
 
     function init() {
@@ -127,7 +146,7 @@ Item {
   }
 
   function startLanguageServer(callback) {
-    py.call('build_utils.start_ls', [], function(res) {
+    lsp.call('build_utils.start_ls', [], function(res) {
       if (callback) {
         callback(res.error, res.result)
       }
