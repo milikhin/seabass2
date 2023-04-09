@@ -1,6 +1,6 @@
 import { LanguageDescription } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
-import { languageServer } from './codemirror-ls'
+import { languageServer } from 'codemirror-languageserver'
 import { Extension } from '@codemirror/state'
 
 const PORT = 8399
