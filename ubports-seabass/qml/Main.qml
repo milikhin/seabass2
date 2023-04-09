@@ -339,7 +339,6 @@ ApplicationWindow {
           }
           onLaunchRequested: {
             const configFile = editorState.filePath
-            console.log(editorState.filePath)
             builder.launch(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
