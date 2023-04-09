@@ -63,9 +63,9 @@ def get_clickable_ppa_cmd(scripts_dir):
             "bash {}/01-setup-ppas.sh"'\
             .format(CONTAINER_ID, scripts_dir)
 
-def get_install_lsp_proxy_cmd():
+def get_install_lsp_proxy_cmd(scripts_dir):
     """Returns cmd to install language server proxy"""
-    return get_container_cmd("npm i -g jsonrpc-ws-proxy@0.0.5")
+    return get_container_cmd(f"bash {scripts_dir}/02-jsonrpc-ws-proxy.sh")
 
 def get_install_typescript_ls_cmd():
     """Returns cmd to install TypeScript language server"""
@@ -75,9 +75,9 @@ def get_install_python_ls_cmd():
     return f'libertine-container-manager exec -i {CONTAINER_ID} -c \
         "pip install python-lsp-server --prefix=/usr/local"'
 
-def get_run_lsp_proxy_cmd(data_dir):
+def get_run_lsp_proxy_cmd(scripts_dir):
     """Starts websocket language server proxy"""
-    return get_container_cmd(f"npx jsonrpc-ws-proxy --port={LSP_PROXY_PORT} --languageServers={data_dir}/shell_scripts/servers.yml")
+    return get_container_cmd(f"node {scripts_dir}/jsonrpc-ws-proxy/dist/server.js --port={LSP_PROXY_PORT} --languageServers={scripts_dir}/servers.yml")
 
 def get_hide_apps_cmd():
     """Returns cmd string to delete unneeded .desktop files from build container"""

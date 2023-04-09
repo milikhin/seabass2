@@ -85,7 +85,7 @@ class BuildEnv:
         self._shell_exec(cmd, dir_name)
 
     def start_ls(self):
-        cmd = get_run_lsp_proxy_cmd(self._data_dir)
+        cmd = get_run_lsp_proxy_cmd(self._scripts_dir)
         self._shell_exec(cmd)
 
     def test_container_exists(self):
@@ -133,7 +133,7 @@ class BuildEnv:
             'This is just a notice. It might be expected or non-critical.')
 
     def _install_lsp_proxy(self):
-        cmd = get_install_lsp_proxy_cmd()
+        cmd = get_install_lsp_proxy_cmd(self._scripts_dir)
         self._shell_exec(cmd)
 
     def _install_typescript_ls(self):
