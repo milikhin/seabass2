@@ -145,7 +145,8 @@ export default class SeabassAppModel extends EventTarget {
       filePath,
       isReadOnly: options.isTerminal,
       isDarkTheme: this._preferences.isDarkTheme,
-      useWrapMode: this._preferences.useWrapMode
+      useWrapMode: this._preferences.useWrapMode,
+      isLsEnabled: options.isLsEnabled
     })
     editor.addEventListener('stateChange', evt => {
       this.dispatchEvent(new CustomEvent('stateChange', {

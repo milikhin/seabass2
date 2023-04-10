@@ -45,6 +45,7 @@ export default class SeabassApi extends EventTarget {
     'requestSaveAndClose',
     'setContent',
     'setPreferences',
+    'toggleLsp',
     'toggleReadOnly',
     'undo',
     'viewportChange'

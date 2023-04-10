@@ -57,10 +57,11 @@ export default class EditorSetup {
   /**
    * Init language support for a given file
    * @param filePath full path to file
+   * @param isLsEnabled language server availability
    * @returns language support extension
    */
-  async setupLanguageSupport (filePath: string): Promise<StateEffect<unknown>> {
-    const langSupport = await getLanguageMode(filePath)
+  async setupLanguageSupport (filePath: string, isLsEnabled: boolean): Promise<StateEffect<unknown>> {
+    const langSupport = await getLanguageMode(filePath, isLsEnabled)
     return this.langCompartment.reconfigure(langSupport ?? Facet.define().of(null))
   }
 

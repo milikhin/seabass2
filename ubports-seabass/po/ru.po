@@ -119,7 +119,7 @@ msgstr ""
 
 #: ../qml/Settings.qml:171
 msgid ""
-"Should anything goes wrong with the container you can delete and recreate it "
+"If something goes wrong with the container you can delete and recreate it "
 "once again."
 msgstr ""
 "Если с контейнером что-то случится, Вы всегда можете удалить и пересоздать "
@@ -140,7 +140,7 @@ msgstr ""
 #: ../qml/Settings.qml:219
 msgid ""
 "• Project files should be located inside ~/Downloads or ~/Documents "
-"directories. These directories are automatically mounted into Libertine "
+"directories. This directories are automatically mounted into Libertine "
 "containers. Alternatively you can create additional bind mounts manually."
 msgstr ""
 "• Все файлы проекта должны находиться в директориях ~/Загрузки или ~/"

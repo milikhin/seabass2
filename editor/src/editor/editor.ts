@@ -25,6 +25,7 @@ interface EditorOptions {
   isReadOnly?: boolean
   fontSize?: number
   useWrapMode: boolean
+  isLsEnabled: boolean
 }
 
 interface Events {
@@ -81,7 +82,7 @@ export default class Editor extends EventTarget {
       state: this._initialState,
       parent: this._editorElem
     })
-    void this._initLanguageSupport(options.filePath)
+    void this._initLanguageSupport(options.filePath, options.isLsEnabled)
 
     // init DOM event handlers (resize, keypress)
     this._initDomEventHandlers()
@@ -233,8 +234,8 @@ export default class Editor extends EventTarget {
   /** Handles viewport resizing */
   resize = (): void => {}
 
-  async _initLanguageSupport (filePath: string): Promise<void> {
-    const effects = await this._setup.setupLanguageSupport(filePath)
+  async _initLanguageSupport (filePath: string, isLsEnabled: boolean): Promise<void> {
+    const effects = await this._setup.setupLanguageSupport(filePath, isLsEnabled)
     this._editor.dispatch({ effects })
   }
 

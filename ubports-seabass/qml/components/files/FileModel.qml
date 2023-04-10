@@ -123,6 +123,12 @@ Item {
     })
   }
 
+  function guessFilePath(sourceApp, fileName, callback) {
+    py.call('fs_utils.guess_file_path', [sourceApp, fileName], function(res) {
+      callback(res.error, res.result)
+    })
+  }
+
   function toggleExpanded(path) {
     if (expanded.indexOf(path) === -1) {
       expanded.push(path)

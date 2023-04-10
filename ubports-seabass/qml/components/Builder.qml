@@ -23,6 +23,10 @@ Item {
   onCompleted: {
     ready = true
   }
+  onDisabledChanged: {
+    py.init()
+    lsp.init()
+  }
 
   ConfirmDialog {
     id: confirmDialog
@@ -32,14 +36,7 @@ Item {
   Python {
     id: py
     Component.onCompleted: {
-      if (disabled) {
-        return
-      }
-
-      addImportPath(Qt.resolvedUrl('../../py-backend'))
-      importModule('build_utils', function() {
-        ready = true
-      })
+      init()
     }
     onReceived: function(evtArgs) {
       if (evtArgs[0] !== 'stdout') {
@@ -50,6 +47,35 @@ Item {
     }
     onError: function(pyErrorMessage) {
       unhandledError(pyErrorMessage)
+    }
+
+    function init() {
+      if (root.disabled || root.ready) {
+        return
+      }
+
+      addImportPath(Qt.resolvedUrl('../../py-backend'))
+      importModule('build_utils', function() {
+        root.ready = true
+      })
+    }
+  }
+
+  Python {
+    id: lsp
+    Component.onCompleted: {
+      init()
+    }
+
+    function init() {
+      if (root.disabled || root.ready) {
+        return
+      }
+
+      addImportPath(Qt.resolvedUrl('../../py-backend'))
+      importModule('build_utils', function() {
+        root.ready = true
+      })
     }
   }
 
@@ -116,6 +142,14 @@ Item {
   function _testContainer(callback) {
     py.call('build_utils.test_container_exists', [], function(res) {
       callback(res.error, res.result)
+    })
+  }
+
+  function startLanguageServer(callback) {
+    lsp.call('build_utils.start_ls', [], function(res) {
+      if (callback) {
+        callback(res.error, res.result)
+      }
     })
   }
 }

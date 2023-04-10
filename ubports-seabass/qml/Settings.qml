@@ -171,6 +171,67 @@ Item {
           anchors.right: parent.right
           anchors.leftMargin: Suru.units.gu(1)
           anchors.rightMargin: Suru.units.gu(1)
+
+          Label {
+            anchors.verticalCenter: parent.verticalCenter
+            font.bold: true
+            text: i18n.tr("Features")
+          }
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+          spacing: Suru.units.gu(1)
+
+          Label {
+            anchors.verticalCenter: parent.verticalCenter
+            text: i18n.tr("Intellisense:")
+          }
+
+          Switch {
+            checked: hasBuildContainer && settings.isLspEnabled
+            enabled: hasBuildContainer
+            onCheckedChanged: {
+              settings.isLspEnabled = checked
+            }
+          }
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
+
+          ColumnLayout {
+            width: parent.width
+            spacing: Suru.units.gu(1)
+
+            Label {
+              Layout.fillWidth: true
+              text: i18n.tr(
+                "Intellisense support is experimental and requires functional build container. " +
+                "Supported languages: C++, JavaScript, Python, TypeScript"
+              )
+              wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            }
+          }
+        }
+
+        Rectangle {
+          width: parent.width
+          height: Suru.units.dp(1)
+          color: Suru.neutralColor
+        }
+
+        Row {
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.leftMargin: Suru.units.gu(1)
+          anchors.rightMargin: Suru.units.gu(1)
           visible: isLibertineEnabled
 
           Label {
@@ -204,7 +265,7 @@ Item {
               text: i18n.tr(
                 "In order to execute Clickable, Seabass requires a special Libertine container to be created first. " +
                 "Once the container is created you can update it here and manage it as usual " +
-                "using `libertine-container-manager` (container ID is `seabass2-build`) or via the System Settings."
+                "using `libertine-container-manager` (container ID is `seabass2`) or via the System Settings."
               )
               wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
@@ -212,7 +273,7 @@ Item {
             Label {
               Layout.fillWidth: true
               text: i18n.tr(
-                "Should anything goes wrong with the container you can delete and recreate it once again."
+                "If something goes wrong with the container you can delete and recreate it once again."
               )
               wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             }
@@ -262,7 +323,7 @@ Item {
               Layout.fillWidth: true
               text: i18n.tr(
                 "• Project files should be located inside ~/Downloads or ~/Documents directories. " +
-                "These directories are automatically mounted into Libertine containers. " +
+                "This directories are automatically mounted into Libertine containers. " +
                 "Alternatively you can create additional bind mounts manually."
               )
               wrapMode: Text.WrapAtWordBoundaryOrAnywhere

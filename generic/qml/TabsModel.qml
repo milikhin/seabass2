@@ -76,7 +76,8 @@ ListModel {
     append(currentTab)
     tabAdded(currentTab, {
       createIfNotExists: !options.isRestored,
-      doNotActivate: options.doNotActivate
+      doNotActivate: options.doNotActivate,
+      isRestored: options.isRestored
     })
     _updateTabNames()
 

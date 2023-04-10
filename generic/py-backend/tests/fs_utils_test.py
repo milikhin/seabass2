@@ -4,8 +4,9 @@ import sys
 from tempfile import gettempdir, TemporaryFile
 from time import sleep
 from os.path import join
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from fs_utils import list_files, get_editor_config, watch_changes, rename, rm, guess_file_path
+import helpers
 
 from .mocks import pyotherside
 sys.modules['pyotherside'] = pyotherside
@@ -194,29 +195,30 @@ def test_remove(fs): # pylint: disable=invalid-name
     rm(NESTED_FILE_PATH)
     assert not fs.exists(NESTED_FILE_PATH)
 
-def test_contenthub_guessed(fs): # pylint: disable=invalid-name
+@patch('fs_utils.content_hub.exec_cmd')
+def test_contenthub_guessed(patcher): # pylint: disable=invalid-name
     """#guess_file_path should find and return file path in logs"""
     app_name = 'app_name'
     file_name = 'test.txt'
     file_path = '/foo/bar/' + file_name
-    fs.create_dir('/home/phablet/.cache/upstart/')
-    fs.create_file('/home/phablet/.cache/upstart/click-bla-bla-' + app_name + '.log',
-                   contents='resolveContentType for file file://' + file_path)
+    patcher.return_value = iter(['resolveContentType for file file://' + file_path])
     guessed_path = guess_file_path(app_name, file_path)['result']
     assert guessed_path == file_path
 
-def test_contenthub_no_log(fs): # pylint: disable=invalid-name
+@patch('fs_utils.content_hub.exec_cmd')
+def test_contenthub_no_log(patcher): # pylint: disable=invalid-name
     """#guess_file_path should raise exception if source app logs not found"""
     app_name = 'foo'
-    fs.create_dir('/home/phablet/.cache/upstart/')
-    guess_error = guess_file_path(app_name, 'test.txt')['error']
-    assert guess_error == 'Source log file is not found for ' + app_name
+    file_name = 'test.txt'
+    patcher.return_value = []
+    guess_error = guess_file_path(app_name, file_name)['error']
+    assert guess_error == 'Unable to guess original file path for ' + app_name + ':' + file_name
 
-def test_contenthub_file_path_not_guessed(fs): # pylint: disable=invalid-name
+@patch('fs_utils.content_hub.exec_cmd')
+def test_contenthub_file_path_not_guessed(patcher): # pylint: disable=invalid-name
     """#guess_file_path should raise exception if file path can't be guessed"""
     app_name = 'foo'
     file_name = 'file.txt'
-    fs.create_dir('/home/phablet/.cache/upstart/')
-    fs.create_file('/home/phablet/.cache/upstart/click-bla-bla-' + app_name + '.log')
+    patcher.return_value = iter(['resolveContentType for file file://foo.bar'])
     guess_error = guess_file_path(app_name, file_name)['error']
     assert guess_error == "Unable to guess original file path for {}:{}".format(app_name, file_name)
