@@ -2,20 +2,33 @@
 
 import subprocess
 import re
-from os.path import dirname
+from os import remove
+from os.path import dirname, join, dirname, realpath
+from shutil import copytree
+from textwrap import dedent
+from psutil import Process
 
 from libertine.Libertine import LibertineContainer, ContainersConfig # pylint: disable=import-error
 
-from .config import CONTAINER_ID, PACKAGES
-from .helpers import shell_exec, get_create_cmd, get_install_clickable_cmd,\
-    get_create_project_cmd, get_run_clickable_cmd, get_delete_desktop_files_cmd,\
-    get_destroy_cmd, get_install_cmd, get_launch_cmd, get_install_python_cmd_array
+from helpers import exec_cmd
+from .config import PACKAGES
+from .helpers import get_create_cmd,\
+    get_create_project_cmd, get_run_clickable_cmd, get_hide_apps_cmd,\
+    get_destroy_cmd, get_install_cmd, get_launch_cmd, get_clickable_ppa_cmd,\
+    get_node_ppa_cmd, get_install_lsp_proxy_cmd, get_run_lsp_proxy_cmd,\
+    get_install_typescript_ls_cmd, get_install_python_ls_cmd
+
+# This function is available in Python but doesn't provide any status updates:
+#   `self._container.start_application(cmd, environ)`
 
 class BuildEnv:
     """
     Build environment inside a chroot Libertine container
     """
     def __init__(self, container_id, print_renderer=print):
+        self._data_dir = '/home/phablet/.local/share/seabass2.mikhael/'
+        self._src_scripts_dir = join(dirname(realpath(__file__)), 'shell_scripts')
+        self._scripts_dir = join(self._data_dir, 'shell_scripts')
         self._container_id = container_id
         self._print_renderer = print_renderer
         self._libertine_config = ContainersConfig()
@@ -48,7 +61,7 @@ class BuildEnv:
 
         click_names = re.findall(r'^Successfully built package in \'\.\/(.*)\'', last_line)
         if len(click_names) == 1:
-            self._print('Installing click package.')
+            self._print('Installing {} package.'.format(click_names[0]))
             install_cmd = get_install_cmd(click_names[0])
             self._shell_exec(install_cmd, cwd)
             app_namings = re.findall(r'^(.*?)\.(.*?)_', click_names[0])
@@ -71,14 +84,19 @@ class BuildEnv:
         cmd = get_create_project_cmd(options)
         self._shell_exec(cmd, dir_name)
 
+    def start_ls(self):
+        cmd = get_run_lsp_proxy_cmd(self._scripts_dir)
+        self._shell_exec(cmd)
+
     def test_container_exists(self):
         """Returns True if Seabass Libertine container exists, False otherwise"""
         self._libertine_config.refresh_database()
         return self._libertine_config.container_exists(self._container_id)
 
     def update_container(self):
-        """Upgrades built tools within the container"""
-        self._install_clickable()
+        """Installs missing packages / upgrades installed packages within the container"""
+        self._copy_scripts()
+        self._install_packages()
 
     def _create_container(self):
         cmd = get_create_cmd()
@@ -91,39 +109,55 @@ class BuildEnv:
 
     def _shell_exec(self, cmd, cwd='/home/phablet', nowait=False):
         res = ''
-        for stdout_line in shell_exec(cmd, cwd, nowait):
+        for stdout_line in exec_cmd(cmd, cwd, nowait):
             self._print(stdout_line, eol='')
             res = stdout_line
         return res
 
     def _get_container(self):
         self._libertine_config.refresh_database()
-        return LibertineContainer(CONTAINER_ID, self._libertine_config)
+        return LibertineContainer(self._container_id, self._libertine_config)
 
     def _install_packages(self):
         self._container.update_libertine_container()
+        has_error = False
         for package in PACKAGES:
             self._print("Installing {}...".format(package))
             install_succeeded = self._container.install_package(package,
                                                                 update_cache=False, no_dialog=True)
             if not install_succeeded:
-                raise Exception("Installing {} failed".format(package))
+                has_error = True
 
-    def _install_python(self):
-        python_install_lines = get_install_python_cmd_array()
-        for cmd in python_install_lines:
-            self._shell_exec(cmd)
+        if has_error:
+            self._print('[WARNING]: apt reported errors while installing required packages. '
+            'This is just a notice. It might be expected or non-critical.')
 
-    def _delete_desktop_files(self):
-        cmd = get_delete_desktop_files_cmd()
-        self._print("Deleting container applications from the App Grid...")
+    def _install_lsp_proxy(self):
+        cmd = get_install_lsp_proxy_cmd(self._scripts_dir)
         self._shell_exec(cmd)
 
-    def _install_clickable(self):
-        cmd = get_install_clickable_cmd()
-        # This function is available in Python but doesn't provide progress:
-        #   `self._container.start_application(cmd, environ)`
+    def _install_typescript_ls(self):
+        cmd = get_install_typescript_ls_cmd()
         self._shell_exec(cmd)
+
+    def _install_python_ls(self):
+        cmd = get_install_python_ls_cmd()
+        self._shell_exec(cmd)
+
+    def _hide_apps_from_grid(self):
+        cmd = get_hide_apps_cmd()
+        self._shell_exec(cmd)
+
+    def _add_ppas(self):
+        node_ppa_cmd = get_node_ppa_cmd()
+        clickable_ppa_cmd = get_clickable_ppa_cmd(self._scripts_dir)
+        self._shell_exec(node_ppa_cmd)
+        self._shell_exec(clickable_ppa_cmd)
+
+    def _copy_scripts(self):
+        copytree(self._src_scripts_dir, self._scripts_dir, dirs_exist_ok=True)
+        self._libertine_config.add_new_bind_mount(container_id=self._container_id,
+                                                  mount_path=self._data_dir)
 
     def _print(self, message, margin_top=False, eol='\n'):
         delimeter_top = '\n\n' if margin_top else ''
@@ -136,15 +170,19 @@ class BuildEnv:
             self._container = self._create_container()
 
             self._print('Step 2/4. Installing required packages.', margin_top=True)
+            self._copy_scripts()
+            self._add_ppas()
             self._install_packages()
 
-            self._print('Step 3/4. Install python.')
-            self._install_python()
+            self._print('Step 3/4. Initializing language server protocol support.', margin_top=True)
+            self._install_lsp_proxy()
+            self._install_typescript_ls()
+            self._install_python_ls()
 
-            self._print('Step 4/4. Installing Clickable.', margin_top=True)
-            self._install_clickable()
-            self._delete_desktop_files()
-            self._print("\r\nDONE: Build container has been successfully created")
+            self._print("Step 4/4. Hiding GUI applications from the App Grid.", margin_top=True)
+            self._hide_apps_from_grid()
+
+            self._print("DONE: Build container has been successfully created", margin_top=True)
         except subprocess.CalledProcessError as err:
             self._print('ERROR: Creating a container failed', margin_top=True)
             self._print(err)
@@ -153,7 +191,7 @@ class BuildEnv:
             self._print('ERROR: Setting up a container failed', margin_top=True)
             self._print(err)
             if self.test_container_exists():
-                self._print('Deleting created container. Please wait...', margin_top=True)
+                self._print('Deleting created container...', margin_top=True)
                 self._destroy_container()
                 self._print('Container has been deleted')
             raise Exception('Setting up a container failed') from err

@@ -25,6 +25,7 @@ interface EditorOptions {
   isReadOnly?: boolean
   fontSize?: number
   useWrapMode: boolean
+  isLsEnabled: boolean
 }
 
 interface Events {
@@ -48,9 +49,12 @@ export default class Editor extends EventTarget {
   _initialState: EditorState
   _isOskVisible: boolean
   _isReadOnly: boolean
+  _oskDebounceTimer: NodeJS.Timeout|null = null
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250
+  SCROLL_INTO_VIEW_TIMEOUT = 250
+  OSK_SCROLL_DELAY = 100
 
   constructor (options: EditorOptions) {
     super()
@@ -78,7 +82,7 @@ export default class Editor extends EventTarget {
       state: this._initialState,
       parent: this._editorElem
     })
-    void this._initLanguageSupport(options.filePath)
+    void this._initLanguageSupport(options.filePath, options.isLsEnabled)
 
     // init DOM event handlers (resize, keypress)
     this._initDomEventHandlers()
@@ -188,6 +192,13 @@ export default class Editor extends EventTarget {
    */
   oskVisibilityChanged ({ isVisible }: { isVisible: boolean }): void {
     this._isOskVisible = isVisible
+
+    if (this._isOskVisible) {
+      // scroll into view when opening virtual keyboard
+      setTimeout(() => this._editor.dispatch({
+        effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
+      }), this.SCROLL_INTO_VIEW_TIMEOUT)
+    }
   }
 
   /**
@@ -215,19 +226,24 @@ export default class Editor extends EventTarget {
     }
   }
 
-  async _initLanguageSupport (filePath: string): Promise<void> {
-    const effects = await this._setup.setupLanguageSupport(filePath)
+  /** Called when editor becomes visible */
+  openFile (): void {
+    this._onChange()
+  }
+
+  /** Handles viewport resizing */
+  resize = (): void => {}
+
+  async _initLanguageSupport (filePath: string, isLsEnabled: boolean): Promise<void> {
+    const effects = await this._setup.setupLanguageSupport(filePath, isLsEnabled)
     this._editor.dispatch({ effects })
   }
 
   _initDomEventHandlers (): void {
-    this._editorElem.addEventListener('keypress', evt => {
-      /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
-      if (evt.keyCode === 8 || evt.keyCode === 13) {
-        evt.preventDefault()
-      }
-    }, true)
-    window.addEventListener('resize', this._onResize)
+    this._editorElem.addEventListener('keypress', this._onKeyPress, true)
+    ;(this._editorElem.querySelector('.cm-scroller') as HTMLElement)
+      .addEventListener('scroll', this._tmpDisableScrollIntoView)
+    window.addEventListener('resize', this.resize)
   }
 
   _onChange (): void {
@@ -236,15 +252,40 @@ export default class Editor extends EventTarget {
     }))
   }
 
-  _onResize = (): void => {
-    if (this._isOskVisible) {
-      this._editor.dispatch({
-        effects: EditorView.scrollIntoView(this._editor.state.selection.ranges[0])
-      })
+  _onKeyPress = (evt: KeyboardEvent): void => {
+    /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
+    if (evt.keyCode === 8 || evt.keyCode === 13) {
+      evt.preventDefault()
     }
   }
 
+  _tmpDisableScrollIntoView = (): void => {
+    if (this._isReadOnly || this._isOskVisible) {
+      return
+    }
+
+    if (this._oskDebounceTimer === null) {
+      this._editor.dispatch({
+        effects: this._setup.readOnlyCompartment.reconfigure(
+          EditorView.editable.of(false))
+      })
+    } else {
+      clearTimeout(this._oskDebounceTimer)
+    }
+
+    this._oskDebounceTimer = setTimeout(() => {
+      this._editor.dispatch({
+        effects: this._setup.readOnlyCompartment.reconfigure(
+          EditorView.editable.of(true))
+      })
+      this._oskDebounceTimer = null
+    }, this.OSK_SCROLL_DELAY)
+  }
+
   _removeDomEventHandlers (): void {
-    window.removeEventListener('resize', this._onResize)
+    this._editorElem.removeEventListener('keypress', this._onKeyPress, true)
+    ;(this._editorElem.querySelector('.cm-scroller') as HTMLElement)
+      .removeEventListener('scroll', this._tmpDisableScrollIntoView)
+    window.removeEventListener('resize', this.resize)
   }
 }

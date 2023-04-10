@@ -12,6 +12,7 @@ CustomComponents.ToolBar {
   property bool canBeSaved: false
   property bool buildable: false
   property bool buildEnabled: false
+  property bool isLibertineEnabled: false
   property bool keyboardExtensionEnabled: false
   property bool searchEnabled: false
   property bool terminalEnabled: false
@@ -42,13 +43,13 @@ CustomComponents.ToolBar {
 
   CustomComponents.ToolButton {
     iconName: "package-x-generic-symbolic"
-    visible: buildable
+    visible: isLibertineEnabled && buildable
     enabled: buildEnabled
     onClicked: buildRequested()
   }
   CustomComponents.ToolButton {
     iconName: "media-playback-start"
-    visible: buildable
+    visible: isLibertineEnabled && buildable
     enabled: buildEnabled
     onClicked: launchRequested()
   }

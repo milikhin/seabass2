@@ -46,7 +46,7 @@ GenericComponents.EditorApi {
           filePath: filePath,
           subTitle: QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir),
           title: QmlJs.getFileName(filePath),
-          isInitial: true,
+          isRestored: true,
           doNotActivate: settings.initialTab !== i
         })
       }
@@ -64,5 +64,11 @@ GenericComponents.EditorApi {
     editorState.hasUndo = !data.isReadOnly && data.hasUndo
     editorState.hasRedo = !data.isReadOnly && data.hasRedo
     editorState.isReadOnly = data.isReadOnly
+  }
+
+  Component.onCompleted: {
+    Qt.inputMethod.visibleChanged.connect(function() {
+      api.oskVisibilityChanged(Qt.inputMethod.visible)
+    })
   }
 }

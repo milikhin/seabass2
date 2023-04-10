@@ -66,6 +66,7 @@ class SeabassApp {
     this._api.addEventListener('toggleReadOnly', this._forwardEvent.bind(this))
     this._api.addEventListener('undo', this._forwardEvent.bind(this))
     this._api.addEventListener('viewportChange', this._onViewportChange.bind(this))
+    this._api.addEventListener('toggleLsp', this._onToggleLsp.bind(this))
 
     this._model.addEventListener('stateChange', this._onStateChange.bind(this))
     this._model.addEventListener('log', this._onLog.bind(this))
@@ -104,6 +105,7 @@ class SeabassApp {
    */
   _onOpenFile (evt: CustomEvent<FileActionOptions>): void {
     this._tabs.show(evt.detail.filePath)
+    this._model.forwardEvent(evt.detail.filePath, evt)
   }
 
   /**
@@ -120,7 +122,7 @@ class SeabassApp {
    * @param evt viewportChange event
    */
   _onViewportChange (evt: CustomEvent<ViewportOptions>): void {
-    this._model.setViewportOptions(evt.detail)
+    this._model.setViewportOptions(evt.detail, this._tabs.currentTab?.id)
   }
 
   /**
@@ -158,6 +160,17 @@ class SeabassApp {
    */
   _onLog (evt: CustomEvent<unknown>): void {
     this._api.sendLogs(evt.detail)
+  }
+
+  _onToggleLsp (evt: CustomEvent<{ isEnabled: boolean }>): void {
+    const LS_INIT_TIMEOUT = 2500
+
+    void (async () => {
+      await new Promise(resolve => setTimeout(resolve, LS_INIT_TIMEOUT))
+      for (const [filePath, editor] of this._model._editors.entries()) {
+        void editor._initLanguageSupport(filePath, evt.detail.isEnabled)
+      }
+    })()
   }
 }
 

@@ -52,7 +52,19 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Inställningar</translation>
+    </message>
+    <message>
+        <source>Opened files</source>
+        <translation>Öppnade filer</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Stäng</translation>
+    </message>
+    <message>
+        <source>Return to editor</source>
+        <translation>Återgå till redigeraren</translation>
     </message>
 </context>
 <context>
@@ -99,8 +111,38 @@
         <translation>Vill du kassera ändringar?</translation>
     </message>
     <message>
-        <source>Unsaved changes at %1 will be lost if you open another file. Continue?</source>
-        <translation>Osparade ändringar på %1 kommer att förloras om du öppnar en annan fil. Fortsätta?</translation>
+        <source>Unsaved changes at %1 will be lost. Continue?</source>
+        <translation>Osparade ändringar på %1 kommer att förloras. Vill du fortsätta?</translation>
+    </message>
+</context>
+<context>
+    <name>Settings</name>
+    <message>
+        <source>Settings</source>
+        <translation>Inställningar</translation>
+    </message>
+    <message>
+        <source>Font size, CSS px</source>
+        <translation>Teckenstorlek, CSS px</translation>
+    </message>
+    <message>
+        <source>Soft wrap</source>
+        <translation>Följsam radbrytning</translation>
+    </message>
+    <message>
+        <source>Automatically wrap long lines</source>
+        <translation>Radbryt långa rader automatiskt</translation>
+    </message>
+</context>
+<context>
+    <name>Tabs</name>
+    <message>
+        <source>Open file...</source>
+        <translation>Öppna fil...</translation>
+    </message>
+    <message>
+        <source>Close all</source>
+        <translation>Stäng alla</translation>
     </message>
 </context>
 <context>

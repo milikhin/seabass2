@@ -145,7 +145,8 @@ export default class SeabassAppModel extends EventTarget {
       filePath,
       isReadOnly: options.isTerminal,
       isDarkTheme: this._preferences.isDarkTheme,
-      useWrapMode: this._preferences.useWrapMode
+      useWrapMode: this._preferences.useWrapMode,
+      isLsEnabled: options.isLsEnabled
     })
     editor.addEventListener('stateChange', evt => {
       this.dispatchEvent(new CustomEvent('stateChange', {
@@ -155,14 +156,22 @@ export default class SeabassAppModel extends EventTarget {
     this._editors.set(filePath, editor)
 
     this.dispatchEvent(new CustomEvent('loadFile', { detail: options }))
-    this.dispatchEvent(new CustomEvent('stateChange', { detail: editor.getUiState() }))
+    this.dispatchEvent(new CustomEvent('stateChange', {
+      detail: {
+        ...editor.getUiState(),
+        filePath
+      }
+    }))
   }
 
-  setViewportOptions (options: ViewportOptions): void {
+  setViewportOptions (options: ViewportOptions, editorId?: string): void {
     this._viewport = {
       verticalHtmlOffset: options.verticalHtmlOffset ?? 0
     }
     this.dispatchEvent(new CustomEvent('viewportChange', { detail: this._viewport }))
+    if (editorId !== undefined) {
+      this._editors.get(editorId)?.resize()
+    }
   }
 
   /**

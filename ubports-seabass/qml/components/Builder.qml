@@ -7,6 +7,7 @@ import "../generic/utils.js" as QmlJs
 Item {
   id: root
   property bool ready: false
+  property bool disabled: false
   property string tabId: '__seabass2_build_output'
   property string title: 'Build output'
   property string subTitle: 'Terminal'
@@ -22,6 +23,10 @@ Item {
   onCompleted: {
     ready = true
   }
+  onDisabledChanged: {
+    py.init()
+    lsp.init()
+  }
 
   ConfirmDialog {
     id: confirmDialog
@@ -31,10 +36,7 @@ Item {
   Python {
     id: py
     Component.onCompleted: {
-      addImportPath(Qt.resolvedUrl('../../py-backend'))
-      importModule('build_utils', function() {
-        ready = true
-      })
+      init()
     }
     onReceived: function(evtArgs) {
       if (evtArgs[0] !== 'stdout') {
@@ -45,6 +47,35 @@ Item {
     }
     onError: function(pyErrorMessage) {
       unhandledError(pyErrorMessage)
+    }
+
+    function init() {
+      if (root.disabled || root.ready) {
+        return
+      }
+
+      addImportPath(Qt.resolvedUrl('../../py-backend'))
+      importModule('build_utils', function() {
+        root.ready = true
+      })
+    }
+  }
+
+  Python {
+    id: lsp
+    Component.onCompleted: {
+      init()
+    }
+
+    function init() {
+      if (root.disabled || root.ready) {
+        return
+      }
+
+      addImportPath(Qt.resolvedUrl('../../py-backend'))
+      importModule('build_utils', function() {
+        root.ready = true
+      })
     }
   }
 
@@ -80,7 +111,7 @@ Item {
 
   function ensureContainer(callback, onStarted) {
     onStarted = onStarted || Function.prototype
-    builder._testContainer(function(err, containerExists) {
+    _testContainer(function(err, containerExists) {
       if (err) {
         return callback(err)
       }
@@ -111,6 +142,14 @@ Item {
   function _testContainer(callback) {
     py.call('build_utils.test_container_exists', [], function(res) {
       callback(res.error, res.result)
+    })
+  }
+
+  function startLanguageServer(callback) {
+    lsp.call('build_utils.start_ls', [], function(res) {
+      if (callback) {
+        callback(res.error, res.result)
+      }
     })
   }
 }

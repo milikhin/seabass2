@@ -19,12 +19,13 @@ Supported platforms:
 
 Core features:
 * Syntax highlighting for over 100 programming/markup languages
+* Multiple tabs
 * Navigation buttons
 * Light and dark themes
 * Reading indentation preferences from .editorconfig files
 
 Ubuntu Touch:
-* Adaptive layout and multiple tabs
+* Adaptive layout
 * Create/Rename/Delete files
 * File tree
 * Create and build QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)

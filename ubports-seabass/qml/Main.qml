@@ -6,8 +6,9 @@ import QtQuick.Controls.Suru 2.2
 import Qt.labs.platform 1.0
 import Qt.labs.settings 1.0
 import QtWebSockets 1.0
+import io.thp.pyotherside 1.4
 
-import Ubuntu.Components.Themes 1.3
+import Lomiri.Components.Themes 1.3
 
 import "./components" as CustomComponents
 import "./generic" as GenericComponents
@@ -27,8 +28,10 @@ ApplicationWindow {
   readonly property bool isWide: width >= Suru.units.gu(100)
   readonly property string defaultTitle: i18n.tr("Welcome")
   readonly property string defaultSubTitle: i18n.tr("Seabass2")
-  readonly property string version: "2.0.0-rc.1"
+  readonly property string version: "2.1.0"
+
   property bool hasBuildContainer: false
+  property bool isLibertineEnabled: false
   property int activeTheme: parseInt(settings.theme)
   property var currentTab: tabBar.currentIndex === -1
     ? undefined
@@ -39,6 +42,10 @@ ApplicationWindow {
     settings.initialTab = currentTab && !currentTab.isTerminal
       ? settings.initialFiles.indexOf(currentTab.filePath)
       : 0
+  }
+
+  onHasBuildContainerChanged: {
+    api.postMessage('toggleLsp', { isEnabled: hasBuildContainer })
   }
 
   function handleBuilderStarted() {
@@ -52,6 +59,17 @@ ApplicationWindow {
     i18n.domain = "seabass2.mikhael"
   }
 
+  readonly property var py: Python {
+    Component.onCompleted: {
+      addImportPath(Qt.resolvedUrl('../py-backend'))
+      importModule('fs_utils', function() {
+        py.call('fs_utils.test_exec', ['libertine-container-manager'], function(hasLibertine) {
+          root.isLibertineEnabled = hasLibertine
+        })
+      })
+    }
+  }
+
   Settings {
     id: settings
     property bool isKeyboardExtensionVisible: true
@@ -62,6 +80,7 @@ ApplicationWindow {
     property int initialTab: 0
     property bool restoreOpenedTabs: true
     property bool useWrapMode: true
+    property bool isLspEnabled: true
 
     onFontSizeChanged: {
       editorState.fontSize = fontSize
@@ -94,6 +113,7 @@ ApplicationWindow {
     onAppLoaded: {
       editorState.loadTheme()
       editorState.updateViewport()
+      api.postMessage('toggleLsp', { isEnabled: hasBuildContainer })
     }
     onFileBeingClosed: function (filePath) {
       tabsModel.close(filePath)
@@ -108,7 +128,8 @@ ApplicationWindow {
           filePath: tab.id,
           content: '',
           isTerminal: true,
-          isActive: !options.doNotActivate
+          isActive: !options.doNotActivate,
+          isLsEnabled: false
         })
       } else {
         api.loadFile({
@@ -119,7 +140,8 @@ ApplicationWindow {
               tabsModel.close(tab.filePath)
             }
           },
-          isActive: !options.doNotActivate
+          isActive: !options.doNotActivate,
+          isLsEnabled: settings.isLspEnabled && !options.isRestored
         })
       }
     }
@@ -130,6 +152,7 @@ ApplicationWindow {
 
   CustomComponents.Builder {
     id: builder
+    disabled: !isLibertineEnabled
 
     onStarted: {
       const existingTabIndex = tabsModel.openTerminal(builder.tabId, builder.title, builder.subTitle)
@@ -157,6 +180,9 @@ ApplicationWindow {
       builder._testContainer(function(err, containerExists) {
         if (err) {
           return
+        }
+        if (containerExists && settings.isLspEnabled) {
+          builder.startLanguageServer()
         }
         root.hasBuildContainer = containerExists
       })
@@ -200,6 +226,8 @@ ApplicationWindow {
           homeDir: api.homeDir
           onClosed: navBar.visible = false
           isPage: !isWide
+          isLibertineEnabled: root.isLibertineEnabled
+
           Layout.fillWidth: true
           Layout.fillHeight: true
 
@@ -258,6 +286,7 @@ ApplicationWindow {
           id: header
           title: currentTab ? currentTab.uniqueTitle : defaultTitle
           subtitle: currentTab ? currentTab.subTitle : defaultSubTitle
+          isLibertineEnabled: root.isLibertineEnabled
           Layout.fillWidth: true
 
           onNavBarToggled: {
@@ -271,7 +300,8 @@ ApplicationWindow {
             pageStack.push(Qt.resolvedUrl("Settings.qml"), {
               version: root.version,
               buildContainerReady: builder.ready,
-              hasBuildContainer: root.hasBuildContainer
+              hasBuildContainer: root.hasBuildContainer,
+              isLibertineEnabled: root.isLibertineEnabled
             })
 
             pageStack.currentItem.containerCreationStarted.connect(function() {
@@ -312,7 +342,7 @@ ApplicationWindow {
             builder.launch(configFile, function(err, result) {
               if (err) {
                 return errorDialog.show(
-                  i18n.tr('Build and run (%1) failed. See build output for details').arg(configFile)
+                  i18n.tr('Building (%1) failed. See build output for details').arg(configFile)
                 )
               }
             }, handleBuilderStarted)

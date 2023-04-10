@@ -8,6 +8,8 @@ pyfakefs = "*"
 pytest = "*"
 coverage = "*"
 pylint = "*"
+psutil = "*"
+exceptiongroup = "*"
 
 [packages]
 

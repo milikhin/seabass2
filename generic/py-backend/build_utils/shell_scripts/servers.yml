@@ -1,0 +1,12 @@
+# Edit this file to add support for additional language servers
+langservers:
+  cpp:
+    - clangd
+  javascript:
+    - typescript-language-server
+    - --stdio
+  typescript:
+    - typescript-language-server
+    - --stdio
+  python:
+    - pylsp

@@ -46,7 +46,6 @@ export default class EditorSetup {
       keymap.of([indentWithTab, ...historyKeymap]),
       this._getDefaultLangExtension(options),
       this._getDocChangeHandlerExtension(options),
-      this._getDomEventHandlerExtension(options),
       this._getReadOnlyExtension(options),
       this._getThemeExtension(options),
       this._getLineWrappingExtension(options),
@@ -58,10 +57,11 @@ export default class EditorSetup {
   /**
    * Init language support for a given file
    * @param filePath full path to file
+   * @param isLsEnabled language server availability
    * @returns language support extension
    */
-  async setupLanguageSupport (filePath: string): Promise<StateEffect<unknown>> {
-    const langSupport = await getLanguageMode(filePath)
+  async setupLanguageSupport (filePath: string, isLsEnabled: boolean): Promise<StateEffect<unknown>> {
+    const langSupport = await getLanguageMode(filePath, isLsEnabled)
     return this.langCompartment.reconfigure(langSupport ?? Facet.define().of(null))
   }
 
@@ -103,23 +103,6 @@ export default class EditorSetup {
       }
 
       options.onChange()
-    })
-  }
-
-  _getDomEventHandlerExtension (options: ExtensionsOptions): Extension {
-    return EditorView.domEventHandlers({
-      scroll: evt => {
-        if (evt.target === null || !('classList' in evt.target)) {
-          return
-        }
-
-        const target = evt.target as HTMLElement
-        if (!target.classList.contains('cm-scroller')) {
-          return
-        }
-
-        options.onChange()
-      }
     })
   }
 
