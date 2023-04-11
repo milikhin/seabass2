@@ -25,7 +25,7 @@ All platforms:
 * Reading indentation preferences from .editorconfig files
 * Creating/deleting files from within the app
 
-Ubuntu Touch only:
+Ubuntu Touch:
 * Adaptive layout
 * File tree
 * Create and build QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
