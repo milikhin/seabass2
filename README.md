@@ -17,16 +17,16 @@ Supported platforms:
 
 ## Features
 
-Core features:
+All platforms:
 * Syntax highlighting for over 100 programming/markup languages
 * Multiple tabs
-* Navigation buttons
+* Code navigation buttons
 * Light and dark themes
 * Reading indentation preferences from .editorconfig files
+* Creating/deleting files from within the app
 
-Ubuntu Touch:
+Ubuntu Touch only:
 * Adaptive layout
-* Create/Rename/Delete files
 * File tree
 * Create and build QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
 
