@@ -29,6 +29,7 @@ Ubuntu Touch only:
 * Adaptive layout
 * File tree
 * Create and build QML, C++, Python and HTML projects using [Clickable](https://gitlab.com/clickable/clickable)
+* Intellisense for C++, JavaScript, TypeScript and Python
 
 ## Build instructions
 
