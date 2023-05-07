@@ -8,6 +8,7 @@ import EditorSetup from './setup'
 import { parseEditorConfig } from './utils'
 
 import './editor.css'
+import './search-panel.css'
 
 export interface SeabassEditorState {
   hasChanges: boolean

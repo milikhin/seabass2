@@ -357,7 +357,7 @@ ApplicationWindow {
           onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           onSearch: {
             editor.forceActiveFocus()
-            api.postMessage('toggleSearch')
+            api.postMessage('keyDown', { keyCode: 70 /* F */, ctrlKey: true })
           }
           onOpenTerminalApp: {
               if (editorState.filePath) {

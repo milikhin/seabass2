@@ -12,6 +12,7 @@ import SeabassAppModel, {
   ViewportOptions
 } from './model'
 
+import '@vscode/codicons/dist/codicon.css'
 import './app.css'
 
 /** App initialization options */
