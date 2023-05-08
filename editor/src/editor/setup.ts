@@ -43,7 +43,7 @@ export default class EditorSetup {
 
     this.extensions = [
       basicSetup,
-      search(),
+      search({ top: true }),
       history(),
       keymap.of([indentWithTab, ...historyKeymap, ...searchKeymap]),
       this._getDefaultLangExtension(options),

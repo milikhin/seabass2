@@ -47,6 +47,7 @@ export default class SeabassApi extends EventTarget {
     'setPreferences',
     'toggleLsp',
     'toggleReadOnly',
+    'toggleSearchPanel',
     'undo',
     'viewportChange'
   ])

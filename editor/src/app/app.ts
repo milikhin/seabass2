@@ -68,6 +68,7 @@ class SeabassApp {
     this._api.addEventListener('undo', this._forwardEvent.bind(this))
     this._api.addEventListener('viewportChange', this._onViewportChange.bind(this))
     this._api.addEventListener('toggleLsp', this._onToggleLsp.bind(this))
+    this._api.addEventListener('toggleSearchPanel', this._forwardEvent.bind(this))
 
     this._model.addEventListener('stateChange', this._onStateChange.bind(this))
     this._model.addEventListener('log', this._onLog.bind(this))
