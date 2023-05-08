@@ -4,6 +4,7 @@ import { Compartment, EditorState, Extension, Facet, StateEffect } from '@codemi
 import { keymap } from '@codemirror/view'
 import { history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { oneDark } from '@codemirror/theme-one-dark'
+import { search, searchKeymap } from '@codemirror/search'
 import { getLanguageMode } from './language'
 import { SeabassEditorConfig } from './utils'
 
@@ -42,15 +43,29 @@ export default class EditorSetup {
 
     this.extensions = [
       basicSetup,
+      search({ top: true }),
       history(),
-      keymap.of([indentWithTab, ...historyKeymap]),
+      keymap.of([indentWithTab, ...historyKeymap, ...searchKeymap]),
       this._getDefaultLangExtension(options),
       this._getDocChangeHandlerExtension(options),
       this._getReadOnlyExtension(options),
       this._getThemeExtension(options),
       this._getLineWrappingExtension(options),
       indentUnit.of(this._getIndentationString(options.editorConfig)),
-      EditorState.tabSize.of(options.editorConfig.tabWidth)
+      EditorState.tabSize.of(options.editorConfig.tabWidth),
+      EditorState.phrases.of({
+        // find prev/next
+        next: '\uea9a', // arrow down
+        previous: '\ueaa1', // arrow up
+        // repace
+        replace: '\ueb3d', // replace icon
+        'replace all': '\ueb3c', // replace-all icon
+
+        // search options: checkobes are replaced with buttons in CSS
+        'match case': '',
+        regexp: '',
+        'by word': ''
+      })
     ]
   }
 

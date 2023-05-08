@@ -61,6 +61,7 @@ export interface IncomingMessagePayload {
   undo: undefined
   toggleLsp: { isEnabled: boolean }
   toggleReadOnly: undefined
+  toggleSearchPanel: undefined
 }
 
 /** Incoming API message from a platform-specific app */

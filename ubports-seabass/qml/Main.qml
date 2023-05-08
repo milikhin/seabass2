@@ -357,7 +357,7 @@ ApplicationWindow {
           onKeyboardExtensionToggled: settings.isKeyboardExtensionVisible = !settings.isKeyboardExtensionVisible
           onSearch: {
             editor.forceActiveFocus()
-            api.postMessage('toggleSearch')
+            api.postMessage('toggleSearchPanel')
           }
           onOpenTerminalApp: {
               if (editorState.filePath) {

@@ -1,0 +1,103 @@
+.editor .cm-editor .cm-panel.cm-search button[name="close"] {
+  color: inherit;
+}
+
+/* reset smaller by default font-size */
+.editor .cm-editor .cm-panel.cm-search .cm-textfield,
+.editor .cm-editor .cm-panel.cm-search .cm-button,
+.editor .cm-editor .cm-panel.cm-search label {
+  font-size: 1rem;
+}
+
+/* reset button styling to be more neutral */
+.editor .cm-editor .cm-panel.cm-search .cm-button {
+  background: transparent;
+  margin-right: 0;
+  border-left-width: 1px;
+  height: 1.45rem;
+  box-sizing: content-box;
+}
+
+.editor .cm-panel.cm-search .cm-button + .cm-button {
+  border-left-width: 0;
+}
+
+/* change buttons text to icons */
+.editor .cm-editor .cm-panel.cm-search .cm-button[name="next"],
+.editor .cm-editor .cm-panel.cm-search .cm-button[name="prev"],
+.editor .cm-editor .cm-panel.cm-search .cm-button[name="replace"],
+.editor .cm-editor .cm-panel.cm-search .cm-button[name="replaceAll"] {
+  font-family: codicon;
+}
+
+/* hide "select all" button */
+.editor .cm-panel.cm-search .cm-button[name="select"] {
+  display: none;
+}
+
+/* set spacing between button groups */
+.editor .cm-panel.cm-search .cm-button + label {
+  margin: 0 0 0 .3rem;
+}
+
+.editor .cm-panel.cm-search label {
+  vertical-align: top;
+}
+
+.editor .cm-panel.cm-search label + label {
+  margin: 0;
+}
+
+.editor .cm-panel.cm-search .cm-textfield {
+  /* 100% - 2 buttons*/
+  max-width: calc(100% - 8rem);
+  height: 1.45rem;
+  box-sizing: content-box;
+}
+
+/* display buttons instead of checkboxes to save space */
+.editor .cm-panel.cm-search input[type="checkbox"] {
+  appearance: none;
+  margin: 0.2rem 0 0 0;
+  color: inherit;
+}
+
+.editor .cm-panel.cm-search input[type="checkbox"]::after {
+  content: "";
+  display: inline-block;
+  font-family: codicon;
+  font-size: 1rem;
+  width: 1rem;
+  height: 1.45em;
+  line-height: 1.45em;
+  border: solid 1px #888;
+  padding: .2rem 1rem;
+  border-radius: 1px;
+  border-left-width: 1px;
+}
+
+.editor .cm-panel.cm-search input[type="checkbox"]:checked::after,
+.editor .cm-panel.cm-search .cm-button:active {
+  background-color: #ccc;
+  color: black;
+}
+
+.editor .cm-panel.cm-search input[type="checkbox"][name="case"]::after {
+  content: "\eab1";
+}
+
+.editor .cm-panel.cm-search input[type="checkbox"][name="re"]::after {
+  content: "\eb38";
+  border-left-width: 0;
+}
+
+.editor .cm-panel.cm-search input[type="checkbox"][name="word"]::after {
+  content: "\eb7e";
+  border-left-width: 0;
+}
+
+@media only screen and (max-width: 400px) {
+  .editor .cm-panel.cm-search label {
+    display: none;
+  }
+}

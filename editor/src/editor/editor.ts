@@ -2,12 +2,14 @@ import { EditorView } from 'codemirror'
 import { EditorState } from '@codemirror/state'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
 import { runScopeHandlers } from '@codemirror/view'
+import { searchPanelOpen, openSearchPanel, closeSearchPanel } from '@codemirror/search'
 import { RawEditorConfig, SetContentOptions } from '../api/api-interface'
 import { SeabassCommonPreferences } from '../app/model'
 import EditorSetup from './setup'
 import { parseEditorConfig } from './utils'
 
 import './editor.css'
+import './search-panel.css'
 
 export interface SeabassEditorState {
   hasChanges: boolean
@@ -211,6 +213,15 @@ export default class Editor extends EventTarget {
         EditorView.editable.of(!this._isReadOnly))
     })
     this._onChange()
+  }
+
+  toggleSearchPanel (): void {
+    const isOpened = searchPanelOpen(this._editor.state)
+    if (isOpened) {
+      closeSearchPanel(this._editor)
+    } else {
+      openSearchPanel(this._editor)
+    }
   }
 
   /**
