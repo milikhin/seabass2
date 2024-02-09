@@ -68,6 +68,7 @@ WebViewPage {
         useWrapMode: configuration.useWrapMode
         verticalHtmlOffset: (headerHeight + editorControlsHeight) / WebEngineSettings.pixelRatio
         filePath: tabsModel.currentTab ? tabsModel.currentTab.filePath : ''
+        placeSearchOnTop: false
 
         onFilePathChanged: {
             if (filePath) {
@@ -156,7 +157,7 @@ WebViewPage {
                 page: root
                 title: hasOpenedFile
                     ? ((editorState.hasChanges ? '*' : '') + QmlJs.getFileName(filePath))
-                    : qsTr('Seabass v%1').arg('1.0.0')
+                    : qsTr('Seabass v%1').arg('1.1.0')
                 description: hasOpenedFile
                     ? QmlJs.getPrintableDirPath(QmlJs.getDirPath(filePath), api.homeDir)
                     : qsTr('Release notes')
@@ -248,6 +249,13 @@ WebViewPage {
 
             PushUpMenu {
                 visible: isMenuEnabled
+                MenuItem {
+                    text: qsTr('Find/Replace')
+                    enabled: hasOpenedFile
+                    onClicked: {
+                        api.postMessage('toggleSearchPanel')
+                    }
+                }
                 MenuItem {
                     text: toolbar.open ? qsTr("Hide toolbar") : qsTr("Show toolbar")
                     onClicked: {

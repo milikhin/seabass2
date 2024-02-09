@@ -23,6 +23,7 @@ export interface SeabassCommonPreferences {
   isDarkTheme: boolean
 
   fontSize?: number
+  placeSearchOnTop?: boolean
   useWrapMode?: boolean
 }
 
@@ -61,6 +62,7 @@ export default class SeabassAppModel extends EventTarget {
   /** App preferences */
   _preferences: {
     isDarkTheme: boolean
+    placeSearchOnTop: boolean
     useWrapMode: boolean
   }
 
@@ -71,7 +73,7 @@ export default class SeabassAppModel extends EventTarget {
   constructor () {
     super()
     this._editors = new Map()
-    this._preferences = { isDarkTheme: false, useWrapMode: true }
+    this._preferences = { isDarkTheme: false, useWrapMode: true, placeSearchOnTop: true }
     this._viewport = {
       verticalHtmlOffset: 0
     }
@@ -146,7 +148,8 @@ export default class SeabassAppModel extends EventTarget {
       isReadOnly: options.isTerminal,
       isDarkTheme: this._preferences.isDarkTheme,
       useWrapMode: this._preferences.useWrapMode,
-      isLsEnabled: options.isLsEnabled
+      isLsEnabled: options.isLsEnabled,
+      placeSearchOnTop: this._preferences.placeSearchOnTop
     })
     editor.addEventListener('stateChange', evt => {
       this.dispatchEvent(new CustomEvent('stateChange', {
@@ -188,7 +191,8 @@ export default class SeabassAppModel extends EventTarget {
 
     this._preferences = {
       isDarkTheme: options.isDarkTheme ?? false,
-      useWrapMode: options.useWrapMode ?? true
+      useWrapMode: options.useWrapMode ?? true,
+      placeSearchOnTop: options.placeSearchOnTop ?? true
     }
 
     for (const editor of this._editors.values()) {

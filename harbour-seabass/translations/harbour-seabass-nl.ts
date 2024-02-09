@@ -66,6 +66,10 @@
         <source>Return to editor</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Find/Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ErrorDialog</name>

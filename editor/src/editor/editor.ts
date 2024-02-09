@@ -23,11 +23,13 @@ interface EditorOptions {
   editorConfig: RawEditorConfig
   elem: HTMLElement
   filePath: string
+  isLsEnabled: boolean
+  useWrapMode: boolean
+
   isDarkTheme?: boolean
   isReadOnly?: boolean
   fontSize?: number
-  useWrapMode: boolean
-  isLsEnabled: boolean
+  placeSearchOnTop?: boolean
 }
 
 interface Events {
@@ -66,7 +68,8 @@ export default class Editor extends EventTarget {
       isReadOnly: options.isReadOnly ?? false,
       isDarkTheme: options.isDarkTheme ?? false,
       onChange: this._onChange.bind(this),
-      useWrapMode: options.useWrapMode
+      useWrapMode: options.useWrapMode,
+      placeSearchOnTop: options.placeSearchOnTop
     })
 
     // set initial editor state

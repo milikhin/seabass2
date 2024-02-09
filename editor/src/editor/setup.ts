@@ -16,6 +16,7 @@ interface ExtensionsOptions extends ThemeOptions{
   editorConfig: SeabassEditorConfig
   useWrapMode: boolean
   isReadOnly?: boolean
+  placeSearchOnTop?: boolean
 
   onChange: (content?: string) => void
 }
@@ -43,7 +44,7 @@ export default class EditorSetup {
 
     this.extensions = [
       basicSetup,
-      search({ top: true }),
+      search({ top: options.placeSearchOnTop }),
       history(),
       keymap.of([indentWithTab, ...historyKeymap, ...searchKeymap]),
       this._getDefaultLangExtension(options),

@@ -9,6 +9,7 @@ QtObject {
   property bool hasUndo: false
   property bool hasRedo: false
   property bool isReadOnly: false
+  property bool placeSearchOnTop: true
 
   // Colors
   property bool isDarkTheme: false
@@ -46,6 +47,7 @@ QtObject {
       textColor: textColor,
       fontSize: fontSize,
       useWrapMode: useWrapMode,
+      placeSearchOnTop: placeSearchOnTop
     })
   }
 
