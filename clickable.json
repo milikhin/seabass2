@@ -1,7 +1,13 @@
 {
   "build_dir": "./build_ubports",
   "builder": "pure-qml-cmake",
-  "clickable_minimum_required": "7.9.0",
+  "clickable_minimum_required": "8.0.0",
+  "image_setup": {
+    "run": [
+      "curl -fsSL https://deb.nodesource.com/setup_20.x | bash",
+      "apt-get install -y nodejs"
+    ]
+  },
   "framework": "ubuntu-sdk-20.04",
   "ignore_review_warnings": true,
   "kill": "qmlscene",

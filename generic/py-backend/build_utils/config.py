@@ -15,6 +15,7 @@ PACKAGES = [
     'pkg-config',
     'intltool',
     'nodejs',
+    'npm',
     'click',
     'click-reviewers-tools',
     'clickable',
