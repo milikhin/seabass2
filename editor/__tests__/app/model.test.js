@@ -13,7 +13,8 @@ describe('SeabassAppModel', () => {
       expect(model._editors).toEqual(new Map())
       expect(model._preferences).toEqual({
         isDarkTheme: false,
-        useWrapMode: true
+        useWrapMode: true,
+        placeSearchOnTop: true
       })
       expect(model._viewport).toEqual({
         verticalHtmlOffset: 0
@@ -167,7 +168,8 @@ describe('SeabassAppModel', () => {
 
       expect(model._preferences).toEqual({
         isDarkTheme: options.isDarkTheme,
-        useWrapMode: true
+        useWrapMode: true,
+        placeSearchOnTop: true
       })
     })
 
@@ -182,7 +184,8 @@ describe('SeabassAppModel', () => {
 
       expect(model._preferences).toEqual({
         isDarkTheme: options.isDarkTheme,
-        useWrapMode: options.useWrapMode
+        useWrapMode: options.useWrapMode,
+        placeSearchOnTop: true
       })
     })
   })
