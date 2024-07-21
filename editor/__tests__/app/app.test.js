@@ -14,7 +14,11 @@ describe('SeabassApp', () => {
     const waitForApiMessage = waitForSailfishApiMessage()
 
     localStorage.setItem('sailfish__isToolbarOpened', true)
-    createApp({ apiTransport: API_TRANSPORT.SAILFISH_WEBVIEW })
+    createApp({
+      apiTransport: API_TRANSPORT.SAILFISH_WEBVIEW,
+      welcomeElem: document.createElement('div'),
+      rootElem: document.createElement('div')
+    })
 
     // Check for 'appLoaded' action
     const evt = await waitForApiMessage

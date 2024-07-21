@@ -74,7 +74,7 @@ export default class Editor extends EventTarget {
     })
 
     // listen to SearchPanel events
-    const updateListenerExtension = EditorView.updateListener.of(this._onChange.bind(this));
+    const updateListenerExtension = EditorView.updateListener.of(this._onChange.bind(this))
 
     // set initial editor state
     this._initialState = EditorState.create({
