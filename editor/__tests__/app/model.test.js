@@ -27,7 +27,7 @@ describe('SeabassAppModel', () => {
       content: uuid(),
       editorConfig: { indent_size: 1, tab_width: 1 },
       filePath: uuid(),
-      isReadOnly: false
+      isReadOnly: false,
     }
 
     it('should open new Editor', () => {
@@ -58,7 +58,8 @@ describe('SeabassAppModel', () => {
         hasUndo: false,
         hasRedo: false,
         filePath: options.filePath,
-        isReadOnly: options.isReadOnly
+        isReadOnly: options.isReadOnly,
+        searchPanelHeight: 0
       })
     })
   })

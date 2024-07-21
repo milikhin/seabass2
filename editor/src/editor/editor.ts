@@ -59,6 +59,7 @@ export default class Editor extends EventTarget {
   ON_CHANGE_TIMEOUT = 250
   SCROLL_INTO_VIEW_TIMEOUT = 250
   OSK_SCROLL_DELAY = 100
+  SEARCH_BTN_QUERY = '.editor .cm-editor .cm-panel.cm-search'
 
   constructor (options: EditorOptions) {
     super()
@@ -72,9 +73,12 @@ export default class Editor extends EventTarget {
       placeSearchOnTop: options.placeSearchOnTop
     })
 
+    // listen to SearchPanel events
+    const updateListenerExtension = EditorView.updateListener.of(this._onChange.bind(this));
+
     // set initial editor state
     this._initialState = EditorState.create({
-      extensions: this._setup.extensions,
+      extensions: [...this._setup.extensions, updateListenerExtension],
       doc: options.content
     })
     this._isOskVisible = false
@@ -225,7 +229,6 @@ export default class Editor extends EventTarget {
     } else {
       openSearchPanel(this._editor)
     }
-    this._onChange()
   }
 
   /**
@@ -234,15 +237,15 @@ export default class Editor extends EventTarget {
    */
   getUiState (): SeabassEditorState {
     const isSearchPanelOpened = searchPanelOpen(this._editor.state)
-
+    const searchPanelHeight = isSearchPanelOpened
+      ? document.querySelector(this.SEARCH_BTN_QUERY)?.clientHeight ?? 0
+      : 0
     return {
       hasChanges: !this._isReadOnly && !this._editor.state.doc.eq(this._initialState.doc),
       hasUndo: !this._isReadOnly && undoDepth(this._editor.state) > 0,
       hasRedo: !this._isReadOnly && redoDepth(this._editor.state) > 0,
       isReadOnly: this._isReadOnly,
-      searchPanelHeight: isSearchPanelOpened
-        ? document.querySelector('.harbour .editor .cm-editor .cm-panel.cm-search')?.clientHeight ?? 0
-        : 0
+      searchPanelHeight: searchPanelHeight * window.devicePixelRatio
     }
   }
 

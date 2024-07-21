@@ -25,6 +25,10 @@ export default class SeabassView {
    * Shows welcome note, hides tabs interface
    */
   showWelcomeScreen (): void {
+    if (!this._welcomeElem) {
+      return
+    }
+
     this._welcomeElem.style.display = 'block'
     this._rootElem.style.display = 'none'
   }

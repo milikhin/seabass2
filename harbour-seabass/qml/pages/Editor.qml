@@ -256,6 +256,7 @@ WebViewPage {
                     enabled: hasOpenedFile
                     onClicked: {
                         api.postMessage('toggleSearchPanel')
+                        isMenuEnabled = !isMenuEnabled
                     }
                 }
                 MenuItem {
@@ -333,9 +334,9 @@ WebViewPage {
 
             // Floating action button to enable pulley menus
             PlatformComponents.FloatingButton {
-                anchors.bottom: (toolbar.open ? toolbar.top : parent.bottom) + editorState.searchPanelHeight
+                anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
                 anchors.right: parent.right
-                anchors.bottomMargin: Theme.paddingMedium
+                anchors.bottomMargin: Theme.paddingMedium + editorState.searchPanelHeight
                 anchors.rightMargin: Theme.paddingMedium
                 visible: hasOpenedFile
 
