@@ -22,9 +22,27 @@
       /* font-size: #fontSize */
     }
   </style>
+
+  <!-- SfOS specific style overrides -->
+  <style>
+    .harbour .editor .cm-panel.cm-search label {
+      display: none;
+    }
+
+    .harbour .editor .cm-editor .cm-panel.cm-search .cm-textfield,
+    .harbour .editor .cm-editor .cm-panel.cm-search .cm-button,
+    .harbour .editor .cm-editor .cm-panel.cm-search label {
+      font-size: 14px;
+    }
+
+    .harbour .editor .cm-editor .cm-panel.cm-search button[name="close"] {
+      padding: 5px;
+      font-size: 1rem;
+    }
+  </style>
 </head>
 
-<body>
+<body class="harbour">
   <div id="welcome">
     <h3>
       Features:

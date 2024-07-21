@@ -69,6 +69,7 @@ WebViewPage {
         verticalHtmlOffset: (headerHeight + editorControlsHeight) / WebEngineSettings.pixelRatio
         filePath: tabsModel.currentTab ? tabsModel.currentTab.filePath : ''
         placeSearchOnTop: false
+        searchPanelHeight: 0
 
         onFilePathChanged: {
             if (filePath) {
@@ -109,6 +110,7 @@ WebViewPage {
                 tabsModel.patch(data.filePath, { hasChanges: data.hasChanges })
             }
 
+            editorState.searchPanelHeight = data.searchPanelHeight
             editorState.hasChanges = data.hasChanges
             editorState.hasUndo = !data.isReadOnly && data.hasUndo
             editorState.hasRedo = !data.isReadOnly && data.hasRedo
@@ -331,7 +333,7 @@ WebViewPage {
 
             // Floating action button to enable pulley menus
             PlatformComponents.FloatingButton {
-                anchors.bottom: toolbar.open ? toolbar.top : parent.bottom
+                anchors.bottom: (toolbar.open ? toolbar.top : parent.bottom) + editorState.searchPanelHeight
                 anchors.right: parent.right
                 anchors.bottomMargin: Theme.paddingMedium
                 anchors.rightMargin: Theme.paddingMedium

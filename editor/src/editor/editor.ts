@@ -1,7 +1,6 @@
-import { EditorView } from 'codemirror'
 import { EditorState } from '@codemirror/state'
 import { undoDepth, redoDepth, undo, redo } from '@codemirror/commands'
-import { runScopeHandlers } from '@codemirror/view'
+import { EditorView, runScopeHandlers } from '@codemirror/view'
 import { searchPanelOpen, openSearchPanel, closeSearchPanel } from '@codemirror/search'
 import { RawEditorConfig, SetContentOptions } from '../api/api-interface'
 import { SeabassCommonPreferences } from '../app/model'
@@ -16,6 +15,7 @@ export interface SeabassEditorState {
   hasRedo: boolean
   hasUndo: boolean
   isReadOnly: boolean
+  searchPanelHeight: number
 }
 
 interface EditorOptions {
@@ -225,6 +225,7 @@ export default class Editor extends EventTarget {
     } else {
       openSearchPanel(this._editor)
     }
+    this._onChange()
   }
 
   /**
@@ -232,11 +233,16 @@ export default class Editor extends EventTarget {
    * @returns editor state
    */
   getUiState (): SeabassEditorState {
+    const isSearchPanelOpened = searchPanelOpen(this._editor.state)
+
     return {
       hasChanges: !this._isReadOnly && !this._editor.state.doc.eq(this._initialState.doc),
       hasUndo: !this._isReadOnly && undoDepth(this._editor.state) > 0,
       hasRedo: !this._isReadOnly && redoDepth(this._editor.state) > 0,
-      isReadOnly: this._isReadOnly
+      isReadOnly: this._isReadOnly,
+      searchPanelHeight: isSearchPanelOpened
+        ? document.querySelector('.harbour .editor .cm-editor .cm-panel.cm-search')?.clientHeight ?? 0
+        : 0
     }
   }
 

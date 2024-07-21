@@ -23,6 +23,7 @@ QtObject {
 
   // UI tweaks
   property int verticalHtmlOffset: 0
+  property int searchPanelHeight: 0
 
   Component.onCompleted: {
     isDarkThemeChanged.connect(loadTheme)
