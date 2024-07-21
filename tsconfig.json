@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "module": "ES2020",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "target": "es2015",
+    "target": "ES2015",
 
     // Use tsc only for typechecks
     "noEmit": true,
