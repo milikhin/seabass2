@@ -3,7 +3,7 @@ export interface Tab {
   id: string
 }
 
-type TabEventName = 'create'|'close'|'show'
+type TabEventName = 'create' | 'close' | 'show'
 class TabEvent extends CustomEvent<Tab> {
   constructor (type: TabEventName, tab: Tab) {
     super(type, { detail: tab })
@@ -27,7 +27,7 @@ export default class TabsModel extends EventTarget {
     return Array.from(this._tabs.values())
   }
 
-  get currentTab (): Tab|undefined {
+  get currentTab (): Tab | undefined {
     if (this._currentTabId === undefined || !this._tabs.has(this._currentTabId)) {
       return
     }
@@ -76,7 +76,7 @@ export default class TabsModel extends EventTarget {
    * @param id unique tab id
    * @returns tab
    */
-  get (id: string): Tab|undefined {
+  get (id: string): Tab | undefined {
     return this._tabs.get(id)
   }
 

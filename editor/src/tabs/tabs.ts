@@ -28,7 +28,7 @@ export default class Tabs {
     this.addEventListener = this._model.addEventListener.bind(this._model)
   }
 
-  get currentTab (): Tab|undefined {
+  get currentTab (): Tab | undefined {
     return this._model.currentTab
   }
 
@@ -57,7 +57,7 @@ export default class Tabs {
     this._model.show(id)
   }
 
-  get (id: string): Tab|undefined {
+  get (id: string): Tab | undefined {
     return this._model.get(id)
   }
 }

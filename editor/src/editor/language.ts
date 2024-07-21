@@ -12,7 +12,7 @@ const LSP_LANGUAGES = new Map([
   ['TypeScript', 'typescript']
 ])
 
-function getLSPName (langName: string): string|undefined {
+function getLSPName (langName: string): string | undefined {
   return LSP_LANGUAGES.get(langName)
 }
 
@@ -23,7 +23,7 @@ function getLSPName (langName: string): string|undefined {
  * @returns language support extension if found
  */
 export async function getLanguageMode (filePath: string, isLsEnabled: boolean):
-Promise<Extension[]|undefined> {
+Promise<Extension[] | undefined> {
   const lang = LanguageDescription.matchFilename(languages, filePath)
   if (lang === null) {
     return

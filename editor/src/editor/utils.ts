@@ -1,6 +1,6 @@
 import { RawEditorConfig } from '../api/api-interface'
 
-type INDENT_STYLE = 'space'|'tab'
+type INDENT_STYLE = 'space' | 'tab'
 const DEFAULT_INDENT_SIZE = 2
 const DEFAULT_INDENT_STYLE = 'space'
 

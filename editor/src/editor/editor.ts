@@ -53,7 +53,7 @@ export default class Editor extends EventTarget {
   _initialState: EditorState
   _isOskVisible: boolean
   _isReadOnly: boolean
-  _oskDebounceTimer: NodeJS.Timeout|null = null
+  _oskDebounceTimer: NodeJS.Timeout | null = null
 
   /** Content-change event timeout (ms) */
   ON_CHANGE_TIMEOUT = 250

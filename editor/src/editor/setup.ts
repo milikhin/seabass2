@@ -12,7 +12,7 @@ interface ThemeOptions {
   isDarkTheme?: boolean
 }
 
-interface ExtensionsOptions extends ThemeOptions{
+interface ExtensionsOptions extends ThemeOptions {
   editorConfig: SeabassEditorConfig
   useWrapMode: boolean
   isReadOnly?: boolean
