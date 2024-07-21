@@ -4,6 +4,7 @@ import {
   IncomingApiMessage,
   IncomingMessagePayload
 } from './api-interface'
+import DummyTransport from './dummy-transport'
 import SailfishApiTransport from './sailfish-transport'
 import SocketApiTransport from './socket-transport'
 
@@ -29,7 +30,8 @@ export default class SeabassApi extends EventTarget {
 
   SUPPORTED_TRANSPORTS = {
     [API_TRANSPORT.SAILFISH_WEBVIEW]: SailfishApiTransport,
-    [API_TRANSPORT.WEB_SOCKET]: SocketApiTransport
+    [API_TRANSPORT.WEB_SOCKET]: SocketApiTransport,
+    [API_TRANSPORT.DUMMY_TRANSPORT]: DummyTransport
   }
 
   /** supported incoming API messages */

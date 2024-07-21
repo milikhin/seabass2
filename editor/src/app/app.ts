@@ -31,13 +31,13 @@ interface SeabassOptions {
  */
 class SeabassApp {
   /** API to interact between platform-specific app and crossplatform editor */
-  _api: SeabassApi
+  private readonly _api: SeabassApi
   /** app model: preferences and list of opened editors */
-  _model: SeabassAppModel
+  private readonly _model: SeabassAppModel
   /** app view */
-  _view: SeabassView
+  private readonly _view: SeabassView
   /** opened tabs */
-  _tabs: Tabs
+  private readonly _tabs: Tabs
 
   constructor ({ apiTransport, rootElem, welcomeElem }: SeabassOptions) {
     this._api = new SeabassApi({ transport: apiTransport })
@@ -46,6 +46,7 @@ class SeabassApp {
     this._tabs = new Tabs({ rootElem })
 
     this._registerApiEventListeners()
+    this._view.showWelcomeScreen()
     this._api.send({ action: 'appLoaded' })
   }
 

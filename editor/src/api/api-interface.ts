@@ -10,6 +10,7 @@ export enum API_TRANSPORT {
   SAILFISH_WEBVIEW = 'Sailfish webView',
   /** WebSocket-based API backend */
   WEB_SOCKET = 'WebSocket',
+  DUMMY_TRANSPORT = 'DummyTransport'
 }
 
 /** EditorConfig options (parsed by python lib) */

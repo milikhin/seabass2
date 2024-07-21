@@ -4,7 +4,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "target": "es5",
+    "target": "es2015",
 
     // Use tsc only for typechecks
     "noEmit": true,

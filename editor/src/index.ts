@@ -1,6 +1,10 @@
 import { API_TRANSPORT, IncomingApiMessage, IncomingMessagePayload } from './api/api-interface'
 import createApp from './app/app'
 
+if (window.seabassOptions.useWebUi) {
+  import('./web-ui')
+}
+
 declare global {
   interface Window {
     /** `postSeabassApiMessage` global function is used to communicate with UI */
@@ -9,6 +13,7 @@ declare global {
     seabassOptions: {
       /** API transport name */
       apiTransport: API_TRANSPORT
+      useWebUi: boolean
     }
   }
 }

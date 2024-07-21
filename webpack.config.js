@@ -15,6 +15,10 @@ const commonConfig = {
         use: ['style-loader', 'css-loader']
       },
       {
+        test: /\.scss$/i,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
         test: /\.(woff(2)?|ttf|eot|svg)$/,
         use: ['file-loader']
       }
@@ -26,7 +30,7 @@ const commonConfig = {
   resolve: {
     extensions: ['.ts', '.js']
   },
-  mode: 'production'
+  mode: 'development'
 }
 
 const sailfishConfig = {

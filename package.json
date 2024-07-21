@@ -7,7 +7,8 @@
     "test": "jest --config=./editor/jest.config.js",
     "test-watch": "jest --watch --config=./editor/jest.config.js",
     "build": "webpack",
-    "build-watch": "webpack --watch"
+    "build-watch": "webpack --watch",
+    "build-watch-ut": "webpack --watch --config-name=ubports"
   },
   "keywords": [
     "seabass",
@@ -29,6 +30,8 @@
     "file-loader": "^6.2.0",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
+    "sass": "^1.70.0",
+    "sass-loader": "^14.1.0",
     "style-loader": "^1.3.0",
     "ts-standard": "^11.0.0",
     "typescript": "^4.9.4",
@@ -41,6 +44,7 @@
     "@codemirror/theme-one-dark": "^6.1.0",
     "@vscode/codicons": "^0.0.33",
     "codemirror": "^6.0.1",
-    "codemirror-languageserver": "git+https://github.com/milikhin/codemirror-languageserver.git"
+    "codemirror-languageserver": "git+https://github.com/milikhin/codemirror-languageserver.git",
+    "vanilla-framework": "^4.7.0"
   }
 }
