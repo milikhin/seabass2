@@ -50,6 +50,7 @@ Run `clickable` (in the project root directory).
 1. Build editor engine
    1. Install editor dependencies and build tools: `npm ci`
    1. Build editor engine and copy required files to the build directory: `npm run build -- --config-name=sfos`
+1. Copy `generic` folder to `harbour-seabass/qml`
 1. Build App
    * Build `harbour-seabass` using Sailfish SDK
 
