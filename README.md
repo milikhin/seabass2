@@ -66,7 +66,6 @@ Run `clickable` (in the project root directory).
 
 ## Contribution
 
-Bug reports and feature requests are very appreciated, as so pull requests!
 Please see [wiki](https://github.com/milikhin/seabass2/wiki) for project docs. Unit tests for [editor](https://github.com/milikhin/seabass2/tree/master/editor/__tests__),
 [python modules](https://github.com/milikhin/seabass2/tree/master/generic/py-backend/tests) and
 [ubports-seabass](https://github.com/milikhin/seabass2/tree/master/ubports-seabass/tests) might also be useful.
