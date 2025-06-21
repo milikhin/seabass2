@@ -5,6 +5,7 @@ import Sailfish.Pickers 1.0
 import Sailfish.WebView 1.0
 import Sailfish.WebEngine 1.0
 import Nemo.Configuration 1.0
+import QtQuick 2.6
 
 import '../generic/utils.js' as QmlJs
 import '../components' as PlatformComponents
@@ -18,6 +19,15 @@ WebViewPage {
     property bool hasOpenedFile: editorState.filePath !== ''
     property alias filePath: editorState.filePath
     allowedOrientations: Orientation.All
+    readonly property var saveShortcut: Shortcut {
+        sequence: StandardKey.Save
+        onActivated: api.requestFileSave(editorState.filePath)
+        enabled: hasOpenedFile && !api.isSaveInProgress && !editorState.isReadOnly
+    }
+    readonly property var fileOpenShortcut: Shortcut {
+        sequence: StandardKey.Open
+        onActivated: pageStack.push(filePicker)
+    }
 
     onIsMenuEnabledChanged: {
         if (isMenuEnabled && hasOpenedFile) {
