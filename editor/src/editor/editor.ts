@@ -264,7 +264,7 @@ export default class Editor extends EventTarget {
   }
 
   _initDomEventHandlers (): void {
-    this._editorElem.addEventListener('keypress', this._onKeyPress, true)
+    this._editorElem.addEventListener('keydown', this._onKeyDown, true)
     ;(this._editorElem.querySelector('.cm-scroller') as HTMLElement)
       .addEventListener('scroll', this._tmpDisableScrollIntoView)
     window.addEventListener('resize', this.resize)
@@ -276,7 +276,8 @@ export default class Editor extends EventTarget {
     }))
   }
 
-  _onKeyPress = (evt: KeyboardEvent): void => {
+  _onKeyDown = (evt: KeyboardEvent): void => {
+    // this.dispatchEvent(new CustomEvent('log', { detail: { keyCode: evt.keyCode } }));
     /* `Enter`, `Backspace` and Arrows are handled twice on SfOS, disable redundant keypress handler */
     const duplicatedKeyCodes = [8, 13, 37, 38, 39, 40]
     if (duplicatedKeyCodes.includes(evt.keyCode)) {
@@ -308,7 +309,7 @@ export default class Editor extends EventTarget {
   }
 
   _removeDomEventHandlers (): void {
-    this._editorElem.removeEventListener('keypress', this._onKeyPress, true)
+    this._editorElem.removeEventListener('keydown', this._onKeyDown, true)
     ;(this._editorElem.querySelector('.cm-scroller') as HTMLElement)
       .removeEventListener('scroll', this._tmpDisableScrollIntoView)
     window.removeEventListener('resize', this.resize)
