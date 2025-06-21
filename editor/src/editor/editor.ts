@@ -34,6 +34,7 @@ interface EditorOptions {
 
 interface Events {
   stateChange: CustomEvent<SeabassEditorState>
+  log: CustomEvent<unknown>
 }
 type EventListener <T extends keyof Events> = ((evt: Events[T]) => void) |
 ({ handleEvent: (evt: Events[T]) => void }) | null
@@ -276,8 +277,9 @@ export default class Editor extends EventTarget {
   }
 
   _onKeyPress = (evt: KeyboardEvent): void => {
-    /* `Enter` and `Backspace` are handled twice on SfOS, disable redundant keypress handler */
-    if (evt.keyCode === 8 || evt.keyCode === 13) {
+    /* `Enter`, `Backspace` and Arrows are handled twice on SfOS, disable redundant keypress handler */
+    const duplicatedKeyCodes = [8, 13, 37, 38, 39, 40]
+    if (duplicatedKeyCodes.includes(evt.keyCode)) {
       evt.preventDefault()
     }
   }

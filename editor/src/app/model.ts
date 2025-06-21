@@ -151,6 +151,9 @@ export default class SeabassAppModel extends EventTarget {
       isLsEnabled: options.isLsEnabled,
       placeSearchOnTop: this._preferences.placeSearchOnTop
     })
+    editor.addEventListener('log', evt => {
+      this.dispatchEvent(new CustomEvent('log', { detail: evt.detail }))
+    })
     editor.addEventListener('stateChange', evt => {
       this.dispatchEvent(new CustomEvent('stateChange', {
         detail: { ...evt.detail, filePath }
