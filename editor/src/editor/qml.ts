@@ -24,6 +24,9 @@ interface QMLState {
 
 function tokenBase(stream: StringStream, state: QMLState): string | null {
   const ch = stream.next()
+  if (ch === undefined) {
+    return null
+  }
 
   if (ch === '"' || ch === "'") {
     state.tokenize = tokenString(ch)
