@@ -41,7 +41,9 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "@codemirror/language": "^6.12.3",
     "@codemirror/language-data": "^6.1.0",
+    "@codemirror/stream-parser": "^0.19.9",
     "@codemirror/theme-one-dark": "^6.1.0",
     "@vscode/codicons": "^0.0.33",
     "codemirror": "^6.0.1",
