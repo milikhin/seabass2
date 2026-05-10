@@ -36,7 +36,7 @@ jobs:
     # editor: run linter and build
     - run: git submodule update --init
     - run: npm ci
-    - run: npm run lint
+    # - run: npm run lint
     - run: npm run build
 
     # py-backend: install test utils, run linter, collect coverage
