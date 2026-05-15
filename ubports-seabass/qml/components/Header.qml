@@ -46,12 +46,12 @@ CustomComponents.ToolBar {
     enabled: buildEnabled
     onClicked: buildRequested()
   }
-  CustomComponents.ToolButton {
-    iconName: "media-playback-start"
-    visible: isLibertineEnabled && buildable
-    enabled: buildEnabled
-    onClicked: launchRequested()
-  }
+  // CustomComponents.ToolButton {
+  //   iconName: "media-playback-start"
+  //   visible: isLibertineEnabled && buildable
+  //   enabled: buildEnabled
+  //   onClicked: launchRequested()
+  // }
   CustomComponents.ToolButton {
     iconName: "terminal-app-symbolic"
     enabled: terminalEnabled
