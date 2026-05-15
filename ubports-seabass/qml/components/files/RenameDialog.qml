@@ -1,6 +1,8 @@
 import QtQuick 2.4
-import Lomiri.Components 1.3
-import Lomiri.Components.Popups 1.3
+import QtQuick.Window 2.2
+import QtQuick.Controls 2.2
+import QtQuick.Controls.Suru 2.2
+import QtQuick.Layouts 1.3
 import "../../generic/utils.js" as QmlJs
 
 Item {
@@ -17,41 +19,46 @@ Item {
       const newFilePath = QmlJs.getNormalPath(newFileUrl)
       handler(newFilePath)
     }
-    PopupUtils.open(dialog)
+    dialogue.visible = true
   }
 
-  Component {
-    id: dialog
+  Dialog {
+    id: dialogue
+    parent: ApplicationWindow.overlay
+    modal: true
+    title: i18n.tr("Rename %1").arg(originalFileName)
+    standardButtons: Dialog.Ok | Dialog.Cancel
+    x: (parent.width - width) / 2
+    y: (parent.height - height - Qt.inputMethod.keyboardRectangle.height / Screen.devicePixelRatio) / 2
+    onAccepted: {
+      onSubmit(fileName.text)
+    }
+    onVisibleChanged: {
+      if (visible) {
+        fileName.text = originalFileName
+        fileName.forceActiveFocus()
+      }
+    }
 
-    Dialog {
-      id: dialogue
-      title: i18n.tr("Rename %1").arg(originalFileName)
-      text: QmlJs.getPrintableDirPath(dirPath, homeDir)
+    ColumnLayout {
+      spacing: 20
+      anchors.fill: parent
+      Label {
+        wrapMode: Text.WordWrap
+        text: QmlJs.getPrintableDirPath(dirPath, homeDir)
+        Layout.fillWidth: true
+      }
       TextField {
         id: fileName
         focus: true
         placeholderText: i18n.tr("file.txt")
-        text: originalFileName
+        Layout.fillWidth: true
         inputMethodHints: Qt.ImhNoPredictiveText
+
         // Enter key
         Keys.onReturnPressed: {
-          PopupUtils.close(dialogue)
+          visible = false
           onSubmit(fileName.text)
-        }
-      }
-      Button {
-        enabled: fileName.text !== ''
-        text: i18n.tr("Rename")
-        color: theme.palette.normal.positive
-        onClicked: {
-          PopupUtils.close(dialogue)
-          onSubmit(fileName.text)
-        }
-      }
-      Button {
-        text: i18n.tr("Cancel")
-        onClicked: {
-          PopupUtils.close(dialogue)
         }
       }
     }
