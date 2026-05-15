@@ -1,3 +1,5 @@
+**Seabass2 is in maintenance mode. No new feature releases planned.**
+
 ![build](https://github.com/milikhin/seabass2/workflows/build/badge.svg)
 
 # Seabass
