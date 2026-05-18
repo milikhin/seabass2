@@ -37,7 +37,12 @@ Item {
       if (visible) {
         fileName.text = originalFileName
         fileName.forceActiveFocus()
+        buttons.standardButton(Dialog.Ok).enabled = fileName.text !== ''
       }
+    }
+    footer: DialogButtonBox {
+      id: buttons
+      standardButtons: Dialog.Ok | Dialog.Cancel
     }
 
     ColumnLayout {
@@ -54,11 +59,16 @@ Item {
         placeholderText: i18n.tr("file.txt")
         Layout.fillWidth: true
         inputMethodHints: Qt.ImhNoPredictiveText
+        onTextChanged: {
+          buttons.standardButton(Dialog.Ok).enabled = text !== ''
+        }
 
         // Enter key
         Keys.onReturnPressed: {
-          visible = false
+          if (fileName.text === '') return
+
           onSubmit(fileName.text)
+          dialogue.visible = false
         }
       }
     }
