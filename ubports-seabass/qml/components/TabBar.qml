@@ -14,13 +14,26 @@ Item {
   property real maxTabLabelWidth: Suru.units.gu(30)
   property ListModel model
   property alias currentIndex: tabBar.currentIndex
+  property var recentTabs: []
+  readonly property var tabShortcut: Shortcut {
+    enabled: root.recentTabs.length > 1
+    sequence: "Ctrl+Tab"
+    onActivated: root.tabSwitcher(true)
+  }
+  readonly property var backTabShortcut: Shortcut {
+    enabled: root.recentTabs.length > 1
+    sequence: "Ctrl+Shift+Tab"
+    onActivated: root.tabSwitcher(false)
+  }
 
   signal opened(string id)
+  signal tabSwitcher(bool forward)
 
   onCurrentIndexChanged: {
     const currentTab = model.get(currentIndex)
     if (currentTab) {
       opened(currentTab.id)
+      addToRecentTabs(currentTab.id)
     }
   }
 
@@ -30,11 +43,13 @@ Item {
         openTab(tab.id)
       }
     })
-    model.tabClosed.connect(function () {
+    model.tabClosed.connect(function (tabId) {
       const currentTab = model.get(currentIndex)
       if (currentTab) {
         opened(currentTab.id)
       }
+
+      removeFromRecentTabs(tabId)
     })
   }
 
@@ -129,6 +144,25 @@ Item {
     if (index !== undefined) {
       currentIndex = index
       opened(id)
+    }
+  }
+
+  function addToRecentTabs(id) {
+    const arr = recentTabs
+    const deleteIndex = arr.indexOf(id)
+    if (deleteIndex > -1) {
+      arr.splice(deleteIndex, 1)
+    }
+    arr.unshift(id);
+    recentTabs = arr.slice()
+  }
+
+  function removeFromRecentTabs(id) {
+    const deleteIndex = recentTabs.indexOf(id)
+    if (deleteIndex > -1) {
+      const arr = recentTabs
+      arr.splice(deleteIndex, 1)
+      recentTabs = arr.slice()
     }
   }
 }
