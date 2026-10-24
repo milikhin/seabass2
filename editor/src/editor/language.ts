@@ -2,7 +2,6 @@ import { LanguageDescription } from '@codemirror/language'
 import { languages } from '@codemirror/language-data'
 import { languageServer } from './codemirror-ls'
 import { Extension } from '@codemirror/state'
-import { qmlStreamLanguage } from './qml'
 
 const PORT = 8399
 
@@ -28,7 +27,9 @@ Promise<Extension[] | undefined> {
   const lang = LanguageDescription.matchFilename(languages, filePath)
   if (lang === null) {
     if (filePath.toLowerCase().endsWith('.qml')) {
-      return [qmlStreamLanguage]
+      // Loaded on demand like the modes from language-data
+      const { qml } = await import('./qml')
+      return [qml]
     }
 
     return
