@@ -5,49 +5,97 @@ import QtQuick.Layouts 1.3
 
 import '../common' as CustomComponents
 
-CustomComponents.ToolBar {
+ColumnLayout {
+  id: root
+
   property bool treeMode: false
   property bool isLibertineEnabled: false
+  property bool currentFileIsTerminal: false
 
+  property alias title: mainToolBar.title
+  property alias subtitle: mainToolBar.subtitle
+  property alias hasLeadingButton: mainToolBar.hasLeadingButton
+
+  signal leadingAction()
   signal closed()
   signal fileCreationInitialized()
   signal projectCreationInitialized()
   signal reloaded()
+  signal goHome()
+  signal goUp()
+  signal setPathToCurrentFile()
 
-  CustomComponents.ToolButton {
-    iconName: "contextual-menu"
-    onClicked: menu.open()
+  CustomComponents.ToolBar {
+    id: mainToolBar
 
-    Menu {
-      id: menu
-      y: parent.height
-      modal: true
-      CustomComponents.MenuItem {
-        iconName: "add"
-        text: i18n.tr("New file...")
-        onTriggered: fileCreationInitialized()
+    Layout.fillWidth: true
+
+    onLeadingAction: root.leadingAction()
+
+    CustomComponents.ToolButton {
+      text: i18n.tr("Close")
+      iconName: "close"
+      visible: !hasLeadingButton
+      onClicked: root.closed()
+    }
+  }
+
+  ToolBar {
+    Layout.fillWidth: true
+
+    RowLayout {
+      anchors.fill: parent
+
+      CustomComponents.ToolButton {
+        text: i18n.tr("Home")
+        iconName: "go-home"
+        onClicked: root.goHome()
       }
-      CustomComponents.MenuItem {
-        iconName: "add"
-        text: i18n.tr("New project...")
-        onTriggered: projectCreationInitialized()
-        visible: isLibertineEnabled
+      CustomComponents.ToolButton {
+        text: i18n.tr("Go Up")
+        iconName: "go-up"
+        onClicked: root.goUp()
       }
-      CustomComponents.MenuItem {
-        iconName: treeMode ? "select" : "select-none"
-        text: i18n.tr("Tree mode")
-        onTriggered: treeMode = !treeMode
+      CustomComponents.ToolButton {
+        text: i18n.tr("Set path from current file")
+        iconName: "stock_document"
+        visible: !root.currentFileIsTerminal
+        onClicked: root.setPathToCurrentFile()
       }
-      CustomComponents.MenuItem {
-        iconName: "reload"
+      CustomComponents.ToolButton {
         text: i18n.tr("Reload")
-        onTriggered: reloaded()
+        iconName: "reload"
+        onClicked: root.reloaded()
       }
-      CustomComponents.MenuItem {
-        iconName: "close"
-        text: i18n.tr("Close")
-        onTriggered: closed()
-        visible: !hasLeadingButton
+
+      // Spacer
+      RowLayout {}
+
+      CustomComponents.ToolButton {
+        iconName: "contextual-menu"
+        onClicked: menu.open()
+
+        Menu {
+          id: menu
+          y: parent.height
+          modal: true
+          CustomComponents.MenuItem {
+            iconName: "add"
+            text: i18n.tr("New file...")
+            onTriggered: root.fileCreationInitialized()
+          }
+          CustomComponents.MenuItem {
+            iconName: "add"
+            text: i18n.tr("New project...")
+            onTriggered: root.projectCreationInitialized()
+            visible: root.isLibertineEnabled
+          }
+          CustomComponents.MenuItem {
+            iconName: root.treeMode ? "select" : "select-none"
+            text: i18n.tr("Tree mode")
+            onTriggered: root.treeMode = !root.treeMode
+          }
+        }
       }
     }
   }
