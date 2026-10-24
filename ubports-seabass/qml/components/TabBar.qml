@@ -70,6 +70,16 @@ Item {
       tabBar.contentItem.snapMode = ListView.NoSnap
     }
 
+    // Make sure current tab is always visible
+    onWidthChanged: focusTabDelayTimer.restart()
+
+    // Delay since it's only important after resizing
+    Timer {
+      id: focusTabDelayTimer
+      interval: 200
+      onTriggered: tabBar.contentItem.positionViewAtIndex(tabBar.contentItem.currentIndex, ListView.Contain)
+    }
+
     Repeater {
       id: repeater
       model: root.model
