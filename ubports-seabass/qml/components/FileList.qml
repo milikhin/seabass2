@@ -19,6 +19,7 @@ Item {
 
   property string homeDir
   property real rowHeight: units.gu(4.5)
+  property var currentTab
 
   signal closed()
   signal errorOccured(string errorMessage)
@@ -110,6 +111,7 @@ Item {
 
       id: header
       isLibertineEnabled: root.isLibertineEnabled
+      currentFileIsTerminal: root.currentTab ? root.currentTab.isTerminal : false
       hasLeadingButton: root.isPage
       onLeadingAction: closed()
       title: i18n.tr("Files")
@@ -119,8 +121,12 @@ Item {
       onProjectCreationInitialized: root.projectCreationInitialized(directoryModel.directory)
       onReloaded: directoryModel.load()
       onTreeModeChanged: root.treeMode = treeMode
+      onGoUp: directoryModel.directory = QmlJs.getDirPath(QmlJs.getNormalPath(directoryModel.directory))
+      onGoHome: directoryModel.directory = homeDir
+      onSetPathToCurrentFile: directoryModel.directory = QmlJs.getDirPath(root.currentTab.filePath)
       z: 1
     }
+    
 
     ListView {
       id: list

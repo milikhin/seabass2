@@ -224,6 +224,7 @@ ApplicationWindow {
           id: fileList
           isReady: api.isLoaded
           homeDir: api.homeDir
+          currentTab: root.currentTab
           onClosed: navBar.visible = false
           isPage: !isWide
           isLibertineEnabled: root.isLibertineEnabled
