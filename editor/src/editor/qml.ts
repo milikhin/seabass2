@@ -508,7 +508,7 @@ const qmlParser: StreamParser<QmlState> = {
     if (state.js !== null && jsContinues(state, textAfter)) {
       return js.indent!(state.js, textAfter, cx)
     }
-    const scope = state.scopes.at(-1)
+    const scope = state.scopes[state.scopes.length - 1]
     if (scope === undefined) {
       return 0
     }
