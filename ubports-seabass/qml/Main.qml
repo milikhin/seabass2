@@ -375,6 +375,15 @@ ApplicationWindow {
           onOpened: function(tabId) {
             api.openFile(tabId)
           }
+          onTabSwitcher: (forward) => { tabSwitcher.show(forward)}
+        }
+
+        CustomComponents.TabSwitcherPopup {
+          id: tabSwitcher
+
+          model: tabBar.recentTabs
+          tabsModel: tabsModel
+          onTabSelected: (tabId) => { tabBar.openTab(tabId) }
         }
 
         CustomComponents.EditorView {
