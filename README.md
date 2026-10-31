@@ -1,4 +1,4 @@
-Seabass2 is in maintenance mode. No new feature releases planned. Seabass3 is currently in development, you can follow the progress at [https://fosstodon.org/@mmmikhael](https://fosstodon.org/@mmmikhael)
+Seabass2 is in maintenance mode. No new feature releases planned. Seabass3 is currently in development, you can follow the progress at [https://fosstodon.org/@mmmikhael](https://fosstodon.org/@mmmikhael) and [https://gitlab.com/milikhin/seabass3](https://gitlab.com/milikhin/seabass3)
 
 ----
 
